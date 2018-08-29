@@ -16,9 +16,7 @@ cmsrel CMSSW_8_0_12 # later versions are not tested
 
 ```
 cd CMSSW_8_0_12/src
-
 cmsenv
-
 git cms-init
 ```
 
