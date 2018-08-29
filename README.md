@@ -10,13 +10,17 @@ Package to perform the MT2 analysis from mt2 baby-trees
 ## Setup and Installation
 MT2Analysis2015 must work within the cmsenv, which is set through a valid release of CMSSW
 
-```cmsrel CMSSW_8_0_12 # later versions are not tested```
+```
+cmsrel CMSSW_8_0_12 # later versions are not tested
+```
 
-```cd CMSSW_8_0_12/src```
+```
+cd CMSSW_8_0_12/src
 
-```cmsenv```
+cmsenv
 
-```git cms-init```
+git cms-init
+```
 
 Add a "link" to the remote repository where the code is
 
@@ -24,11 +28,15 @@ Add a "link" to the remote repository where the code is
 
 To clone the master locally from the remote
 
-```git clone -o ana-mt2 git@github.com:MT2Analysis/MT2AnalysisRun2.git myMT2Analysis```
+```
+git clone -o ana-mt2 git@github.com:MT2Analysis/MT2AnalysisRun2.git myMT2Analysis
+```
 
 To clone a given branch locally from the remote
 
-```git clone -o ana-mt2 -b <branch-name> git@github.com:MT2Analysis/MT2AnalysisRun2.git myMT2Analysis```
+```
+git clone -o ana-mt2 -b <branch-name> git@github.com:MT2Analysis/MT2AnalysisRun2.git myMT2Analysis
+```
 
 After first installation, every time you log in
 
