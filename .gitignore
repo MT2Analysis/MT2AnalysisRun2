@@ -1,0 +1,9 @@
+*.root
+*.log
+*.tar
+*.o
+*.eps
+*.pdf
+*.png
+*fuse_hidden*
+*~
