@@ -64,6 +64,7 @@ int main( int argc, char* argv[] ) {
 
   std::string llepControlRegionDir = cfg.getEventYieldDir() + "/llepControlRegion"; 
 
+  // FIXME: please improve the naming of the estimates, it is not intuitive at all!
 
   // Data Control Region
   MT2Analysis<MT2Estimate>* llepCR;
@@ -90,7 +91,8 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2Estimate>* MCcr = MT2Analysis<MT2Estimate>::readFromFile(llepControlRegionDir + "/mc.root", "llepCR");
   MCcr->setName("llepCR_mc");
-  
+
+  // an estimate with all bins equal to the integral of the CR MC  
   MT2Analysis<MT2Estimate>* MCcr_integral;
   if( use_extrapolation || do_hybrid ){
     MCcr_integral = MT2Estimate::makeIntegralAnalysisFromEstimate( "MCcr_integral", cfg.regionsSet(), MCcr_ );
@@ -170,7 +172,8 @@ int main( int argc, char* argv[] ) {
   else if( do_hybrid ){
     (*RatioMC) = ( (*MCsr_integral) / (*MCcr_integral) );
   }
-  
+ 
+  // Why do you use a syst estimate here ? 
   MT2Analysis<MT2EstimateSyst>* llep_est_ = MT2EstimateSyst::makeAnalysisFromEstimate( "llep_est_", cfg.regionsSet(), llepCR );
 
   MT2Analysis<MT2EstimateSyst>* llep_est;

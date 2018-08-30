@@ -1,7 +1,7 @@
-# MT2AnalysisRun2 
+# MT2AnalysisRun2
 Package to perform the MT2 analysis from mt2 baby-trees
 
- This README is work-in-progress and contains instructions on how to run 
+ This README is work-in-progress and contains instructions on how to run
  the basic blocks of the package, excluding the QCD estimates.
 
  For inspiration about what was done in the past, consult
@@ -76,25 +76,45 @@ Then you can make the Data/MC plots
 Run the background estimation !
 
 ```
-./computeLostLepton <cfg-file-name> 
-./computeZinvFromZll <cfg-file-name> 
+./computeLostLepton <cfg-file-name>
+./computeZinvFromZll <cfg-file-name>
 ```
 
-Note that the 1.13 factor present in https://github.com/MT2Analysis/MT2Analysis2015/blob/mg-data2017/analysis/computeZinvFromZll.cpp#L629 
+Note that the 1.13 factor present in https://github.com/MT2Analysis/MT2Analysis2015/blob/mg-data2017/analysis/computeZinvFromZll.cpp#L629
 is derived from plotZllGratio_2d.C   --> this script is also used to make the purity plots (?)
 
-Create the template data card
+To compute the purity of the Zll region current script is below. You must create the output dir of the plots to run it
+```
+root -l -b -q drawRSFOF.C
+```
+
+Create the template data card. For the general syntax of data card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
 
 ```
 ./createDatacards_general_zllZinvEst  <cfg-file-name> <model> <m1> <m2> <m11> <m22> <label>  # mass range
-                                                          T2qq    200    200                    
+                                                        T2qq Parent-mass-low parent-mass-up LSP-mass-low LSP-mass-down                    
 ```
 
-To submit the card making on the batch, make sure that copySE is set to true in createDatacards_general_zllZinvEst 
+Data/Bkg plotting:
+
+In all topological regions
+```
+./compareYield_all <cfg-file-name>
+```
+
+In each HT region
+```
+./compareYield_bins_all <cfg-file-name>
+```
+
+For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis2015/tree/MT2Analysis2015_RandD
+
+Signal data card creation
+To submit the card making on the batch, make sure that copySE is set to true in createDatacards_general_zllZinvEst
 divide the submission based on mass ranges, use this script for submission
 
 ```
 python launchCreateDatacards_2016.py
 ```
 
-Note: most of the times some jobs will fail, so you can as well submit twice and then check from one or the other which are missing 
+Note: most of the times some jobs will fail, so you can as well submit twice and then check from one or the other which are missing
