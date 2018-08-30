@@ -1727,6 +1727,8 @@ int main( int argc, char* argv[] ) {
     sigName = signals[isig]->getName();
     //sigName = getSimpleSignalName( signals[isig]->getName() );
 
+    std::cout << "Processing signal " << sigName << std::endl;
+
     std::string scont = "_sigcontam";
     std::string::size_type pos = sigName.find(scont);
     if(pos != std::string::npos) sigName.erase(pos,scont.length());
@@ -1768,14 +1770,12 @@ int main( int argc, char* argv[] ) {
 
       //MT2Estimate* thisSigSystCentral = signalVeto[isig]->get(*iR);
       if( thisSigSystCentral->yield3d!=0 ){
-	
 	//this_signal3d_central = signalVeto[isig]->get(*iR)->yield3d;
 	this_signal3d_central        = signals[isig]->get(*iR)->yield3d;
 	
       }
       else continue;
       
-
       // Project SUSY parent mass on 1D histogram (to be used to loop over scan masses)
       this_signalParent = this_signal3d_central->ProjectionY("mParent");
       

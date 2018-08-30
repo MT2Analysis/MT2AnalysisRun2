@@ -58,6 +58,7 @@ and then recompile
 
 ## Run - time !
 
+### Data and backgrounds
 First you need to make the regions selections and compute the yields
 
 ```
@@ -91,8 +92,7 @@ root -l -b -q drawRSFOF.C
 Create the template data card. For the general syntax of data card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
 
 ```
-./createDatacards_general_zllZinvEst  <cfg-file-name> <model> <m1> <m2> <m11> <m22> <label>  # mass range
-                                                        T2qq Parent-mass-low parent-mass-up LSP-mass-low LSP-mass-down                    
+./createDatacards_general_zllZinvEst <cfg-file-name> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
 ```
 
 Data/Bkg plotting:
@@ -109,12 +109,40 @@ In each HT region
 
 For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis2015/tree/MT2Analysis2015_RandD
 
-Signal data card creation
-To submit the card making on the batch, make sure that copySE is set to true in createDatacards_general_zllZinvEst
-divide the submission based on mass ranges, use this script for submission
+### Signals
 
+Run regionEventYields on the signal, for the moment just use those already run before
+
+```
+/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/*root
+```
+
+Run the data card creation also for the signal, e.g.
+```
+./createDatacards_general_zllZinvEst dataETH_SnTMC_35p9ifb T2qq 300 305 200 205 pippo  # -> mass point or mass range
+```
+Be sure that the you created some data cards for the signal, not only the template data card
+
+Submit data card creation to the batch (copySE=true), divided in mass ranges
 ```
 python launchCreateDatacards_2016.py
 ```
-
 Note: most of the times some jobs will fail, so you can as well submit twice and then check from one or the other which are missing
+
+
+### Limits
+From now on you need software Combine
+
+Combine the data cards
+
+```
+combineCards.py -S <input-card-1> <input-card-2> ...  >  <combined-card>
+```
+
+Submit a limit
+
+```
+combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
+```
+
+Plot the limits with PlotSMS (?)
