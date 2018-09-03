@@ -130,7 +130,7 @@ python launchCreateDatacards_2016.py
 Note: most of the times some jobs will fail, so you can as well submit twice and then check from one or the other which are missing
 
 
-### Limits
+### Limit tests
 From now on you need software Combine
 
 Combine the data cards
@@ -145,4 +145,7 @@ Submit a limit
 combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
 ```
 
-Plot the limits with PlotSMS (?)
+### Limits, full production and plotting 
+Please follow [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
+
+And then [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
