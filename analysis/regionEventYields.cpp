@@ -85,6 +85,12 @@ int main( int argc, char* argv[] ) {
   std::string configFileName(argv[1]);
   MT2Config cfg(configFileName);
 
+  std::cout << "-> Reading era/year from config: " << cfg.year() << std::endl;
+  if(cfg.year()==0) {
+    std::cout << "There must be an error: era/year is empty in config" << std::endl;
+    exit(120);  
+  }
+
   bool onlyData = false;
   bool onlyMC   = false;
   bool onlySignal = false;
@@ -394,7 +400,6 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
   std::cout << "-> Setting up MT2Analysis with name: " << sample.sname << std::endl;
   MT2Analysis<T>* analysis = new MT2Analysis<T>( sample.sname, regionsSet, sample.id );
 
-
   if( sample.id < 1000){
 
     if( cfg.additionalStuff()=="qgVars" ) {
@@ -436,9 +441,10 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
     if( myTree.isData ) {
       if(cfg.year() == 2016) if( !myTree.passFilters2016() ) continue;
       if(cfg.year() == 2017) if( !myTree.passFilters2017() ) continue;
-    } //else if( !myTree.passFiltersMC() ) continue;
-    // TODO: make sure that myTree.passFiltersMC is correct for the different years
-
+    } else {
+      if(cfg.year() == 2016) if( !myTree.passFiltersMC2016() ) continue;
+      if(cfg.year() == 2017) if( !myTree.passFiltersMC2017() ) continue;
+    } 
 
     if (myTree.isData) {
       //MG 2016 expression

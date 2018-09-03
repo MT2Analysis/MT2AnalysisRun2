@@ -1010,7 +1010,8 @@ public :
    virtual Bool_t   passIsoTrackVeto() const;
    virtual Bool_t   passFilters2016 () const;
    virtual Bool_t   passFilters2017 () const;
-   virtual Bool_t   passFiltersMC   () const;
+   virtual Bool_t   passFiltersMC2016   () const;
+   virtual Bool_t   passFiltersMC2017   () const;
    virtual Bool_t   passGammaAdditionalSelection( int sampleId ) const;
    virtual Bool_t   passMonoJetId( int j ) const;
    virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
@@ -1623,11 +1624,19 @@ Bool_t MT2Tree::passFilters2017() const {
 
 }
 
-Bool_t MT2Tree::passFiltersMC() const {
+Bool_t MT2Tree::passFiltersMC2016() const {
 
   return nVert>0 && Flag_HBHENoiseFilter>0 && Flag_HBHENoiseIsoFilter>0 && Flag_globalTightHalo2016Filter>0 && Flag_EcalDeadCellTriggerPrimitiveFilter>0 && Flag_goodVertices>0 && Flag_badMuonFilterV2>0 && Flag_badChargedHadronFilterV2>0 ;
 
 }
+
+
+Bool_t MT2Tree::passFiltersMC2017() const {
+  // TODO: implement
+  return true;
+
+}
+
 
 Bool_t MT2Tree::passMonoJetId( int j ) const {
   //  return jet_id[j]>=3 && jet_chHEF[j]>0.05 && jet_neHEF[j]<0.8 && jet_phEF[j]<0.7;
