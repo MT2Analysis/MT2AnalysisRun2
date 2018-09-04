@@ -405,7 +405,8 @@ MT2EstimateTree.o: ../src/MT2EstimateTree.cc MT2Region.o MT2Estimate.o
 MT2DrawTools.o: ../src/MT2DrawTools.cc MT2Region.o MT2EstimateTree.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -c ../src/MT2DrawTools.cc MT2Region.o MT2EstimateTree.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
-
+MT2LeptonSFTool.o: ../src/MT2LeptonSFTool.cc
+	$(CC) -Wall $(INCLUDES) -c ../src/MT2LeptonSFTool.cc $(ROOTFLAG) $(EXTRALIBS)
 
 
 
