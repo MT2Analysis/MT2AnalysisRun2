@@ -123,12 +123,11 @@ Run the data card creation also for the signal, e.g.
 ```
 Be sure that the you created some data cards for the signal, not only the template data card
 
-Submit data card creation to the batch (copySE=true), divided in mass ranges
+Submit data card creation to the batch (copySE=true)
 ```
-python launchCreateDatacards_2016.py
+python launchCreateDatacards_2016.py <model-name> <label> 
 ```
-Note: most of the times some jobs will fail, so you can as well submit twice and then check from one or the other which are missing
-
+TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
 ### Limit tests
 From now on you need software Combine
