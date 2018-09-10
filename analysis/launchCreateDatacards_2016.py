@@ -1,6 +1,6 @@
 # Script to launch the datacard creation for the signals
 # python launchCreateDatacards_2016.py T2qq <label>
-# Idea is to divide the batch submission into slices of squark/gluino mass decay
+# Currently sends one job per mass mass point
 
 import os
 import sys

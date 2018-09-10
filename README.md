@@ -123,14 +123,8 @@ Run the data card creation also for the signal, e.g.
 ```
 Be sure that the you created some data cards for the signal, not only the template data card
 
-Submit data card creation to the batch (copySE=true)
-```
-python launchCreateDatacards_2016.py <model-name> <label> 
-```
-TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
-
 ### Limit tests
-From now on you need software Combine
+For limit calculation you need software Combine
 
 Combine the data cards
 
@@ -145,6 +139,21 @@ combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${
 ```
 
 ### Limits, full production and plotting 
-Please follow [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
+Submit data card creation to the batch (copySE=true)
+```
+python launchCreateDatacards_2016.py <model-name> <label> 
+```
+TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
-And then [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
+Sumbit data card combination to the batch
+```
+python combineCards_scan.py <path> <model>
+```
+Sumbit limit calculation to the batch
+```
+python submitLimits_scan.py <path> <model>
+```
+
+For more info, Please follow [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
+
+For plotting in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
