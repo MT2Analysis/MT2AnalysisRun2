@@ -15,7 +15,7 @@
 # NOTE: the so-called 'cleanings' are commented out because take forever to run (why?); anyhow the impact is very small
 
 
-from ROOT import TChain, TH1F
+from ROOT import TChain, TH1F, PyConfig
 import os.path
 
 cuts={}
@@ -159,25 +159,28 @@ class SampleCutflow(object):
       print '{:>20} {:>20} {:>20} {:>20}'.format(cutName, self.cutflow[cutName], '{:.2f}'.format(self.efficiency['rel'][cutName]), '{:.2f}'.format(self.efficiency['abs'][cutName]))
     print ''
 
-if __name__ == "__main__":
-
+def getOptions():
   from argparse import ArgumentParser
-  import os
-  parser = ArgumentParser(description='', add_help=True)
-
+  parser = ArgumentParser(description='Cutflow helper', add_help=True)
+  
   allowed_regionGroups = ordered_cutNames.keys()
   allowed_formats = ['mini', 'nano']
-
+  
   parser.add_argument('-f', '--fileName', type=str, dest='fileName', help='full path to filename')
   parser.add_argument('-s', '--sampleName', type=str, dest='sampleName', help='name of sample, e.g. Wlv miniAOD')
   parser.add_argument('-t', '--treeName', type=str, dest='treeName', help='name of the tree', default='Events')
   parser.add_argument('-y', '--year', type=str, dest='year', help='year of data taking', default='2017')
   parser.add_argument('-g'  '--regionGroup', type=str, dest='regionGroup', help='cut series', default='SR', choices=allowed_regionGroups)
   parser.add_argument('-d'  '--dataFormat', type=str, dest='dataFormat', help='mini or nano', default='nano', choices=allowed_formats)
+  
+  return parser.parse_args()
 
-  options = parser.parse_args()
+if __name__ == "__main__":
+
+  options = getOptions()
 
   myCutflow = SampleCutflow(sampleName=options.sampleName, fileNames=[options.fileName], treeName=options.treeName, year=options.year, region=options.regionGroup, dataFormat=options.dataFormat )
   myCutflow.fill()
   myCutflow.fillEfficiency()
   myCutflow.stamp()
+
