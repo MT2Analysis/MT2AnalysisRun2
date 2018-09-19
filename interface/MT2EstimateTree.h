@@ -52,6 +52,9 @@ class MT2EstimateTree : public MT2Estimate {
   float diffMetMht;
   int nVert;
 
+  float rho;
+  float met_pt;
+
   int nJets;
   int nBJets;
   int nElectrons;
@@ -62,6 +65,12 @@ class MT2EstimateTree : public MT2Estimate {
 
   int GenSusyMScan1;
   int GenSusyMScan2;
+
+  //kinematic variables for the lepton
+  float lepPt;
+  float lepEta;
+  float lepPhi;
+  float lepMass;
 
 //  float GenSusyMScan1;
 //  float GenSusyMScan2;
