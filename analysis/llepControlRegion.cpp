@@ -231,6 +231,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   TFile* file = TFile::Open(sample.file.c_str());
   TTree* tree = (TTree*)file->Get("mt2");
 
+
   MT2Tree myTree;
   myTree.Init(tree);
 
@@ -312,6 +313,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float ht   = (njets>1) ? myTree.ht : myTree.jet1_pt;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
     float minMTBmet = myTree.minMTBMet;
+    //we add lepton kinematics parameters on the tree
+    
 
     MT2EstimateTree* thisEstimate;
 
@@ -437,6 +440,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
+   
 
     float mt2_genmet;
     if(dogenmet)

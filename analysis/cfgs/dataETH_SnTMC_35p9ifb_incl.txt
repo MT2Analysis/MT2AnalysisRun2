@@ -1,4 +1,5 @@
 lumi 35.867
+year 2016
 regionsSet 13TeV_2016_inclusive
 
 gammaTemplateRegions 13TeV_2016_inclusive
