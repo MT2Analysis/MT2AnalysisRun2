@@ -53,8 +53,12 @@ class MT2EstimateTree : public MT2Estimate {
   int nVert;
 
   float rho;
-  float met_pt;
 
+  float met_pt;
+  float met_phi;
+  float mht_pt;
+  float mht_phi;
+  
   int nJets;
   int nBJets;
   int nElectrons;

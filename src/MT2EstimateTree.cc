@@ -65,10 +65,13 @@ void MT2EstimateTree::initTree( ) {
   tree->Branch( "nJetHF", &nJetHF, "nJetHF/I");
   
   tree->Branch( "deltaPhiMin", &deltaPhiMin, "deltaPhiMin/F");
-  tree->Branch("diffMetMht", &diffMetMht, "diffMetMht/F");
+  tree->Branch( "diffMetMht", &diffMetMht, "diffMetMht/F");
   tree->Branch( "nVert", &nVert, "nVert/I");
   tree->Branch( "rho", &rho, "rho/F");
   tree->Branch( "met_pt", &met_pt, "met_pt/F");
+  tree->Branch( "met_phi", &met_phi, "met_phi/F");
+  tree->Branch( "mht_pt", &mht_pt, "mht_pt/F");
+  tree->Branch( "mht_phi", &mht_phi, "mht_phi/F");
 
   tree->Branch( "nElectrons", &nElectrons, "nElectrons/I");
   tree->Branch( "nMuons", &nMuons, "nMuons/I");
@@ -109,10 +112,13 @@ void MT2EstimateTree::initTree4read( ) {
   tree->SetBranchAddress( "nBJets"       , &nBJets       );
   tree->SetBranchAddress( "nJetHF"       , &nJetHF       );
   tree->SetBranchAddress( "deltaPhiMin"  , &deltaPhiMin  );
-  tree->SetBranchAddress("diffMetMht"    , &diffMetMht   );
+  tree->SetBranchAddress( "diffMetMht"   , &diffMetMht   );
   tree->SetBranchAddress( "nVert"        , &nVert        );
   tree->SetBranchAddress( "rho"          , &rho          );
   tree->SetBranchAddress( "met_pt"       , &met_pt       );
+  tree->SetBranchAddress( "met_phi"      , &met_phi      );
+  tree->SetBranchAddress( "mht_pt"       , &mht_pt       );
+  tree->SetBranchAddress( "mht_phi"      , &mht_phi      );
   tree->SetBranchAddress( "nElectrons"   , &nElectrons   );
   tree->SetBranchAddress( "nMuons"       , &nMuons       );
   tree->SetBranchAddress( "nPFLep"       , &nPFLep       );
@@ -430,15 +436,20 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   nVert  = mt2tree.nVert;
   
   rho  = mt2tree.rho;
-  met_pt  = mt2tree.met_pt;
+ 
 
   if(mt2tree.nJet30>1)
     mt2    = mt2tree.mt2;
   else if(mt2tree.nJet30==1)
     mt2    = mt2tree.ht;
 
-  ht     = mt2tree.ht;
-  met    = mt2tree.met_pt;
+  ht      = mt2tree.ht;
+  met     = mt2tree.met_pt;
+  met_pt  = mt2tree.met_pt;
+  met_phi = mt2tree.met_phi;
+  mht_pt  = mt2tree.mht_pt;
+  mht_phi = mt2tree.mht_phi;
+  
 
   nJets  = mt2tree.nJet30;
   nBJets = mt2tree.nBJet20;
@@ -452,10 +463,10 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
 
   nJetHF = mt2tree.get_nJetHF();
 
-  lepPt    = mt2tree.lep_pt[5];
-  lepEta   = mt2tree.lep_eta[5];
-  lepPhi   = mt2tree.lep_phi[5];
-  lepMass  = mt2tree.lep_mass[5];
+  lepPt    = mt2tree.lep_pt[0];
+  lepEta   = mt2tree.lep_eta[0];
+  lepPhi   = mt2tree.lep_phi[0];
+  lepMass  = mt2tree.lep_mass[0];
     
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;
   //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;

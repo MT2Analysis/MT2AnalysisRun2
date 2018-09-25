@@ -425,6 +425,11 @@ void addVariables(MT2Analysis<MT2EstimateTree>* anaTree){
   MT2EstimateTree::addVar( anaTree, "nJetHF30" );
   MT2EstimateTree::addVar( anaTree, "jet1_pt" );
 
+  MT2EstimateTree::addVar( anaTree, "zll_met_pt" );
+  MT2EstimateTree::addVar( anaTree, "zll_met_phi" );
+  MT2EstimateTree::addVar( anaTree, "zll_mht_pt" );
+  MT2EstimateTree::addVar( anaTree, "zll_mht_phi" );
+
 }
 
 
@@ -634,6 +639,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );
       	  thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
       	  thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
       	  thisTree->fillTree_zll(myTree, weight );
       	  thisTree->yield->Fill( mt2, weight );
@@ -673,6 +683,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       	  thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
       	  thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
       	  thisTree->fillTree_zll(myTree, weight );
       	  thisTree->yield->Fill( mt2, weight );
 
@@ -707,6 +722,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       	  thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
       	  thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
       	  thisTree->fillTree_zll(myTree, weight );
       	  thisTree->yield->Fill( mt2, weight );
 
@@ -740,6 +760,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );
       	  thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
       	  thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
       	  thisTree->fillTree_zll(myTree, weight );
       	  thisTree->yield->Fill( mt2, weight );
@@ -781,6 +806,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
         thisTree->assignVar("jet1_pt", myTree.jet1_pt );
         thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
         thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+
+	thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+        thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+        thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
         thisTree->fillTree_zll(myTree, weight );
         thisTree->yield->Fill( mt2, weight );
@@ -846,6 +876,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
 	        thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
+		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
 	        thisTree_of->fillTree_zll(myTree, weight );
 	        thisTree_of->yield->Fill( mt2, weight );
 
@@ -884,6 +919,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
 	        thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
+		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
 	        thisTree_of->fillTree_zll(myTree, weight );
 	        thisTree_of->yield->Fill( mt2, weight );
 
@@ -919,6 +959,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
 	        thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
+		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
 	        thisTree_of->fillTree_zll(myTree, weight );
 	        thisTree_of->yield->Fill( mt2, weight );
 
@@ -945,6 +990,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("raw_mt2", myTree.mt2 );
 	        thisTree_of->assignVar("raw_met", myTree.met_pt );
 
+		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
 	        thisTree_of->assignVar("weight_lep0", weight_lep0);
 	        thisTree_of->assignVar("weight_lep1", weight_lep1);
 	        thisTree_of->assignVar("weight_lep_err", weight_lep_err);
@@ -954,6 +1000,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 	        thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
 	        thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+
+		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
 	        thisTree_of->fillTree_zll(myTree, weight );
 	        thisTree_of->yield->Fill( mt2, weight );
@@ -993,6 +1043,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 	      thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
 	      thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+
+	      thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	      thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	      thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	      thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
 	      thisTree_of->fillTree_zll(myTree, weight );
 	      thisTree_of->yield->Fill( mt2, weight );
