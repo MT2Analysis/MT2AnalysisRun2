@@ -35,7 +35,7 @@
 #include "interface/mt2.h"
 
 
-using namespace std;
+
 
 
 void randomizePoisson( MT2Analysis<MT2EstimateTree>* data );
@@ -157,15 +157,13 @@ int main( int argc, char* argv[] ) {
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
 
-    std::cout << "je vais rentrer dans MT2Sample::loadSamples" << std::endl;
-
     std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 101, 999); // not interested in signal here (see later)
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(120);
     }
 
-    std::cout << "jusque la ca marche" << std::endl;
+
 
 
     std::vector< MT2Analysis<MT2EstimateTree>* > EventYield_incl;
@@ -173,13 +171,11 @@ int main( int argc, char* argv[] ) {
       int this_id = fSamples[i].id;
       if( this_id<600 ) continue; // skip everything that is not ZJets
       if( this_id>=700 ) continue; //
-      std::cout << "est ce qu on me voit" << std::endl;
       EventYield_incl.push_back( computeYield<MT2EstimateTree>( fSamples[i], cfg, "13TeV_2016_inclusive"  ));
     }
-    std::cout << "je pense qu on ne me voit pas" << std::endl;
     MT2Analysis<MT2EstimateTree>* EventYield_zjets_inclusive = mergeYields<MT2EstimateTree>( EventYield_incl, "13TeV_2016_inclusive", "ZJets_inclusive", 600, 699, "Z+jets" );
     EventYield_zjets_inclusive->writeToFile(outputdir + "/ZJetsIncl.root");
- 
+
 
     std::vector< MT2Analysis<MT2EstimateTree>* > EventYield_ssr;
     for( unsigned i=0; i<fSamples.size(); ++i ) {
@@ -388,11 +384,7 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
 
-  //For 2016 ntuples, the tree is called mt2
-  //TTree* tree = (TTree*)file->Get("mt2");
-  //For 2017 ntuples, the tree is called Events
-  TTree* tree = (TTree*)file->Get("Events");
-
+  TTree* tree = (TTree*)file->Get("mt2");
 
 
   MT2Tree myTree;

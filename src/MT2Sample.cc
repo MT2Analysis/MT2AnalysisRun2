@@ -10,7 +10,7 @@
 #include "TFile.h"
 #include "TTree.h"
 
-
+using namespace std;
 
 MT2Sample::MT2Sample() {};
 
@@ -46,11 +46,10 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
 
 
   while( IN.getline(buffer, 500, '\n') ) {
-
     if (buffer[0] == '#') {
       continue; // Skip lines commented with '#'                                                                                                                                                                                 
     }
-
+   
     std::string sampleFilePath(buffer);
     TString sampleFilePath_tstr(sampleFilePath);
     if( !(sampleFilePath_tstr.EndsWith(".root")) ) continue;
@@ -67,7 +66,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       iss >> sub;
       pathDirs.push_back(sub);
     } while (iss);
-
+  
     TString rootFileName(pathDirs[pathDirs.size()-2]); // last element of vector always empty: take -2
 
     if( filter!="" && !(rootFileName.Contains(filter.c_str())) ) continue;
@@ -87,10 +86,12 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       std::cout << "[MT2Sample::loadSamples] ERROR! Illegal file name: " << rootFileName << std::endl;
       exit(1101);
     }
-     
 
     TFile* file = TFile::Open(s.file.c_str());
-    TTree* tree = (TTree*)file->Get("mt2");
+    //In the ntuples of the 2016 data, the tree is called mt2
+    //TTree* tree = (TTree*)file->Get("mt2");
+    //In the ntuples of the 2017 data, the tree is called Events
+    TTree* tree = (TTree*)file->Get("Events");
 
     
     ULong64_t evt_nEvts;
