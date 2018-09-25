@@ -26,13 +26,12 @@
 #include "interface/MT2DrawTools.h"
 #include "interface/MT2Config.h"
 
-#include "TRandom3.h"
+#include "interface/Utils.h"
 
+#include "TRandom3.h"
 
 #define mt2_cxx
 #include "interface/mt2.h"
-
-
 
 int roundD(float d) {
   return (int)(floor(d + 0.5));
@@ -110,12 +109,11 @@ int main( int argc, char* argv[] ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
     }
-
     MT2Analysis<MT2EstimateTree>* llepCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet );
-
-    for( unsigned i=0; i < fSamples.size(); ++i )
+  
+    for( unsigned i=0; i < fSamples.size(); ++i ){
       computeYield( fSamples[i], cfg, llepCR );
-
+    }
     llepCR->writeToFile( outputdir + "/mc.root" );
 
     if( cfg.dummyAnalysis() ) {
@@ -222,15 +220,19 @@ int main( int argc, char* argv[] ) {
 }
 
 
-
 void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree ){
 
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
 
-  TFile* file = TFile::Open(sample.file.c_str());
-  TTree* tree = (TTree*)file->Get("mt2");
+  // Sum of weights
+  double nGen=-9999; double nGenWeighted=-9999;
+  nGen = getNgen(sample.file, "genEventCount");
+  nGenWeighted = getNgen(sample.file, "genEventSumw");
 
+  // Tree initialization
+  TFile* file = TFile::Open(sample.file.c_str());
+  TTree* tree = (TTree*)file->Get("Events");
 
   MT2Tree myTree;
   myTree.Init(tree);
@@ -312,7 +314,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     int nbjets = myTree.nBJet20;
     float ht   = (njets>1) ? myTree.ht : myTree.jet1_pt;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
-    float minMTBmet = myTree.minMTBMet;
+    float minMTBmet = -999;  //myTree.minMTBMet;
     //we add lepton kinematics parameters on the tree
     
 
@@ -370,6 +372,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 }
 
 // TO DO: streamline computeSigYield similarly as computeYield
+//
+
 template <class T>
 MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg ) {
 
@@ -436,7 +440,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     float ht   = myTree.ht;
     float met  = myTree.met_pt;
     float met_gen  = myTree.met_genPt;
-    float minMTBmet = myTree.minMTBMet;
+    float minMTBmet = -999;//myTree.minMTBMet;
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
@@ -633,7 +637,6 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   return analysis;
 
 }
-
 
 
 
