@@ -88,6 +88,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     }
 
     TFile* file = TFile::Open(s.file.c_str());
+    
     //In the ntuples of the 2016 data, the tree is called mt2
     //TTree* tree = (TTree*)file->Get("mt2");
     //In the ntuples of the 2017 data, the tree is called Events
@@ -96,14 +97,14 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     
     ULong64_t evt_nEvts;
     int evt_id;
-    float evt_filter, evt_kfactor, evt_xsec, evt_scale1fb;
+    float evt_filter, evt_kfactor, evt_xsec; // evt_scale1fb;
 
     tree->SetBranchAddress("evt_id",&evt_id);
-    tree->SetBranchAddress("evt_nEvts",&evt_nEvts);
+//    tree->SetBranchAddress("evt_nEvts",&evt_nEvts);
     tree->SetBranchAddress("evt_filter",&evt_filter);
     tree->SetBranchAddress("evt_kfactor",&evt_kfactor);
     tree->SetBranchAddress("evt_xsec",&evt_xsec);
-    tree->SetBranchAddress("evt_scale1fb",&evt_scale1fb);
+//    tree->SetBranchAddress("evt_scale1fb",&evt_scale1fb);
     
     tree->GetEntry(0);
 
@@ -134,11 +135,11 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     std::cout << "s.id  = " << s.id << std::endl;
     std::cout << "evtid = " << evt_id << std::endl;
     
-    s.nevents  = evt_nEvts;
+//    s.nevents  = evt_nEvts;
     s.xsection = evt_xsec;
     s.filter   = evt_filter;
     s.kfact    = evt_kfactor;
-    s.scale1fb = evt_scale1fb;
+//    s.scale1fb = evt_scale1fb;
 
     if( (idMin>=0 && s.id<idMin) || (idMax>=0 && s.id>idMax) ) {
       file->Close();
@@ -149,7 +150,6 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
 
     s.sname = fileNameParts[0];
     s.name  = fileNameParts[0];
-
     if( !isData ) {
 
       bool foundPU=false;
@@ -169,7 +169,6 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       }
 
     } else {
-
       for( unsigned i=1; i<fileNameParts.size(); ++i ) {
         if( fileNameParts[i] == "root" ) break;
         if( fileNameParts[i] == "babytree" ) continue;
@@ -193,12 +192,12 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     std::cout << "   Short name:     " << s.sname << std::endl;
     std::cout << "   File:           " << s.file << std::endl;
     std::cout << "   ID:             " << s.id << std::endl;
-    std::cout << "   Events:         " << s.nevents  << std::endl;
+    //std::cout << "   Events:         " << s.nevents  << std::endl;
     std::cout << "   Xsection:       " << s.xsection << std::endl;
     //std::cout << "   Lumi:           " << s.lumi << std::endl;
     std::cout << "   Kfactor:        " << s.kfact << std::endl;
     std::cout << "   Filter:         " << s.filter << std::endl;
-    std::cout << "   Scale to 1/fb:  " << s.scale1fb << std::endl;
+    //std::cout << "   Scale to 1/fb:  " << s.scale1fb << std::endl;
     //std::cout << "   Avg PU weight:  " << s.PU_avg_weight << std::endl;
     //std::cout << "   type:           " << s.type << std::endl;
     //std::cout << "   Color:          " << s.color << std::endl;

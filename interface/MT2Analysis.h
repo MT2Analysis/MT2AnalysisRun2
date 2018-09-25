@@ -1722,7 +1722,7 @@ MT2Region* MT2Analysis<T>::matchRegion( MT2Region region ) const {
 template<class T>
 T* MT2Analysis<T>::get( const MT2Tree& mt2tree ) const {
 
-  return this->get( mt2tree.ht, mt2tree.nJet30, mt2tree.nBJet20, mt2tree.minMTBMet, mt2tree.mt2 );
+  return this->get( mt2tree.ht, mt2tree.nJet30, mt2tree.nBJet20, -999., mt2tree.mt2 );
   //return this->get( mt2tree.ht, mt2tree.nJet30, mt2tree.nBJet20, mt2tree.met_pt, mt2tree.minMTBMet, mt2tree.mt2 );
 
 }
