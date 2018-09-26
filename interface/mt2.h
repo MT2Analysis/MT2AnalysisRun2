@@ -2057,6 +2057,7 @@ public :
    // virtual Bool_t   passGammaAdditionalSelection( int sampleId ) const;
    virtual Bool_t   passMonoJetId( int j ) const;
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
+   virtual Bool_t   passTriggerSelection2017(TString sel = "") const;
 };
 
 #endif
@@ -3172,24 +3173,24 @@ Bool_t MT2Tree::passIsoTrackVeto() const {
 
 Bool_t MT2Tree::passFilters2016() const {
 
-  return PV_npvs>0 && Flag_HBHENoiseFilter>0 && Flag_HBHENoiseIsoFilter>0 && Flag_globalTightHalo2016Filter>0 && Flag_EcalDeadCellTriggerPrimitiveFilter>0 && Flag_goodVertices>0 && Flag_eeBadScFilter>0 && Flag_badMuonFilterV2>0 && Flag_badChargedHadronFilterV2>0 ;
+  return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_eeBadScFilter && Flag_badMuonFilterV2 && Flag_badChargedHadronFilterV2 ;
 
 }
 
 Bool_t MT2Tree::passFilters2017() const {
-  return PV_npvs>0 && Flag_goodVertices>0 && Flag_globalSuperTightHalo2016Filter>0 && Flag_HBHENoiseFilter>0 && Flag_HBHENoiseIsoFilter>0 && Flag_EcalDeadCellTriggerPrimitiveFilter>0 && Flag_BadPFMuonFilter>0 && Flag_BadChargedCandidateFilter>0 && Flag_eeBadScFilter>0 && Flag_ecalBadCalibFilter>0 ;
+  return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
 
 }
 
 Bool_t MT2Tree::passFiltersMC2016() const {
 
-  return PV_npvs>0 && Flag_HBHENoiseFilter>0 && Flag_HBHENoiseIsoFilter>0 && Flag_globalTightHalo2016Filter>0 && Flag_EcalDeadCellTriggerPrimitiveFilter>0 && Flag_goodVertices>0 && Flag_badMuonFilterV2>0 && Flag_badChargedHadronFilterV2>0 ;
+  return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_badMuonFilterV2 && Flag_badChargedHadronFilterV2 ;
 
 }
 
 
 Bool_t MT2Tree::passFiltersMC2017() const {
-  return PV_npvs>0 && Flag_goodVertices>0 && Flag_globalSuperTightHalo2016Filter>0 && Flag_HBHENoiseFilter>0 && Flag_HBHENoiseIsoFilter>0 && Flag_EcalDeadCellTriggerPrimitiveFilter>0 && Flag_BadPFMuonFilter>0 && Flag_BadChargedCandidateFilter>0 && Flag_ecalBadCalibFilter>0 ;
+  return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
 
 }
 
@@ -3244,6 +3245,17 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel) const
   return kFALSE;
 }
 
+Bool_t MT2Tree::passTriggerSelection2017(TString sel){
+  if(sel == "llep"){
+    return HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
+  }
+  else if(sel == "zllSF"){
+    return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v || HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v || HLT_Mu37_TkMu27_v || HLT_Mu50_v || HLT_TkMu50_v || HLT_Mu55_v || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v || HLT_DoubleEle25_CaloIdL_MW_v || HLT_DoubleEle33_CaloIdL_MW_v || HLT_Photon200_v;
+  }
+  else if(sel == "zllOF"){
+    return HLT_Mu50_v || HLT_TkMu50_v || HLT_Mu55_v || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v || HLT_Mu27_Ele37_CaloIdL_MW_v3 || HLT_Mu37_Ele27_CaloIdL_MW_v3 || HLT_Photon200_v;
+  }
+}
 
 /*
 Bool_t MT2Tree::passGammaAdditionalSelection(int sampleId) const
