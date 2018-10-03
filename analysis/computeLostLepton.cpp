@@ -138,7 +138,6 @@ int main( int argc, char* argv[] ) {
   // The final lost lepton background estimate is the product between 1. and 2. (implemented later)
 
 
-
  // MC Control Region
   //For me this is completely useless
   // MT2Analysis<MT2Estimate>* MCcr_ = MT2Analysis<MT2Estimate>::readFromFile(llepControlRegionDir + "/mc.root", "llepCR");
