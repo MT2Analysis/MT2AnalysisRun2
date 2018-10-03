@@ -40,12 +40,11 @@ using namespace std;
 
 
 void randomizePoisson( MT2Analysis<MT2EstimateTree>* data );
-template <class T>
-MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std::string otherRegion="" );
-template <class T>
-MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg );
-template <class T>
-MT2Analysis<T>* mergeYields( std::vector< MT2Analysis<T> *> EventYield, const std::string& regionsSet, const std::string& name, int id_min, int id_max=-1, const std::string& legendName="" );
+
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, std::string otherRegion="" );
+//template <class T>
+//MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg );
+//template <class T>
 int matchPartonToJet( int index, MT2Tree* myTree );
 
 
@@ -148,148 +147,72 @@ int main( int argc, char* argv[] ) {
 
   TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
 
+  std::vector<MT2Analysis<MT2EstimateTree>* > EventYields_toWrite; // used to handle with a for loop the writing to file of all yields
 
-  std::vector<MT2Analysis<MT2EstimateTree>* > yields;
-  //MT2Analysis<MT2EstimateTree>* dataYield;
+  // ********************
+  // Do analysis on MC bkg
+  // ********************
+  std::vector<std::string> sampleNames = {"Top", "WJets", "QCD", "ZJets"};  // group of bkg mc samples
+  std::map<std::string, MT2Analysis<MT2EstimateTree>*> mcSRMap;
 
-  if( cfg.useMC() && !onlyData && !onlySignal ) { // use MC BG estimates
-    cout << "I am a MC file " << endl;
+  if( cfg.useMC() && !onlyData && !onlySignal ) { // do bkg
+
+    // Load samples
     std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
 
-
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 101, 999); // not interested in signal here (see later)
+/*    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 101, 999); // not interested in signal here (see later)
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(120);
     }
+*/
+    // create Groups of samples, i.e. vectors - e.g. one for Wjets, one for top, ecc
+    std::map<TString, std::vector<MT2Sample>> fSamplesMap;
+    std::cout << "-> Creating sample list for Top " << std::endl;
+    fSamplesMap["Top"] = MT2Sample::loadSamples(samplesFileName, 300, 499);
+    std::cout << "-> Creating sample list for WJets " << std::endl;
+    fSamplesMap["WJets"] = MT2Sample::loadSamples(samplesFileName, 500, 509);
+    std::cout << "-> Creating sample list for QCD " << std::endl;
+    fSamplesMap["QCD"] = MT2Sample::loadSamples(samplesFileName, 100, 199);
+    std::cout << "-> Creating sample list for ZJets " << std::endl;
+    fSamplesMap["ZJets"] = MT2Sample::loadSamples(samplesFileName, 600, 699);
 
-    
-
-    std::vector< MT2Analysis<MT2EstimateTree>* > EventYield_incl;
-    for( unsigned i=0; i<fSamples.size(); ++i ) {
-      cout << "do I enter the loop" << endl;
-      int this_id = fSamples[i].id;
-      if( this_id<600 ) continue; // skip everything that is not ZJets
-      if( this_id>=700 ) continue; //
-      EventYield_incl.push_back( computeYield<MT2EstimateTree>( fSamples[i], cfg, "13TeV_2016_inclusive"  ));
-      cout << "I am about to leave the loop IIIIIIIIICCCCCCCC " << endl;
-    }
-    
-    MT2Analysis<MT2EstimateTree>* EventYield_zjets_inclusive = mergeYields<MT2EstimateTree>( EventYield_incl, "13TeV_2016_inclusive", "ZJets_inclusive", 600, 699, "Z+jets" );
-    EventYield_zjets_inclusive->writeToFile(outputdir + "/ZJetsIncl.root");
- 
-
-    std::vector< MT2Analysis<MT2EstimateTree>* > EventYield_ssr;
-    for( unsigned i=0; i<fSamples.size(); ++i ) {
-      int this_id = fSamples[i].id;
-      if( this_id>=600 ) continue; //
-      if( this_id<=299 ) continue; //
-      EventYield_ssr.push_back( computeYield<MT2EstimateTree>( fSamples[i], cfg, "13TeV_2016_ssr"  ));
-    }
-   
-    MT2Analysis<MT2EstimateTree>* EventYield_wjets_ssr = mergeYields<MT2EstimateTree>( EventYield_ssr, "13TeV_2016_ssr", "Wjets_ssr", 500, 599, "W+jets" );
-    EventYield_wjets_ssr->writeToFile(outputdir + "/WjetsSSR.root");
-    MT2Analysis<MT2EstimateTree>* EventYield_top_ssr = mergeYields<MT2EstimateTree>( EventYield_ssr, "13TeV_2016_ssr", "Top_ssr", 300, 499, "Top" );
-    EventYield_top_ssr->writeToFile(outputdir + "/TopSSR.root");
-
-
-    std::vector< MT2Analysis<MT2EstimateTree>* > EventYield;
-    for( unsigned i=0; i<fSamples.size(); ++i ) {
-      int this_id = fSamples[i].id;
-      if( this_id>=200 && this_id<300 ) continue; // skip GJets
-      if( this_id>=700 && this_id<800 ) continue; // skip DY
-      EventYield.push_back( computeYield<MT2EstimateTree>( fSamples[i], cfg ));
-      cout << "sorti de computeYield" << endl;
+    // Calculate the yields 
+    for(auto sampleName : sampleNames){
+      std::cout << "-> Considering group " << sampleName << std::endl;
+      // create the estimate tree for the group
+      mcSRMap[sampleName] = new MT2Analysis<MT2EstimateTree> ( sampleName, cfg.regionsSet() );
+      // then fill it from all samples in the group
+      for (auto fSample : fSamplesMap[sampleName]){
+        computeYield( fSample, cfg, mcSRMap[sampleName] );
+      }
+      std::cout << "-> Done looping on samples for this group" << std::endl;
     }
 
+    // add them to the output handler
+    for (auto sampleName : sampleNames){
+      EventYields_toWrite.push_back(mcSRMap[sampleName]);
+    }
 
+  } // if bkg MC samples
 
-    std::cout << "-> Done looping on samples. Start merging." << std::endl;
+  // ********************
+  // Do analysis on signals, if any
+  // ********************
 
-    std::cout << "     merging Top..." << std::endl;
-    MT2Analysis<MT2EstimateTree>* EventYield_top   = mergeYields<MT2EstimateTree>( EventYield, cfg.regionsSet(), "Top", 300, 499 ); // ttbar, single top, ttW, ttZ...
-    std::cout << "     merging QCD..." << std::endl;
-    MT2Analysis<MT2EstimateTree>* EventYield_qcd   = mergeYields<MT2EstimateTree>( EventYield, cfg.regionsSet(), "QCD", 100, 199 );
-    std::cout << "     merging WJets..." << std::endl;
-    MT2Analysis<MT2EstimateTree>* EventYield_wjets = mergeYields<MT2EstimateTree>( EventYield, cfg.regionsSet(), "WJets", 500, 599, "W+jets" );
-    std::cout << "     merging ZJets..." << std::endl;
-    MT2Analysis<MT2EstimateTree>* EventYield_zjets = mergeYields<MT2EstimateTree>( EventYield, cfg.regionsSet(), "ZJets", 600, 699, "Z+jets" );
-
-
-    //    MT2Analysis<MT2EstimateTree>* EventYield_other = mergeYields<MT2EstimateTree>( EventYield, cfg.regionsSet(), "Other", 700, 999, "Other" );
-    std::cout << "-> Done merging." << std::endl;
-
-    yields.push_back( EventYield_qcd );
-    yields.push_back( EventYield_wjets );
-    yields.push_back( EventYield_zjets );
-    yields.push_back( EventYield_top );
-    //    yields.push_back( EventYield_other );
-
-
-
-    if( cfg.dummyAnalysis() ) {
-      MT2Analysis<MT2EstimateTree>* dataYield   = mergeYields<MT2EstimateTree>( EventYield, cfg.regionsSet(), "data", 100, 699 );
-      yields.push_back( dataYield );
-    } //else {
-      //dataYield = new MT2Analysis<MT2EstimateTree>( "data", cfg.regionsSet(), 1 );
-    //}
-
-  } // if MC samples
-
-
-
-  // load signal samples, if any
   MT2Analysis<MT2EstimateAllSigSyst>* signalYield ;
 
   std::vector< MT2Analysis< MT2EstimateAllSigSyst>* > signals;
-  if( cfg.mcSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData ) {
-    //  if( cfg.mcSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData && onlySignal) {
-
-    std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
-    std::cout << std::endl << std::endl;
-    std::cout << "-> Loading signal samples from file: " << samplesFileName << std::endl;
-
-    //   if( signalName == "" ) signalName = 9999;
-
-    std::cout << "signal name " << signalName << std::endl;
-
-    //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, signalName); // only signal (id>=1000)
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000); // only signal (id>=1000)
-
-
-
-    if( fSamples.size()==0 ) {
-
-      std::cout << "No signal samples found, skipping." << std::endl;
-
-    } else {
-
-      for( unsigned i=0; i<fSamples.size(); ++i )
-        signals.push_back( computeSigYield<MT2EstimateAllSigSyst>( fSamples[i], cfg ) );
-
-//      std::cout << "     merging T1bbbb full scan..." << std::endl;
-//      MT2Analysis<MT2EstimateAllSigSyst>* EventYield_T1bbbb   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), "SMS_T1bbbb_fullScan", 1020, 1020 );
-//      std::cout << "-> Done merging." << std::endl;
-//      signals.push_back( EventYield_T1bbbb );
-
-    } // if samples != 0
-
-    std::cout << "Merging        signals" << std::endl;
-
-    signalYield   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), signalName, 1000, 2000 ); //old t1bbbb 1200, 1249
-
-
-  } // if mc samples
-
-  else if ( cfg.sigSamples()!="" && !onlyData  ) {
-    //  else if ( cfg.sigSamples()!="" && !onlyData && onlySignal ) {
+  if( cfg.sigSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData ) { // Take signals from a different sample file, compulsory, otherwise no signals analysis
 
     std::string samplesFileName = "../samples/samples_" + cfg.sigSamples() + ".dat";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading signal samples from file: " << samplesFileName << std::endl;
+    std::cout << "     signal name " << signalName << std::endl;
 
+    //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, signalName); // only signal (id>=1000)
     std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000); // only signal (id>=1000)
 
     if( fSamples.size()==0 ) {
@@ -299,90 +222,76 @@ int main( int argc, char* argv[] ) {
     } else {
 
       for( unsigned i=0; i<fSamples.size(); ++i )
-        signals.push_back( computeSigYield<MT2EstimateAllSigSyst>( fSamples[i], cfg ) );
-
-//      std::cout << "     merging T1bbbb full scan..." << std::endl;
-//      MT2Analysis<MT2EstimateAllSigSyst>* EventYield_T1bbbb   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), "SMS_T1bbbb_fullScan", 1020, 1020 );
-//      std::cout << "-> Done merging." << std::endl;
-//      signals.push_back( EventYield_T1bbbb );
-
+        continue;
+        //signals.push_back( computeSigYield<MT2EstimateAllSigSyst>( fSamples[i], cfg ) );
     } // if samples != 0
 
-    std::cout << "Merging signals" << std::endl;
-    signalYield   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), signalName, 1000, 2000 );
+    std::cout << "Merging        signals" << std::endl;
+
+    //signalYield   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), signalName, 1000, 2000 ); //old t1bbbb 1200, 1249
 
 
-  } // if sig samples
+  } // if signal samples
 
 
+  // ********************
+  // Do analysis on data
+  // ********************
   if( !(cfg.dummyAnalysis()) && cfg.dataSamples()!="" && !onlyMC  && !onlySignal ) {
-    cout << "I think you see me" << endl;
-    std::string samplesFile_data = "../samples/samples_" + cfg.dataSamples() + ".dat";
+
+    // Read the samples and create the MT2Sample for data    
+    std::string samplesFileNameData = "../samples/samples_" + cfg.dataSamples() + ".dat";
 
     std::cout << std::endl << std::endl;
-    std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
+    std::cout << "-> Loading data from file: " << samplesFileNameData << std::endl;
 
-    //    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "JetHTMHT"); //, 1, 99 );
-    //    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, 1, 3 );
-    // std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "noDuplicates" );
-    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "");
-    if( samples_data.size()==0 ) {
-      std::cout << "There must be an error: samples_data is empty!" << std::endl;
+    std::vector<MT2Sample> fSamplesData = MT2Sample::loadSamples(samplesFileNameData, ""); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
+    if( fSamplesData.size()==0 ) {
+      std::cout << "There must be an error: fSamplesData is empty!" << std::endl;
       exit(1209);
     }
 
-    cout << "after loadsample" << endl;
-
-    std::vector< MT2Analysis<MT2EstimateTree>* > EventYield_data;
-    for( unsigned i=0; i < samples_data.size(); ++i ){
-      cout << "I start looping" << endl;
-      EventYield_data.push_back( computeYield<MT2EstimateTree>( samples_data[i], cfg ) );
+    // Compute the yields
+    MT2Analysis<MT2EstimateTree> *dataSR = new MT2Analysis<MT2EstimateTree> ( "data", cfg.regionsSet() );; 
+ 
+    for (auto fSample : fSamplesData){
+      computeYield( fSample, cfg, dataSR );
     }
-    cout << "after computeYield" << endl;
-    MT2Analysis<MT2EstimateTree>* dataYield;
-    //dataYield = EventYield_data[0];
-    //dataYield->setName("data");
-    //dataYield   = mergeYields<MT2EstimateTree>( EventYield_data, cfg.regionsSet(), "data", 1, 3 );
-    dataYield   = mergeYields<MT2EstimateTree>( EventYield_data, cfg.regionsSet(), "data", -1, 10 );
 
-    yields.push_back( dataYield );
+    // Add result to output handler
+    EventYields_toWrite.push_back( dataSR );
 
-  }
+  } // end data
 
-
-  if( yields.size()==0 && signals.size()==0 ) {
+  // ********************
+  // Write all analyses to output
+  // ********************
+  if( EventYields_toWrite.size()==0 && signals.size()==0 ) {
     std::cout << "-> Didn't end up with a single yield... something's wrong." << std::endl;
     exit(87);
   }
 
-
-  // save MT2Analyses:
-  if( yields.size()>0 ){
-    yields[0]->writeToFile(outputdir + "/analyses.root");
-  for( unsigned i=1; i<yields.size(); ++i )
-    yields[i]->writeToFile(outputdir + "/analyses.root");
-  //for( unsigned i=0; i<signals.size(); ++i )
-  //  signals[i]->writeToFile(outputdir + "/analyses.root");
-  }
-  else if( signals.size()>0 ){
-    //    signals[0]->writeToFile(outputdir + "/analyses.root");
-    //    for( unsigned i=1; i<signals.size(); ++i )
-    //    signals[i]->writeToFile(outputdir + "/analyses.root");
+  if( EventYields_toWrite.size()>0 ){
+    EventYields_toWrite[0]->writeToFile(outputdir + "/analyses.root"); // not sure why we split the writing !!!
+    for( unsigned i=1; i<EventYields_toWrite.size(); ++i ) {
+      EventYields_toWrite[i]->writeToFile(outputdir + "/analyses.root");
+    }
+  } else if( signals.size()>0 ){
+    signals[0]->writeToFile(outputdir + "/analyses.root");
+    for( unsigned i=1; i<signals.size(); ++i ) {
+      signals[i]->writeToFile(outputdir + "/analyses.root");
+    }
   }
 
   // signalYield->writeToFile(outputdir + "/analyses.root");
 
   cfg.saveAs(outputdir + "/config.txt");
-  cout << "the code is finished" << endl;
   return 0;
 
 }
 
 
-
-
-template <class T>
-MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std::string otherRegion ) {
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, std::string otherRegion){
 
   std::string regionsSet = cfg.regionsSet();
   if(otherRegion!="")
@@ -400,60 +309,26 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
   TTree* tree = (TTree*)file->Get("Events");
 
   MT2Tree myTree;
-
-  //if( cfg.additionalStuff()=="qgVars" || cfg.additionalStuff()=="hfContent" ) {
-  //   myTree.loadGenStuff = true;
-  //} else {
-  //  myTree.loadGenStuff = false;
-  // }
-
   myTree.Init(tree);
 
-  std::cout << "-> Setting up MT2Analysis with name: " << sample.sname << std::endl;
-  MT2Analysis<T>* analysis = new MT2Analysis<T>( sample.sname, regionsSet, sample.id );
+  //We temporally add this line, since it is not a branch of the MT2tree yet
+  Bool_t isData = (sample.id >= 1 && sample.id < 100 );
+  std::cout << "evt_id=" << myTree.evt_id << " sample.id=" << sample.id << "  isData="<< isData << std::endl;
 
-  if( sample.id < 1000){
-
-    if( cfg.additionalStuff()=="qgVars" ) {
-
-      T::addVar( analysis, "partId0" );
-      T::addVar( analysis, "partId1" );
-      T::addVar( analysis, "partId2" );
-      T::addVar( analysis, "partId3" );
-      T::addVar( analysis, "qgl0" );
-      T::addVar( analysis, "qgl1" );
-      T::addVar( analysis, "qgl2" );
-      T::addVar( analysis, "qgl3" );
-      T::addVar( analysis, "qglProd" );
-      T::addVar( analysis, "qglAve" );
-    }
-
-    if( cfg.additionalStuff()=="hfContent" ) {
-      T::addVar( analysis, "nTrueB" );
-      T::addVar( analysis, "nTrueBJ" );
-      T::addVar( analysis, "nTrueC" );
-    }
-
-    T::addVar( analysis, "jet1_pt" );
-    T::addVar( analysis, "jet2_pt" );
-    T::addVar( analysis, "mht" );
-
+  double nGen=-9999; double nGenWeighted=-9999;
+  if(!isData){
+    nGen = getNgen(sample.file, "genEventCount");
+    nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
 
-  //We temporally add this line, since it is not a branch of the MT2tree yet
-  Bool_t isData = (myTree.evt_id >= 1 && myTree.evt_id < 100 );
-
   int nentries = tree->GetEntries();
-  //ATTENTION: REMETTRE iEntry<nentries 
-  for( int iEntry=0; iEntry<nentries/50; ++iEntry ) {
-    //ATTENTION: modifier ici aussi
-    if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries/50 << std::endl;
 
+  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+
+    if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     myTree.GetEntry(iEntry);
-
     //if( myTree.isData && !myTree.isGolden ) continue;
     //if(isData && !myTree.isGolden ) continue;
-
     if(isData) {
       if(cfg.year() == 2016) if( !myTree.passFilters2016() ) continue;
       if(cfg.year() == 2017) if( !myTree.passFilters2017() ) continue;
@@ -461,13 +336,9 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
       if(cfg.year() == 2016) if( !myTree.passFiltersMC2016() ) continue;
       if(cfg.year() == 2017) if( !myTree.passFiltersMC2017() ) continue;
     } 
-
     if (isData) {
-      //MG 2016 expression
-      //if(cfg.year() == 2016) if( !(myTree.HLT_PFMET120_PFMHT120 || myTree.HLT_PFHT900 || myTree.HLT_PFHT300_PFMET110 || myTree.HLT_PFJet450 || myTree.HLT_PFMETNoMu120_PFMHTNoMu120 ) ) continue;
       if(cfg.year() == 2017) if (!myTree.passTriggerSelection2017("SR")) continue;
     }
-
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter --> not in nanoAOD
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue; -->not in nanoAOD
@@ -483,38 +354,19 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
     }
     // kinematic selections, including lepton veto
     if( !myTree.passSelection() ) continue;
-    // monojet id
+    // monojet id, not needed for 2017, as all jets have tight id
     //if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
-    // uncomment this line once we have implemented the passMonoJetId function
-
 
     // Selection is over, now apply the weights !
     //Double_t weight = (isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
-
-    //Number of generated events:
-    //double nGen=-9999;
-    //nGen = getNgen(sample.file, "genEventCount"); //this variable cannot be computed for data, since there is no Runs tree
-    //Double_t weight = (isData) ? 1. : myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
-    // FIXME : divide the weight expression by nEffEventsHisto once it has been created!
-    
-    if(isData == true) cout << "je suis data" << endl;
-    if(isData == false) cout << "je suis mc" << endl;
-    
-
     Double_t weight_syst = 1.;
     Double_t weight(1.);
     if(isData){
       weight = 1.;
     }
     else{
-      double nGen=-9999;
-      nGen = getNgen(sample.file, "genEventCount"); //this variable cannot be computed for data, since there is no Runs tree
       weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
     }
-      
-      
-
-
     // if(!isData){
     // weight *= myTree.weight_btagsf;
     // weight *= myTree.weight_lepsf;
@@ -535,9 +387,8 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
     // Now that you have done the pre-selection
     // you can actually make the estimates
     // define here the variables that will enter the region categorization
-
     float ht   = myTree.ht;
-    float minMTBmet = -999;
+    float minMTBmet = -999; // 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
@@ -548,160 +399,28 @@ MT2Analysis<T>* computeYield( const MT2Sample& sample, const MT2Config& cfg, std
     //  GenSusyMScan1 = myTree.GenSusyMGluino;
     // GenSusyMScan2 = myTree.GenSusyMNeutralino;
     // }
-
-
-    T* thisEstimate = analysis->get( ht, njets, nbjets, minMTBmet, mt2 );
-    //T* thisEstimate = analysis->get(ht, njets, nbjets, mt2);
-    //T* thisEstimate = analysis->get( ht, njets, nbjets, met, minMTBmet, mt2 );
+    MT2EstimateTree *thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
     if( thisEstimate==0 ) continue;
-
     if( sample.id < 1000 ){
-
-      thisEstimate->assignVar( "jet1_pt",  myTree.jet1_pt );
-      thisEstimate->assignVar( "jet2_pt",  myTree.jet2_pt );
-      thisEstimate->assignVar( "mht",  myTree.mht_pt );
-
-      if( cfg.additionalStuff()=="qgVars" ) {
-
-	// initialize
-	thisEstimate->assignVar( "qgl0", -1. );
-	thisEstimate->assignVar( "qgl1", -1. );
-	thisEstimate->assignVar( "qgl2", -1. );
-	thisEstimate->assignVar( "qgl3", -1. );
-	thisEstimate->assignVar( "partId0", 0 );
-	thisEstimate->assignVar( "partId1", 0 );
-	thisEstimate->assignVar( "partId2", 0 );
-	thisEstimate->assignVar( "partId3", 0 );
-
-	float qglProd = 1.;
-	float qglAve = 0.;
-	int denom = 0;
-
-
-	if( njets>0 && fabs(myTree.jet_eta[0])<2.5 ) {
-
-	  float qgl0 = myTree.Jet_qgl[0];
-	  thisEstimate->assignVar( "qgl0", qgl0 );
-	  qglProd *= qgl0;
-	  qglAve += qgl0;
-	  denom++;
-	  thisEstimate->assignVar( "partId0", matchPartonToJet( 0, &myTree ) );
-	  //thisEstimate->assignVar( "partId0", myTree.jet_mcFlavour[0] );
-
-	}
-
-
-	if( njets>1 && fabs(myTree.jet_eta[1])<2.5 ) {
-
-	  float qgl1 = myTree.Jet_qgl[1];
-	  thisEstimate->assignVar( "qgl1", qgl1 );
-	  qglProd *= qgl1;
-	  qglAve += qgl1;
-	  denom++;
-
-	  thisEstimate->assignVar( "partId1", matchPartonToJet( 1, &myTree ) );
-	  //thisEstimate->assignVar( "partId1", myTree.jet_mcFlavour[1] );
-
-	}
-
-	if( njets>2 && fabs(myTree.jet_eta[2])<2.5 ) {
-
-	  float qgl2 = myTree.Jet_qgl[2];
-	  thisEstimate->assignVar( "qgl2", qgl2 );
-	  qglProd *= qgl2;
-	  qglAve += qgl2;
-	  denom++;
-
-	  thisEstimate->assignVar( "partId2", matchPartonToJet( 2, &myTree ) );
-	  //thisEstimate->assignVar( "partId2", myTree.jet_mcFlavour[2] );
-
-	}
-
-
-	if( njets>3 && fabs(myTree.jet_eta[3])<2.5 ) {
-
-	  float qgl3 = myTree.Jet_qgl[3];
-	  thisEstimate->assignVar( "qgl3", qgl3 );
-	  qglProd *= qgl3;
-	  qglAve += qgl3;
-	  denom++;
-
-	  thisEstimate->assignVar( "partId3", matchPartonToJet( 3, &myTree ) );
-	  //thisEstimate->assignVar( "partId3", myTree.jet_mcFlavour[3] );
-
-	}
-
-	qglAve /= (float)denom;
-
-	thisEstimate->assignVar( "qglProd", qglProd );
-	thisEstimate->assignVar( "qglAve", qglAve );
-
-
-      }
-
-      //if( cfg.additionalStuff()=="hfContent" ) {
-
-      //float nTrueB=0.;
-      //float nTrueC=0.;
-
-      //for( int ipart=0; ipart<myTree.ngenPart; ++ipart ) {
-      
-      //  if( myTree.genPart_pt[ipart] < 20. ) continue;
-      //  if( abs(myTree.genPart_eta[ipart])>2.5 ) continue;
-      //  if( myTree.genPart_status[ipart] != 23 ) continue;
-
-      //  if( abs(myTree.genPart_pdgId[ipart])==5 )
-      //    nTrueB+=1.;
-      //  if( abs(myTree.genPart_pdgId[ipart])==4 )
-      //    nTrueC+=1.;
-
-      //}
-
-
-      //	float nTrueBJ=0.;
-
-      //for( int ijet=0; ijet<myTree.nJet; ++ijet ) {
-
-      //  if( myTree.jet_pt[ijet] <20. ) continue;
-      //  if( abs(myTree.jet_eta[ijet])>2.5 ) continue;
-
-      //  if( abs(myTree.Jet_btagDeepFlavB[ijet])==5 )
-      //    nTrueBJ+=1.;
-
-	    //}
-
-	    //thisEstimate->assignVar( "nTrueB", nTrueB );
-	    //thisEstimate->assignVar( "nTrueC", nTrueC );
-	    //thisEstimate->assignVar( "nTrueBJ", nTrueBJ );
-
-	    // }
-       }
-
-    if( sample.id < 1000 ){
-
       thisEstimate->assignTree( myTree, weight );
       thisEstimate->tree->Fill();
-
     }
    
     thisEstimate->yield->Fill( mt2, weight );
+    // once we have the GenSusyMScan variables, we can add the 3D EventYields_toWrite
     //thisEstimate->yield3d->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight );
 
   } // for entries
 
-  //ofs.close();
-  cout << "est ce que je vais bien" << endl;
-  analysis->finalize();
+  anaTree->finalize();
 
   delete tree;
 
   file->Close();
   delete file;
 
-  return analysis;
-
 }
-
+/*
 template <class T>
 MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg ) {
 
@@ -851,14 +570,14 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
       // }
 
     //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb*cfg.lumi()*myTree.puWeight;
-    /*
+    
     Double_t weight = 1.;
     Double_t weight_geq20 = 1.;
     Double_t weight_l20 = 1.;
 
 
 
-    //    Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
+    //    Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb;//  *cfg.lumi();
     //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb*cfg.lumi(); //Keeping normalization to luminosity for signal?
     Double_t weight_syst = 1.;
 
@@ -914,7 +633,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
     }
 
-    */
+    
 
     
     T* thisEstimate = analysis->get( ht, njets, nbjets, minMTBmet, mt2 );
@@ -936,7 +655,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
       //    thisEstimate->yield3d_btag_light_DN->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight*(1.-(btag_light_DN-1.)));
 
 
-      /*
+      
       thisEstimate->yield3d_isr_UP->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight/weight_isr*isr_UP);
       thisEstimate->yield3d_isr_DN->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight/weight_isr*isr_DN);
 
@@ -954,14 +673,14 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
       else
 	thisEstimate->yield3d_st20->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight_l20);
 
-      */}
-    /*
+      }
+    
     if(dogenmet && passGenMET){
 
       thisEstimate->yield3d_genmet->Fill( mt2_genmet, GenSusyMScan1, GenSusyMScan2, weight );
 
     }
-      */
+      
   } // for entries
 
   //ofs.close();
@@ -976,8 +695,10 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   return analysis;
 
 }
+*/
 
 
+/*
 template <class T>
 MT2Analysis<T>* mergeYields( std::vector<MT2Analysis<T> *> EventYield, const std::string& regionsSet, const std::string& name, int id_min, int id_max, const std::string& legendName ) {
   cout << "I am in mergeYields" << endl;
@@ -986,10 +707,12 @@ MT2Analysis<T>* mergeYields( std::vector<MT2Analysis<T> *> EventYield, const std
   MT2Analysis<T>* return_EventYield = new MT2Analysis<T>(name, regionsSet, id_min, legendName);
 
   for( unsigned i=0; i<EventYield.size(); ++i ) {
+    std::cout << "i=" << i << std::endl;
     cout << "je suis dans la boucle" << endl;
     if( EventYield[i]->getId() >= id_min && EventYield[i]->getId() <= id_max ) {
-
+       std::cout << "before sum" << std::endl;
        *(return_EventYield) += *(EventYield[i]);
+       std::cout << "after sum" << std::endl;
 
     }
 
@@ -1001,7 +724,7 @@ MT2Analysis<T>* mergeYields( std::vector<MT2Analysis<T> *> EventYield, const std
 }
 
 
-
+*/
 
 
 void randomizePoisson( MT2Analysis<MT2EstimateTree>* data ) {

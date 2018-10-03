@@ -49,14 +49,11 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     if (buffer[0] == '#') {
       continue; // Skip lines commented with '#'                                                                                                                                                                                 
     }
-   
     std::string sampleFilePath(buffer);
     TString sampleFilePath_tstr(sampleFilePath);
     if( !(sampleFilePath_tstr.EndsWith(".root")) ) continue;
-
     MT2Sample s;
     s.file = sampleFilePath;
-
     sampleFilePath_tstr.ReplaceAll( "/", " " );
 
     std::istringstream iss(sampleFilePath_tstr.Data());
@@ -66,7 +63,6 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       iss >> sub;
       pathDirs.push_back(sub);
     } while (iss);
-  
     TString rootFileName(pathDirs[pathDirs.size()-2]); // last element of vector always empty: take -2
 
     if( filter!="" && !(rootFileName.Contains(filter.c_str())) ) continue;
@@ -86,19 +82,15 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       std::cout << "[MT2Sample::loadSamples] ERROR! Illegal file name: " << rootFileName << std::endl;
       exit(1101);
     }
-
     TFile* file = TFile::Open(s.file.c_str());
-    
     //In the ntuples of the 2016 data, the tree is called mt2
     //TTree* tree = (TTree*)file->Get("mt2");
     //In the ntuples of the 2017 data, the tree is called Events
     TTree* tree = (TTree*)file->Get("Events");
-
     
     ULong64_t evt_nEvts;
     int evt_id;
     float evt_filter, evt_kfactor, evt_xsec; // evt_scale1fb;
-
     tree->SetBranchAddress("evt_id",&evt_id);
 //    tree->SetBranchAddress("evt_nEvts",&evt_nEvts);
     tree->SetBranchAddress("evt_filter",&evt_filter);
@@ -107,9 +99,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
 //    tree->SetBranchAddress("evt_scale1fb",&evt_scale1fb);
     
     tree->GetEntry(0);
-
     s.id       = evt_id;
-
     if(s.id<=0){
 
       if( rootFileName.Contains("JetHT") )               s.id = 1;
@@ -132,8 +122,8 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
 
     }
 
-    std::cout << "s.id  = " << s.id << std::endl;
-    std::cout << "evtid = " << evt_id << std::endl;
+//    std::cout << "s.id  = " << s.id << std::endl;
+//    std::cout << "evtid = " << evt_id << std::endl;
     
 //    s.nevents  = evt_nEvts;
     s.xsection = evt_xsec;
