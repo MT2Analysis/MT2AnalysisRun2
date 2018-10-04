@@ -27,6 +27,7 @@
 #include "interface/MT2EstimateAllSigSyst.h"
 #include "interface/MT2DrawTools.h"
 #include "interface/MT2Config.h"
+#include "interface/MT2GoodrunClass.h"
 
 #include "TRandom3.h"
 
@@ -315,10 +316,23 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   Bool_t isData = (sample.id >= 1 && sample.id < 100 );
   std::cout << "evt_id=" << myTree.evt_id << " sample.id=" << sample.id << "  isData="<< isData << std::endl;
 
+  // number of gen events
   double nGen=-9999; double nGenWeighted=-9999;
   if(!isData){
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
+  }
+  
+  // json business here 
+  const char* unblindedjson_file;
+  if (cfg.year()==2017) unblindedjson_file="../jsons/goodruns_2017_unblinded.txt";
+  else if (cfg.year()==2018) unblindedjson_file="../jsons/goodruns_2018_unblinded.txt";
+
+  GoodRun unblinded;
+
+  if (cfg.applyJSONforSR() and isData) {
+    std::cout << "Loading unblinded json file: " << unblindedjson_file << std::endl;
+    unblinded.set_goodrun_file(unblindedjson_file);
   }
 
   int nentries = tree->GetEntries();
@@ -347,6 +361,16 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
+    
+    // only look at unblinded data through json
+    bool isUnblinded;
+    if (cfg.applyJSONforSR() && isData && !unblinded.goodrun(myTree.run, myTree.luminosityBlock)){
+      isUnblinded = false;
+    } else {
+      isUnblinded = true;
+    }
+    if(!isUnblinded) continue;
+
     //check if is there is a nan
     if( isnan(myTree.ht) || isnan(myTree.met_pt) ||  isinf(myTree.ht) || isinf(myTree.met_pt)  ){
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
