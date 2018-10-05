@@ -72,7 +72,7 @@ int main( int argc, char* argv[] ) {
   mc.push_back(mc_top);
 
   std::string plotsDir = cfg.getEventYieldDir() + "/llepControlRegion/plotsDataMC";
-  std::string plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/250ht450";
+  std::string plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/575ht1000";
  
   
   //warning: change of the directory here
@@ -101,10 +101,10 @@ int main( int argc, char* argv[] ) {
   //std::string selection = "ht>200. && met>200  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // std::string selection = "ht>250. && met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   //std::string selection = "ht>1000. && met>30  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
-  std::string selection = "ht>250 && ht<450 && met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  std::string selection = "ht>575 && ht<1000 && met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
 
-  double htInf = 200.;//200;
-  double htSup = 500; //2050.;
+  double htInf = 500.;//200;
+  double htSup = 1050; //2050.;
    
   dt.drawRegionYields_fromTree("nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV", cutsLabel, jetCutsLabel);
@@ -147,7 +147,7 @@ int main( int argc, char* argv[] ) {
 
   //selection = "ht>200 && met>200. && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // selection = "ht>250 && met>250. && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
-   selection = "ht>250. && ht<450. && met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+   selection = "ht>575. && ht<1000. && met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
     
   dt.drawRegionYields_fromTree("0b_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("0b_mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV" , cutsLabel, jetCutsLabel);
@@ -181,8 +181,8 @@ int main( int argc, char* argv[] ) {
   jetCutsLabel = getJetCutLabel(jetMin, jetMax, bMin, bMax);
 
   //selection = "ht>200 && met>200. && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met &&  mt2>200.";
-  //selection = "ht>250 && met>250. && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met &&  mt2>200.";
-   selection = "ht>250. && ht<450. && met>250  && nJets>1 && nBJets>1  && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  // selection = "ht>250 && met>250. && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met &&  mt2>200.";
+   selection = "ht>575. && ht<1000. && met>250  && nJets>1 && nBJets>1  && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   
   dt.drawRegionYields_fromTree("2b_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("2b_mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV", cutsLabel, jetCutsLabel);
@@ -219,7 +219,7 @@ int main( int argc, char* argv[] ) {
 
   //selection = "ht>200. && met>200  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // selection = "ht>250. && met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
-   selection = "ht>250. && ht<450. && met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  selection = "ht>575. && ht<1000. && met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
 
   //  dt.drawRegionYields_fromTree( "monojet_mt2"              , "mt2"                , selection, 12, 0.    , 600.  , "M_{T2}"          , "GeV" , cutsLabel, jetCutsLabel );
   
