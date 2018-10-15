@@ -97,6 +97,7 @@ public :
    Float_t         Jet_chEmEF[88];   //[nJet]
    Float_t         Jet_chHEF[88];   //[nJet]
    Float_t         Jet_eta[88];   //[nJet]
+   Int_t           Jet_hadronFlavour[88];   //[nJet]
    Float_t         Jet_mass[88];   //[nJet]
    Float_t         Jet_neEmEF[88];   //[nJet]
    Float_t         Jet_neHEF[88];   //[nJet]
@@ -1104,6 +1105,7 @@ public :
    TBranch        *b_Jet_chEmEF;   //!
    TBranch        *b_Jet_chHEF;   //!
    TBranch        *b_Jet_eta;   //!
+   TBranch        *b_Jet_hadronFlavour;   //!
    TBranch        *b_Jet_mass;   //!
    TBranch        *b_Jet_neEmEF;   //!
    TBranch        *b_Jet_neHEF;   //!
@@ -2193,6 +2195,7 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("Jet_chEmEF", Jet_chEmEF, &b_Jet_chEmEF);
    fChain->SetBranchAddress("Jet_chHEF", Jet_chHEF, &b_Jet_chHEF);
    fChain->SetBranchAddress("Jet_eta", Jet_eta, &b_Jet_eta);
+   fChain->SetBranchAddress("Jet_hadronFlavour", Jet_hadronFlavour, &b_Jet_hadronFlavour);
    fChain->SetBranchAddress("Jet_mass", Jet_mass, &b_Jet_mass);
    fChain->SetBranchAddress("Jet_neEmEF", Jet_neEmEF, &b_Jet_neEmEF);
    fChain->SetBranchAddress("Jet_neHEF", Jet_neHEF, &b_Jet_neHEF);
