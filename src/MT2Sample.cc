@@ -84,9 +84,9 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     }
     TFile* file = TFile::Open(s.file.c_str());
     //In the ntuples of the 2016 data, the tree is called mt2
-    //TTree* tree = (TTree*)file->Get("mt2");
+    // TTree* tree = (TTree*)file->Get("mt2");
     //In the ntuples of the 2017 data, the tree is called Events
-    TTree* tree = (TTree*)file->Get("Events");
+     TTree* tree = (TTree*)file->Get("Events");
     
     ULong64_t evt_nEvts;
     int evt_id;

@@ -75,6 +75,8 @@ class MT2EstimateTree : public MT2Estimate {
   float lepEta;
   float lepPhi;
   float lepMass;
+  float lepID; //to discriminate between electrons and muons
+  float lepMiniRelIso; //lepton isolation
 
 //  float GenSusyMScan1;
 //  float GenSusyMScan2;

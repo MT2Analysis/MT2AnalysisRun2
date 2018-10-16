@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
   if( argc > 2 ) {
     std::string dataMC(argv[2]);
     if( dataMC=="data" ) onlyData = true;
-    else if( dataMC=="MC" ) onlyMC = true;
+    else if( dataMC=="MC" || dataMC=="mc" ) onlyMC = true;
     else if( dataMC=="signal" ) onlySignal = true;
     else {
       std::cout << "-> You passed a second argument that isn't 'data' nor 'MC', so I don't know what to do about it." << std::endl;
@@ -103,7 +103,15 @@ int main(int argc, char* argv[]) {
 
   //Getting the scale factor histogram/////////////////
   //Electrons//
-  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/scaleFactors.root";
+
+  ////////////////////////////////////////////
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // WARNING !!!!
+  // THE SCALE FACTOR HISTOGRAMS HAVE BEEN UPDATED: COULDNT FIND GfsElectronToVeto ANYMORE
+  // USED THE OLD scaleFactor.root FILE
+  // TO BE FIXED!!
+
+  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/scaleFactors_old.root";
   TFile * f_ele = new TFile(filename.c_str() );
   if (!f_ele->IsOpen()) std::cout << " ERROR: Could not find scale factor file " << filename << std::endl;
   //Uncomment for loose Id
@@ -122,8 +130,6 @@ int main(int argc, char* argv[]) {
   h_elTrk = (TH2D*) f_eleTrk->Get("EGamma_SF2D");
   h_elTrk->SetDirectory(0);
   f_eleTrk->Close(); delete f_eleTrk;
-
-
 
 
   //Muons//
@@ -447,14 +453,14 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
   std::string regionsSet = cfg.crRegionsSet();
   if( do_ZinvEst ) regionsSet = cfg.regionsSet();
-
+ 
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
 
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
 
-  TTree* tree = (TTree*)file->Get("mt2");
+  TTree* tree = (TTree*)file->Get("Events");
 
   MT2Tree myTree;
   //  myTree.loadGenStuff = false;
@@ -518,7 +524,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
         if( !myTree.passSelection("zll") ) continue;
     }
     if(( myTree.lep_pdgId[0]*myTree.lep_pdgId[1])>0 )   continue;
-    if(  myTree.nJet30==1 && !(myTree.jet_id[0]>=4)) continue;
+    //FIXME!! removed next selection criteria for 2017 since jet_id defined differently
+    //if(  myTree.nJet30==1 && !(myTree.jet_id[0]>=4)) continue;
 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;

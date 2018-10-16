@@ -47,6 +47,7 @@ class MT2DrawTools {
   void set_mc( std::vector< MT2Analysis<MT2EstimateTree>* >* mc );
   void set_lumi( float lumi );
   void set_lumiErr( float lumiErr );
+  void set_year(int year);
   void set_shapeNorm( bool shapeNorm );
   void set_mcSF( float mcsf );
   void set_addOverflow( bool addOver );
@@ -109,6 +110,7 @@ class MT2DrawTools {
   std::string outdir_;
   float lumi_;
   float lumiErr_;
+  int year_;
   bool shapeNorm_;
   bool addOverflow_;
   bool displaySF_;

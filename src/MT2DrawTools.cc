@@ -7,7 +7,7 @@
 
 #include "../interface/MT2EstimateTree.h"
 
-
+using namespace std;
 
 MT2DrawTools::MT2DrawTools( const std::string& outDir, float lumi ) {
 
@@ -84,6 +84,14 @@ void MT2DrawTools::set_shapeNorm( bool shapeNorm ) {
   else
     std::cout << "[MT2DrawTools] Using lumi normalization." << std::endl;
   shapeNorm_ = shapeNorm;
+
+}
+
+
+void MT2DrawTools::set_year(int year) { 
+
+  std::cout << "[MT2DrawTools] Setting year to: " << year<< std::endl;
+  year_ = year; 
 
 }
 
@@ -1144,8 +1152,11 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     legend->SetTextFont(42);
     legend->SetFillColor(0);
     //float data_int = 0.;
+
     if( data_ ) {
-      legend->AddEntry( gr_data, "Data", "P" );
+      TString year = to_string(year_);
+      TString nameOfDataLegend = "Data " + year;
+      legend->AddEntry( gr_data, nameOfDataLegend, "P" );
       //std::cout<< h1_data->GetName() << std::endl;
       //std::cout << "integral: " << h1_data->Integral(3, -1) << std::endl;
       //std::cout << "data(30-60): "<< h1_data->GetBinContent(3) + h1_data->GetBinContent(4) << std::endl;
