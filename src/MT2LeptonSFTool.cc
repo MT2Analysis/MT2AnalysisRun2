@@ -14,17 +14,24 @@ MT2LeptonSFTool::MT2LeptonSFTool(){
 
 bool MT2LeptonSFTool::setElHistos( std::string fname_ID, std::string fname_RECO, std::string fname_RECO_LOWPT){
 
-  // get the files
-  if(fname_ID == "")
-    fname_ID = "../data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingLoose94X.root";
-  if(fname_RECO == "")
-    fname_RECO = "../data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root";
-  if(fname_RECO_LOWPT == "")
-    fname_RECO_LOWPT = "../data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root";
+  // get the files FIXME: change file location
+  if(fname_ID == "")// this file comes from the EGAMMA POG,  should we still use it, or only keep SUSY recommendation? 
+    fname_ID = "/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/myMT2Analysis/data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingLoose94X.root";
+  if(fname_RECO == "")//for the reco, we follow EGAMMA POG recommendation, with electron pT > 20GeV, RunBCDEF: keep it!
+    fname_RECO = "/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/myMT2Analysis/data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root";
+  if(fname_RECO_LOWPT == "")// I dont where this file comes from, and why it is used
+    fname_RECO_LOWPT = "/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/myMT2Analysis/data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root";
 
-  TFile* f_ID = new TFile(fname_ID.c_str() );
-  TFile* f_RECO = new TFile(fname_RECO.c_str() );
-  TFile* f_RECO_LOWPT = new TFile(fname_RECO_LOWPT.c_str() );
+  //additionally there is a root file containing all the electron scale factors used by susy: ElectronScaleFactors_Run2017.root. This file contains all the necessary histograms (like in zllCR) Should we keep all three files above, and add this one on top of them?
+
+  if(fname_ElectronSF == "")
+    fname_ElectronSF = "/t3home/anlyon/CMSSW_8_12/src/ElectronScaleFactors_Run2017.root"; //change file location
+
+  // https://twiki.cern.ch/twiki/bin/view/CMS/EgammaIDRecipesRun2 There we can find the recommandation for Moriond2019, with 2017 and 2018 samples. There is also a file with pT > 10GeV (which is our cut) --> should we consider this?
+
+  TFile* f_ID = new TFile(fname_ID.c_str() ); // keep it?
+  TFile* f_RECO = new TFile(fname_RECO.c_str() ); 
+  TFile* f_RECO_LOWPT = new TFile(fname_RECO_LOWPT.c_str() ); // keep it?
 
   if (!f_ID->IsOpen() || !f_RECO->IsOpen() || !f_RECO_LOWPT->IsOpen())
     std::cout << " ERROR: Could not find scale factor file for ELECTRONS " << std::endl;
@@ -34,12 +41,14 @@ bool MT2LeptonSFTool::setElHistos( std::string fname_ID, std::string fname_RECO,
   TH2D* h_ID  = (TH2D*) f_ID->Get("EGamma_SF2D");
   TH2D* h_RECO = (TH2D*) f_RECO->Get("EGamma_SF2D");
   TH2D* h_RECO_LOWPT = (TH2D*) f_RECO_LOWPT->Get("EGamma_SF2D");
+  // here from the SUSY recommendation file, I don't know which histogram to consider!
 
   if (!h_ID || !h_RECO || !h_RECO_LOWPT) std::cout << "ERROR: Could not find at least one of the scale factor histograms"<< std::endl;
 
   // set the member histograms
+  // this is simply a copy of the histograms
   h_EL_ID = (TH2D*) h_ID->Clone("h_EL_ID");
-  h_EL_ID->SetDirectory(0);
+  h_EL_ID->SetDirectory(0); // the histogram doesn't belong to any directory anymore
   //h_EL_ID->Multiply(h_iso);
   h_EL_RECO = (TH2D*) h_RECO->Clone("h_RECO");
   h_EL_RECO->SetDirectory(0);
@@ -52,13 +61,16 @@ bool MT2LeptonSFTool::setElHistos( std::string fname_ID, std::string fname_RECO,
 
 
 bool MT2LeptonSFTool::setMuHistos( std::string filenameID, std::string filenameISO, std::string filenamedxyz ){
-
+  // should we keep those files or used the one suggested by SUSY (commented below)?
   if( filenameID == "")
     filenameID =   "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
+  //RunBCDEF_SF_ID.root
   if( filenameISO == "")
     filenameISO =  "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root";
+  //RunBCDEF_SF_ISO.root 
   if( filenamedxyz == "")
     filenamedxyz = "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
+  // I dont know what this files does, and if it is supposed to be kept, replaced or removed
 
   TFile * f1 = new TFile(filenameID.c_str() );
   TFile * f2 = new TFile(filenameISO.c_str() );
@@ -68,6 +80,7 @@ bool MT2LeptonSFTool::setMuHistos( std::string filenameID, std::string filenameI
   if (!f2->IsOpen()) { std::cout<<"ERROR: Could not find ISO scale factor file "<<filenameISO<<std::endl; return 0;}
   if (!f3->IsOpen()) { std::cout<<"ERROR: Could not find dxy dz scale factor file "<<filenamedxyz<<std::endl; return 0;}
 
+  //if we change to the susy filed, there are many histograms there, that we will have to choose
   TH2D* h_id_mu   = (TH2D*) f1->Get("SF");
   TH2D* h_iso_mu  = (TH2D*) f2->Get("SF");
   TH2D* h_dxyz_mu = (TH2D*) f3->Get("SF");
@@ -88,7 +101,7 @@ bool MT2LeptonSFTool::setMuHistos( std::string filenameID, std::string filenameI
 
 
 
-lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
+  lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
 
   lepSF weight;
 
@@ -107,7 +120,8 @@ lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
   }
 
   // for h_EL_ID, histogram goes from 10 GeV to 500 GeV in pt (y axis)
-  pt_cutoff = std::max( 10., std::min( 500., double(pt)) );
+  pt_cutoff = std::max( 10., std::min( 500., double(pt)) );//select electron pT, or 10GeV or 500GeV if pT doesnt belong to that range
+  // the 2D histograms are basically eta vs pT. So we pick up the scale factor corresponding to our electron features
   binx = h_EL_ID->GetXaxis()->FindBin(eta);
   biny = h_EL_ID->GetYaxis()->FindBin(pt_cutoff);
   central *= h_EL_ID->GetBinContent(binx,biny);
