@@ -93,8 +93,8 @@ computeZinv2b: computeZinv2b.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2Estima
 	$(CC) -Wall $(INCLUDES) -o computeZinv2b computeZinv2b.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)
 
 
-regionEventYields: regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
-	$(CC) -Wall $(INCLUDES) -o regionEventYields regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+regionEventYields: regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2GoodrunClass.o
+	$(CC) -Wall $(INCLUDES) -o regionEventYields regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2GoodrunClass.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 regionEventYields_scales: regionEventYields_scales.cpp MT2Region.o MT2Sample.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o regionEventYields_scales regionEventYields_scales.cpp MT2Region.o MT2Sample.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -414,7 +414,10 @@ MT2DrawTools.o: ../src/MT2DrawTools.cc MT2Region.o MT2EstimateTree.o MT2Config.o
 
 MT2LeptonSFTool.o: ../src/MT2LeptonSFTool.cc
 	$(CC) -Wall $(INCLUDES) -c ../src/MT2LeptonSFTool.cc $(ROOTFLAG) $(EXTRALIBS)
+# TO DO: add MT2LeptonSFTool for dependencies
 
+MT2GoodrunClass.o: ../src/MT2GoodrunClass.cc
+	$(CC) -Wall $(INCLUDES) -c ../src/MT2GoodrunClass.cc $(ROOTFLAG) $(EXTRALIBS)
 
 
 

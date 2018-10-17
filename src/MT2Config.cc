@@ -25,6 +25,7 @@ MT2Config::MT2Config( const std::string& name ) {
   lumi_DoubleEG_ = 0.;
   lumi_DoubleMu_ = 0.;
   year_ = 0;
+  applyJSONforSR_ = 0.;
 
   regionsSet_ = "";
   mcSamples_ = "";
@@ -77,6 +78,8 @@ MT2Config::MT2Config( const std::string& name ) {
       lumi_DoubleMu_ = atof(StringValue);
     else if( this_name=="year")
       year_ = atoi(StringValue);
+    else if( this_name=="applyJSONforSR")
+      applyJSONforSR_ = atoi(StringValue);
     else if( this_name=="regionsSet" )
       regionsSet_ = std::string(StringValue);
     else if( this_name=="mcSamples" )
@@ -233,6 +236,7 @@ void MT2Config::saveAs( const std::string& filename ) const {
   ofs << "lumi_DoubleEG "     <<   lumi_DoubleEG_       << std::endl;
   ofs << "lumi_DoubleMu "     <<   lumi_DoubleMu_       << std::endl;
   ofs << "year "     <<   year_       << std::endl;
+  ofs << "applyJSONforSR "     <<   applyJSONforSR_       << std::endl;
 
   ofs << "regionsSet " << regionsSet_ << std::endl;
   if( mcSamples_!="" )       ofs << "mcSamples " << mcSamples_ << std::endl;
