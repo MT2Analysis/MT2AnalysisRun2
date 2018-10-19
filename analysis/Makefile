@@ -40,8 +40,8 @@ computeZllGammaRatio_New: computeZllGammaRatio_New.cpp MT2Region.o MT2Sample.o M
 computeZllofBackground: computeZllofBackground.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o
 	$(CC) -Wall $(INCLUDES) -o computeZllofBackground computeZllofBackground.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
-zllControlRegion: zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o
-	$(CC) -Wall $(INCLUDES) -o zllControlRegion zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+zllControlRegion: zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o MT2LeptonSFTool.o
+	$(CC) -Wall $(INCLUDES) -o zllControlRegion zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o MT2LeptonSFTool.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 singleLeptonControlRegion: singleLeptonControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2Config.o MT2EstimateTree.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o singleLeptonControlRegion singleLeptonControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2Config.o MT2EstimateTree.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -58,8 +58,8 @@ doSmearing: doSmearing.cpp Davismt2.o Hemisphere.o MT2Region.o MT2Sample.o MT2Es
 computeLostLepton: computeLostLepton.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o computeLostLepton computeLostLepton.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)
 
-llepControlRegion: llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
-	$(CC) -Wall $(INCLUDES) -o llepControlRegion llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+llepControlRegion: llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o
+	$(CC) -Wall $(INCLUDES) -o llepControlRegion llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 llepControlRegion_compatible2016: llepControlRegion_compatible2016.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o llepControlRegion_compatible2016 llepControlRegion_compatible2016.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
