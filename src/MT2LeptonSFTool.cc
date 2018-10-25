@@ -1,5 +1,5 @@
 #include "../interface/MT2LeptonSFTool.h"
-
+using namespace std;
 // Tool to apply the lepton scale factors for the MT2 specific selections
 
 // This MT2LeptonSFTool has a hard time to be elegant, and in fact it's not
@@ -12,72 +12,120 @@ MT2LeptonSFTool::MT2LeptonSFTool(){
   // doing nothing for the moment
 }
 
-bool MT2LeptonSFTool::setElHistos( std::string fname_ID, std::string fname_RECO, std::string fname_RECO_LOWPT){
 
-  // get the files
-  if(fname_ID == "")
-    fname_ID = "../data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingLoose94X.root";
-  if(fname_RECO == "")
-    fname_RECO = "../data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root";
-  if(fname_RECO_LOWPT == "")
-    fname_RECO_LOWPT = "../data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root";
+void MT2LeptonSFTool::test(){
+  std::cout << "je suis dans lepton scale factor et je fais un test" << std::endl;
+}
 
-  TFile* f_ID = new TFile(fname_ID.c_str() );
-  TFile* f_RECO = new TFile(fname_RECO.c_str() );
-  TFile* f_RECO_LOWPT = new TFile(fname_RECO_LOWPT.c_str() );
+bool MT2LeptonSFTool::setElHist(TString sel){
+
+  // get the files 
+  TString fname_ID = "../data/ElectronScaleFactors_Run2017.root";
+  //pT > 20GeV
+  TString fname_RECO = "../data/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root";
+  //pT < 20GeV
+  TString fname_RECO_LOWPT = "../data/egammaEffi.txt_EGM2D_runBCDEF_passingRECO_lowEt.root";
+  //old files:
+  //fname_ID = "/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/myMT2Analysis/data/eleSF/egammaEffi.txt_EGM2D_runBCDEF_passingLoose94X.root";
+
+  // https://twiki.cern.ch/twiki/bin/view/CMS/EgammaIDRecipesRun2 There we can find the recommandation for Moriond2019, with 2017 and 2018 samples. There is also a file with pT > 10GeV (which is our cut) --> should we consider this?
+
+  TFile* f_ID = new TFile(fname_ID);
+  TFile* f_RECO = new TFile(fname_RECO);
+  TFile* f_RECO_LOWPT = new TFile(fname_RECO_LOWPT); 
 
   if (!f_ID->IsOpen() || !f_RECO->IsOpen() || !f_RECO_LOWPT->IsOpen())
     std::cout << " ERROR: Could not find scale factor file for ELECTRONS " << std::endl;
-
+  
   // get the histograms from the file
-  //TH2D* h_iso = (TH2D*) f_ele->Get("MVAVLooseElectronToMini");
-  TH2D* h_ID  = (TH2D*) f_ID->Get("EGamma_SF2D");
+  TH2D* h_ID_noIso = 0;
+  if(sel == "SR" || sel == "llep" || sel == ""){
+    //cout << "I enter in electron hist" << endl;
+     h_ID_noIso  = (TH2D*) f_ID->Get("Run2017_CutBasedVetoNoIso94X");
+  }
+  else if(sel == "zll"){
+    //cout << "You are not supposed to see me" << endl;
+     h_ID_noIso  = (TH2D*) f_ID->Get("Run2017_CutBasedLooseNoIso94X");
+  }
+  TH2D* h_ID_Iso = (TH2D*) f_ID->Get("Run2017_MVAVLooseTightIP2DMini");
   TH2D* h_RECO = (TH2D*) f_RECO->Get("EGamma_SF2D");
   TH2D* h_RECO_LOWPT = (TH2D*) f_RECO_LOWPT->Get("EGamma_SF2D");
-
-  if (!h_ID || !h_RECO || !h_RECO_LOWPT) std::cout << "ERROR: Could not find at least one of the scale factor histograms"<< std::endl;
-
+ 
+  if (!h_ID_noIso || !h_ID_Iso || !h_RECO || !h_RECO_LOWPT){
+    std::cout << std::endl << std::endl << "ERROR: Could not find at least one of the scale factor histograms"<< std::endl << std::endl;
+  }
+  
+  //  cout << "Number of bins of No iso: " << h_ID_noIso -> GetSize() << endl;
+  //cout << "Number of bins of iso: " << h_ID_Iso -> GetSize() << endl;
+  
   // set the member histograms
-  h_EL_ID = (TH2D*) h_ID->Clone("h_EL_ID");
-  h_EL_ID->SetDirectory(0);
-  //h_EL_ID->Multiply(h_iso);
+
+  h_EL_ID = (TH2D*) h_ID_noIso->Clone("h_EL_ID");
+  h_EL_ID->SetDirectory(0); // the histogram doesn't belong to any directory anymore
+  h_EL_ID->Multiply(h_ID_Iso); // we multiply the scale factors with and without isolation
+  
+  // we cannot multiply with the reco scale factors, since it will depend on the particular electron pt
   h_EL_RECO = (TH2D*) h_RECO->Clone("h_RECO");
   h_EL_RECO->SetDirectory(0);
 
   h_EL_RECO_LOWPT = (TH2D*) h_RECO_LOWPT->Clone("h_RECO_LOWPT");
   h_EL_RECO_LOWPT->SetDirectory(0);
 
+  f_ID->Close();
+  f_RECO->Close();
+  f_RECO_LOWPT->Close();
+
+  delete f_ID;
+  delete f_RECO;
+  delete f_RECO_LOWPT;
+
   return true;
 }
 
 
-bool MT2LeptonSFTool::setMuHistos( std::string filenameID, std::string filenameISO, std::string filenamedxyz ){
+bool MT2LeptonSFTool::setMuHist(){
+ 
+  // get the files
+  TString filenameID = "../data/RunBCDEF_SF_ID.root";
+  TString filenameISO = "../data/SF.root";
 
-  if( filenameID == "")
-    filenameID =   "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
-  if( filenameISO == "")
-    filenameISO =  "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root";
-  if( filenamedxyz == "")
-    filenamedxyz = "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
+  //old files
+  // filenameID =   "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
+  // filenameISO =  "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root"; 
+  // filenamedxyz = "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
 
-  TFile * f1 = new TFile(filenameID.c_str() );
-  TFile * f2 = new TFile(filenameISO.c_str() );
-  TFile * f3 = new TFile(filenamedxyz.c_str() );
+  TFile * f1 = new TFile(filenameID);
+  TFile * f2 = new TFile(filenameISO);
+  //TFile * f3 = new TFile(filenamedxyz.c_str() );
 
   if (!f1->IsOpen()) { std::cout<<" ERROR: Could not find ID scale factor file "<<filenameID<<std::endl; return 0;}
   if (!f2->IsOpen()) { std::cout<<"ERROR: Could not find ISO scale factor file "<<filenameISO<<std::endl; return 0;}
-  if (!f3->IsOpen()) { std::cout<<"ERROR: Could not find dxy dz scale factor file "<<filenamedxyz<<std::endl; return 0;}
+  //if (!f3->IsOpen()) { std::cout<<"ERROR: Could not find dxy dz scale factor file "<<filenamedxyz<<std::endl; return 0;}
 
-  TH2D* h_id_mu   = (TH2D*) f1->Get("SF");
-  TH2D* h_iso_mu  = (TH2D*) f2->Get("SF");
-  TH2D* h_dxyz_mu = (TH2D*) f3->Get("SF");
+  TH2D* h_id_mu   = (TH2D*) f1->Get("NUM_LooseID_DEN_genTracks_pt_abseta");
+  TH2D* h_iso_mu  = (TH2D*) f2->Get("TnP_MC_NUM_MiniIso02Cut_DEN_LooseID_PAR_pt_eta");
+  //TH2D* h_dxyz_mu = (TH2D*) f3->Get("SF");
 
-  if (!h_id_mu || !h_iso_mu  || !h_dxyz_mu) { std::cout<<"ERROR: Could not find scale factor histogram"<<std::endl; return 0;}
-  h_muSF = (TH2D*) h_id_mu->Clone("h_muSF");
-  h_muSF->SetDirectory(0);
-  h_muSF->Multiply(h_iso_mu);
-  h_muSF->Multiply(h_dxyz_mu);
+  //cout << "I enter muon hist" << endl;
+  //cout << "Number of bins 1: " << h_id_mu->GetSize() << endl;
+  //cout << "Number of bins 2: " << h_iso_mu->GetSize() << endl;
 
+  if (!h_id_mu || !h_iso_mu) { std::cout<<"ERROR: Could not find scale factor histogram"<<std::endl; return 0;}
+  
+
+  h_muSF_ID = (TH2D*) h_id_mu->Clone("h_muSF_ID");
+  h_muSF_ID->SetDirectory(0);
+  // h_muSF->Multiply(h_iso_mu);//this causes a problem since the histograms don't have the same number of bins
+  // h_muSF->Multiply(h_dxyz_mu);
+
+  h_muSF_ISO = (TH2D*) h_iso_mu->Clone("h_muSF_ISO");
+  h_muSF_ISO->SetDirectory(0);
+
+  f1->Close();
+  f2->Close();
+
+  delete f1;
+  delete f2;
 
   return true;
 }
@@ -88,7 +136,7 @@ bool MT2LeptonSFTool::setMuHistos( std::string filenameID, std::string filenameI
 
 
 
-lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
+lepSF MT2LeptonSFTool::getElSF(float pt, float eta){
 
   lepSF weight;
 
@@ -107,7 +155,9 @@ lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
   }
 
   // for h_EL_ID, histogram goes from 10 GeV to 500 GeV in pt (y axis)
-  pt_cutoff = std::max( 10., std::min( 500., double(pt)) );
+  //if(pt>500) cout << "Je suis un electron avec un trop grand pT" << endl;
+  pt_cutoff = std::max( 10., std::min( 499., double(pt)) );//select electron pT, or 10GeV or 500GeV if pT doesnt belong to that range
+  // the 2D histograms are basically eta vs pT. So we pick up the scale factor corresponding to our electron features
   binx = h_EL_ID->GetXaxis()->FindBin(eta);
   biny = h_EL_ID->GetYaxis()->FindBin(pt_cutoff);
   central *= h_EL_ID->GetBinContent(binx,biny);
@@ -116,15 +166,18 @@ lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
 
   // for RECO, you need to access to a different histogram depending on the pt
   if(pt>=20.){
-    pt_cutoff = std::max( 20., std::min( 500., double(pt)) );
+    pt_cutoff = std::max( 20., std::min( 499., double(pt)) );//Note: SF at pT==500 is null, so we set the limit to 499
+    //if(pt!=pt_cutoff) cout << "le cut marche, pT_cutoff= " << pt_cutoff << endl;
     binx = h_EL_RECO->GetXaxis()->FindBin(eta);
     biny = h_EL_RECO->GetYaxis()->FindBin(pt_cutoff);
     central *= h_EL_RECO->GetBinContent(binx,biny);
+    //if(pt>500) cout << "et SF vaut " << h_EL_RECO->GetBinContent(binx,biny)<< endl;
     err = h_EL_RECO->GetBinError(binx,biny);
     tot_err += err*err;
   }else{
+    // if(pt>500) cout << "est ce que je rentre systematiquement la?" << endl;
     binx = h_EL_RECO_LOWPT->GetXaxis()->FindBin(eta);
-    central *= h_EL_RECO_LOWPT->GetBinContent(binx,1);
+    central *= h_EL_RECO_LOWPT->GetBinContent(binx,1);//we set biny to 1 since eta is constant along pT axis
     err = h_EL_RECO_LOWPT->GetBinContent(binx,1);
     tot_err += err*err;
   }
@@ -144,26 +197,28 @@ lepSF MT2LeptonSFTool::getElSF( int year, float pt, float eta){
 
 
 
-/*
-lepSF MT2LeptonSFTool::getMuSF( int pdgId, float pt, float eta){ // FIXME
-// FIXME: wrong impementation
-  lepSF weights;
+lepSF MT2LeptonSFTool::getMuSF(float pt, float eta){ 
+  lepSF weight;
 
-  if( !h_muSF || !h_elSF || !h_elSF_trk ){
+  if(!h_muSF_ID && !h_muSF_ISO){
     std::cout << "There are not scale factor histograms for me to read from " << std::endl;
-    return weights;
+    return weight;
   }
 
+  Float_t central = 1;
+  Float_t tot_err = 0;
+  Float_t err = 0;
 
-  float pt_cutoff = std::max( 10.1, std::min( 100., double(pt) ) );
+  float pt_cutoff = -9999;
+  Int_t binx_ID = -9999;
+  Int_t biny_ID = -9999;
+  Int_t binx_ISO = -9999;
+  Int_t biny_ISO = -9999;
 
-  //Electrons
-  if( pdgId == 11) {
-
-  } //else Muons
-  else if( pdgId == 13) {
-    Int_t binx = h_muSF->GetXaxis()->FindBin(pt_cutoff);
-    Int_t biny = h_muSF->GetYaxis()->FindBin(fabs(eta));
+  pt_cutoff = std::max(20., std::min(119., double(pt))); 
+   
+  binx_ID = h_muSF_ID->GetXaxis()->FindBin(pt_cutoff);
+  biny_ID = h_muSF_ID->GetYaxis()->FindBin(fabs(eta));
 
     //	  float central_trk = 1;
     //	  Int_t binx_trk = h_muTrk_hi->GetXaxis()->FindBin(  lep_eta[o] );
@@ -178,22 +233,31 @@ lepSF MT2LeptonSFTool::getMuSF( int pdgId, float pt, float eta){ // FIXME
     //	  central *= central_trk;
 
 
-    central = h_muSF->GetBinContent(binx,biny);
-    err  = 0.03; //current recomendation is 3% //   err  = 0.014; // adding in quadrature 1% unc. on ID and 1% unc. on ISO
-    if (central > 1.2 || central < 0.8)
+    central *= h_muSF_ID->GetBinContent(binx_ID,biny_ID);
+    err = h_muSF_ID->GetBinError(binx_ID,biny_ID);
+    tot_err += err*err;
+
+    binx_ISO = h_muSF_ISO->GetXaxis()->FindBin(pt_cutoff);
+    biny_ISO = h_muSF_ISO->GetYaxis()->FindBin(fabs(eta));
+
+    central *= h_muSF_ISO->GetBinContent(binx_ISO,biny_ISO);
+    err = h_muSF_ISO->GetBinError(binx_ISO,biny_ISO);
+    tot_err += err*err;
+
+    //err  = 0.03; //current recomendation is 3% //   err  = 0.014; // adding in quadrature 1% unc. on ID and 1% unc. on ISO
+    if (central > 1.2 || central < 0.8){
       std::cout<<"STRANGE: Muon with pT/eta of "<<pt<<"/"<< fabs(eta) <<". SF is "<< central <<std::endl;
-    uncert_UP = central + err;
-    uncert_DN = central - err;
+    }else{
+      //cout << "Good muon" << endl;
+    }
 
-  }//done with one  electron/muon
+  weight.sf = central;
+  weight.up = central + sqrt(tot_err);
+  weight.dn = central - sqrt(tot_err);
 
-  weights.sf = central;
-  weights.up = uncert_UP;
-  weights.dn = uncert_DN;
-
-  return weights;
+  return weight;
 }
-*/
+
 
 
 

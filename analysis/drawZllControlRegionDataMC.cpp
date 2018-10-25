@@ -141,10 +141,10 @@ int main(int argc, char* argv[]){
   //  bgYields_of.push_back( wjets_of );
   bgYields_of.push_back( Zll_of );
 
-  std::string plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/plots/plotsDataMC";
+  std::string plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/plots/lepSF/plotsDataMC";
   if( shapeNorm ) plotsDir += "_shape";
 
-  std::string plotsDir_of = cfg.getEventYieldDir() + "/zllControlRegion/plots/plotsDataMC_of";
+  std::string plotsDir_of = cfg.getEventYieldDir() + "/zllControlRegion/plots/lepSF/plotsDataMC_of";
   if( shapeNorm ) plotsDir_of += "_shape";
 
 

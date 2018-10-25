@@ -1,3 +1,4 @@
+
 // Script to perform the estimates of the lostlepton control region
 
 #include <iostream>
@@ -27,8 +28,11 @@
 #include "interface/MT2Config.h"
 
 #include "interface/Utils.h"
+#include "interface/MT2LeptonSFTool.h"
 
 #include "TRandom3.h"
+
+using namespace std;
 
 #define mt2_cxx
 #include "interface/mt2.h"
@@ -226,8 +230,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // Do the selection here: please try to keep a consistent order
     // between this script and similar scripts
-//    if( myTree.isData && !myTree.isGolden ) continue;
 
+    // if( myTree.isData && !myTree.isGolden ) continue;
+
+    // apply the filters
     if(isData) {
       if(cfg.year() == 2016) if( !myTree.passFilters2016() ) continue;
       if(cfg.year() == 2017) if( !myTree.passFilters2017() ) continue;
@@ -236,13 +242,14 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if(cfg.year() == 2017) if( !myTree.passFiltersMC2017() ) continue;
     } 
 
+    // apply the triggers
     if (isData) {
       if(cfg.year() == 2017) if (!myTree.passTriggerSelection2017("llep")) continue;
     }
 
     // some additional cleanings
-//    if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
-//    if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
+    //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
+    //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
     //crazy events! To be piped into a separate txt file
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
@@ -253,23 +260,55 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
-    // main kinematic selections here
+
+
+    // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic() ) continue;
     // monojet id
-//    if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
-    // specific analysis region cuts
+    // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    
+
+    // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue;
 
 
     // Selection is over, now apply the weights !
-    //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
     Double_t weight(1.);
+  
+    //weight on the cross section  
+    //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
     if(isData){
       weight = 1.;
     }
     else{
       weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
     }
+
+    //lepton scale factor (only on !data)
+    if(!isData){
+      MT2LeptonSFTool leptonSF;
+   
+      if(abs(myTree.lep_pdgId[0])<12){ //electrons (lep_pdgID = +- 11)
+	bool electronHist = leptonSF.setElHist("llep"); //checks if all the electron sf files can be loaded
+	if(electronHist){
+	  lepSF elSFandError = leptonSF.getElSF(myTree.lep_pt[0], myTree.lep_eta[0]);
+	  float elSF = elSFandError.sf;
+	  weight *= elSF;
+	  //cout << "je suis un electron" << endl;
+	}
+      }else if(abs(myTree.lep_pdgId[0])>12){//muons (lep_pdgID = +- 13)
+	bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
+	if(muonHist){
+	  lepSF muSFandError = leptonSF.getMuSF(myTree.lep_pt[0], myTree.lep_eta[0]);
+	  float muSF = muSFandError.sf;
+	  weight *= muSF;
+	  //cout << "je suis un muon" << endl;
+	}
+      }
+    }
+    
+    
+
 
    /* if( !myTree.isData ){
       weight *= myTree.weight_btagsf;

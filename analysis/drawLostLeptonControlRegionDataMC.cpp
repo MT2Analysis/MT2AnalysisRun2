@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   //   please set cuts on Ht here    //
  
   //please consider only ints for the range of ht!
-  int htMin=250, htMax=-1;
+  int htMin=575, htMax=1000;
   
   std::string cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   string ht_min = to_string(htMin);
@@ -116,13 +116,13 @@ int main( int argc, char* argv[] ) {
 
   std::string plotsDir;
   if(plotElectron && !plotMuon){
-    plotsDir = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/isolation/electron/" + dirName;
+    plotsDir = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/lepSF/electron/" + dirName;
   }
   else if(plotMuon && !plotElectron){
-    plotsDir = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/isolation/muon/" + dirName;
+    plotsDir = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/lepSF/muon/" + dirName;
   }
   else{
-    plotsDir = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/isolation/lepton/" + dirName;
+    plotsDir = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/lepSF/lepton/" + dirName;
   }
  
   if(shapeNorm) plotsDir += "_shape";
@@ -170,7 +170,7 @@ int main( int argc, char* argv[] ) {
   }
 
 
-  /*
+  
    
   dt.drawRegionYields_fromTree("incl_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV", cutsLabel, jetCutsLabel);
@@ -198,10 +198,10 @@ int main( int argc, char* argv[] ) {
   dt.drawRegionYields_fromTree("incl_mht_pt", "mht_pt", selection, 100, 0, 1000, "H_{T}^{miss} p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_mht_phi", "mht_phi", selection, 40, -4, 4, "H_{T}^{miss} phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_diffMetMht", "diffMetMht", selection, 50, 0, 250, "|E_{T}^{miss}-H_{T}^{miss}|", "GeV", cutsLabel, jetCutsLabel);
-  */
+  
   dt.drawRegionYields_fromTree("incl_lepMiniRelIso", "lepMiniRelIso", selection, 20, 0, 0.2, "Lepton isolation", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepMiniRelIso*pT", "lepMiniRelIso*lepPt", selection, 20, 0, 0.2, "Lepton isolation * pT", "", cutsLabel, jetCutsLabel);
-  /*  
+    
 
   // +++++++++++++++++++++++++
   // +++      b-veto       +++
@@ -346,7 +346,7 @@ int main( int argc, char* argv[] ) {
   dt.drawRegionYields_fromTree("monojet_mht_pt", "mht_pt", selection, 100, 0, 1000, "H_{T}^{miss} p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_mht_phi", "mht_phi", selection, 40, -4, 4, "H_{T}^{miss} phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_diffMetMht", "diffMetMht", selection, 50, 0, 250, "|E_{T}^{miss}-H_{T}^{miss}|", "GeV", cutsLabel, jetCutsLabel);
-  */  
+    
 /*
   // +++++++++++++++++++++++++
   // +++      b-veto       +++

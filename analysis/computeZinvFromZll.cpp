@@ -118,6 +118,7 @@ int main( int argc, char* argv[] ) {
 
   //MT2Analysis<MT2EstimateTree>* TopTree_mc = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/ZllPurityTrees_of.root", "Top");
 
+  //I dont understand the following. Seems that we want to remove a specific contribution of Top, but I don't see any contribution having id=411
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this
   MT2Analysis<MT2EstimateTree>* TTZ = MT2EstimateTree::makeAnalysisFromInclusiveTree( "TTZ" , cfg.regionsSet(), TopTree_mc,  "(id==411 && Z_pt>200.)");
   (*TTZ) *= lumi;
@@ -536,7 +537,7 @@ int main( int argc, char* argv[] ) {
 
 
 
-
+/*
 MT2Analysis<MT2Estimate>* getInclusiveRatioMC( const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* Zinv, MT2Analysis<MT2EstimateTree>* gammaCRtree ) {
 
 
@@ -592,7 +593,7 @@ MT2Analysis<MT2Estimate>* getInclusiveRatioMC( const MT2Config& cfg, MT2Analysis
   return inclusiveRatio;
 
 }
-
+*/
 
 
 
