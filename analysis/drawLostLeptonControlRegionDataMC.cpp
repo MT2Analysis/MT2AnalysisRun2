@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   //   please set cuts on Ht here    //
  
   //please consider only ints for the range of ht!
-  int htMin=250, htMax=-1;
+  int htMin=575, htMax=1000;
   
   std::string cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   string ht_min = to_string(htMin);

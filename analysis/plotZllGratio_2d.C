@@ -1,5 +1,20 @@
-{
+//this file plots the gamma estimate over the Zll estimate
 
+#include <iostream>
+#include <cmath>
+
+#include "TCanvas.h"
+#include "TTree.h"
+#include "TLegend.h"
+#include "TH2D.h"
+#include "TH1D.h"
+#include "TF1.h"
+#include "TFile.h"
+#include "THStack.h"
+#include "TGraphErrors.h"
+#include "TStyle.h"
+
+int main(){
   //READ in all the trees
   std::cout << "Reading in all input trees..." << std::endl;
   
@@ -10,7 +25,7 @@
   // Photon MC
   TFile* fGmc = TFile::Open("EventYields_data_Run2016_12p9ifb_ICHEP/gammaControlRegion/mc.root");
   TTree* tGmc = (TTree*) fGmc->Get("gammaCRtree/HT200toInf_j1toInf_b0toInf/tree_gammaCRtree_HT200toInf_j1toInf_b0toInf");
-
+  
   // Zll data
   TFile* fZdata = TFile::Open("EventYields_data_Run2016_12p9ifb_ICHEP/zllControlRegion/data.root");
   TTree* tZdata = (TTree*) fZdata->Get("data/HT200toInf_j1toInf_b0toInf/tree_data_HT200toInf_j1toInf_b0toInf");
@@ -162,7 +177,7 @@
       double value = hzllData_jht->GetBinContent(x,y);
       
       if (value>0) error /= value;
-      error = TMath::Sqrt(0.1*0.1+error*error);
+      error = sqrt(0.1*0.1+error*error);
       error *= value;
       
       hzllData_jht->SetBinError(x,y, error);
@@ -176,7 +191,7 @@
       double value = hzllData_bj->GetBinContent(x,y);
       
       if (value>0) error /= value;
-      error = TMath::Sqrt(0.1*0.1+error*error);
+      error = sqrt(0.1*0.1+error*error);
       error *= value;
 
       hzllData_bj->SetBinError(x,y, error);
@@ -189,7 +204,7 @@
   gStyle->SetOptStat(0);
   gStyle->SetPalette(51);
   gStyle->SetPaintTextFormat("1.2f");
-
+  
   TCanvas* cp0 = new TCanvas("cp0", "", 600, 600);
   purity_jht->SetTitle("Photon Purity");
   purity_jht->GetXaxis()->SetTitle("H_{T} [GeV]");
@@ -205,7 +220,7 @@
   purity_bj->GetZaxis()->SetRangeUser(0.5, 1.0);
   purity_bj->GetZaxis()->SetLabelSize(0.02);
   purity_bj->Draw("colz,text45E");
-
+  
   TCanvas* c0 = new TCanvas("c0", "", 600, 600);
   hzllData_jht->SetTitle("Z(l^{+}l^{-}) / #gamma ratio");
   hzllData_jht->GetXaxis()->SetTitle("H_{T} [GeV]");
@@ -228,4 +243,6 @@
   hzllData_bj->GetZaxis()->SetLabelSize(0.02);
   hzllData_bj->Draw("colz,text45E");
 
+
+  return 0;
 }

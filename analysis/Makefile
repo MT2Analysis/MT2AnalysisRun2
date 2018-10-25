@@ -92,6 +92,8 @@ computeZinvFromZll: computeZinvFromZll.cpp MT2Region.o MT2Sample.o MT2Estimate.o
 computeZinv2b: computeZinv2b.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o computeZinv2b computeZinv2b.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)
 
+plotZllGratio_2d: plotZllGratio_2d.C
+	$(CC) -Wall $(INCLUDES) -o plotZllGratio_2d plotZllGratio_2d.C $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 regionEventYields: regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2GoodrunClass.o
 	$(CC) -Wall $(INCLUDES) -o regionEventYields regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2GoodrunClass.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -265,6 +267,12 @@ drawLostLeptonControlRegionDataMC_EAs: drawLostLeptonControlRegionDataMC_EAs.cpp
 
 drawLostLeptonControlRegionDataMC_compareData: drawLostLeptonControlRegionDataMC_compareData.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o drawLostLeptonControlRegionDataMC_compareData drawLostLeptonControlRegionDataMC_compareData.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
+
+drawRSFOF: drawRSFOF.C 
+	$(CC) -Wall $(INCLUDES) -o drawRSFOF drawRSFOF.C $(ROOTFLAG) $(EXTRALIBS)
+
+drawRSFOF_mc: drawRSFOF_mc.C 
+	$(CC) -Wall $(INCLUDES) -o drawRSFOF_mc drawRSFOF_mc.C $(ROOTFLAG) $(EXTRALIBS)
 
 fitDeltaPhiQCD: fitDeltaPhiQCD.cpp  MT2Region.o MT2Estimate.o MT2EstimateQCD.o  MT2EstimateTree.o MT2Config.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o fitDeltaPhiQCD fitDeltaPhiQCD.cpp MT2Region.o MT2Estimate.o MT2EstimateQCD.o MT2EstimateTree.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)

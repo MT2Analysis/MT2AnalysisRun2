@@ -1,30 +1,33 @@
-{
+#include <iostream>
+#include <cmath>
 
-//  TFile *_file0 = TFile::Open("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_Run2016_12p9ifb_zurich2016/zllControlRegion/ZllPurityTrees.root");
-//  TTree* SF_top = (TTree*) _file0->Get("Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf")->Clone("SF_top");
-//  TTree* SF_dy = (TTree*) _file0->Get("DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf")->Clone("SF_dy");
+#include "TCanvas.h"
+#include "TTree.h"
+#include "TLegend.h"
+#include "TH2D.h"
+#include "TH1D.h"
+#include "TF1.h"
+#include "TFile.h"
+#include "THStack.h"
+#include "TGraphErrors.h"
+#include "TStyle.h"
+#include "TLine.h"
+#include "TPaveText.h"
+#include "TString.h"
+#include "TChain.h"
+
+using namespace std;
+
+int main(){
+
   TChain* SF=new TChain("SF");
-  //  SF->Add("/mnt/t3nfs01/data01/shome/mschoene//8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_2016_36p2ifb/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-//  SF->Add("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_2016_36p2ifb/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-//  SF->Add("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_2016_36p2ifb/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
-  SF->Add("/mnt/t3nfs01/data01/shome/mmasciov/8_0_12/src/myMT2Analysis/analysis/EventYields_data_2016_SnTMC_362ifb_noBtagSF//zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-  SF->Add("/mnt/t3nfs01/data01/shome/mmasciov/8_0_12/src/myMT2Analysis/analysis/EventYields_data_2016_SnTMC_362ifb_noBtagSF//zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
+  SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
 
-  //  SF->Add("/mnt/t3nfs01/data01/shome/mschoene//8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_2016_36p2ifb/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-
-//  SF->Add("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_Run2016_12p9ifb_zurich2016/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-//  SF->Add("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_Run2016_12p9ifb_zurich2016/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
-
-//  TFile *_file1 = TFile::Open("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_Run2016_12p9ifb_zurich2016/zllControlRegion/ZllPurityTrees_of.root");
-//  TTree* OF = (TTree*) _file1->Get("Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf")->Clone("OF");
 
   TChain* OF=new TChain("OF");
-  //  OF->Add("/mnt/t3nfs01/data01/shome/mschoene//8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_2016_36p2ifb/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-  OF->Add("/mnt/t3nfs01/data01/shome/mmasciov/8_0_12/src/myMT2Analysis/analysis/EventYields_data_2016_SnTMC_362ifb_noBtagSF//zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-  OF->Add("/mnt/t3nfs01/data01/shome/mmasciov/8_0_12/src/myMT2Analysis/analysis/EventYields_data_2016_SnTMC_362ifb_noBtagSF//zllControlRegion/ZllPurityTrees_of.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
-
-//  OF->Add("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_Run2016_12p9ifb_zurich2016/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-//  OF->Add("/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_data_Run2016_12p9ifb_zurich2016/zllControlRegion/ZllPurityTrees_of.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
+  OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
 
 
   gDirectory->cd("");
@@ -72,7 +75,7 @@
   
   cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
   double RSFOF = integral_sf/integral_of;
-  double err_R = TMath::Sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+  double err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
   cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
 
@@ -500,7 +503,7 @@
   
   cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
   RSFOF = integral_sf/integral_of;
-  err_R = TMath::Sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+  err_R = sqrt((error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
   cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
   TCanvas* c7=new TCanvas("c7", "", 600, 600);
@@ -546,9 +549,11 @@
 
   // Save As:
 
-  c1 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_mll.pdf");
-  c1r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_mll.pdf");
+  TString directoryName = "test/";
 
+  c1 ->SaveAs(directoryName + "SFnOF_mll.pdf");
+  c1r->SaveAs(directoryName + "RSFOF_mll.pdf");
+  /*
   c2 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_ht.pdf");
   c2r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_ht.pdf");
 
@@ -566,6 +571,8 @@
 
   c7 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_zpt.pdf");
   c7r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_zpt.pdf");
+  */
 
 
+  return 0;
 }
