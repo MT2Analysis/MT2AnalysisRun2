@@ -25,7 +25,6 @@
 #include "interface/MT2EstimateAllSigSyst.h"
 #include "interface/MT2DrawTools.h"
 #include "interface/MT2Config.h"
-#include "interface/MT2BTagSFHelper.h"
 
 #include "interface/Utils.h"
 
@@ -197,10 +196,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
-
-  // Btag SF helper
-  MT2BTagSFHelper bTagSFHelper;
-  
 
   // Tree initialization
   TFile* file = TFile::Open(sample.file.c_str());
