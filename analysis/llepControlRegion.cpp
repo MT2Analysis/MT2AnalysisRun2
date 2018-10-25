@@ -273,19 +273,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       weight = 1.;
     }
     else{
-      // calculate btag weights and syst variations
-      float weight_btagsf = 1.;
-      float weight_btagsf_heavy_UP = 1.;
-      float weight_btagsf_heavy_DN = 1.;
-      float weight_btagsf_light_UP = 1.;
-      float weight_btagsf_light_DN = 1.;
-      bool isFastSim = false;
-      // FIXME: for the moment using myTree.Jet_mcFlavour, myTree.Jet_btagCSV as missing correponding branches for the "jet collection" 
-      // this is quite wrong , let's see how the code handles this...
-      bTagSFHelper.get_weight_btag(myTree.nJet, myTree.Jet_pt, myTree.Jet_eta, myTree.Jet_hadronFlavour, myTree.Jet_btagCSVV2, 
-                                   weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim );
-      //std::cout << "calculated btag weight from Jet collection, w=" << weight_btagsf << std::endl;
-      // TODO: once implemetation is fully correct, multiply by weight_btagsf
       weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
     }
 
