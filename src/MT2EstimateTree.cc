@@ -84,6 +84,8 @@ void MT2EstimateTree::initTree( ) {
   tree->Branch( "lepMass", &lepMass, "lepMass/F");
   tree->Branch( "lepID", &lepID, "lepID/F");
   tree->Branch( "lepMiniRelIso", &lepMiniRelIso, "lepMiniRelISo/F");
+  tree->Branch( "isotrackPt", &isotrackPt, "isotrackPt/F");
+  tree->Branch( "isotrack_pdgId", &isotrack_pdgId, "isotrack_pdgId/I");
 
   //tree->Branch( "GenSusyMScan1", &GenSusyMScan1, "GenSusyMScan1/I");
   //tree->Branch( "GenSusyMScan2", &GenSusyMScan2, "GenSusyMScan2/I");
@@ -132,7 +134,9 @@ void MT2EstimateTree::initTree4read( ) {
   tree->SetBranchAddress( "lepPhi"       , &lepPhi       );
   tree->SetBranchAddress( "lepMass"      , &lepMass      );
   tree->SetBranchAddress( "lepID"        , &lepID        );
-  tree->SetBranchAddress( "lepMiniRelIso", &lepMiniRelIso);
+  tree->SetBranchAddress( "lepMiniRelIso", &lepMiniRelIso); 
+  tree->SetBranchAddress( "isotrackPt"   , &isotrackPt   );
+  tree->SetBranchAddress( "isotrack_pdgId", &isotrack_pdgId);
 
   for (std::map< std::string, float* >::iterator i= extraVars.begin(); i!=extraVars.end(); i++)
     tree->SetBranchAddress(i->first.c_str(), (i->second));
@@ -473,6 +477,8 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   lepMass  = mt2tree.lep_mass[0];
   lepID    = mt2tree.lep_pdgId[0];
   lepMiniRelIso = mt2tree.lep_miniRelIso[0];
+  isotrackPt    = mt2tree.IsoTrack_pt[0];
+  isotrack_pdgId = mt2tree.IsoTrack_pdgId[0];
     
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;
   //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;

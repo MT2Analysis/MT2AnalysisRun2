@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "TCanvas.h"
 #include "TTree.h"
@@ -14,6 +15,11 @@
 #include "TLine.h"
 #include "TPaveText.h"
 #include "TString.h"
+#include "TGraph.h"
+#include "TGraph2D.h"
+#include "TMatrixD.h"
+#include "TPaletteAxis.h"
+
 
 using namespace std;
 
@@ -233,7 +239,7 @@ int main(){
   TCanvas* c1r=new TCanvas("c1r", "", 600, 600);
   c1r->cd();
   mllRSFOF->Draw("PE");
-//  //  mllRSFOF->Fit("pol0");
+  mllRSFOF->Fit("pol0");
   
   TLine* lr = new TLine(50, (float) RSFOF, 200, (float)RSFOF);
   TLine* lrup = new TLine(50, (float)(RSFOF+err_R), 200, (float)(RSFOF+err_R));
@@ -291,18 +297,114 @@ int main(){
   htSF->GetYaxis()->SetTitle("Entries");
   htOF->GetYaxis()->SetTitle("Entries");
 
+  //modification of the cut on Z_pT, to estimate how strongly the value of the ratio depends on it
 
-  SF->Draw("ht>>htSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
-  OF->Draw("ht>>htOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
+  vector<int> npT = {160, 165, 170, 175, 180, 185, 190, 195, 198, 199, 200, 155, 150, 145, 140, 135, 130};
+  int size = npT.size();
+  vector<double> nMass = {50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130};
+  int sizeM = nMass.size();
+  Double_t x[size]; //will store the value of the cut on Z_pt
+  Double_t y[sizeM]; //will store the value of the cut on Z_mass
+  Double_t z[size]; //will store the value of the ratio
+  Double_t x_err[size];
+  Double_t y_err[sizeM];
+  Double_t z_err[size];
+  Double_t percentage[size]; //will contain the error in % to the value of the ratio with Z_pt<=200
+  Double_t percentagex[size];
+  Double_t xx[size];
+  Double_t percentagey[sizeM];
+  //for 2D plots
+  Double_t t[size][size]; //will contain the value of the ratio as a function of the cuts on Z_pt and Z_mass
+  Double_t percentage2d[size][sizeM]; //will contain the error in % to the value of R(SF/OF) compared to Z_pt <= 200 && Z_mass >= 50 
   
-  integral_sf = htSF->IntegralAndError(1,-1, error_sf);
-  integral_of = htOF->IntegralAndError(1,-1, error_of);
-  
-  cout << "[HT] R^{SF/OF} = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
-  RSFOF = integral_sf/integral_of;
-  err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-  cout << "[HT] R^{SF/OF} = "<< RSFOF << "+-" << err_R << endl;
 
+ 
+  for(int i(0); i<size; ++i){
+    for(int j(0); j<sizeM; ++j){
+
+      TString valpT = to_string(npT[i]);
+      TString valMass = to_string(nMass[j]);
+
+      SF->Draw("ht>>htSF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nLep==2 ", "goff");
+      OF->Draw("ht>>htOF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nLep==2", "goff");
+  
+      integral_sf = htSF->IntegralAndError(1,-1, error_sf);
+      integral_of = htOF->IntegralAndError(1,-1, error_of);
+  
+      // cout << "[HT] R^{SF/OF} = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+      RSFOF = integral_sf/integral_of;
+      err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+      //cout << "[HT] Z_pT<=" << valpT << "Z_mass<=" << valMass << " R^{SF/OF} = "<< RSFOF << "+-" << err_R << endl;
+ 
+      x[i] = npT[i];
+      x_err[i] = 0.;
+      y[j] = nMass[j];
+      y_err[i] = 0.;
+      z[i] = RSFOF;
+      z_err[i] = err_R;
+      percentage[i] = (z[i]-1.79424)/1.79424*100;
+      percentagex[i] = (npT[i]-200.)/200. *100;
+      percentagey[j] = (nMass[i]-50.)/50. *100;
+      xx[i] = (npT[i]-200.)/200.*100;
+
+      //for 2D graph
+      t[i][j] = RSFOF; 
+      percentage2d[i][j] = (t[i][j]-1.79424)/1.79424*100;
+       
+    }
+  }
+ 
+  //we plot the variation of the ratio as a function of the cut on Z_pt
+  TCanvas* c = new TCanvas();
+  //c->SetLogy();
+  TGraphErrors *mygraph = new TGraphErrors(size, x, z, x_err ,z_err);
+  mygraph->SetMarkerColor(4);
+  mygraph->SetMarkerStyle(21);
+  //mygraph->SetLineColor(0);
+  mygraph->GetXaxis()->SetTitle("cut on Z_pT");
+  mygraph->GetYaxis()->SetTitle("R(SF/OF)");
+  mygraph->SetTitle("Variation of the cut on Z_pT");
+  mygraph->Draw("ACP");
+  
+  c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/uncertainty_study/variation_cut_ZpT.pdf");
+  c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/uncertainty_study/variation_cut_ZpT.png");
+
+  
+  //we plot the variation of the ratio compared to the initial cut Z_pt <= 200 in %
+  TCanvas* d = new TCanvas();
+  //d->SetLogy();
+  TGraph *mygraph2 = new TGraph(size, x, percentage);
+  mygraph2->SetMarkerColor(4);
+  mygraph2->SetMarkerStyle(21);
+  //mygraph->SetLineColor(0);
+  mygraph2->GetXaxis()->SetTitle("cut on Z_pT");
+  mygraph2->GetYaxis()->SetTitle("Difference to Z_pT<200 [%]");
+  mygraph2->SetTitle("Variation of the cut on Z_pT");
+  mygraph2->Draw("ACP");
+  
+  d->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/uncertainty_study/percentage_variation_cut_ZpT.pdf");
+  d->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/uncertainty_study/percentage_variation_cut_ZpT.png");
+  
+  //we make a 2D plot of value of R(SF/OF) as a function of the value of cuts on Z_pt and Z_mass
+  TCanvas* e = new TCanvas("e", "", 600, 600);
+  TGraph2D* mygraph2d = new TGraph2D();
+  int n(0); //index to fill the plot
+  for(int i(0); i<size; ++i){
+    for(int j(0); j<sizeM; ++j){
+      cout << "percentagex: " << percentagex[i] << " percentagey: " << percentagey[j] << endl;
+       mygraph2d->SetPoint(n, percentagex[i], percentagey[j], percentage2d[i][j]); //fills the graph
+       ++n;
+    }
+  }
+  mygraph2d->SetTitle("Variation of R(SF/OF) with cuts on Z_pT & Z_mass; cut on Z_pT; cut on Z_mass; [%]");
+  mygraph2d->Draw("colz");
+ 
+  e->SetRightMargin(0.15);
+  e->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/uncertainty_study/percentage_2D.pdf");
+  e->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/uncertainty_study/percentage_2D.png");
+
+
+ 
 
   TCanvas* c2=new TCanvas("c2", "", 600, 600);
   c2->cd();
@@ -321,7 +423,15 @@ int main(){
   TCanvas* c2r=new TCanvas("c2r", "", 600, 600);
   c2r->cd();
   htRSFOF->Draw("PE");
-  //  htRSFOF->Fit("pol0");
+  //fit the result and get the chi2
+  htRSFOF->Fit("pol0");
+  //TF1 *getTheFit = htRSFOF->GetFunction("fit");
+  //Double_t chi2 = getTheFit->GetChisquare();
+  //cout << "[HT] chi2 = " << chi2 << endl;
+
+  //TF1 *fit = htRSFOF->GetFunction("fit");
+  //Double_t chi2 = fit->GetChisquare("fit");
+  
 
   TLine* lrht = new TLine(250, (float) RSFOF, 2000, (float)RSFOF);
   TLine* lrhtup = new TLine(250, (float)(RSFOF+err_R), 2000, (float)(RSFOF+err_R));
@@ -408,7 +518,7 @@ int main(){
   TCanvas* c3r=new TCanvas("c3r", "", 600, 600);
   c3r->cd();
   njRSFOF->Draw("PE");
-  //  njRSFOF->Fit("pol0");
+  njRSFOF->Fit("pol0");
 
   TLine* lrnj = new TLine(1, (float) RSFOF, 10, (float)RSFOF);
   TLine* lrnjup = new TLine(1, (float)(RSFOF+err_R), 10, (float)(RSFOF+err_R));
@@ -494,7 +604,7 @@ int main(){
   TCanvas* c4r=new TCanvas("c4r", "", 600, 600);
   c4r->cd();
   nbRSFOF->Draw("PE");
-  //  nbRSFOF->Fit("pol0");
+  nbRSFOF->Fit("pol0");
 
   TLine* lrnb   = new TLine(0, (float) RSFOF, 4, (float)RSFOF);
   TLine* lrnbup = new TLine(0, (float)(RSFOF+err_R), 4, (float)(RSFOF+err_R));
@@ -582,7 +692,7 @@ int main(){
   TCanvas* c5r=new TCanvas("c5r", "", 600, 600);
   c5r->cd();
   mt2RSFOF->Draw("PE");
-  //  mt2RSFOF->Fit("pol0");
+  mt2RSFOF->Fit("pol0");
 
   TLine* lrmt2   = new TLine(200, (float) RSFOF,        1500., (float)RSFOF);
   TLine* lrmt2up = new TLine(200, (float)(RSFOF+err_R), 1500., (float)(RSFOF+err_R));

@@ -20,24 +20,131 @@ using namespace std;
 
 int main(){
 
+  ///////////////////////////////////////////////////
+  //                 style settings                //
+  ///////////////////////////////////////////////////
+ 
+  // set the TStyle
+  TStyle* style = new TStyle("DrawBaseStyle", "");
+  gStyle->SetCanvasColor(0);
+  gStyle->SetPadColor(0);
+  gStyle->SetFrameFillColor(0);
+  gStyle->SetStatColor(0);
+  gStyle->SetOptStat(0);
+  gStyle->SetTitleFillColor(0);
+  gStyle->SetCanvasBorderMode(0);
+  gStyle->SetPadBorderMode(0);
+  gStyle->SetFrameBorderMode(0);
+  gStyle->SetPadBottomMargin(0.12);
+  gStyle->SetPadLeftMargin(0.12);
+  gStyle->cd();
+  // For the canvas:
+  gStyle->SetCanvasBorderMode(0);
+  gStyle->SetCanvasColor(kWhite);
+  gStyle->SetCanvasDefH(600); //Height of canvas
+  gStyle->SetCanvasDefW(600); //Width of canvas
+  gStyle->SetCanvasDefX(0); //POsition on screen
+  gStyle->SetCanvasDefY(0);
+  // For the Pad:
+  gStyle->SetPadBorderMode(0);
+  gStyle->SetPadColor(kWhite);
+  gStyle->SetPadGridX(false);
+  gStyle->SetPadGridY(false);
+  gStyle->SetGridColor(0);
+  gStyle->SetGridStyle(3);
+  gStyle->SetGridWidth(1);
+  // For the frame:
+  gStyle->SetFrameBorderMode(0);
+  gStyle->SetFrameBorderSize(1);
+  gStyle->SetFrameFillColor(0);
+  gStyle->SetFrameFillStyle(0);
+  gStyle->SetFrameLineColor(1);
+  gStyle->SetFrameLineStyle(1);
+  gStyle->SetFrameLineWidth(1);
+  // Margins:
+  gStyle->SetPadTopMargin(0.05);
+  gStyle->SetPadBottomMargin(0.15);//0.13);
+  gStyle->SetPadLeftMargin(0.15);//0.16);
+  gStyle->SetPadRightMargin(0.05);//0.02);
+  // For the Global title:
+  gStyle->SetOptTitle(0);
+  gStyle->SetTitleFont(42);
+  gStyle->SetTitleColor(1);
+  gStyle->SetTitleTextColor(1);
+  gStyle->SetTitleFillColor(10);
+  gStyle->SetTitleFontSize(0.05);
+  // For the axis titles:
+  gStyle->SetTitleColor(1, "XYZ");
+  gStyle->SetTitleFont(42, "XYZ");
+  gStyle->SetTitleSize(0.05, "XYZ");
+  gStyle->SetTitleXOffset(1.15);//0.9);
+  gStyle->SetTitleYOffset(1.5); // => 1.15 if exponents
+  // For the axis labels:
+  gStyle->SetLabelColor(1, "XYZ");
+  gStyle->SetLabelFont(42, "XYZ");
+  gStyle->SetLabelOffset(0.007, "XYZ");
+  gStyle->SetLabelSize(0.045, "XYZ");
+  // For the axis:
+  gStyle->SetAxisColor(1, "XYZ");
+  gStyle->SetStripDecimals(kTRUE);
+  gStyle->SetTickLength(0.03, "XYZ");
+  gStyle->SetNdivisions(510, "XYZ");
+  gStyle->SetPadTickX(1); // To get tick marks on the opposite side of the frame
+  gStyle->SetPadTickY(1);
+  // for histograms:
+  gStyle->SetHistLineColor(1);
+
+
+  ///////////////////////////////////////////////////
+  //                 get the files                 //
+  ///////////////////////////////////////////////////
+
+  int year = 2017;
+  if(year==2017){
+    cout << "Computation of the ratio R(SF/OF) with the 2017 samples" << endl;
+  }
+  else if(year==2016){
+    cout << "Computation of the ratio R(SF/OF) with the 2016 samples" << endl;
+  }
+
+
   TChain* SF=new TChain("SF");
-  SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-  SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  if(year==2017){
+    SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
+    SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  }
+  else if(year==2016){
+    SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/ZllPurityTrees.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
+    SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  }
+
 
 
   TChain* OF=new TChain("OF");
-  OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
-  OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  if(year==2017){
+    OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
+    OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  }
+  else  if(year==2016){
+    OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
+    OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/ZllPurityTrees_of.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
+  }
 
 
   gDirectory->cd("");
   gStyle->SetOptStat(0);
   gStyle->SetOptFit(1);
   
-  cout << SF->GetEntries() << endl;
+  cout << "Number of SF entries: " << SF->GetEntries() << endl;
 //  cout << SF_top->GetEntries() << endl;
 //  cout << SF_dy->GetEntries() << endl;
-  cout << OF->GetEntries() << endl;
+  cout << "Number of OF entries: " << OF->GetEntries() << endl;
+
+  
+  ///////////////////////////////////////////////////
+  //      ratio as a function of mll (Z mass)      //
+  ///////////////////////////////////////////////////
+
 
   float bins_mll[]={50,60,71.20,80,90,100,111.20,120,130,140,150,160,170,180,200};
   TH1D* mllSF = new TH1D("mllSF", "", 14, bins_mll);
@@ -59,11 +166,13 @@ int main(){
   mllOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("Z_mass>>mllSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
-  OF->Draw("Z_mass>>mllOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  SF->Draw("Z_mass>>mllSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)))*weight/HLT_weight", "goff");
+  OF->Draw("Z_mass>>mllOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.&& (nJets>1 || (mt2>250.)) )*weight", "goff");
+  // SF->Draw("Z_mass>>mllSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)");
+  //OF->Draw("Z_mass>>mllOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)", "goff");
 
-  mllSF->Scale(36.459);
-  mllOF->Scale(36.459);
+  mllSF->Scale(41.9);
+  mllOF->Scale(41.9);
   
   double integral_sf, error_sf;
   double integral_of, error_of;
@@ -73,10 +182,10 @@ int main(){
 //  error_sf = TMath::Sqrt(integral_sf);
 //  error_of = TMath::Sqrt(integral_of);
   
-  cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+  cout << "[mll] R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
   double RSFOF = integral_sf/integral_of;
   double err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-  cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
+  cout << "[mll] R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
 
   TCanvas* c1=new TCanvas("c1", "", 600, 600);
@@ -91,14 +200,14 @@ int main(){
   mllRSFOF->SetMinimum(0.);
   mllRSFOF->SetMaximum(2.);
   
-  mllRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  mllRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   mllRSFOF->GetYaxis()->SetTitle("R(SF/OF)");
 
   TCanvas* c1r=new TCanvas("c1r", "", 600, 600);
   c1r->cd();
 
   mllRSFOF->Draw("PE");
-  //  mllRSFOF->Fit("pol0");
+  mllRSFOF->Fit("pol0");
   
   TLine* lr = new TLine(50, (float) RSFOF, 200, (float)RSFOF);
   TLine* lrup = new TLine(50, (float)(RSFOF+err_R), 200, (float)(RSFOF+err_R));
@@ -114,7 +223,12 @@ int main(){
   lrup->Draw("same");
   lrdn->Draw("same");
 
-  //HT  
+
+  ///////////////////////////////////////////////////
+  //         ratio as a function of HT             //
+  ///////////////////////////////////////////////////  
+
+ 
   float bins_ht[]={250,450,575,1000,2000};
   
   TH1D* htSF = new TH1D("htSF", "", 4, bins_ht);
@@ -136,20 +250,20 @@ int main(){
   htOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("ht>>htSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight/HLT_weight", "goff");
-  OF->Draw("ht>>htOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight", "goff");
+  SF->Draw("ht>>htSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight/HLT_weight", "goff");
+  OF->Draw("ht>>htOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight", "goff");
   
-  htSF->Scale(36.459);
-  htOF->Scale(36.459);
+  htSF->Scale(41.9);
+  htOF->Scale(41.9);
  
 
-//  integral_sf = htSF->IntegralAndError(1,-1, error_sf);
-//  integral_of = htOF->IntegralAndError(1,-1, error_of);
-//  
-//  cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
-//  RSFOF = integral_sf/integral_of;
-//  err_R = TMath::Sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-//  cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
+  integral_sf = htSF->IntegralAndError(1,-1, error_sf);
+  integral_of = htOF->IntegralAndError(1,-1, error_of);
+  
+  cout << "[HT] R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+  RSFOF = integral_sf/integral_of;
+  err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+  cout << "[HT] R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
   TCanvas* c2=new TCanvas("c2", "", 600, 600);
   c2->cd();
@@ -162,14 +276,14 @@ int main(){
   htRSFOF->SetMinimum(0.);
   htRSFOF->SetMaximum(2.);
   
-  htRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  htRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   htRSFOF->GetYaxis()->SetTitle("R(SF/OF)");
 
   TCanvas* c2r=new TCanvas("c2r", "", 600, 600);
   c2r->cd();
 
   htRSFOF->Draw("PE");
-  //  htRSFOF->Fit("pol0");
+  htRSFOF->Fit("pol0");
 
   TLine* lrht = new TLine(250, (float) RSFOF, 2000, (float)RSFOF);
   TLine* lrhtup = new TLine(250, (float)(RSFOF+err_R), 2000, (float)(RSFOF+err_R));
@@ -186,7 +300,10 @@ int main(){
   lrhtdn->Draw("same");
 
 
-  //NJets
+  ///////////////////////////////////////////////////
+  //         ratio as a function of Nj             //
+  ///////////////////////////////////////////////////  
+
   float bins_nj[]={1,2,4,7,10};
   
   TH1D* njSF = new TH1D("njSF", "", 4, bins_nj);
@@ -208,20 +325,20 @@ int main(){
   njOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("nJets>>njSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight/HLT_weight", "goff");
-  OF->Draw("nJets>>njOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight", "goff");
+  SF->Draw("nJets>>njSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight/HLT_weight", "goff");
+  OF->Draw("nJets>>njOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight", "goff");
   
-  njSF->Scale(36.459);
-  njOF->Scale(36.459);
+  njSF->Scale(41.9);
+  njOF->Scale(41.9);
   
 
-//  integral_sf = njSF->IntegralAndError(1,-1, error_sf);
-//  integral_of = njOF->IntegralAndError(1,-1, error_of);
-//  
-//  cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
-//  RSFOF = integral_sf/integral_of;
-//  err_R = TMath::Sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-//  cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
+  integral_sf = njSF->IntegralAndError(1,-1, error_sf);
+  integral_of = njOF->IntegralAndError(1,-1, error_of);
+  
+  cout << "[Nj] R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+  RSFOF = integral_sf/integral_of;
+  err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+  cout << "[Nj] R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
   TCanvas* c3=new TCanvas("c3", "", 600, 600);
   c3->cd();
@@ -234,14 +351,14 @@ int main(){
   njRSFOF->SetMinimum(0.);
   njRSFOF->SetMaximum(2.);
   
-  njRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  njRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   njRSFOF->GetYaxis()->SetTitle("R(SF/OF)");
 
   TCanvas* c3r=new TCanvas("c3r", "", 600, 600);
   c3r->cd();
 
   njRSFOF->Draw("PE");
-  //  njRSFOF->Fit("pol0");
+  njRSFOF->Fit("pol0");
 
   TLine* lrnj = new TLine(1, (float) RSFOF, 10, (float)RSFOF);
   TLine* lrnjup = new TLine(1, (float)(RSFOF+err_R), 10, (float)(RSFOF+err_R));
@@ -258,7 +375,11 @@ int main(){
   lrnjdn->Draw("same");
 
 
-  //NB
+
+  ///////////////////////////////////////////////////
+  //         ratio as a function of Nb             //
+  /////////////////////////////////////////////////// 
+  
   float bins_nb[]={0,1,2,3,4};
   
   TH1D* nbSF = new TH1D("nbSF", "", 4, bins_nb);
@@ -280,20 +401,20 @@ int main(){
   nbOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("nBJets>>nbSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
-  OF->Draw("nBJets>>nbOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  SF->Draw("nBJets>>nbSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)))*weight/HLT_weight", "goff");
+  OF->Draw("nBJets>>nbOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)))*weight", "goff");
   
-  nbSF->Scale(36.459);
-  nbOF->Scale(36.459);
+  nbSF->Scale(41.9);
+  nbOF->Scale(41.9);
   
 
-//  integral_sf = nbSF->IntegralAndError(1,-1, error_sf);
-//  integral_of = nbOF->IntegralAndError(1,-1, error_of);
-//  
-//  cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
-//  RSFOF = integral_sf/integral_of;
-//  err_R = TMath::Sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-//  cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
+  integral_sf = nbSF->IntegralAndError(1,-1, error_sf);
+  integral_of = nbOF->IntegralAndError(1,-1, error_of);
+  
+  cout << "[Nb] R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+  RSFOF = integral_sf/integral_of;
+  err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+  cout << "[Nb] R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
   TCanvas* c4=new TCanvas("c4", "", 600, 600);
   c4->cd();
@@ -306,14 +427,14 @@ int main(){
   nbRSFOF->SetMinimum(0.);
   nbRSFOF->SetMaximum(2.);
   
-  nbRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  nbRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   nbRSFOF->GetYaxis()->SetTitle("R(SF/OF)");
 
   TCanvas* c4r=new TCanvas("c4r", "", 600, 600);
   c4r->cd();
 
   nbRSFOF->Draw("PE");
-  //  nbRSFOF->Fit("pol0");
+  nbRSFOF->Fit("pol0");
 
   TLine* lrnb   = new TLine(0, (float) RSFOF, 4, (float)RSFOF);
 //  TLine* lrnbup = new TLine(0, (float)(RSFOF+err_R), 4, (float)(RSFOF+err_R));
@@ -333,7 +454,10 @@ int main(){
   lrnbdn->Draw("same");
 
 
-  //MT2
+  ///////////////////////////////////////////////////
+  //         ratio as a function of MT2            //
+  ///////////////////////////////////////////////////
+
   float bins_mt2[]={200,300,400,600,1500};
   
   TH1D* mt2SF = new TH1D("mt2SF", "", 4, bins_mt2);
@@ -355,20 +479,20 @@ int main(){
   mt2OF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("mt2>>mt2SF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight/HLT_weight", "goff");
-  OF->Draw("mt2>>mt2OF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight", "goff");
+  SF->Draw("mt2>>mt2SF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.))  )*weight/HLT_weight", "goff");
+  OF->Draw("mt2>>mt2OF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight", "goff");
   
-  mt2SF->Scale(36.459);
-  mt2OF->Scale(36.459);
+  mt2SF->Scale(41.9);
+  mt2OF->Scale(41.9);
   
 
-//  integral_sf = mt2SF->IntegralAndError(1,-1, error_sf);
-//  integral_of = mt2OF->IntegralAndError(1,-1, error_of);
-//  
-//  cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
-//  RSFOF = integral_sf/integral_of;
-//  err_R = TMath::Sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-//  cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
+  integral_sf = mt2SF->IntegralAndError(1,-1, error_sf);
+  integral_of = mt2OF->IntegralAndError(1,-1, error_of);
+  
+  cout << "[MT2] R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+  RSFOF = integral_sf/integral_of;
+  err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+  cout << "[MT2] R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
   TCanvas* c5=new TCanvas("c5", "", 600, 600);
   c5->cd();
@@ -381,14 +505,14 @@ int main(){
   mt2RSFOF->SetMinimum(0.);
   mt2RSFOF->SetMaximum(2.);
   
-  mt2RSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  mt2RSFOF->GetYaxis()->SetRangeUser(1.,3.);
   mt2RSFOF->GetYaxis()->SetTitle("R(SF/OF)");
 
   TCanvas* c5r=new TCanvas("c5r", "", 600, 600);
   c5r->cd();
 
   mt2RSFOF->Draw("PE");
-  //  mt2RSFOF->Fit("pol0");
+  mt2RSFOF->Fit("pol0");
 
   TLine* lrmt2   = new TLine(200, (float) RSFOF,        1500., (float)RSFOF);
   TLine* lrmt2up = new TLine(200, (float)(RSFOF+err_R), 1500., (float)(RSFOF+err_R));
@@ -404,7 +528,7 @@ int main(){
   lrmt2up->Draw("same");
   lrmt2dn->Draw("same");
 
-
+  /*
   // dR(l1,l2)
   TH1D* drllSF = new TH1D("drllSF", "", 25,0,5);
   drllSF->Sumw2();
@@ -430,8 +554,8 @@ int main(){
   SF->Draw("TMath::Sqrt( (lep_eta0-lep_eta1)*(lep_eta0-lep_eta1) + ((lep_phi0-lep_phi1)>TMath::Pi() ? lep_phi0-lep_phi1-2*TMath::Pi() : ((lep_phi0-lep_phi1)<=-TMath::Pi() ? lep_phi0-lep_phi1+2*TMath::Pi() : lep_phi0-lep_phi1) )*((lep_phi0-lep_phi1)>TMath::Pi() ? lep_phi0-lep_phi1-2*TMath::Pi() : ((lep_phi0-lep_phi1)<=-TMath::Pi() ? lep_phi0-lep_phi1+2*TMath::Pi() : lep_phi0-lep_phi1) ) )>>drllSF", "(Z_mass>50. && (Z_mass<=71.19 || Z_mass>111.19) && Z_pt<=200)*weight/HLT_weight", "goff");
   OF->Draw("TMath::Sqrt( (lep_eta0-lep_eta1)*(lep_eta0-lep_eta1) + ((lep_phi0-lep_phi1)>TMath::Pi() ? lep_phi0-lep_phi1-2*TMath::Pi() : ((lep_phi0-lep_phi1)<=-TMath::Pi() ? lep_phi0-lep_phi1+2*TMath::Pi() : lep_phi0-lep_phi1) )*((lep_phi0-lep_phi1)>TMath::Pi() ? lep_phi0-lep_phi1-2*TMath::Pi() : ((lep_phi0-lep_phi1)<=-TMath::Pi() ? lep_phi0-lep_phi1+2*TMath::Pi() : lep_phi0-lep_phi1) ) )>>drllOF", "(Z_mass>50. && (Z_mass<=71.19 || Z_mass>111.19) && Z_pt<=200)*weight", "goff");
 
-  drllSF->Scale(36.459);
-  drllOF->Scale(36.459);
+  drllSF->Scale(41.9);
+  drllOF->Scale(41.9);
 
 
   TCanvas* c6=new TCanvas("c6", "", 600, 600);
@@ -494,17 +618,17 @@ int main(){
   SF->Draw("Z_pt>>zptSF", "(Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
   OF->Draw("Z_pt>>zptOF", "(Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
   
-  zptSF->Scale(36.459);
-  zptOF->Scale(36.459);
+  zptSF->Scale(41.9);
+  zptOF->Scale(41.9);
   
 
   integral_sf = zptSF->IntegralAndError(1,-1, error_sf);
   integral_of = zptOF->IntegralAndError(1,-1, error_of);
   
-  cout << "R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+  cout << "[ZpT] R(SF/OF) = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
   RSFOF = integral_sf/integral_of;
   err_R = sqrt((error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
-  cout << "R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
+  cout << "[ZpT] R(SF/OF) = "<< RSFOF << "+-" << err_R << endl;
 
   TCanvas* c7=new TCanvas("c7", "", 600, 600);
   c7->cd();
@@ -544,34 +668,36 @@ int main(){
   lrzpt->Draw("same");
   lrzptup->Draw("same");
   lrzptdn->Draw("same");
-
+  */
 
 
   // Save As:
+  TString directoryName = "EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_mc/";
 
-  TString directoryName = "test/";
-
-  c1 ->SaveAs(directoryName + "SFnOF_mll.pdf");
+  c1 ->SaveAs(directoryName + "SFandOF_mll.pdf");
   c1r->SaveAs(directoryName + "RSFOF_mll.pdf");
-  /*
-  c2 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_ht.pdf");
-  c2r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_ht.pdf");
+  c1 ->SaveAs(directoryName + "SFandOF_mll.png");
+  c1r->SaveAs(directoryName + "RSFOF_mll.png");
 
-  c3 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_nj.pdf");
-  c3r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_nj.pdf");
+  c2 ->SaveAs(directoryName + "SFandOF_ht.pdf");
+  c2r->SaveAs(directoryName + "RSFOF_ht.pdf");
+  c2 ->SaveAs(directoryName + "SFandOF_ht.png");
+  c2r->SaveAs(directoryName + "RSFOF_ht.png");
 
-  c4 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_nb.pdf");
-  c4r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_nb.pdf");
+  c3 ->SaveAs(directoryName + "SFandOF_nj.pdf");
+  c3r->SaveAs(directoryName + "RSFOF_nj.pdf");
+  c3 ->SaveAs(directoryName + "SFandOF_nj.png");
+  c3r->SaveAs(directoryName + "RSFOF_nj.png");
 
-  c5 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_mt2.pdf");
-  c5r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_mt2.pdf");
+  c4 ->SaveAs(directoryName + "SFandOF_nb.pdf");
+  c4r->SaveAs(directoryName + "RSFOF_nb.pdf");
+  c4 ->SaveAs(directoryName + "SFandOF_nb.png");
+  c4r->SaveAs(directoryName + "RSFOF_nb.png");
 
-  c6 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_drll.pdf");
-  c6r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_drll.pdf");
-
-  c7 ->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/SFnOF_zpt.pdf");
-  c7r->SaveAs("RSFOF_mc_noZwindow_36p2ifb_onlyTop_l1pt100/RSFOF_zpt.pdf");
-  */
+  c5 ->SaveAs(directoryName + "SFandOF_mt2.pdf");
+  c5r->SaveAs(directoryName + "RSFOF_mt2.pdf");
+  c5 ->SaveAs(directoryName + "SFandOF_mt2.png");
+  c5r->SaveAs(directoryName + "RSFOF_mt2.png");
 
 
   return 0;
