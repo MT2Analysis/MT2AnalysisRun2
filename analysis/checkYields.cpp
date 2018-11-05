@@ -1,3 +1,7 @@
+// Script to check different yields as obtained from two different versions of the code
+// Relative yields difference above specified threshold will be printed to screen
+// example usage:
+// ./checkYields /shome/mratti/mt2_workarea/CMSSW_8_0_12/src/2016_compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/llepControlRegion/data.root /shome/mratti/mt2_workarea/CMSSW_8_0_12/src/old_mt2analysis/analysis/EventYields_dataETH_SnTMC_35p9ifb/llepControlRegion/data.root llepCR 0.0001
 
 #include <fstream>
 
