@@ -27,7 +27,7 @@
 #include "interface/MT2EstimateAllSigSyst.h"
 #include "interface/MT2DrawTools.h"
 #include "interface/MT2Config.h"
-#include "interface/MT2GoodrunClass.h"
+//#include "interface/MT2GoodrunClass.h"
 
 #include "TRandom3.h"
 
@@ -324,16 +324,16 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   }
   
   // json business here 
-  const char* unblindedjson_file;
-  if (cfg.year()==2017) unblindedjson_file="../jsons/goodruns_2017_unblinded.txt";
-  else if (cfg.year()==2018) unblindedjson_file="../jsons/goodruns_2018_unblinded.txt";
+//  const char* unblindedjson_file;
+//  if (cfg.year()==2017) unblindedjson_file="../jsons/goodruns_2017_unblinded.txt";
+//  else if (cfg.year()==2018) unblindedjson_file="../jsons/goodruns_2018_unblinded.txt";
 
-  GoodRun unblinded;
+//  GoodRun unblinded;
 
-  if (cfg.applyJSONforSR() and isData) {
-    std::cout << "Loading unblinded json file: " << unblindedjson_file << std::endl;
-    unblinded.set_goodrun_file(unblindedjson_file);
-  }
+//  if (cfg.applyJSONforSR() and isData) {
+//    std::cout << "Loading unblinded json file: " << unblindedjson_file << std::endl;
+//    unblinded.set_goodrun_file(unblindedjson_file);
+//  }
 
   int nentries = tree->GetEntries();
 
@@ -363,13 +363,13 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
     
     // only look at unblinded data through json
-    bool isUnblinded;
-    if (cfg.applyJSONforSR() && isData && !unblinded.goodrun(myTree.run, myTree.luminosityBlock)){
-      isUnblinded = false;
-    } else {
-      isUnblinded = true;
-    }
-    if(!isUnblinded) continue;
+//    bool isUnblinded;
+//    if (cfg.applyJSONforSR() && isData && !unblinded.goodrun(myTree.run, myTree.luminosityBlock)){
+//      isUnblinded = false;
+//    } else {
+//      isUnblinded = true;
+//    }
+//    if(!isUnblinded) continue;
 
     //check if is there is a nan
     if( isnan(myTree.ht) || isnan(myTree.met_pt) ||  isinf(myTree.ht) || isinf(myTree.met_pt)  ){
