@@ -96,7 +96,7 @@ int main(){
 
 
   ///////////////////////////////////////////////////
-  //                 get the files                 //
+  //                 Get the files                 //
   ///////////////////////////////////////////////////
 
   int year = 2017;
@@ -118,8 +118,6 @@ int main(){
     SF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/ZllPurityTrees.root/DYJets/HT250toInf_j1toInf_b0toInf/tree_DYJets_HT250toInf_j1toInf_b0toInf");
   }
 
-
-
   TChain* OF=new TChain("OF");
   if(year==2017){
     OF->Add("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/ZllPurityTrees_of.root/Top/HT250toInf_j1toInf_b0toInf/tree_Top_HT250toInf_j1toInf_b0toInf");
@@ -140,6 +138,204 @@ int main(){
 //  cout << SF_dy->GetEntries() << endl;
   cout << "Number of OF entries: " << OF->GetEntries() << endl;
 
+
+
+
+  ///////////////////////////////////////////////////
+  //           Correlation of variables            //
+  ///////////////////////////////////////////////////
+  
+  // we want to check here if there is a correlation between cuts and OF
+  
+  //total number of entries in the tree SF and OF:
+  int nEntriesSF = SF->GetEntries();
+  int nEntriesOF = OF->GetEntries();
+
+  cout << "Number of entries in SF data tree: " << SF->GetEntries() << endl;
+  cout << "Number of entries in OF data tree: " << OF->GetEntries() << endl;
+
+  //we set access to some of the branches
+  float Z_pT;
+  float Z_mass;
+  SF -> SetBranchAddress("Z_pt", &Z_pT);
+  SF -> SetBranchAddress("Z_mass", &Z_mass);
+  
+  float Z_pT_OF;
+  float Z_mass_OF;
+  OF -> SetBranchAddress("Z_pt", &Z_pT_OF);
+  OF -> SetBranchAddress("Z_mass", &Z_mass_OF);
+
+
+  //we declare 2D histogram that will contain the four bins (OF<, OF>, SF<, SF>)
+  TH2D *hist = new TH2D("hist", "hist", 2, 0, 1, 2, 0, 1);
+  cout << "Total number of bins of the histogram: " << hist->GetNbinsX() + hist->GetNbinsY() << endl;
+  Int_t bin01 = hist->GetBin(0, 1);
+  Int_t bin10 = hist->GetBin(1, 0);
+  Int_t bin11 = hist->GetBin(1, 1);
+  Int_t bin00 = hist->GetBin(0, 0);
+
+  cout << "bin01: " << bin01 << endl;
+  cout << "bin10: " << bin10 << endl;
+  cout << "bin11: " << bin11 << endl;
+  cout << "bin00: " << bin00 << endl;
+
+  //loop on SF
+  for(int i=0; i<SF->GetEntries(); ++i){ 
+    if(i % 30000 == 0){ 
+      cout << "   Entry: " << i << " / " << nEntriesSF << endl;
+    }
+    
+    SF -> GetEntry(i);
+  
+    if(Z_pT <= 200 && Z_mass >= 50){
+      hist->AddBinContent(bin01);
+    }
+    else{
+      hist->AddBinContent(bin11); 
+    } 
+  }
+  
+  cout << "bin01 content: " << hist->GetBinContent(bin01) << endl;
+  cout << "total bin content SF: " <<  hist->GetBinContent(bin11) +  hist->GetBinContent(bin01) << endl;
+  
+  
+  //loop on OF
+  for(int iEntry(0); iEntry<nEntriesOF; ++iEntry){ 
+    if(iEntry % 3000 == 0){ 
+      cout << "Entry: " << iEntry << " / " << nEntriesOF << endl;
+    }
+
+    OF->GetEntry(iEntry);
+ 
+    if(Z_pT_OF<=200 && Z_mass_OF>=50){
+      hist->AddBinContent(bin00);
+    }
+    else{
+      hist->AddBinContent(bin10);
+    }
+  }
+   
+  cout << "total bin content OF: " <<  hist->GetBinContent(bin00) +  hist->GetBinContent(bin10) << endl;
+  
+
+  double correlationFactor = hist->GetCorrelationFactor();
+  cout << "Correlation Factor: " << correlationFactor << endl;
+
+ 
+  
+
+  //plot of normalized Z_pT in OF and SF
+
+
+  TH1D* hist_ZpTSF = new TH1D("hist_ZpTSF", "hist_ZpTSF", 100, 0, 1500);
+  TH1D* hist_ZpTOF = new TH1D("hist_ZpTOF", "hist_ZpTOF", 100, 0, 1500);
+
+  hist_ZpTSF->Sumw2(); 
+  hist_ZpTOF->Sumw2(); 
+
+  hist_ZpTSF->SetLineColor(4);
+  hist_ZpTSF->SetMarkerColor(4);
+  hist_ZpTSF->SetMarkerStyle(7);
+  hist_ZpTOF->SetLineColor(2);
+  hist_ZpTOF->SetMarkerColor(2);
+  hist_ZpTOF->SetMarkerStyle(7);
+
+  hist_ZpTSF->GetXaxis()->SetTitle("Z pT [GeV]");
+  hist_ZpTSF->GetYaxis()->SetTitle("Entries");
+ 
+  //SF->Draw("Z_pt >> hist_ZpTSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  //OF->Draw("Z_pt >> hist_ZpTOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  SF->Draw("Z_pt >> hist_ZpTSF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  OF->Draw("Z_pt >> hist_ZpTOF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  //SF->Draw("Z_pt >> hist_ZpTSF", "", "goff");
+  //OF->Draw("Z_pt >> hist_ZpTOF", "", "goff");
+
+  // TH1D* ZpTSF = (TH1D*) hist_ZpTSF->Clone("ZpTSF");
+
+  double integral_ZpTSF = hist_ZpTSF->Integral(1,-1);
+  double integral_ZpTOF = hist_ZpTOF->Integral(1,-1);
+
+  hist_ZpTSF->Scale(1/integral_ZpTSF);
+  hist_ZpTOF->Scale(1/integral_ZpTOF);
+
+  TLegend *leg = new TLegend(0.75, 0.7, 0.95, 0.9);
+  leg -> AddEntry(hist_ZpTSF, "SF", "P");
+  leg -> AddEntry(hist_ZpTOF, "OF", "P");
+  leg -> SetTextSize(0.04);
+  leg -> SetLineColor(0);
+  leg -> SetFillColor(0);
+  leg -> SetBorderSize(0);
+  
+  TCanvas *plotZpT = new TCanvas();
+  plotZpT->cd();
+
+  // hist_ZpTOF->Draw();
+  hist_ZpTSF->Draw("same");
+  hist_ZpTOF->Draw("same");
+  leg -> Draw();
+  plotZpT -> SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/plotsZllEstimates/correlation/plotZpT_withCut.pdf");
+  
+
+
+  
+  //we repeat the same with Z_mass
+
+  TH1D* hist_ZMassSF = new TH1D("hist_ZMassSF", "hist_ZMassSF", 33, 0, 500);
+  TH1D* hist_ZMassOF = new TH1D("hist_ZMassOF", "hist_ZMassOF", 33, 0, 500);
+
+  hist_ZMassSF->Sumw2(); 
+  hist_ZMassOF->Sumw2(); 
+
+  hist_ZMassSF->SetLineColor(4);
+  hist_ZMassSF->SetMarkerColor(4);
+  hist_ZMassSF->SetMarkerStyle(7);
+  hist_ZMassOF->SetLineColor(4);
+  hist_ZMassOF->SetMarkerColor(2);
+  hist_ZMassOF->SetMarkerStyle(7);
+
+  hist_ZMassSF->GetXaxis()->SetTitle("Z Mass [GeV]");
+  hist_ZMassSF->GetYaxis()->SetTitle("Entries");
+ 
+  //SF->Draw("Z_mass >> hist_ZMassSF", "", "goff");
+  //OF->Draw("Z_mass >> hist_ZMassOF", "", "goff");
+  SF->Draw("Z_mass >> hist_ZMassSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  OF->Draw("Z_mass >> hist_ZMassOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  //SF->Draw("Z_mass >> hist_ZMassSF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  //OF->Draw("Z_mass >> hist_ZMassOF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+
+  // TH1D* ZpTSF = (TH1D*) hist_ZpTSF->Clone("ZpTSF");
+
+  double integral_ZMassSF = hist_ZMassSF->Integral(1,-1);
+  double integral_ZMassOF = hist_ZMassOF->Integral(1,-1);
+
+  hist_ZMassSF->Scale(1/integral_ZMassSF);
+  hist_ZMassOF->Scale(1/integral_ZMassOF);
+
+  TLegend *legMass = new TLegend(0.65, 0.7, 0.85, 0.9);
+  legMass -> AddEntry(hist_ZMassSF, "SF", "P");
+  legMass -> AddEntry(hist_ZMassOF, "OF", "P");
+  legMass -> SetTextSize(0.04);
+  legMass -> SetLineColor(0);
+  legMass -> SetFillColor(0);
+  legMass -> SetBorderSize(0);
+  
+  TCanvas *plotZMass = new TCanvas();
+  plotZMass->cd();
+
+  //hist_ZMassOF->Draw();
+  hist_ZMassSF->Draw("same");
+  hist_ZMassOF->Draw("same");
+  legMass -> Draw();
+  plotZMass -> SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/plotsZllEstimates/correlation/plotZMass_withFullCut.pdf");
+
+
+
+
+
+
+
+  bool computeRatio = false;
+  if(computeRatio){
   
   ///////////////////////////////////////////////////
   //      ratio as a function of mll (Z mass)      //
@@ -166,10 +362,8 @@ int main(){
   mllOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("Z_mass>>mllSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)))*weight/HLT_weight", "goff");
-  OF->Draw("Z_mass>>mllOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.&& (nJets>1 || (mt2>250.)) )*weight", "goff");
-  // SF->Draw("Z_mass>>mllSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)");
-  //OF->Draw("Z_mass>>mllOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)", "goff");
+  SF->Draw("Z_mass>>mllSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  OF->Draw("Z_mass>>mllOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
 
   mllSF->Scale(41.9);
   mllOF->Scale(41.9);
@@ -250,8 +444,8 @@ int main(){
   htOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("ht>>htSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight/HLT_weight", "goff");
-  OF->Draw("ht>>htOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight", "goff");
+  SF->Draw("ht>>htSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight/HLT_weight", "goff");
+  OF->Draw("ht>>htOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight", "goff");
   
   htSF->Scale(41.9);
   htOF->Scale(41.9);
@@ -325,8 +519,8 @@ int main(){
   njOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("nJets>>njSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight/HLT_weight", "goff");
-  OF->Draw("nJets>>njOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight", "goff");
+  SF->Draw("nJets>>njSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight/HLT_weight", "goff");
+  OF->Draw("nJets>>njOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight", "goff");
   
   njSF->Scale(41.9);
   njOF->Scale(41.9);
@@ -401,8 +595,8 @@ int main(){
   nbOF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("nBJets>>nbSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)))*weight/HLT_weight", "goff");
-  OF->Draw("nBJets>>nbOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)))*weight", "goff");
+  SF->Draw("nBJets>>nbSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  OF->Draw("nBJets>>nbOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
   
   nbSF->Scale(41.9);
   nbOF->Scale(41.9);
@@ -479,8 +673,8 @@ int main(){
   mt2OF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("mt2>>mt2SF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.))  )*weight/HLT_weight", "goff");
-  OF->Draw("mt2>>mt2OF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && (nJets>1 || (mt2>250.)) )*weight", "goff");
+  SF->Draw("mt2>>mt2SF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight/HLT_weight", "goff");
+  OF->Draw("mt2>>mt2OF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. )*weight", "goff");
   
   mt2SF->Scale(41.9);
   mt2OF->Scale(41.9);
@@ -698,7 +892,7 @@ int main(){
   c5r->SaveAs(directoryName + "RSFOF_mt2.pdf");
   c5 ->SaveAs(directoryName + "SFandOF_mt2.png");
   c5r->SaveAs(directoryName + "RSFOF_mt2.png");
-
+  }
 
   return 0;
 }
