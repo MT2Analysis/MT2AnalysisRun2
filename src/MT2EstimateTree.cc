@@ -83,7 +83,9 @@ void MT2EstimateTree::initTree( ) {
   tree->Branch( "lepPhi", &lepPhi, "lepPhi/F");
   tree->Branch( "lepMass", &lepMass, "lepMass/F");
   tree->Branch( "lepID", &lepID, "lepID/F");
-  tree->Branch( "lepMiniRelIso", &lepMiniRelIso, "lepMiniRelIso/F");
+  tree->Branch( "lepMiniRelIso", &lepMiniRelIso, "lepMiniRelISo/F");
+  tree->Branch( "isotrackPt", &isotrackPt, "isotrackPt/F");
+  tree->Branch( "isotrack_pdgId", &isotrack_pdgId, "isotrack_pdgId/I");
 
   //tree->Branch( "GenSusyMScan1", &GenSusyMScan1, "GenSusyMScan1/I");
   //tree->Branch( "GenSusyMScan2", &GenSusyMScan2, "GenSusyMScan2/I");
@@ -132,7 +134,9 @@ void MT2EstimateTree::initTree4read( ) {
   tree->SetBranchAddress( "lepPhi"       , &lepPhi       );
   tree->SetBranchAddress( "lepMass"      , &lepMass      );
   tree->SetBranchAddress( "lepID"        , &lepID        );
-  tree->SetBranchAddress( "lepMiniRelIso", &lepMiniRelIso);
+  tree->SetBranchAddress( "lepMiniRelIso", &lepMiniRelIso); 
+  tree->SetBranchAddress( "isotrackPt"   , &isotrackPt   );
+  tree->SetBranchAddress( "isotrack_pdgId", &isotrack_pdgId);
 
   for (std::map< std::string, float* >::iterator i= extraVars.begin(); i!=extraVars.end(); i++)
     tree->SetBranchAddress(i->first.c_str(), (i->second));
@@ -414,11 +418,11 @@ void MT2EstimateTree::fillTree( const MT2Tree& mt2tree, float w  ) {
 
 
 
-void MT2EstimateTree::fillTree_gamma( const MT2Tree& mt2tree, float w ) {
+/*void MT2EstimateTree::fillTree_gamma( const MT2Tree& mt2tree, float w ) {
   this->assignTree_gamma( mt2tree, w );
   tree->Fill();
 }
-
+*/
 
 void MT2EstimateTree::fillTree_zll( const MT2Tree& mt2tree, float w ) {
   this->assignTree_zll( mt2tree, w );
@@ -434,12 +438,12 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   lumi   = mt2tree.lumi;
   evt    = mt2tree.evt;
   weight = w;
-  puWeight = mt2tree.puWeight;
+//  puWeight = mt2tree.puWeight;
   id     = mt2tree.evt_id;
 
   nVert  = mt2tree.nVert;
   
-  rho  = mt2tree.rho;
+//  rho  = mt2tree.rho;
  
 
   if(mt2tree.nJet30>1)
@@ -465,7 +469,7 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   nPFLep        = mt2tree.nPFLep5LowMT;
   nPFHad        = mt2tree.nPFHad10LowMT;
 
-  nJetHF = mt2tree.get_nJetHF();
+//  nJetHF = mt2tree.get_nJetHF();
 
   lepPt    = mt2tree.lep_pt[0];
   lepEta   = mt2tree.lep_eta[0];
@@ -473,6 +477,8 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   lepMass  = mt2tree.lep_mass[0];
   lepID    = mt2tree.lep_pdgId[0];
   lepMiniRelIso = mt2tree.lep_miniRelIso[0];
+  isotrackPt    = mt2tree.isoTrack_pt[0];
+  isotrack_pdgId = mt2tree.isoTrack_pdgId[0];
     
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;
   //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
@@ -497,7 +503,7 @@ void MT2EstimateTree::assignTree_zll( const MT2Tree& mt2tree, float w ) {
   lumi   = mt2tree.lumi;
   evt    = mt2tree.evt;
   weight = w;
-  puWeight = mt2tree.puWeight;
+//  puWeight = mt2tree.puWeight;
   id     = mt2tree.evt_id;
 
   nVert  = mt2tree.nVert;
@@ -523,10 +529,10 @@ void MT2EstimateTree::assignTree_zll( const MT2Tree& mt2tree, float w ) {
   nPFLep        = mt2tree.nPFLep5LowMT;
   nPFHad        = mt2tree.nPFHad10LowMT;
 
-  nJetHF = mt2tree.get_nJetHF();
+  //nJetHF = mt2tree.get_nJetHF();
 
-  GenSusyMScan1 = mt2tree.GenSusyMGluino;
-  GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
+  //GenSusyMScan1 = mt2tree.GenSusyMGluino;
+  //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
 
 //  LHEweight_original = mt2tree.LHEweight_original;
 //  for (int i=0; i < 446; ++i){
@@ -537,16 +543,16 @@ void MT2EstimateTree::assignTree_zll( const MT2Tree& mt2tree, float w ) {
 }
 
 
-void MT2EstimateTree::assignTree_gamma( const MT2Tree& mt2tree, float w ) {
+/*void MT2EstimateTree::assignTree_gamma( const MT2Tree& mt2tree, float w ) {
 
   run    = mt2tree.run;
   lumi   = mt2tree.lumi;
-  evt    = mt2tree.evt;
+  evt    = mt2tree.event;
   weight = w;
-  puWeight = mt2tree.puWeight;
+//  puWeight = mt2tree.puWeight;
   id     = mt2tree.evt_id;
 
-  nVert  = mt2tree.nVert;
+  nVert  = mt2tree.PV_npvsGood;
 
   if(mt2tree.gamma_nJet30>1)
     mt2    = mt2tree.gamma_mt2;
@@ -577,7 +583,7 @@ void MT2EstimateTree::assignTree_gamma( const MT2Tree& mt2tree, float w ) {
 
 }
 
-  
+*/  
 
 void MT2EstimateTree::assignVars( float aht, int anJets, int anBJets, float amet, float amt2 ) {
 

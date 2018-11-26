@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   //   please set cuts on Ht here    //
  
   //please consider only ints for the range of ht!
-  int htMin=575, htMax=1000;
+  int htMin=250, htMax=-1;
   
   std::string cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   string ht_min = to_string(htMin);
@@ -118,13 +118,13 @@ int main( int argc, char* argv[] ) {
   std::string plotsDir = cfg.getEventYieldDir() + "/llepControlRegion/plotsDataMC";
   std::string plotsDir2;
   if(plotElectron && !plotMuon){
-    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/test/electron/" + dirName;
+    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/electron/" + dirName;
   }
   else if(plotMuon && !plotElectron){
-    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/test/muon/" + dirName;
+    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/muon/" + dirName;
   }
   else{
-    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/test/" + dirName;
+    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/lepton/" + dirName;
   }
  
   
@@ -139,7 +139,7 @@ int main( int argc, char* argv[] ) {
   dt.set_mc(&mc);
 
   dt.set_lumi(cfg.lumi());
-  dt.set_year(cfg.year());
+  //dt.set_year(cfg.year());
  
 
 
@@ -174,8 +174,6 @@ int main( int argc, char* argv[] ) {
     selection += "&& ht<" + ht_max;
   }
 
-
- 
    
   dt.drawRegionYields_fromTree("incl_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV", cutsLabel, jetCutsLabel);
@@ -192,7 +190,8 @@ int main( int argc, char* argv[] ) {
   // dt.drawRegionYields_fromTree("met_pt", "met_pt", selection, 100, 200, 1000, "MET pT", "GeV", cutsLabel, jetCutsLabel);
   
   //lepton kinematics
-  dt.drawRegionYields_fromTree("incl_lepPt", "lepPt", selection, 70, 0, 700, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  //dt.drawRegionYields_fromTree("incl_lepPt", "lepPt", selection, 70, 0, 540, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  dt.drawRegionYields_fromTree("incl_lepPt", "(nElectrons+nMuons==1) ? lepPt : (abs(isotrack_pdgId)!=211 ? isotrackPt : -1.0)", selection, 40, 0, 400, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepEta", "lepEta", selection, 21, -3.5, 3.5, "Lepton eta", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepPhi", "lepPhi", selection, 40, -3, 3, "Lepton phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepMass", "lepMass", selection, 5, 0, 1, "Lepton mass", "GeV", cutsLabel, jetCutsLabel);
@@ -204,7 +203,7 @@ int main( int argc, char* argv[] ) {
   dt.drawRegionYields_fromTree("incl_mht_phi", "mht_phi", selection, 40, -4, 4, "H_{T}^{miss} phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_diffMetMht", "diffMetMht", selection, 50, 0, 250, "|E_{T}^{miss}-H_{T}^{miss}|", "GeV", cutsLabel, jetCutsLabel);
 
-  /*
+  
 
   // +++++++++++++++++++++++++
   // +++      b-veto       +++
@@ -219,7 +218,20 @@ int main( int argc, char* argv[] ) {
 
   //selection = "ht>200 && met>200. && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // selection = "ht>250 && met>250. && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
-   selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  // selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+
+  if(plotElectron && !plotMuon){
+    selection = "abs(lepID)<12 && ht>" + ht_min + "&& met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  else if(plotMuon && !plotElectron){
+    selection = "abs(lepID)>12 && ht>" + ht_min + "&& met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  else{
+    selection = "ht>" + ht_min + "&& met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  if(htMax != -1){
+    selection += "&& ht<" + ht_max;
+  }
     
   dt.drawRegionYields_fromTree("0b_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("0b_mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV" , cutsLabel, jetCutsLabel);
@@ -230,7 +242,8 @@ int main( int argc, char* argv[] ) {
 
   dt.drawRegionYields_fromTree("0b_deltaPhiMin", "deltaPhiMin", selection, 16, -0.5, 3.5, "Delta #Phi_{min}", "", cutsLabel, jetCutsLabel);
      
-  dt.drawRegionYields_fromTree("0b_lepPt", "lepPt", selection, 70, 0, 700, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  // dt.drawRegionYields_fromTree("0b_lepPt", "lepPt", selection, 70, 0, 540, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  dt.drawRegionYields_fromTree("0b_lepPt", "(nElectrons+nMuons==1) ? lepPt : (abs(isotrack_pdgId)!=211 ? isotrackPt : -1.0)", selection, 40, 0, 400, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("0b_lepEta", "lepEta", selection, 21, -3.5, 3.5, "Lepton eta", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("0b_lepPhi", "lepPhi", selection, 40, -3, 3, "Lepton phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("0b_lepMass", "lepMass", selection, 5, 0, 1, "Lepton mass", "GeV", cutsLabel, jetCutsLabel);
@@ -254,7 +267,22 @@ int main( int argc, char* argv[] ) {
 
   //selection = "ht>200 && met>200. && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met &&  mt2>200.";
   // selection = "ht>250 && met>250. && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met &&  mt2>200.";
-   selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets>1 && nBJets>1  && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  //selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets>1 && nBJets>1  && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+
+
+  if(plotElectron && !plotMuon){
+    selection = "abs(lepID)<12 && ht>" + ht_min + "&& met>250  && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  else if(plotMuon && !plotElectron){
+    selection = "abs(lepID)>12 && ht>" + ht_min + "&& met>250  && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  else{
+    selection = "ht>" + ht_min + "&& met>250  && nJets>1 && nBJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  if(htMax != -1){
+    selection += "&& ht<" + ht_max;
+  }
+
   
   dt.drawRegionYields_fromTree("2b_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("2b_mt2", "mt2", selection, 10, 200., 1200., "M_{T2}", "GeV", cutsLabel, jetCutsLabel);
@@ -265,7 +293,8 @@ int main( int argc, char* argv[] ) {
 
   dt.drawRegionYields_fromTree("2b_deltaPhiMin", "deltaPhiMin", selection, 16, -0.5, 3.5, "#Delta #Phi_{min}", "", cutsLabel, jetCutsLabel);
     
-  dt.drawRegionYields_fromTree("2b_lepPt", "lepPt", selection, 70, 0, 700, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  //dt.drawRegionYields_fromTree("2b_lepPt", "lepPt", selection, 70, 0, 540, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  dt.drawRegionYields_fromTree("2b_lepPt", "(nElectrons+nMuons==1) ? lepPt : (abs(isotrack_pdgId)!=211 ? isotrackPt : -1.0)", selection, 40, 0, 400, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("2b_lepEta", "lepEta", selection, 21, -3.5, 3.5, "Lepton eta", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("2b_lepPhi", "lepPhi", selection, 40, -3, 3, "Lepton phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("2b_lepMass", "lepMass", selection, 5, 0, 1, "Lepton mass", "GeV", cutsLabel, jetCutsLabel);
@@ -291,7 +320,20 @@ int main( int argc, char* argv[] ) {
 
   //selection = "ht>200. && met>200  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // selection = "ht>250. && met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
-  selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  //selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+
+  if(plotElectron && !plotMuon){
+    selection = "abs(lepID)<12 && ht>" + ht_min + "&& met>250  && nJets==11 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  else if(plotMuon && !plotElectron){
+    selection = "abs(lepID)>12 && ht>" + ht_min + "&& met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  else{
+    selection = "ht>" + ht_min + "&& met>250  && nJets==1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+  }
+  if(htMax != -1){
+    selection += "&& ht<" + ht_max;
+  }
 
   //  dt.drawRegionYields_fromTree( "monojet_mt2"              , "mt2"                , selection, 12, 0.    , 600.  , "M_{T2}"          , "GeV" , cutsLabel, jetCutsLabel );
   
@@ -303,7 +345,8 @@ int main( int argc, char* argv[] ) {
   
   dt.drawRegionYields_fromTree("monojet_deltaPhiMin", "deltaPhiMin", selection, 16, -0.5, 3.5, "#Delta #Phi_{min}", "", cutsLabel, jetCutsLabel);
  
-  dt.drawRegionYields_fromTree("monojet_lepPt", "lepPt", selection, 70, 0, 700, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  //dt.drawRegionYields_fromTree("monojet_lepPt", "lepPt", selection, 70, 0, 540, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  dt.drawRegionYields_fromTree("monojet_lepPt", "(nElectrons+nMuons==1) ? lepPt : (abs(isotrack_pdgId)!=211 ? isotrackPt : -1.0)", selection, 40, 0, 400, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_lepEta", "lepEta", selection, 21, -3.5, 3.5, "Lepton eta", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_lepPhi", "lepPhi", selection, 40, -3, 3, "Lepton phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_lepMass", "lepMass", selection, 5, 0, 1, "Lepton mass", "GeV", cutsLabel, jetCutsLabel);
@@ -313,7 +356,7 @@ int main( int argc, char* argv[] ) {
   dt.drawRegionYields_fromTree("monojet_mht_pt", "mht_pt", selection, 100, 0, 1000, "H_{T}^{miss} p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_mht_phi", "mht_phi", selection, 40, -4, 4, "H_{T}^{miss} phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("monojet_diffMetMht", "diffMetMht", selection, 50, 0, 250, "|E_{T}^{miss}-H_{T}^{miss}|", "GeV", cutsLabel, jetCutsLabel);
-  */
+  
 /*
   // +++++++++++++++++++++++++
   // +++      b-veto       +++

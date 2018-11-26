@@ -258,7 +258,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
 
     if (myTree.isData) {
-      if (cfg.year() == 2017) if ( !(myTree.HLT_PFMET120_PFMHT120 || myTree.HLT_PFHT900 || myTree.HLT_PFHT300_PFMET110 || myTree.HLT_PFJet450 || myTree.HLT_PFMETNoMu120_PFMHTNoMu120 ) ) continue;
+      if (cfg.year() == 2016) if ( !(myTree.HLT_PFMET120_PFMHT120 || myTree.HLT_PFHT900 || myTree.HLT_PFHT300_PFMET110 || myTree.HLT_PFJet450 || myTree.HLT_PFMETNoMu120_PFMHTNoMu120 ) ) continue;
       if(cfg.year() == 2017) if ( !(myTree.HLT_PFMET120_PFMHT120 || myTree.HLT_PFHT1050 || myTree.HLT_PFHT500_PFMET100_PFMHT100 || myTree.HLT_PFJet500 || myTree.HLT_PFMETNoMu120_PFMHTNoMu120 || myTree.HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 ) ) continue;
     }
 

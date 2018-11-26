@@ -271,6 +271,15 @@ drawQCDForMonoJet: drawQCDForMonoJet.cpp MT2Region.o MT2Estimate.o MT2EstimateTr
 drawQCDForMonoJetValidation: drawQCDForMonoJetValidation.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o drawQCDForMonoJetValidation drawQCDForMonoJetValidation.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawRSFOF: drawRSFOF.C 
+	$(CC) -Wall $(INCLUDES) -o drawRSFOF drawRSFOF.C $(ROOTFLAG) $(EXTRALIBS)
+
+drawRSFOF_mc: drawRSFOF_mc.C 
+	$(CC) -Wall $(INCLUDES) -o drawRSFOF_mc drawRSFOF_mc.C $(ROOTFLAG) $(EXTRALIBS)
+
+comparisonZinvEstimates: comparisonZinvEstimates.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o 
+	$(CC) -Wall $(INCLUDES) -o comparisonZinvEstimates comparisonZinvEstimates.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+
 computeQCDfraction: computeQCDfraction.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o computeQCDfraction computeQCDfraction.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 

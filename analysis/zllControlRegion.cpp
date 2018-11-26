@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 
   //Getting the scale factor histogram/////////////////
   //Electrons//
-  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/scaleFactors.root";
+  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/scaleFactors_old.root";
   TFile * f_ele = new TFile(filename.c_str() );
   if (!f_ele->IsOpen()) std::cout << " ERROR: Could not find scale factor file " << filename << std::endl;
   //Uncomment for loose Id
