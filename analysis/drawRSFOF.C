@@ -123,6 +123,10 @@ int main(){
   ///////////////////////////////////////////////////
   
   // we want to check here if there is a correlation between cuts and OF
+
+
+  bool studyCorrelation = false;
+  if(studyCorrelation){
   
   //total number of entries in the tree SF and OF:
   int nEntriesSF = SF->GetEntries();
@@ -144,17 +148,18 @@ int main(){
 
 
   //we declare 2D histogram that will contain the four bins (OF<, OF>, SF<, SF>)
-  TH2D *hist = new TH2D("hist", "hist", 2, 0, 1, 2, 0, 1);
+  TH2D *hist = new TH2D("hist", "hist", 2, 0, 10, 2, 0, 10);
   cout << "Total number of bins of the histogram: " << hist->GetNbinsX() + hist->GetNbinsY() << endl;
-  Int_t bin01 = hist->GetBin(0, 1);
-  Int_t bin10 = hist->GetBin(1, 0);
-  Int_t bin11 = hist->GetBin(1, 1);
-  Int_t bin00 = hist->GetBin(0, 0);
+  
+  //Int_t bin01 = hist->GetBin(1, 4);
+  //Int_t bin10 = hist->GetBin(9, 4);
+  //Int_t bin11 = hist->GetBin(9, 9);
+  //Int_t bin00 = hist->GetBin(3, 3);
 
-  cout << "bin01: " << bin01 << endl;
-  cout << "bin10: " << bin10 << endl;
-  cout << "bin11: " << bin11 << endl;
-  cout << "bin00: " << bin00 << endl;
+  //cout << "bin01: " << bin01 << endl;
+  //cout << "bin10: " << bin10 << endl;
+  //cout << "bin11: " << bin11 << endl;
+  //cout << "bin00: " << bin00 << endl;
 
   //loop on SF
   for(int i=0; i<SF->GetEntries(); ++i){ 
@@ -165,15 +170,15 @@ int main(){
     SF -> GetEntry(i);
   
     if(Z_pT <= 200 && Z_mass >= 50){
-      hist->AddBinContent(bin01);
+      hist->Fill(1., 9.); //those number are chosen in the way that small is between 1 and 5 and high between 6 and 9 (to access different region in the rectangle)
     }
     else{
-      hist->AddBinContent(bin11);
+      hist->Fill(9.,9.);
     } 
   }
   
-  cout << "bin01 content: " << hist->GetBinContent(bin01) << endl;
-  cout << "total bin content SF: " <<  hist->GetBinContent(bin11) +  hist->GetBinContent(bin01) << endl;
+  //cout << "bin01 content: " << hist->GetBinContent(bin01) << endl;
+  //cout << "total bin content SF: " <<  hist->GetBinContent(bin11) +  hist->GetBinContent(bin01) << endl;
   
   
   //loop on OF
@@ -185,15 +190,15 @@ int main(){
     OF->GetEntry(iEntry);
  
     if(Z_pT_OF<=200 && Z_mass_OF>=50){
-      hist->AddBinContent(bin00);
+      hist->Fill(1., 1.);
     }
     else{
-      hist->AddBinContent(bin10);
+      hist->Fill(9., 1.);
     }
   }
-   
-  cout << "total bin content OF: " <<  hist->GetBinContent(bin00) +  hist->GetBinContent(bin10) << endl;
   
+  //cout << "total bin content OF: " <<  hist->GetBinContent(bin00) +  hist->GetBinContent(bin10) << endl;
+    
 
   double correlationFactor = hist->GetCorrelationFactor();
   cout << "Correlation Factor: " << correlationFactor << endl;
@@ -201,21 +206,15 @@ int main(){
 
   TCanvas *c = new TCanvas();
   hist->Draw("colz");
-  c->SaveAs("test/hist.pdf");
+  c->SetRightMargin(0.2);
+  c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/plotsZllEstimates/correlation/2Dhist_data.pdf");
 
-
-  //cout << "Bin of bin 0 0: " << hist->GetBin(0,0) << endl;
-  ////cout << "Bin of bin 0 1: " << hist->GetBinWithContent2(0.,0,1) << endl;
-  //cout << "Bin of bin 1 0: " << hist->GetBin(1,0) << endl;
-  //cout << "Bin of bin 1 1: " << hist->GetBin(1,1) << endl;
-  //cout << "bin 1: " << hist->GetBinContent(5) << endl;
+  }
+ 
 
 
 
-
-
-
-  bool computeRatio = false;
+  bool computeRatio = true;
   if(computeRatio){
 
   ///////////////////////////////////////////////////
@@ -264,7 +263,7 @@ int main(){
   label_top->SetTextSize(0.038);
   label_top->SetTextAlign(31); // align right
   label_top->SetTextFont(42);  // label_top->SetTextFont(62);
-  label_top->AddText("35.9 fb^{-1} (13 TeV)");
+  label_top->AddText("41.9 fb^{-1} (13 TeV)");
 
   TPaveText* label_cms = new TPaveText(0.143,0.96,0.27,0.965, "brNDC");
   label_cms->SetBorderSize(0);
@@ -329,14 +328,14 @@ int main(){
   mllRSFOF->SetMinimum(0.);
   mllRSFOF->SetMaximum(2.);
   
-  mllRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  mllRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   mllRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   mllRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
   TCanvas* c1r=new TCanvas("c1r", "", 600, 600);
   c1r->cd();
   mllRSFOF->Draw("PE");
-  mllRSFOF->Fit("pol0");
+  // mllRSFOF->Fit("pol0");
   
   TLine* lr = new TLine(50, (float) RSFOF, 200, (float)RSFOF);
   TLine* lrup = new TLine(50, (float)(RSFOF+err_R), 200, (float)(RSFOF+err_R));
@@ -394,9 +393,9 @@ int main(){
   htSF->GetYaxis()->SetTitle("Entries");
   htOF->GetYaxis()->SetTitle("Entries");
 
+  //study of the variation of the value of the ratio as a function of the cut values (commented)
 
-
-
+  /*
 //modification of the cut on Z_pT, to estimate how strongly the value of the ratio depends on it
 
   vector<int> npT = {160, 165, 170, 175, 180, 185, 190, 195, 198, 199, 200, 155, 150, 145, 140, 135, 130};
@@ -472,11 +471,11 @@ int main(){
   e->SetRightMargin(0.15);
   e->SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_2016.pdf");
   e->SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_2016.png");
-
+*/
 
  
 
-  /*
+  
   SF->Draw("ht>>htSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
   OF->Draw("ht>>htOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
   
@@ -487,7 +486,7 @@ int main(){
   RSFOF = integral_sf/integral_of;
   err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
   cout << "[HT] R^{SF/OF} = "<< RSFOF << "+-" << err_R << endl;
-  */
+  
 
 
   TCanvas* c2=new TCanvas("c2", "", 600, 600);
@@ -500,14 +499,14 @@ int main(){
 
   htRSFOF->SetMinimum(0.);
   htRSFOF->SetMaximum(2.);
-  htRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  htRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   htRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   htRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
   TCanvas* c2r=new TCanvas("c2r", "", 600, 600);
   c2r->cd();
   htRSFOF->Draw("PE");
-  htRSFOF->Fit("pol0");
+  // htRSFOF->Fit("pol0");
 
   TLine* lrht = new TLine(250, (float) RSFOF, 2000, (float)RSFOF);
   TLine* lrhtup = new TLine(250, (float)(RSFOF+err_R), 2000, (float)(RSFOF+err_R));
@@ -587,14 +586,14 @@ int main(){
   njRSFOF->SetMinimum(0.);
   njRSFOF->SetMaximum(2.);
   
-  njRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  njRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   njRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   njRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
   TCanvas* c3r=new TCanvas("c3r", "", 600, 600);
   c3r->cd();
   njRSFOF->Draw("PE");
-  njRSFOF->Fit("pol0");
+  //njRSFOF->Fit("pol0");
 
   TLine* lrnj = new TLine(1, (float) RSFOF, 10, (float)RSFOF);
   TLine* lrnjup = new TLine(1, (float)(RSFOF+err_R), 10, (float)(RSFOF+err_R));
@@ -673,14 +672,14 @@ int main(){
   nbRSFOF->SetMinimum(0.);
   nbRSFOF->SetMaximum(2.);
   
-  nbRSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  nbRSFOF->GetYaxis()->SetRangeUser(1.,3.);
   nbRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   nbRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
   TCanvas* c4r=new TCanvas("c4r", "", 600, 600);
   c4r->cd();
   nbRSFOF->Draw("PE");
-  nbRSFOF->Fit("pol0");
+  // nbRSFOF->Fit("pol0");
 
   TLine* lrnb   = new TLine(0, (float) RSFOF, 4, (float)RSFOF);
   TLine* lrnbup = new TLine(0, (float)(RSFOF+err_R), 4, (float)(RSFOF+err_R));
@@ -762,14 +761,14 @@ int main(){
   mt2RSFOF->SetMinimum(0.);
   mt2RSFOF->SetMaximum(2.);
   
-  mt2RSFOF->GetYaxis()->SetRangeUser(0.,2.);
+  mt2RSFOF->GetYaxis()->SetRangeUser(1.,3.);
   mt2RSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   mt2RSFOF->GetYaxis()->SetTitleOffset(1.4);
 
   TCanvas* c5r=new TCanvas("c5r", "", 600, 600);
   c5r->cd();
   mt2RSFOF->Draw("PE");
-  mt2RSFOF->Fit("pol0");
+  // mt2RSFOF->Fit("pol0");
 
   TLine* lrmt2   = new TLine(200, (float) RSFOF,        1500., (float)RSFOF);
   TLine* lrmt2up = new TLine(200, (float)(RSFOF+err_R), 1500., (float)(RSFOF+err_R));
@@ -1202,7 +1201,7 @@ int main(){
 
 
   //SAVE as:
-  TString directoryName = "EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/";
+  TString directoryName = "EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/";
 
   c1 ->SaveAs(directoryName + "SFandOF_mll.pdf");
   c1r->SaveAs(directoryName + "RSFOF_mll.pdf");

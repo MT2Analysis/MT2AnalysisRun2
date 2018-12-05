@@ -241,11 +241,7 @@ int main( int argc, char* argv[] ) {
   std::cout << "Creating Shapes..." << std::endl;
 
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// Creating the shapes //////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
+  //we create the shapes
  
   MT2Analysis<MT2Estimate>* Zinv_forHybrid_notIntegral = MT2Analysis<MT2Estimate>::readFromFile(cfg.getEventYieldDir() + "/analyses.root", "ZJets");
   (* (MT2Analysis<MT2Estimate>*) Zinv_forHybrid_notIntegral) = (* (MT2Analysis<MT2Estimate>*)Zinv_forHybrid_notIntegral) * lumi;
@@ -277,17 +273,14 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2EstimateTree>* zllData_tree_of = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/data_of.root", "data_of");
 
-  MT2Analysis<MT2EstimateTree>* zinvMC_tree = MT2Analysis<MT2EstimateTree>::readFromFile(cfg.getEventYieldDir() + "/ZJetsIncl.root", "ZJets_inclusive"); 
+  MT2Analysis<MT2EstimateTree>* zinvMC_tree = MT2Analysis<MT2EstimateTree>::readFromFile(cfg.getEventYieldDir() + "/ZJetsIncl.root", "ZJets"); 
  
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this
   TFile* temp = new TFile("temp.root","RECREATE");
 
 
 
-  ///////////////////////////////////////////////
-  ///////////FILLING THE SHAPE///////////////////
-  ///////////////////////////////////////////////
-
+  //we fill the shapes
 
   cout << "Filling the shapes..." << endl;
   
@@ -433,12 +426,19 @@ int main( int argc, char* argv[] ) {
 //  MT2Analysis<MT2Estimate>* zinvZllRatio_forShape_TR = new MT2Analysis<MT2Estimate>( "ZinvZllRatio_forShape_TR", cfg.regionsSet() );
 //  (*zinvZllRatio_forShape_TR) = (*zinvMC_forShape_TR) / (*zllMC_shape_TR);
 
+
+
+  ////////////////////////////////////////////////
+  //            Topological region              //
+  ////////////////////////////////////////////////
+
+
   /////////////////Building the hybrid shape from data & MC, and the ratio of the MC/////////////////////////
 
   vector<double> minStatistics = {50.}; //{0., 1., 3., 5., 7., 9., 2000.};//{10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 200., 300., 400., 500.};
 
   //we loop here to change the number of statistics points in the hybrid shape
-for(int i(0); i<minStatistics.size(); ++i){
+  for(int i(0); i<minStatistics.size(); ++i){
 
   buildHybrid( zllHybrid_shape_TR, zllData_shape_TR, zinvMC_forShape_TR, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol, minStatistics[i] );
   //  buildHybrid( zllHybrid_shape_TR, zllData_shape_TR,zllMC_shape_TR ,zinvZllRatio_forShape_TR, bin_extrapol );
@@ -486,11 +486,6 @@ for(int i(0); i<minStatistics.size(); ++i){
 
   //buildHybrid_forPR(  zllHybrid_shape, zllData_shape2, (MT2Analysis<MT2Estimate>*)zllMC_shape, bin_extrapol_nonTR );
  
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   MT2Analysis<MT2EstimateSyst>* zll_est_integral;
@@ -545,7 +540,8 @@ for(int i(0); i<minStatistics.size(); ++i){
 
   double stat = minStatistics[i];
   string statisticsName = to_string(stat);
-  std::string outFile = cfg.getEventYieldDir() + "/zinvFromZll_" + statisticsName;
+  std::string outFile = cfg.getEventYieldDir() + "/zinvFromZll";
+  // std::string outFile = cfg.getEventYieldDir() + "/zinvFromZll_" + statisticsName;
   outFile += ".root";
 
 
@@ -606,6 +602,11 @@ for(int i(0); i<minStatistics.size(); ++i){
   
     bin_extrapol_nonTR->setName("bin_extrapol_forPR");
     bin_extrapol_nonTR->addToFile( outFile );
+
+    zllData_of_forHybrid_notIntegral -> addToFile(outFile);
+    zllData_forHybrid_notIntegral -> addToFile(outFile);
+    zllData_of_forHybrid -> addToFile(outFile);
+    zllData_forHybrid -> addToFile(outFile);
 
   }
 			     
@@ -747,6 +748,8 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
 
   std::set<MT2EstimateSyst*> newData;
 
+  ofstream writeToFile("purity.txt");
+
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
 
     MT2Region* region = new MT2Region( *iR );
@@ -763,6 +766,9 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
       float contentSF = SFEst->yield->GetBinContent(ibin);
       float contentOF = OFEst->yield->GetBinContent(ibin);
       
+      writeToFile << "contentSF = " << contentSF << endl;
+      writeToFile << "contentOF = " << contentOF << endl;
+
       //R(SF/OF) ratio
       float R_sfof;
       float R_sfof_err;
@@ -771,14 +777,21 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
         R_sfof_err = 0.0; // old err, now in create DC= 0.15;
       }
       else if(cfg.year()==2017){
-	R_sfof == 1.79;
-	R_sfof_err == 0.15; // FIXME: adjust this value
+	R_sfof = 1.79;
+	R_sfof_err = 0.15; // FIXME: adjust this value
       }
 	
+      writeToFile << "R(SF/OF) = " << R_sfof << endl;
 
       float purity = 0.0;
-      if(contentSF>(R_sfof * contentOF))
+      if(contentSF>(R_sfof * contentOF)){
 	purity = (contentSF - R_sfof * contentOF)/ contentSF;
+	writeToFile << "purity = (" << contentSF << " - " << R_sfof << " * " << contentOF << ")/ " << contentSF << endl;
+	writeToFile << "purity = " << purity << endl;
+	writeToFile << endl;
+
+      }
+      
       float purity_err = 1.0;
       if( purity > 0.){
 	if(do_Runcert)
@@ -796,7 +809,7 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
 	else
 	  purity_err = 1.0;
       }
-	
+       
       thisNewEstimate->yield->SetBinContent( ibin, purity );
      
       thisNewEstimate->yield->SetBinError( ibin, purity_err );
@@ -1042,9 +1055,29 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
   std::cout << endl << "In build hybrid:" << std::endl;
 
   std::set<MT2Region> regions       = shape_data->getRegions();
+  
+  int n(1);
+  
+  bool writeToExtFile = false;
 
+  ofstream writeToFile("file_bin_extrapol.txt");
+  if(writeToFile.fail()){
+     cerr << "Erreur lors de l'ouverture du fichier" << endl;
+     return;
+  }
+ 
+ 
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
+   
     MT2Region* region = new MT2Region( *iR );
+
+    cout << endl << "Region " << n << endl;
+    if(writeToExtFile){
+      writeToFile << endl << "Region " << n << endl;
+      writeToFile << region->getNiceNames()[0] << " " << region->getNiceNames()[1] << endl;
+    ++n;
+    }
+
 
     TH1D* this_shape_data    = (TH1D*)shape_data   ->get( *iR)->yield;
     TH1D* this_shape_MCsr    = (TH1D*)shape_MCsr   ->get( *iR)->yield;
@@ -1063,6 +1096,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     int nBins = this_shape_data->GetNbinsX();
     //for each topo region will have a bin number indicating where we extrapolate
     int bin_extrapol = 1;
+    int bin_extrapol_fixed = 1;
     double integral = 0.;
     double errData = 0.;
     double integralMC = 0.;
@@ -1071,11 +1105,13 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     std::vector< std::string > niceNames = region->getNiceNames();
     //    std::cout << niceNames[0] << " " << niceNames[1] << std::endl;
 
-    bool getExtrapolBin =0;
+
+    bool getExtrapolBin = 1;
     if(getExtrapolBin){
 
-      if( region->nJetsMax()==1) 
+      if( region->nJetsMax()==1){ 
 	bin_extrapol = 2;
+      }
       else{
 	bin_extrapol = getFixedExtrapolBin( region, this_shape_data );
 
@@ -1097,8 +1133,12 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
       for( int iBin=nBins; iBin>= 1; iBin-- ){
 	// std::cout << this_shape_data->Integral( iBin, -1)  << std::endl;
 	// if( this_shape_data->Integral( iBin, -1) >= 10. ){
-	cout << endl;
+	
 	cout << "Maximum number of statistics in MC CR: " <<  this_shape_MCcr->Integral( iBin, -1) << endl;
+	if(writeToExtFile){
+	  writeToFile << "Maximum number of statistics in MC CR: " <<  this_shape_MCcr->Integral( iBin, -1) << endl;
+	}
+	
 	if( this_shape_MCcr->Integral( iBin, -1) >= minStatistics ){
 	  if( iBin == nBins ){ //We take the full shape from data!
 	    bin_extrapol = iBin+1;
@@ -1121,16 +1161,34 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 	}
       }
     }//got the extrapol bin myself
-    
-    cout << "Check: bin_extrapol = " << bin_extrapol << endl;
 
+
+    //as a check now, compute bin_extrapol fixed to compare it with other method
+    if( region->nJetsMax()==1){ 
+	bin_extrapol_fixed = 2;
+    }
+    else{
+	bin_extrapol_fixed = getFixedExtrapolBin( region, this_shape_data );
+
+	if( bin_extrapol_fixed == nBins ){ 
+	  bin_extrapol_fixed = bin_extrapol_fixed+1;
+	}else{
+	  bin_extrapol_fixed = bin_extrapol_fixed;
+	}
+    }
+    
+    cout << "Check: bin_extrapol / bin_extrapol_fixed / nBins :  " << bin_extrapol << " / " << bin_extrapol_fixed << " / " << nBins << endl;
+    if(writeToExtFile){
+      writeToFile << "Check: bin_extrapol / bin_extrapol_fixed / nBins :  " << bin_extrapol << " / " << bin_extrapol_fixed << " / " << nBins << endl;
+    }
+   
     //Filling the histo that knows where we extrapolate
     this_binExtrapol->SetBinContent( 1, bin_extrapol );
 
     // std::vector< std::string > niceNames = region->getNiceNames();
-    std::cout << std::endl;
+    /* std::cout << std::endl;
     std::cout << niceNames[0] << " " << niceNames[1] << ", bin NR: " << bin_extrapol << " with MT2 edge: " << this_binExtrapol->GetBinLowEdge(bin_extrapol) << std::endl;
-
+    */
     double errZinv;
     double integralZinv = this_shape_MCsr->IntegralAndError( bin_extrapol, -1, errZinv);
     double relativeErrZinv = 1.0;
@@ -1148,9 +1206,9 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
       relativeErrMC = errMC/integralMC;
 
     double errShapeMCExt = sqrt(relativeErrMC*relativeErrMC+relativeErrZinv*relativeErrZinv);
-
+    /*
     std::cout << "extrapol bin / total bins = " << bin_extrapol << " / " << nBins << " : integral " << integral << " : errData " << errData << " : integalMC " << integralMC << " : intZinv " << integralZinv << " : errZinv " << errZinv <<std::endl;
-
+    */
     for(int iBin=1; iBin<= nBins; iBin++){
       double MCsr_cont;
       double MCcr_cont;
@@ -1218,11 +1276,11 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 	
 	relativeErrorData = sqrt( (this_shape_data->GetBinError(iBin)*this_shape_data->GetBinError(iBin))/(this_shape_data->GetBinContent(iBin)*this_shape_data->GetBinContent(iBin)) +  ratioMC_err*ratioMC_err );
 	relativeErrorMC = sqrt( (this_shape_MCcr->GetBinError(iBin)*this_shape_MCcr->GetBinError(iBin))/(this_shape_MCcr->GetBinContent(iBin)*this_shape_MCcr->GetBinContent(iBin)) +  ratioMC_err*ratioMC_err );
-
+	/*
 	std::cout << "MCsr_contErr : " << MCsr_contErr << " MCsr_cont: " << MCsr_cont <<  " MCcr_contErr: " << MCcr_contErr <<  " MCcr_cont: " << MCcr_cont << std::endl;
 
 	std::cout << "dataErr_i : " << this_shape_data->GetBinError(iBin) << " data: " << this_shape_data->GetBinContent(iBin) <<  " ratioMCerr: " << ratioMC_err << std::endl;
-
+	*/
 
 	this_shape_data ->SetBinContent(iBin, this_shape_data->GetBinContent(iBin)*ratioMC_cont);
 	this_shape_MCcr ->SetBinContent(iBin, this_shape_MCcr->GetBinContent(iBin)*ratioMC_cont);
@@ -1232,12 +1290,12 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 
       }else{
 
-
+	/*
 	std::cout << "MCsr_contErr : " << MCsr_contErr << " MCsr_cont: " << MCsr_cont <<  " MCcr_contErr: " << MCcr_contErr <<  " MCcr_cont: " << MCcr_cont << std::endl;
 
 	std::cout << "integral : " << integral << " ratioMC : " << ratioMC_cont <<  " kMT2_zinv : " << kMT2_zinv << std::endl;
 	std::cout << "relativeErrData : " << relativeErrorData  << std::endl;
-
+	*/
 
 	relativeErrorData = sqrt( errShapeExt*errShapeExt + ratioMC_err*ratioMC_err );
         relativeErrorMC = sqrt( errShapeMCExt*errShapeMCExt + ratioMC_err*ratioMC_err );
@@ -1250,9 +1308,9 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
       }
 
       //std::cout << "extrapol bin / total bins / this bin= " << bin_extrapol << " / " << nBins << " / " << iBin << " : " << this_shape_data->Integral(iBin,-1) << " :MCcrInt " << this_shape_MCcr->Integral(iBin,-1) << " :MCscInt " << this_shape_MCsr->Integral(iBin,-1) << " :RatioErr " << ratioMC_err << " : " << errShapeExt << " :errZinv " << relativeErrZinv << " :errData " << relativeErrData <<std::endl;
-    
+      /*
       std::cout << "extrapol bin / total bins / this bin= " << bin_extrapol << " / " << nBins << " / " << bin_extrapol << " : " << this_shape_data->Integral(bin_extrapol,-1) << " :MCcrInt " << this_shape_MCcr->Integral(bin_extrapol,-1) << " :MCscInt " << this_shape_MCsr->Integral(bin_extrapol,-1) << " :RatioErr " << ratioMC_err << " : " << errShapeExt << " :errZinv " << relativeErrZinv << " :errData " << relativeErrData <<std::endl;
-
+      */
       //std::cout << "extrapol bin / total bins / this bin= " << bin_extrapol << " / " << nBins << " / " << iBin << " : " << this_shape_data->Integral(bin_extrapol,-1) << " : " << this_shape_MCcr->Integral(bin_extrapol,-1) << " : " << this_shape_MCsr->Integral(bin_extrapol,-1) << " : " << ratioMC_err << " : " << errShapeExt << " : " << relativeErrZinv << " : " << relativeErrData <<std::endl;
 
       this_shape_hybrid->SetBinContent(iBin, this_shape_data->GetBinContent(iBin) );

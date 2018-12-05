@@ -42,7 +42,7 @@ TH2D*  h_elTrk = 0;
 void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
-		      TH2D* h_elSF, TH2D* h_muSF, bool do_ZinvEst );
+		      TH2D* h_elSF, TH2D* h_muSF, bool do_ZinvEst, bool invertedZcuts = false );
 void addVariables(MT2Analysis<MT2EstimateTree>* anaTree);
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
 float getHLTweight( int lep1_pdgId, int lep2_pdgId, float lep1_pt, float lep2_pt, int variation);
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
   // USED THE OLD scaleFactor.root FILE
   // TO BE FIXED!!
 
-  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/scaleFactors_old.root";
+  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/old2016/scaleFactors_old.root";
   TFile * f_ele = new TFile(filename.c_str() );
   if (!f_ele->IsOpen()) std::cout << " ERROR: Could not find scale factor file " << filename << std::endl;
   //Uncomment for loose Id
@@ -136,9 +136,9 @@ int main(int argc, char* argv[]) {
 
 
   //Muons//
-  std::string filenameID = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/TnP_MuonID_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
-  std::string filenameISO = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/TnP_MuonID_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root";
-  std::string filenamedxyz = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/TnP_MuonID_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
+  std::string filenameID = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/2016/TnP_MuonID_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
+  std::string filenameISO = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/2016/TnP_MuonID_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root";
+  std::string filenamedxyz = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/2016/TnP_MuonID_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
   TFile * f1 = new TFile(filenameID.c_str() );
   TFile * f2 = new TFile(filenameISO.c_str() );
   TFile * f3 = new TFile(filenamedxyz.c_str() );
@@ -304,7 +304,7 @@ int main(int argc, char* argv[]) {
     // MT2Analysis<MT2EstimateTree>* dataTree_filler = new MT2Analysis<MT2EstimateTree>( "data_filler", cfg.crRegionsSet() );
 
     addVariables(dataTree);      addVariables(dataTree_of); // addVariables(dataTree_filler);
-
+    /*
     if( samples_data.size()==0 ) {
       std::cout << std::endl;
       std::cout << "-> WARNING!! Didn't find any data in file: " << samplesFile_data << "!" << std::endl;
@@ -321,9 +321,20 @@ int main(int argc, char* argv[]) {
 
     dataTree->addToFile(outputdir+"/data.root");
     dataTree_of->writeToFile(outputdir+"/data_of.root");
+    */
+   
+    //we create here the estimates in the ttbar enriched CR (inverted cuts on Zmass and ZpT) that are needed to compute R(SF/OF) later on
+    MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
+    MT2Analysis<MT2EstimateTree>* dataTree_of_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_of_invertedZcuts", cfg.regionsSet() );
+    addVariables(dataTree_invertedZcuts); addVariables(dataTree_of_invertedZcuts);
 
+    for(unsigned i=0; i<samples_data.size(); ++i){
+      computeYieldSnO( samples_data[i], cfg, dataTree_invertedZcuts, dataTree_of_invertedZcuts, h_elSF, h_muSF, false, true);
+    }
 
-
+    dataTree_invertedZcuts->addToFile(outputdir+"/data_invertedZcuts.root");
+    dataTree_of_invertedZcuts->addToFile(outputdir+"/data_of_invertedZcuts.root");
+    /*
 
     if(doZinvEst){
       MT2Analysis<MT2EstimateTree>* dataTree_forZinvEst = new MT2Analysis<MT2EstimateTree>( "data", cfg.regionsSet() );
@@ -337,7 +348,7 @@ int main(int argc, char* argv[]) {
       dataTree_of_forZinvEst->addToFile(outputdir+"/data_of_forZinvEst.root");
     }
 
-
+    */
 
   } // if DATA
 
@@ -453,10 +464,15 @@ void addVariables(MT2Analysis<MT2EstimateTree>* anaTree){
 void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
-		      TH2D* h_elSF, TH2D* h_muSF, bool do_ZinvEst) {
+		      TH2D* h_elSF, TH2D* h_muSF, bool do_ZinvEst, bool invertedZcuts = false) {
+
+  std::cout << std::endl << std::endl << "Check: " ;
+  if(invertedZcuts) std::cout << "invertedZcuts = true";
+  else std::cout << "invertedZcuts = false";
+  std::cout << std::endl << std::endl;
 
   std::string regionsSet = cfg.crRegionsSet();
-  if( do_ZinvEst ) regionsSet = cfg.regionsSet();
+  if( do_ZinvEst || invertedZcuts ) regionsSet = cfg.regionsSet();
  
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
@@ -521,7 +537,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     // Kinematic selections common to both SF and OF
     if(!( myTree.nLep==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
-    if(myTree.lep_pt[1]<30) continue;
+    if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to trigger inefficiency
 
     if( cfg.analysisType() == "mt2"){
       if( regionsSet!="13TeV_noCut" )
@@ -661,6 +677,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	      //SF part
 	      if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
 	      if( myTree.zll_pt <= 200. ) continue;
+      }
+      if(invertedZcuts){
+	if(fabs(myTree.zll_mass-91.19)<20) continue;
+	if(myTree.zll_pt > 200.) continue;
+	if(myTree.zll_mass < 50) continue;
       }
       /////////////////////////
       //FIXME: what to do with SF weights?
@@ -893,8 +914,13 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     } else if(isOF){ //////////Opposite FLAVOR//////////////////////////////////////////
       if(isData && !myTree.passTriggerSelection2017("zllOF") ) continue;
       if(do_ZinvEst){
-	      if( fabs(myTree.zll_mass-91.19)>=20. ) continue;
-	      if( myTree.zll_pt <= 200. ) continue;
+	if( fabs(myTree.zll_mass-91.19)>=20. ) continue;
+	if( myTree.zll_pt <= 200. ) continue;
+      }
+      if(invertedZcuts){
+	if(fabs(myTree.zll_mass-91.19)<20) continue;
+	if(myTree.zll_pt > 200.) continue;
+	if(myTree.zll_mass < 50) continue;
       }
       
       // FIXME: what to do with lep_tightID?

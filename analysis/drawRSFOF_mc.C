@@ -167,65 +167,58 @@ int main(){
 
 
   //we declare 2D histogram that will contain the four bins (OF<, OF>, SF<, SF>)
-  TH2D *hist = new TH2D("hist", "hist", 2, 0, 1, 2, 0, 1);
+  TH2D *hist = new TH2D("hist", "hist", 2, 0, 10, 2, 0, 10);
   cout << "Total number of bins of the histogram: " << hist->GetNbinsX() + hist->GetNbinsY() << endl;
-  Int_t bin01 = hist->GetBin(0, 1);
-  Int_t bin10 = hist->GetBin(1, 0);
-  Int_t bin11 = hist->GetBin(1, 1);
-  Int_t bin00 = hist->GetBin(0, 0);
 
-  cout << "bin01: " << bin01 << endl;
-  cout << "bin10: " << bin10 << endl;
-  cout << "bin11: " << bin11 << endl;
-  cout << "bin00: " << bin00 << endl;
 
   //loop on SF
   for(int i=0; i<SF->GetEntries(); ++i){ 
-    if(i % 30000 == 0){ 
+    if(i % 50000 == 0){ 
       cout << "   Entry: " << i << " / " << nEntriesSF << endl;
     }
     
     SF -> GetEntry(i);
   
     if(Z_pT <= 200 && Z_mass >= 50){
-      hist->AddBinContent(bin01);
+      hist->Fill(1., 9.); //those number are chosen in the way that small is between 1 and 5 and high between 6 and 9 (to access different region in the rectangle)
     }
     else{
-      hist->AddBinContent(bin11); 
+      hist->Fill(9.,9.);
     } 
   }
   
-  cout << "bin01 content: " << hist->GetBinContent(bin01) << endl;
-  cout << "total bin content SF: " <<  hist->GetBinContent(bin11) +  hist->GetBinContent(bin01) << endl;
-  
-  
+ 
   //loop on OF
   for(int iEntry(0); iEntry<nEntriesOF; ++iEntry){ 
-    if(iEntry % 3000 == 0){ 
+    if(iEntry % 5000 == 0){ 
       cout << "Entry: " << iEntry << " / " << nEntriesOF << endl;
     }
 
     OF->GetEntry(iEntry);
  
     if(Z_pT_OF<=200 && Z_mass_OF>=50){
-      hist->AddBinContent(bin00);
+      hist->Fill(1., 1.);
     }
     else{
-      hist->AddBinContent(bin10);
+      hist->Fill(9., 1.);
     }
   }
-   
-  cout << "total bin content OF: " <<  hist->GetBinContent(bin00) +  hist->GetBinContent(bin10) << endl;
-  
+    
 
   double correlationFactor = hist->GetCorrelationFactor();
   cout << "Correlation Factor: " << correlationFactor << endl;
 
- 
-  
+
+  TCanvas *c = new TCanvas();
+  hist->Draw("colz");
+  c->SetRightMargin(0.2);
+  c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/plotsZllEstimates/correlation/2Dhist_MC.pdf");
+
+
+
+
 
   //plot of normalized Z_pT in OF and SF
-
 
   TH1D* hist_ZpTSF = new TH1D("hist_ZpTSF", "hist_ZpTSF", 100, 0, 1500);
   TH1D* hist_ZpTOF = new TH1D("hist_ZpTOF", "hist_ZpTOF", 100, 0, 1500);
@@ -245,10 +238,10 @@ int main(){
  
   //SF->Draw("Z_pt >> hist_ZpTSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
   //OF->Draw("Z_pt >> hist_ZpTOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
-  SF->Draw("Z_pt >> hist_ZpTSF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
-  OF->Draw("Z_pt >> hist_ZpTOF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
-  //SF->Draw("Z_pt >> hist_ZpTSF", "", "goff");
-  //OF->Draw("Z_pt >> hist_ZpTOF", "", "goff");
+  // SF->Draw("Z_pt >> hist_ZpTSF", "(Z_pt>200 && (Z_mass>71.19 || Z_mass<=111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  //OF->Draw("Z_pt >> hist_ZpTOF", "(Z_pt>200 && (Z_mass>71.19 || Z_mass<=111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  SF->Draw("Z_pt >> hist_ZpTSF", "", "goff");
+  OF->Draw("Z_pt >> hist_ZpTOF", "", "goff");
 
   // TH1D* ZpTSF = (TH1D*) hist_ZpTSF->Clone("ZpTSF");
 
@@ -263,7 +256,7 @@ int main(){
   leg -> AddEntry(hist_ZpTOF, "OF", "P");
   leg -> SetTextSize(0.04);
   leg -> SetLineColor(0);
-  leg -> SetFillColor(0);
+  leg -> SetFillColorAlpha(0,0);
   leg -> SetBorderSize(0);
   
   TCanvas *plotZpT = new TCanvas();
@@ -273,7 +266,7 @@ int main(){
   hist_ZpTSF->Draw("same");
   hist_ZpTOF->Draw("same");
   leg -> Draw();
-  plotZpT -> SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/plotsZllEstimates/correlation/plotZpT_withCut.pdf");
+  plotZpT -> SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/plotsZllEstimates/correlation/plotZpT_onlyNormalized.pdf");
   
 
 
@@ -296,10 +289,10 @@ int main(){
   hist_ZMassSF->GetXaxis()->SetTitle("Z Mass [GeV]");
   hist_ZMassSF->GetYaxis()->SetTitle("Entries");
  
-  //SF->Draw("Z_mass >> hist_ZMassSF", "", "goff");
-  //OF->Draw("Z_mass >> hist_ZMassOF", "", "goff");
-  SF->Draw("Z_mass >> hist_ZMassSF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
-  OF->Draw("Z_mass >> hist_ZMassOF", "(Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
+  SF->Draw("Z_mass >> hist_ZMassSF", "", "goff");
+  OF->Draw("Z_mass >> hist_ZMassOF", "", "goff");
+  // SF->Draw("Z_mass >> hist_ZMassSF", "(Z_pt>200 && (Z_mass>71.19 || Z_mass<=111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
+  //OF->Draw("Z_mass >> hist_ZMassOF", "(Z_pt>200 && (Z_mass>71.19 || Z_mass<=111.19) && ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
   //SF->Draw("Z_mass >> hist_ZMassSF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight/HLT_weight", "goff");
   //OF->Draw("Z_mass >> hist_ZMassOF", "(ht>=250 && mt2>200 && lep_pt0>100. && lep_pt1>30.)*weight", "goff");
 
@@ -326,7 +319,7 @@ int main(){
   hist_ZMassSF->Draw("same");
   hist_ZMassOF->Draw("same");
   legMass -> Draw();
-  plotZMass -> SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/plotsZllEstimates/correlation/plotZMass_withFullCut.pdf");
+  plotZMass -> SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/plotsZllEstimates/correlation/plotZMass_onlyNormalized.pdf");
 
 
 
@@ -334,7 +327,7 @@ int main(){
 
 
 
-  bool computeRatio = false;
+  bool computeRatio = true;
   if(computeRatio){
   
   ///////////////////////////////////////////////////
