@@ -35,11 +35,8 @@ bool shapeNorm = false;
 
 
 void drawMll( const std::string& outputdir,  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields, MT2Analysis<MT2EstimateTree>* data, bool of, float lumi ); 
-
 void drawStacks(std::string fullPath, float *binss, unsigned int size,  std::string name, std::vector<MT2Analysis<MT2EstimateTree>* > bgYields,  MT2Analysis<MT2EstimateTree>* data,const MT2Region thisRegion, std::string cut, float lumi);
-
 void drawYields( MT2Config cfg, MT2Analysis<MT2EstimateTree>* data, std::vector<MT2Analysis<MT2EstimateTree>* >  bgYields, const std::string& saveName, const std::string& varName, const std::string& selection, int nBins, float xMin, float xMax, std::string axisName="", const std::string& units="" );
-
 std::string getCutLabel( float theMin, float theMax, const std::string& name, const std::string& units );
 
 
@@ -141,10 +138,10 @@ int main(int argc, char* argv[]){
   //  bgYields_of.push_back( wjets_of );
   bgYields_of.push_back( Zll_of );
 
-  std::string plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/plots/lepSF/plotsDataMC";
+  std::string plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/plots/plotsDataMC";
   if( shapeNorm ) plotsDir += "_shape";
 
-  std::string plotsDir_of = cfg.getEventYieldDir() + "/zllControlRegion/plots/lepSF/plotsDataMC_of";
+  std::string plotsDir_of = cfg.getEventYieldDir() + "/zllControlRegion/plots/plotsDataMC_of";
   if( shapeNorm ) plotsDir_of += "_shape";
 
 
@@ -320,7 +317,7 @@ int main(int argc, char* argv[]){
   // +++     inclusive     +++
   // +++++++++++++++++++++++++
   // selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20)";
-  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20)";
+  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20 && lep_pt0>100 && lep_pt1>30)";
 
   dt.drawRegionYields_fromTree( "incl_mt2"   , "mt2"   , selection, 40, 200., 1000., "M_{T2}", "GeV", cutsLabel, "#geq1j, #geq0b");
   dt.drawRegionYields_fromTree( "incl_met"   , "met"   , selection, 40, 200, 1000, "ME_{T}", "GeV", cutsLabel, "#geq1j, #geq0b");
@@ -349,7 +346,7 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree( "incl_mll_el"   , "Z_mass"   , selection_mass_el, 50 , 50., 150., "M_{e^{+}e^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
   selection_mass_mu = "(ht>250. && nJets>=1 && mt2>200. && Z_lepId==13 )";
   dt.drawRegionYields_fromTree( "incl_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
-
+  /*
   //plots in 4 different ranges of Ht
 
   htMin=250, htMax=450;
@@ -1268,7 +1265,7 @@ int main(int argc, char* argv[]){
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
 
-  
+  */
   return 0;
 
 }

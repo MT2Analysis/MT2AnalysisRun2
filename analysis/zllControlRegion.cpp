@@ -17,6 +17,7 @@
 #include "../interface/mt2.h"
 #include "../interface/Utils.h"
 #include "../interface/MT2LeptonSFTool.h"
+#include "../interface/MT2BTagSFHelper.h"
 
 #include "TMath.h"
 #include "TH1D.h"
@@ -26,8 +27,9 @@
 #include "TPaveText.h"
 #include "TLorentzVector.h"
 
+using namespace std;
 
-int round(float d) {
+int Round(float d) {
   return (int)(floor(d + 0.5));
 }
 
@@ -42,7 +44,8 @@ TH2D*  h_elTrk = 0;
 void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
-		      TH2D* h_elSF, TH2D* h_muSF, bool do_ZinvEst, bool invertedZcuts = false );
+		      MT2BTagSFHelper* bTagSF, 
+		      bool do_ZinvEst, bool invertedZcuts = false );
 void addVariables(MT2Analysis<MT2EstimateTree>* anaTree);
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
 float getHLTweight( int lep1_pdgId, int lep2_pdgId, float lep1_pt, float lep2_pt, int variation);
@@ -86,7 +89,7 @@ int main(int argc, char* argv[]) {
     else if( dataMC=="MC" || dataMC=="mc" ) onlyMC = true;
     else if( dataMC=="signal" ) onlySignal = true;
     else {
-      std::cout << "-> You passed a second argument that isn't 'data' nor 'MC', so I don't know what to do about it." << std::endl;
+      std::cout << "-> You passed a second argument that isn't 'data' nor 'MC/mc', so I don't know what to do about it." << std::endl;
     }
   }
 
@@ -102,8 +105,9 @@ int main(int argc, char* argv[]) {
 
   std::cout << "-> Using regions: " << regionsSet << std::endl;
   
-  //previous method to get the scale factors: we don't need this anymore!
 
+  //previous method to get the scale factors: we don't need this anymore!
+  /*
   //Getting the scale factor histogram/////////////////
   //Electrons//
 
@@ -166,7 +170,7 @@ int main(int argc, char* argv[]) {
   h_muTrk_hi = (TH1D*) h_trk_mu_hi->Clone("h_muTrk_hi");
   h_muTrk_hi->SetDirectory(0);
   // fTrk->Close(); delete fTrk;
-  
+  */
 
   if( onlySignal ){
     onlyData=true;
@@ -180,70 +184,98 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
 
-
+    
     std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 700, 799); // DY signal only
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
     }
+    
+   
 
     MT2Analysis<MT2EstimateTree>* mcTree = new MT2Analysis<MT2EstimateTree>( "zllCR", cfg.crRegionsSet() );
     addVariables(mcTree); //Adds some additional variables Zpt,Zmass, raw MT2...
 
     MT2Analysis<MT2EstimateTree>* mcTree_of = new MT2Analysis<MT2EstimateTree>( "zllCR_of", cfg.crRegionsSet() );
     addVariables(mcTree_of);
+   
+    //MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+    
+    for( unsigned i=0; i<fSamples.size(); ++i ){
+      MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+      computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, bTagSF, false);
+      //delete bTagSF;
+      bTagSF = nullptr;    
+    }
 
-    for( unsigned i=0; i<fSamples.size(); ++i )
-      computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, h_elSF, h_muSF, false);
+    //delete bTagSF;
+    //bTagSF = nullptr;
 
     mcTree->writeToFile(outputdir+"/mc.root");
     mcTree_of->writeToFile(outputdir+"/mc_of.root");
 
+    
+    
+    
     if(doZinvEst){
+      //MT2BTagSFHelper* bTagSF_forZinvEst = new MT2BTagSFHelper();
       MT2Analysis<MT2EstimateTree>* mcTree_forZinvEst = new MT2Analysis<MT2EstimateTree>( "zllCR", cfg.regionsSet() );
       addVariables(mcTree_forZinvEst); //Adds some additional variables Zpt,Zmass, raw MT2...
 
       MT2Analysis<MT2EstimateTree>* mcTree_of_forZinvEst = new MT2Analysis<MT2EstimateTree>( "zllCR_of", cfg.regionsSet() );
       addVariables(mcTree_of_forZinvEst);
 
-      for( unsigned i=0; i<fSamples.size(); ++i )
-	computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, h_elSF, h_muSF, true);
+      for( unsigned i=0; i<fSamples.size(); ++i ){
+	MT2BTagSFHelper* bTagSF_forZinvEst = new MT2BTagSFHelper();
+	computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, bTagSF_forZinvEst, true);
+	//delete bTagSF_forZinvEst;
+	bTagSF_forZinvEst = nullptr;
+      }
+
+      //delete bTagSF_forZinvEst;
+      //bTagSF_forZinvEst = nullptr;
 
       mcTree_forZinvEst->writeToFile(outputdir+"/mc_forZinvEst.root");
       mcTree_of_forZinvEst->writeToFile(outputdir+"/mc_of_forZinvEst.root");
-    }
 
+      
+    }
+    
     if( cfg.dummyAnalysis() ) {
       roundLikeData(mcTree);
       mcTree->addToFile(outputdir+"/data.root");
       roundLikeData(mcTree_of);
       mcTree_of->addToFile(outputdir+"/data_of.root");
     }
-
+    
+    
     if(do_bg==true){
       //MC
       MT2Analysis<MT2EstimateTree>* mc_top = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       MT2Analysis<MT2EstimateTree>* mc_top_of = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       addVariables(mc_top);      addVariables(mc_top_of);
       std::vector<MT2Sample> fSamples_top = MT2Sample::loadSamples(samplesFileName, 300, 499);
-      for( unsigned i=0; i<fSamples_top.size(); ++i )
-	computeYieldSnO( fSamples_top[i], cfg, mc_top, mc_top_of, h_elSF, h_muSF, false);
+      for( unsigned i=0; i<fSamples_top.size(); ++i ){
+	MT2BTagSFHelper* bTagSF_top = new MT2BTagSFHelper();
+	computeYieldSnO( fSamples_top[i], cfg, mc_top, mc_top_of, bTagSF_top, false);
+	bTagSF_top = nullptr;
+      }
 
-      /*
-	 MT2Analysis<MT2EstimateTree>* mc_qcd = new MT2Analysis<MT2EstimateTree>( "QCD", cfg.crRegionsSet(),100, "QCD" );
-	 MT2Analysis<MT2EstimateTree>* mc_qcd_of = new MT2Analysis<MT2EstimateTree>( "QCD", cfg.crRegionsSet(),100, "QCD");
-	 addVariables(mc_qcd);      addVariables(mc_qcd_of);
-	 std::vector<MT2Sample> fSamples_qcd = MT2Sample::loadSamples(samplesFileName, 100, 199);
-	 for( unsigned i=0; i<fSamples_qcd.size(); ++i )
-	 computeYieldSnO( fSamples_qcd[i], cfg, mc_qcd, mc_qcd_of, h_elSF, h_muSF, false);
+      
+	 //MT2Analysis<MT2EstimateTree>* mc_qcd = new MT2Analysis<MT2EstimateTree>( "QCD", cfg.crRegionsSet(),100, "QCD" );
+	 //MT2Analysis<MT2EstimateTree>* mc_qcd_of = new MT2Analysis<MT2EstimateTree>( "QCD", cfg.crRegionsSet(),100, "QCD");
+	 //addVariables(mc_qcd);      addVariables(mc_qcd_of);
+	 //std::vector<MT2Sample> fSamples_qcd = MT2Sample::loadSamples(samplesFileName, 100, 199);
+	 //for( unsigned i=0; i<fSamples_qcd.size(); ++i )
+	 //computeYieldSnO( fSamples_qcd[i], cfg, mc_qcd, mc_qcd_of, h_elSF, h_muSF, false);
 
-	 MT2Analysis<MT2EstimateTree>* mc_wjets = new MT2Analysis<MT2EstimateTree>( "WJets", cfg.crRegionsSet(),500, "W+jets"  );
-	 MT2Analysis<MT2EstimateTree>* mc_wjets_of = new MT2Analysis<MT2EstimateTree>( "WJets", cfg.crRegionsSet(),500, "W+jets");
-	 addVariables(mc_wjets);      addVariables(mc_wjets_of);
-	 std::vector<MT2Sample> fSamples_wjets = MT2Sample::loadSamples(samplesFileName, 500, 599);
-	 for( unsigned i=0; i<fSamples_wjets.size(); ++i )
-	 computeYieldSnO( fSamples_wjets[i], cfg, mc_wjets, mc_wjets_of, h_elSF, h_muSF, false);
-      */
+	 //MT2Analysis<MT2EstimateTree>* mc_wjets = new MT2Analysis<MT2EstimateTree>( "WJets", cfg.crRegionsSet(),500, "W+jets"  );
+	 //MT2Analysis<MT2EstimateTree>* mc_wjets_of = new MT2Analysis<MT2EstimateTree>( "WJets", cfg.crRegionsSet(),500, "W+jets");
+	 //addVariables(mc_wjets);      addVariables(mc_wjets_of);
+	 //std::vector<MT2Sample> fSamples_wjets = MT2Sample::loadSamples(samplesFileName, 500, 599);
+	 //for( unsigned i=0; i<fSamples_wjets.size(); ++i )
+	 //computeYieldSnO( fSamples_wjets[i], cfg, mc_wjets, mc_wjets_of, h_elSF, h_muSF, false);
+      
 
       MT2Analysis<MT2EstimateTree>* mc_zll   = mcTree;
       mc_zll->setName("DYJets");
@@ -273,17 +305,20 @@ int main(int argc, char* argv[]) {
 	MT2Analysis<MT2EstimateTree>* mc_top_of_forZinvEst = new MT2Analysis<MT2EstimateTree>( "zllCR_of", cfg.regionsSet() );
 	addVariables(mc_top_of_forZinvEst);
 
-	for( unsigned i=0; i<fSamples_top.size(); ++i )
-	  computeYieldSnO( fSamples_top[i], cfg, mc_top_forZinvEst, mc_top_of_forZinvEst, h_elSF, h_muSF, true);
+	for( unsigned i=0; i<fSamples_top.size(); ++i ){
+	  MT2BTagSFHelper* bTagSF_top_forZinvEst = new MT2BTagSFHelper();
+	  computeYieldSnO( fSamples_top[i], cfg, mc_top_forZinvEst, mc_top_of_forZinvEst, bTagSF_top_forZinvEst, true);
+	  bTagSF_top_forZinvEst = nullptr;
+	}
 
 	mc_top_forZinvEst->writeToFile(outputdir+"/mc_Top_forZinvEst.root");
 	mc_top_of_forZinvEst->writeToFile(outputdir+"/mc_Top_of_forZinvEst.root");
       }
 
-    } //End do background trees
+      } //End do background trees
 
   } //if only MC
-
+   
   if( !onlyMC ) {
 
     //DATA
@@ -304,15 +339,18 @@ int main(int argc, char* argv[]) {
     // MT2Analysis<MT2EstimateTree>* dataTree_filler = new MT2Analysis<MT2EstimateTree>( "data_filler", cfg.crRegionsSet() );
 
     addVariables(dataTree);      addVariables(dataTree_of); // addVariables(dataTree_filler);
-    /*
+    
     if( samples_data.size()==0 ) {
       std::cout << std::endl;
       std::cout << "-> WARNING!! Didn't find any data in file: " << samplesFile_data << "!" << std::endl;
       std::cout << "-> Exiting." << std::endl;
       std::cout << std::endl;
     } else {
-      for( unsigned i=0; i<samples_data.size(); ++i )
-	computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, h_elSF, h_muSF, false);
+      for( unsigned i=0; i<samples_data.size(); ++i ){
+	MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+	computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, bTagSF_data, false);
+	bTagSF_data = nullptr;
+      }
       //      computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_filler, h_elSF, h_muSF, false);
 
       //for( unsigned i=0; i<samples_data_of.size(); ++i )
@@ -321,7 +359,7 @@ int main(int argc, char* argv[]) {
 
     dataTree->addToFile(outputdir+"/data.root");
     dataTree_of->writeToFile(outputdir+"/data_of.root");
-    */
+    
    
     //we create here the estimates in the ttbar enriched CR (inverted cuts on Zmass and ZpT) that are needed to compute R(SF/OF) later on
     MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
@@ -329,26 +367,31 @@ int main(int argc, char* argv[]) {
     addVariables(dataTree_invertedZcuts); addVariables(dataTree_of_invertedZcuts);
 
     for(unsigned i=0; i<samples_data.size(); ++i){
-      computeYieldSnO( samples_data[i], cfg, dataTree_invertedZcuts, dataTree_of_invertedZcuts, h_elSF, h_muSF, false, true);
+      MT2BTagSFHelper* bTagSF_data_invertedCuts = new MT2BTagSFHelper();
+      computeYieldSnO( samples_data[i], cfg, dataTree_invertedZcuts, dataTree_of_invertedZcuts, bTagSF_data_invertedCuts, false, true);
+      bTagSF_data_invertedCuts = nullptr;
     }
 
     dataTree_invertedZcuts->addToFile(outputdir+"/data_invertedZcuts.root");
     dataTree_of_invertedZcuts->addToFile(outputdir+"/data_of_invertedZcuts.root");
-    /*
+    
 
     if(doZinvEst){
       MT2Analysis<MT2EstimateTree>* dataTree_forZinvEst = new MT2Analysis<MT2EstimateTree>( "data", cfg.regionsSet() );
       MT2Analysis<MT2EstimateTree>* dataTree_of_forZinvEst = new MT2Analysis<MT2EstimateTree>( "data_of", cfg.regionsSet() );
       addVariables(dataTree_forZinvEst); addVariables(dataTree_of_forZinvEst);
 
-      for( unsigned i=0; i<samples_data.size(); ++i )
-	computeYieldSnO( samples_data[i], cfg, dataTree_forZinvEst, dataTree_of_forZinvEst, h_elSF, h_muSF, true);
+      for( unsigned i=0; i<samples_data.size(); ++i ){
+	MT2BTagSFHelper* bTagSF_data_forZinvEst = new MT2BTagSFHelper();
+	computeYieldSnO( samples_data[i], cfg, dataTree_forZinvEst, dataTree_of_forZinvEst, bTagSF_data_forZinvEst, true);
+	bTagSF_data_forZinvEst = nullptr;
+      }
 
       dataTree_forZinvEst->addToFile(outputdir+"/data_forZinvEst.root");
       dataTree_of_forZinvEst->addToFile(outputdir+"/data_of_forZinvEst.root");
     }
 
-    */
+    
 
   } // if DATA
 
@@ -372,8 +415,11 @@ int main(int argc, char* argv[]) {
     MT2Analysis<MT2EstimateTree>* signalTree_of = new MT2Analysis<MT2EstimateTree>( "zllSigCR_of", cfg.regionsSet() );
     addVariables(signalTree_of);
 
-    for( unsigned i=0; i<fSamples.size(); ++i )
-      computeYieldSnO( fSamples[i], cfg, signalTree, signalTree_of, h_elSF, h_muSF, true);
+    for( unsigned i=0; i<fSamples.size(); ++i ){
+      MT2BTagSFHelper* bTagSF_signal = new MT2BTagSFHelper();
+      computeYieldSnO( fSamples[i], cfg, signalTree, signalTree_of, bTagSF_signal, true);
+      bTagSF_signal = nullptr;
+    }
 
     signalTree->addToFile(outputdir+"/signal_forZinvEst.root");
 
@@ -381,15 +427,11 @@ int main(int argc, char* argv[]) {
 
 
   }//end of only signal
-
+   
 
   return 0;
 
 }
-
-
-
-
 
 
 
@@ -403,7 +445,7 @@ void roundLikeData( MT2Analysis<MT2EstimateTree>* data ) {
     TH1D* thisYield = data->get(*iR)->yield;
     for( int iBin=1; iBin<thisYield->GetNbinsX()+1; ++iBin ) {
       float yield = thisYield->GetBinContent(iBin);
-      int yield_rounded = round(yield);
+      int yield_rounded = Round(yield);
       thisYield->SetBinContent(iBin, yield_rounded  );
       thisYield->SetBinError(iBin, 0. );
     } // for bins
@@ -464,12 +506,18 @@ void addVariables(MT2Analysis<MT2EstimateTree>* anaTree){
 void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
-		      TH2D* h_elSF, TH2D* h_muSF, bool do_ZinvEst, bool invertedZcuts = false) {
+		      MT2BTagSFHelper* bTagSF,
+		      bool do_ZinvEst, bool invertedZcuts = false ) {
 
   std::cout << std::endl << std::endl << "Check: " ;
   if(invertedZcuts) std::cout << "invertedZcuts = true";
   else std::cout << "invertedZcuts = false";
   std::cout << std::endl << std::endl;
+
+  //initialization of scale factor tools
+  //MT2BTagSFHelper* bTagSF =  new MT2BTagSFHelper();
+  MT2LeptonSFTool leptonSF;
+ 
 
   std::string regionsSet = cfg.crRegionsSet();
   if( do_ZinvEst || invertedZcuts ) regionsSet = cfg.regionsSet();
@@ -496,32 +544,35 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
 
+  
+  
+  
   int nentries = tree->GetEntries();
-  //  nentries=10000;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+    if( iEntry % 5000 == 0 ){
+      std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
+    }
 
-    if( iEntry % 50000 == 0 ) std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
+ 
+
     myTree.GetEntry(iEntry);
 
     // if( myTree.isData && !myTree.isGolden ) continue;
    
+    //we apply the filters
     if(isData) {
-      if(cfg.year() == 2016) if( !myTree.passFilters2016() ) continue;
-      if(cfg.year() == 2017) if( !myTree.passFilters2017() ) continue;
+      if(!myTree.passFilters(cfg.year())) continue;
     } else {
-      if(cfg.year() == 2016) if( !myTree.passFiltersMC2016() ) continue;
-      if(cfg.year() == 2017) if( !myTree.passFiltersMC2017() ) continue;
+      if(!myTree.passFiltersMC(cfg.year())) continue;
     }
 
-    // trigger is based on SF or OF, done after
-    // some additional cleanings
 
     //FIXME: uncomment RA2 filter line and line after
-
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
     
     if(myTree.PV_npvsGood < 1) continue;
+    
     //crazy events! To be piped into a separate txt file
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
@@ -533,19 +584,20 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       continue;
     }
 
-
     // Kinematic selections common to both SF and OF
     if(!( myTree.nLep==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
-    if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to trigger inefficiency
+    if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
 
     if( cfg.analysisType() == "mt2"){
       if( regionsSet!="13TeV_noCut" )
-        if( !myTree.passSelection("zll") ) continue;
+        if( !myTree.passSelection("zll", cfg.year()) ) continue;
     }
+
     if(( myTree.lep_pdgId[0]*myTree.lep_pdgId[1])>0 )   continue;
+    
     //FIXME!! removed next selection criteria for 2017 since jet_id defined differently
-    //if(  myTree.nJet30==1 && !(myTree.jet_id[0]>=4)) continue;
+    //if(myTree.nJet30==1 && !(myTree.jet_id[0]>=4)) continue;
 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
@@ -582,18 +634,13 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if(ID >999)
       weight = 1000.*myTree.evt_xsec / nentries;
 
+
     //lepton scale factors
-   
-    //Double_t weight_lep0 = 1.;
-    //Double_t weight_lep1 = 1.;
-    //Double_t weight_lep_err = 1.;
-
+    
     //we apply the same scale factor on same and opposite CR
-
+    
     //QUESTION: it it correct to apply lepton scale factor on MC. In the previous version, it seems that it was applied on data
     if(!isData){
-      MT2LeptonSFTool leptonSF;
-   
       //we apply the same weight for both leptons
       for(int i(0); i<2; ++i){
 	if(abs(myTree.lep_pdgId[i])<12){ //electrons (lep_pdgID = +- 11)
@@ -614,10 +661,29 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }
     }
     
+    
+    //b-tagging scale factor
+    if(!isData){
 
+      // declaration of the b-tagged weight
+      float weight_btagsf = 1.;
+      //declaration of the b-tagged weight uncertainty for heavy flavor (b or c)
+      float weight_btagsf_heavy_UP = 1.;
+      float weight_btagsf_heavy_DN = 1.;
+      //declaration of the b-tagged weight uncertainty for light flavor 
+      float weight_btagsf_light_UP = 1.;
+      float weight_btagsf_light_DN = 1.;
+      
+      bool isFastSim = false;
 
+      bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
 
+      //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
 
+      weight *= weight_btagsf;
+    }
+    
+    
 
     /*
     if(!isData){
@@ -662,8 +728,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }//end of loop over objects
     }//end of applying SF
     */
-
-
+    
+   
     bool isSF = false;
     bool isOF = false;
 
@@ -672,7 +738,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if( !(myTree.lep_pdgId[0] == -myTree.lep_pdgId[1]) ) isOF = true;
 
     if(isSF){ //////////SAME FLAVOR//////////////////////////////////////////
-      if(isData && !myTree.passTriggerSelection2017("zllSF") )continue;
+      //apply the triggers
+      if(isData && !myTree.passTriggerSelection("zllSF", cfg.year()))continue;
       if(do_ZinvEst){
 	      //SF part
 	      if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
@@ -912,7 +979,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       }
     } else if(isOF){ //////////Opposite FLAVOR//////////////////////////////////////////
-      if(isData && !myTree.passTriggerSelection2017("zllOF") ) continue;
+      //we apply the trigger
+      if(isData && !myTree.passTriggerSelection("zllOF", cfg.year())) continue;
       if(do_ZinvEst){
 	if( fabs(myTree.zll_mass-91.19)>=20. ) continue;
 	if( myTree.zll_pt <= 200. ) continue;
@@ -1157,14 +1225,22 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     } else continue;
 
   } // for entries
+  // delete bTagSF;
+  //bTagSF = 0;
 
+  //bTagSF.~MT2BTagSFHelper();
   anaTree->finalize();
   anaTree_of->finalize();
 
   delete tree;
 
+
+  
+
   file->Close();
   delete file;
+
+  
 
 }
 

@@ -29,6 +29,7 @@
 
 #include "interface/Utils.h"
 #include "interface/MT2LeptonSFTool.h"
+#include "interface/MT2BTagSFHelper.h"
 
 #include "TRandom3.h"
 
@@ -41,7 +42,7 @@ int roundD(float d) {
   return (int)(floor(d + 0.5));
 }
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree );
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF );
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
 
 float DeltaR(float eta1, float eta2, float phi1, float phi2);
@@ -118,7 +119,9 @@ int main( int argc, char* argv[] ) {
     }
     MT2Analysis<MT2EstimateTree>* mcCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet ); // name given here is the name of the parent directory in the output file
     for( unsigned i=0; i < fSamples.size(); ++i ){
-      computeYield( fSamples[i], cfg, mcCR );
+      MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+      computeYield( fSamples[i], cfg, mcCR, bTagSF );
+      bTagSF = nullptr;
     }
     mcCR->writeToFile( outputdir + "/mc.root" );
     if( cfg.dummyAnalysis() ) {
@@ -183,8 +186,11 @@ int main( int argc, char* argv[] ) {
 
     MT2Analysis<MT2EstimateTree>* dataCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet );
 
-    for( unsigned i=0; i < samples_data.size(); ++i )
-      computeYield( samples_data[i], cfg, dataCR );
+    for( unsigned i=0; i < samples_data.size(); ++i ){
+      MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+      computeYield( samples_data[i], cfg, dataCR, bTagSF_data );
+      bTagSF_data = nullptr;
+    }
 
     dataCR->writeToFile( outputdir + "/data.root" );
 
@@ -196,10 +202,14 @@ int main( int argc, char* argv[] ) {
 }
 
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree ){
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF ){
 
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
+
+  //initialization of the scale factors tools
+  MT2LeptonSFTool leptonSF;
+  //MT2BTagSFHelper bTagSF; 
 
   // Tree initialization
   TFile* file = TFile::Open(sample.file.c_str());
@@ -220,12 +230,18 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
-
+ 
   int nentries = tree->GetEntries();
 
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+    if(iEntry % 50000 == 0){
+      std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
+    }
 
-    if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
+    if(iEntry == nentries){
+      cout << "finish loop on entries for this sample" << endl;
+    }
+    
     myTree.GetEntry(iEntry);
 
     // Do the selection here: please try to keep a consistent order
@@ -235,17 +251,17 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // apply the filters
     if(isData) {
-      if(cfg.year() == 2016) if( !myTree.passFilters2016() ) continue;
-      if(cfg.year() == 2017) if( !myTree.passFilters2017() ) continue;
+      if(!myTree.passFilters(cfg.year())) continue;
     } else {
-      if(cfg.year() == 2016) if( !myTree.passFiltersMC2016() ) continue;
-      if(cfg.year() == 2017) if( !myTree.passFiltersMC2017() ) continue;
+      if(!myTree.passFiltersMC(cfg.year())) continue;
     } 
 
     // apply the triggers
-    if (isData) {
-      if(cfg.year() == 2017) if (!myTree.passTriggerSelection2017("llep")) continue;
+    if(isData) {
+      if (!myTree.passTriggerSelection("llep", cfg.year())) continue;
     }
+
+    
 
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
@@ -263,14 +279,15 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
 
     // apply the main kinematic selections here
-    if( !myTree.passBaselineKinematic() ) continue;
+    if( !myTree.passBaselineKinematic("",cfg.year())) continue;
     // monojet id
     // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
-    if( myTree.nLepLowMT!=1 ) continue;
-
+    if( myTree.nLepLowMT!=1 ) continue; 
+    //new cut: we ask specifically the number of leptons with high MT to be zero
+    if(myTree.nLepHighMT != 0) continue;
 
     // Selection is over, now apply the weights !
     Double_t weight(1.);
@@ -283,11 +300,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     else{
       weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
     }
-
+    
     //lepton scale factor (only on !data)
     if(!isData){
-      MT2LeptonSFTool leptonSF;
-   
+      //MT2LeptonSFTool leptonSF;
       if(abs(myTree.lep_pdgId[0])<12){ //electrons (lep_pdgID = +- 11)
 	bool electronHist = leptonSF.setElHist("llep"); //checks if all the electron sf files can be loaded
 	if(electronHist){
@@ -307,8 +323,27 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
     }
     
-    
+    //b-tagging scale factor
+    if(!isData){
 
+      // declaration of the b-tagged weight
+      float weight_btagsf = 1.;
+      //declaration of the b-tagged weight uncertainty for heavy flavor (b or c)
+      float weight_btagsf_heavy_UP = 1.;
+      float weight_btagsf_heavy_DN = 1.;
+      //declaration of the b-tagged weight uncertainty for light flavor 
+      float weight_btagsf_light_UP = 1.;
+      float weight_btagsf_light_DN = 1.;
+      
+      bool isFastSim = false;
+
+      bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
+
+      //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
+
+      weight *= weight_btagsf;
+    }
+    
 
    /* if( !myTree.isData ){
       weight *= myTree.weight_btagsf;
@@ -332,6 +367,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // you can actually make the estimates
     // define here the variables that will enter the region categorization
 
+    
+
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
     float ht   = (njets>1) ? myTree.ht : myTree.jet1_pt;
@@ -339,7 +376,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float minMTBmet = -999;  //myTree.minMTBMet;
     //we add lepton kinematics parameters on the tree
     
-
+   
     MT2EstimateTree* thisEstimate;
 
     if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" ){ // To avoid signal contamination in 7j 2b and 7j 3b
@@ -354,6 +391,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
       else {
 	thisEstimate = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
+	cout << "[Ht] " << ht << endl;
 	if( thisEstimate==0 ) continue;
 	thisEstimate->assignTree( myTree, weight );
 	thisEstimate->tree->Fill();
@@ -384,6 +422,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   } // for entries
 
+
+  //bTagSF.~MT2BTagSFHelper();
+ 
   anaTree->finalize();
 
   delete tree;

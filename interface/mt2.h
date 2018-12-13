@@ -13,6 +13,8 @@
 #include <TFile.h>
 #include <TString.h>
 
+using namespace std;
+
 // Header file for the classes stored in the TTree if any.
 
 class MT2Tree {
@@ -25,6 +27,7 @@ public :
    // Declaration of leaf types
    UInt_t          run;
    UInt_t          luminosityBlock;
+   Int_t           isData;
    ULong64_t       event;
    Float_t         CaloMET_phi;
    Float_t         CaloMET_pt;
@@ -105,6 +108,8 @@ public :
    Float_t         Jet_qgl[88];   //[nJet]
    Float_t         Jet_rawFactor[88];   //[nJet]
    Float_t         Jet_bReg[88];   //[nJet]
+   Int_t           Jet_hadronFlavour[88];
+   Int_t           Jet_partonFlavour[88];
    Int_t           Jet_electronIdx1[88];   //[nJet]
    Int_t           Jet_electronIdx2[88];   //[nJet]
    Int_t           Jet_jetId[88];   //[nJet]
@@ -838,6 +843,7 @@ public :
    Int_t           nPFLep5LowMTclean;
    Int_t           nPFHad10LowMT;
    Int_t           nLepLowMT;
+   Int_t           nLepHighMT;
    Int_t           nRecoLepLowMT;
    Float_t         ht;
    Float_t         mht_pt;
@@ -871,6 +877,8 @@ public :
    Float_t         jet_eta[88];   //[nJet]
    Float_t         jet_phi[88];   //[nJet]
    Int_t           jet_id[88];   //[nJet]
+   Int_t           jet_mcFlavour[88];
+   Float_t         jet_btagCSV[88];
    Float_t         zll_pt;
    Float_t         zll_eta;
    Float_t         zll_phi;
@@ -880,6 +888,17 @@ public :
    Float_t         evt_filter;
    Float_t         evt_kfactor;
    Int_t           evt_year;
+   UInt_t          nIt;
+   Float_t         isoTrack_pt[10];
+   Float_t         isoTrack_eta[10];
+   Float_t         isoTrack_phi[10];
+   Float_t         isoTrack_mass[10];
+   Float_t         isoTrack_dz[10];
+   Float_t         isoTrack_dxy[10];
+   Float_t         isoTrack_pdgId[10];
+   Float_t         isoTrack_absIso[10];
+   Float_t         isoTrack_miniPFRelIso_chg[10];
+   Float_t         isoTrack_mtw[10];
    Bool_t          HLT_HIAK4PFJet80FWD;
    Bool_t          HLT_HISinglePhoton15_Eta3p1ForPPRef;
    Bool_t          HLT_HIDiPFJet15_NoCaloMatched;
@@ -1032,6 +1051,7 @@ public :
    // List of branches
    TBranch        *b_run;   //!
    TBranch        *b_luminosityBlock;   //!
+   TBranch        *b_isData;
    TBranch        *b_event;   //!
    TBranch        *b_CaloMET_phi;   //!
    TBranch        *b_CaloMET_pt;   //!
@@ -1121,6 +1141,8 @@ public :
    TBranch        *b_Jet_nElectrons;   //!
    TBranch        *b_Jet_nMuons;   //!
    TBranch        *b_Jet_puId;   //!
+   TBranch        *b_Jet_hadronFlavour;
+   TBranch        *b_Jet_partonFlavour;
    TBranch        *b_MET_MetUnclustEnUpDeltaX;   //!
    TBranch        *b_MET_MetUnclustEnUpDeltaY;   //!
    TBranch        *b_MET_covXX;   //!
@@ -1845,6 +1867,7 @@ public :
    TBranch        *b_nPFLep5LowMTclean;   //!
    TBranch        *b_nPFHad10LowMT;   //!
    TBranch        *b_nLepLowMT;   //!
+   TBranch        *b_nLepHighMT; 
    TBranch        *b_nRecoLepLowMT;   //!
    TBranch        *b_ht;   //!
    TBranch        *b_mht_pt;   //!
@@ -1878,6 +1901,8 @@ public :
    TBranch        *b_jet_eta;   //!
    TBranch        *b_jet_phi;   //!
    TBranch        *b_jet_id;   //!
+   TBranch        *b_jet_mcFlavour;
+   TBranch        *b_jet_btagCSV;
    TBranch        *b_zll_pt;   //!
    TBranch        *b_zll_eta;   //!
    TBranch        *b_zll_phi;   //!
@@ -1887,6 +1912,17 @@ public :
    TBranch        *b_evt_filter;   //!
    TBranch        *b_evt_kfactor;   //!
    TBranch        *b_evt_year;   //!
+   TBranch        *b_nIt;
+   TBranch        *b_isoTrack_pt;
+   TBranch        *b_isoTrack_eta;
+   TBranch        *b_isoTrack_phi;
+   TBranch        *b_isoTrack_mass;
+   TBranch        *b_isoTrack_dz;
+   TBranch        *b_isoTrack_dxy;
+   TBranch        *b_isoTrack_pdgId;
+   TBranch        *b_isoTrack_absIso;
+   TBranch        *b_isoTrack_miniPFRelIso_chg;
+   TBranch        *b_isoTrack_mtw;
    TBranch        *b_HLT_HIAK4PFJet80FWD;   //!
    TBranch        *b_HLT_HISinglePhoton15_Eta3p1ForPPRef;   //!
    TBranch        *b_HLT_HIDiPFJet15_NoCaloMatched;   //!
@@ -2046,18 +2082,20 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
-   virtual Bool_t   passSelection(TString sel = "") const;
-   virtual Bool_t   passBaselineKinematic (TString sel = "") const;
+   virtual Bool_t   passSelection(TString sel = "", int year = 2016) const;
+   virtual Bool_t   passBaselineKinematic (TString sel = "", int year = 2016) const;
    virtual Bool_t   passLeptonVeto  () const;
    virtual Bool_t   passIsoTrackVeto() const;
-   virtual Bool_t   passFilters2016 () const;
-   virtual Bool_t   passFilters2017 () const;
-   virtual Bool_t   passFiltersMC2016   () const;
-   virtual Bool_t   passFiltersMC2017   () const;
+   virtual Bool_t   passFilters (int year) const;
+   //virtual Bool_t   passFilters2016 () const;
+   //virtual Bool_t   passFilters2017 () const;
+   virtual Bool_t   passFiltersMC (int year) const;
+   //virtual Bool_t   passFiltersMC2016   () const;
+   //virtual Bool_t   passFiltersMC2017   () const;
    // virtual Bool_t   passGammaAdditionalSelection( int sampleId ) const;
    // virtual Bool_t   passMonoJetId( int j ) const;
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
-   virtual Bool_t   passTriggerSelection2017(TString sel = "") const;
+   virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
 };
 
 #endif
@@ -2121,6 +2159,7 @@ void MT2Tree::Init(TTree *tree)
 
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("luminosityBlock", &luminosityBlock, &b_luminosityBlock);
+   fChain->SetBranchAddress("isData", &isData, &b_isData);
    fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("CaloMET_phi", &CaloMET_phi, &b_CaloMET_phi);
    fChain->SetBranchAddress("CaloMET_pt", &CaloMET_pt, &b_CaloMET_pt);
@@ -2210,6 +2249,8 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("Jet_nElectrons", Jet_nElectrons, &b_Jet_nElectrons);
    fChain->SetBranchAddress("Jet_nMuons", Jet_nMuons, &b_Jet_nMuons);
    fChain->SetBranchAddress("Jet_puId", Jet_puId, &b_Jet_puId);
+   fChain->SetBranchAddress("Jet_hadronFlavour", Jet_hadronFlavour, &b_Jet_hadronFlavour);
+   fChain->SetBranchAddress("Jet_partonFlavour", Jet_partonFlavour, &b_Jet_partonFlavour);
    fChain->SetBranchAddress("MET_MetUnclustEnUpDeltaX", &MET_MetUnclustEnUpDeltaX, &b_MET_MetUnclustEnUpDeltaX);
    fChain->SetBranchAddress("MET_MetUnclustEnUpDeltaY", &MET_MetUnclustEnUpDeltaY, &b_MET_MetUnclustEnUpDeltaY);
    fChain->SetBranchAddress("MET_covXX", &MET_covXX, &b_MET_covXX);
@@ -2933,6 +2974,7 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("nPFLep5LowMTclean", &nPFLep5LowMTclean, &b_nPFLep5LowMTclean);
    fChain->SetBranchAddress("nPFHad10LowMT", &nPFHad10LowMT, &b_nPFHad10LowMT);
    fChain->SetBranchAddress("nLepLowMT", &nLepLowMT, &b_nLepLowMT);
+   fChain->SetBranchAddress("nLepHighMT", &nLepHighMT, &b_nLepHighMT);
    fChain->SetBranchAddress("nRecoLepLowMT", &nRecoLepLowMT, &b_nRecoLepLowMT);
    fChain->SetBranchAddress("ht", &ht, &b_ht);
    fChain->SetBranchAddress("mht_pt", &mht_pt, &b_mht_pt);
@@ -2962,10 +3004,23 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("lep_dxy", lep_dxy, &b_lep_dxy);
    fChain->SetBranchAddress("lep_dz", lep_dz, &b_lep_dz);
    fChain->SetBranchAddress("lep_miniRelIso", lep_miniRelIso, &b_lep_miniRelIso);
+   fChain->SetBranchAddress("nIt", &nIt, &b_nIt);
+   fChain->SetBranchAddress("isoTrack_pt", isoTrack_pt, &b_isoTrack_pt);
+   fChain->SetBranchAddress("isoTrack_eta", isoTrack_eta, &b_isoTrack_eta);
+   fChain->SetBranchAddress("isoTrack_phi", isoTrack_phi, &b_isoTrack_phi);
+   fChain->SetBranchAddress("isoTrack_mass", isoTrack_mass, &b_isoTrack_mass);
+   fChain->SetBranchAddress("isoTrack_dz", isoTrack_dz, &b_isoTrack_dz);
+   fChain->SetBranchAddress("isoTrack_dxy", isoTrack_dxy, &b_isoTrack_dxy);
+   fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
+   fChain->SetBranchAddress("isoTrack_absIso", isoTrack_absIso, &b_isoTrack_absIso);
+   fChain->SetBranchAddress("isoTrack_miniPFRelIso_chg", isoTrack_miniPFRelIso_chg, &b_isoTrack_miniPFRelIso_chg);
+   fChain->SetBranchAddress("isoTrack_mtw", isoTrack_mtw, &b_isoTrack_mtw);
    fChain->SetBranchAddress("jet_pt", jet_pt, &b_jet_pt);
    fChain->SetBranchAddress("jet_eta", jet_eta, &b_jet_eta);
    fChain->SetBranchAddress("jet_phi", jet_phi, &b_jet_phi);
    fChain->SetBranchAddress("jet_id", jet_id, &b_jet_id);
+   fChain->SetBranchAddress("jet_mcFlavour", jet_mcFlavour, &b_jet_mcFlavour);
+   fChain->SetBranchAddress("jet_btagCSV", jet_btagCSV, &b_jet_btagCSV);
    fChain->SetBranchAddress("zll_pt", &zll_pt, &b_zll_pt);
    fChain->SetBranchAddress("zll_eta", &zll_eta, &b_zll_eta);
    fChain->SetBranchAddress("zll_phi", &zll_phi, &b_zll_phi);
@@ -3153,12 +3208,12 @@ Int_t MT2Tree::Cut(Long64_t entry)
 }
 
 
-Bool_t MT2Tree::passSelection(TString sel) const
+Bool_t MT2Tree::passSelection(TString sel, int year) const
 {
   if(sel=="zll" || sel=="singleLepton"){
-    return passBaselineKinematic(sel);
+    return passBaselineKinematic(sel, year);
   }else{
-  return passBaselineKinematic(sel) && passLeptonVeto() && passIsoTrackVeto();
+    return passBaselineKinematic(sel, year) && passLeptonVeto() && passIsoTrackVeto();
   }
 }
 
@@ -3170,7 +3225,7 @@ Bool_t MT2Tree::passLeptonVeto() const {
 Bool_t MT2Tree::passIsoTrackVeto() const {
   return nPFLep5LowMT==0 && nPFHad10LowMT==0;
 }
-
+/*
 Bool_t MT2Tree::passFilters2016() const {
 
   return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_eeBadScFilter && Flag_badMuonFilterV2 && Flag_badChargedHadronFilterV2 ;
@@ -3181,7 +3236,22 @@ Bool_t MT2Tree::passFilters2017() const {
   return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
 
 }
+*/
 
+
+Bool_t MT2Tree::passFilters(int year) const {
+  if(year == 2016){
+    return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_eeBadScFilter && Flag_badMuonFilterV2 && Flag_badChargedHadronFilterV2 ;
+  }
+  else if(year == 2017){
+    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+  }
+}
+
+
+
+
+/*
 Bool_t MT2Tree::passFiltersMC2016() const {
 
   return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_badMuonFilterV2 && Flag_badChargedHadronFilterV2 ;
@@ -3193,6 +3263,22 @@ Bool_t MT2Tree::passFiltersMC2017() const {
   return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
 
 }
+*/
+
+
+
+Bool_t MT2Tree::passFiltersMC(int year) const {
+  if(year == 2016){
+    return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_badMuonFilterV2 && Flag_badChargedHadronFilterV2 ;
+  }
+  else if(year == 2017){
+    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+  }
+}
+
+
+
+
 
 
 //Bool_t MT2Tree::passMonoJetId( int j ) const {
@@ -3200,9 +3286,17 @@ Bool_t MT2Tree::passFiltersMC2017() const {
 //return jet_id[j]>=4;
 //}
 
-Bool_t MT2Tree::passBaselineKinematic(TString sel) const
+Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 {
-
+  //Ht cut varies between 2016 and 2017 (1000 vs 1200)
+  float cutOnHT;
+  if(year==2016){
+    cutOnHT = 1000;
+  }
+  else if(year==2017){
+    cutOnHT = 1200;
+  }
+  // cout << "[selection] year 2016" << endl;
   //if (sel=="gamma")
   //return PV_npvs > 0 &&
       //gamma_nJet30 >= 1 &&
@@ -3210,15 +3304,16 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel) const
       //gamma_deltaPhiMin > 0.3 &&
       //( (gamma_nJet30 > 1 && gamma_ht<1000. && gamma_met_pt>250.) || (gamma_nJet30 > 1 && gamma_ht>=1000. && gamma_met_pt>30.) || (gamma_nJet30==1 && gamma_met_pt>250.)) &&
       //gamma_diffMetMht < 0.5*gamma_met_pt;
-   if (sel=="zll")
+  if (sel=="zll"){
     return PV_npvs > 0 &&
       nJet30 >= 1 &&
       nJet30FailId == 0 &&
       zll_deltaPhiMin > 0.3 &&
-      ( (nJet30>1 && zll_ht<1000. && zll_met_pt>250.) || (nJet30>1 && zll_ht>=1000. && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
+      ((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
       zll_diffMetMht < 0.5*zll_met_pt &&
       nLep > 1 ;
-  else if (sel=="qcd")
+  }
+  else if (sel=="qcd"){
     return PV_npvs > 0 &&
       nJet30FailId == 0 &&
       met_pt>30. &&
@@ -3231,30 +3326,46 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel) const
    // ( ( nJet30>1 && ht<1000. && met_genPt>250.) || ( nJet30>1 && ht>=1000. && met_genPt>30.) || (nJet30==1 && met_genPt>250.) ) &&
    // diffMetMht_genmet < 0.5*met_genPt;
   // //   return nVert > 0;
-  else
+  }
+  else{
     return PV_npvs > 0 &&
       //////(nJet30 >= 2 || sel=="monojet") &&
       nJet30 >=1 &&
       nJet30FailId == 0 &&
       deltaPhiMin > 0.3 &&
-      ( ( nJet30>1 && ht<1000. && met_pt>250.) || ( nJet30>1 && ht>=1000. && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
+      ( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
+      //( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
       //      ( (ht<1000. && met_pt>200.) || (ht>=1000. && met_pt>30.) || (nJet30==1 && met_pt>200.) ) &&
       diffMetMht < 0.5*met_pt;
   //    return nVert > 0;
+  }
 
   return kFALSE;
 }
 
-Bool_t MT2Tree::passTriggerSelection2017(TString sel) const{
-  if(sel == "llep" || sel == "SR"){
-    return HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
+Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
+  if(year == 2017){
+    if(sel == "llep" || sel == "SR"){
+      return HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
+    }
+    else if(sel == "zllSF"){
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200;
+    }//FIXME: what to do with the trigger line  HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ ,  HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ ,  HLT_TkMu50 (they are on the google doc table, but are not a branch of the tree)
+    else if(sel == "zllOF"){
+      return HLT_Mu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu27_Ele37_CaloIdL_MW || HLT_Mu37_Ele27_CaloIdL_MW || HLT_Photon200;
+    } // FIXME:  HLT_TkMu50
   }
-  else if(sel == "zllSF"){
-    return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200;
-  }//FIXME: what to do with the trigger line  HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ ,  HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ ,  HLT_TkMu50 (they are on the google doc table, but are not a branch of the tree)
-  else if(sel == "zllOF"){
-    return HLT_Mu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu27_Ele37_CaloIdL_MW || HLT_Mu37_Ele27_CaloIdL_MW || HLT_Photon200;
-  } // FIXME:  HLT_TkMu50
+  else if(year == 2016){
+    if(sel == "llep" || sel == "SR"){
+      return HLT_PFMET120_PFMHT120_IDTight || HLT_PFJet450 || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight  ;
+    }
+    else if(sel == "zllSF"){
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ;
+    }
+    else if(sel == "zllOF"){
+      return HLT_Mu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ;
+    } 
+  }//FIXME: HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ is missing
 }
 
 /*

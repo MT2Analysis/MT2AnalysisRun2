@@ -100,7 +100,7 @@ int main( int argc, char* argv[] ) {
   /////////////////////////////////////
   //  please decide on e or u here   //
 
-  bool plotElectron = true;
+  bool plotElectron = false;
   bool plotMuon = false;  
   
   /////////////////////////////////////
@@ -108,13 +108,13 @@ int main( int argc, char* argv[] ) {
 
   std::string plotsDir2;
   if(plotElectron && !plotMuon){
-    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/electron/" + dirName;
+    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plots/electron/" + dirName;
   }
   else if(plotMuon && !plotElectron){
-    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/muon/" + dirName;
+    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plots/muon/" + dirName;
   }
   else{
-    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plotsDataMC/plots/lepton/" + dirName;
+    plotsDir2 = cfg.getEventYieldDir() +  "/llepControlRegion/plots/lepton/" + dirName;
   }
  
   
