@@ -7,7 +7,9 @@ using namespace std;
 
 
 MT2BTagSFHelper::MT2BTagSFHelper(){
+  cout << "Initializing b-tagging tool" << endl;
 
+  cout << "Getting the csv file" << endl;
   //CSVv2 scale factors from 94X BTV POG recommendation
   calib = new BTagCalibrationStandalone("csvv2", "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/data/b_tagging/CSVv2_94XSF_V2_B_F.csv");
   //calib = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSVv2Moriond17_2017_1_26_BtoH.csv"); 
@@ -22,6 +24,7 @@ MT2BTagSFHelper::MT2BTagSFHelper(){
   reader_fullSim_light->load(*calib,BTagEntryStandalone::FLAV_B,"incl");
   reader_fullSim_light->load(*calib,BTagEntryStandalone::FLAV_C,"incl");
 
+  cout << "Getting the efficiency file" << endl;
   //FIXME: for the efficiency, I guess that we will have to recompute it with our kinematics
   f_btag_eff = new TFile("/shome/mschoene/btagSF/btageff__ttbar_powheg_pythia8_25ns_Moriond17.root"); // Dominick's b-tagging efficiencies
   //f_btag_eff = new TFile("/shome/mschoene/btagSF/btageff__ttbar_powheg_pythia8_25ns.root"); // Dominick's b-tagging efficiencies
@@ -29,7 +32,7 @@ MT2BTagSFHelper::MT2BTagSFHelper(){
   h_btag_eff_c    = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_c"   );
   h_btag_eff_udsg = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_udsg");
 
-  //fastSimulation files: not needed anymore, kept the old ones
+  //fastSimulation files: not needed anymore, kept the old ones 
   calib_fast = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/fastsim_csvv2_ttbar_26_1_2017.csv"); // <- this is the fixed version, the one on the twiki had a bug in the format (too many "")
   //calib_fast = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSV_13TEV_Combined_14_7_2016.csv"); // 25 ns official version of SFs
  
@@ -227,6 +230,7 @@ void MT2BTagSFHelper::get_weight_btag(int nobj, float* obj_pt, float* obj_eta, i
   wtbtagDown_heavy = errHdown / ( mcNoTag * mcTag );
   wtbtagDown_light = errLdown / ( mcNoTag * mcTag );
  
+  //cout << "[bTaggingComputation] j'arrive au bout" << endl; 
 }
 
 

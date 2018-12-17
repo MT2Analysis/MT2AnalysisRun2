@@ -89,8 +89,8 @@ int main(int argc, char* argv[]){
   system(Form("mkdir -p %s", outputdir.c_str()));
 
 
-  std::string ZllDir = cfg.getEventYieldDir() + "/zllControlRegion";
-  std::string ZllDir_of = cfg.getEventYieldDir() + "/zllControlRegion";
+  std::string ZllDir = cfg.getEventYieldDir() + "/zllControlRegion/goodFiles";
+  std::string ZllDir_of = cfg.getEventYieldDir() + "/zllControlRegion/goodFiles";
 
   MT2Analysis<MT2EstimateTree>* Zll = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "DYJets");
   if( Zll==0 ) {

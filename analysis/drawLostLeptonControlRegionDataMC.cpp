@@ -57,8 +57,8 @@ int main( int argc, char* argv[] ) {
     std::cout << "-> Using lumi normalization." << std::endl;
 
 
-  std::string mcFile = cfg.getEventYieldDir() + "/llepControlRegion/mc.root";
-  std::string dataFile = cfg.getEventYieldDir() + "/llepControlRegion/data.root";
+  std::string mcFile = cfg.getEventYieldDir() + "/llepControlRegion/goodFiles/mc.root";
+  std::string dataFile = cfg.getEventYieldDir() + "/llepControlRegion/goodFiles/data.root";
 
   MT2Analysis<MT2EstimateTree>* mc_ = MT2Analysis<MT2EstimateTree>::readFromFile(mcFile, "llepCR");
   MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(dataFile, "llepCR");
@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   //   please set cuts on Ht here    //
  
   //please consider only ints for the range of ht!
-  int htMin=575, htMax=1000;
+  int htMin=250, htMax=-1;
   
   std::string cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   string ht_min = to_string(htMin);
@@ -182,6 +182,7 @@ int main( int argc, char* argv[] ) {
   //lepton kinematics
   //dt.drawRegionYields_fromTree("incl_lepPt", "lepPt", selection, 70, 0, 540, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepPt", "(nElectrons+nMuons==1) ? lepPt : (abs(isotrack_pdgId)!=211 ? isotrackPt : -1.0)", selection, 40, 0, 400, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
+  //dt.drawRegionYields_fromTree("incl_lepPt", "lepPt", selection, 40, 0, 400, "Lepton p_{T}", "GeV", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepEta", "lepEta", selection, 7, -3.5, 3.5, "Lepton eta", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepPhi", "lepPhi", selection, 60, -3, 3, "Lepton phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_lepMass", "lepMass", selection, 5, 0, 1, "Lepton mass", "GeV", cutsLabel, jetCutsLabel);

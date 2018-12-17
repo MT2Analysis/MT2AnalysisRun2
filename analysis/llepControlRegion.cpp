@@ -233,34 +233,37 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
  
   int nentries = tree->GetEntries();
 
+  //for( int iEntry=0; iEntry<20000; ++iEntry ) {
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if(iEntry % 50000 == 0){
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     }
-
+ 
     if(iEntry == nentries){
       cout << "finish loop on entries for this sample" << endl;
     }
     
-    myTree.GetEntry(iEntry);
+    myTree.GetEntry(iEntry);  
 
     // Do the selection here: please try to keep a consistent order
     // between this script and similar scripts
 
     // if( myTree.isData && !myTree.isGolden ) continue;
-
+   
+    
     // apply the filters
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     } else {
       if(!myTree.passFiltersMC(cfg.year())) continue;
     } 
-
+     
+    
     // apply the triggers
     if(isData) {
       if (!myTree.passTriggerSelection("llep", cfg.year())) continue;
     }
-
+    
     
 
     // some additional cleanings
@@ -276,8 +279,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
-
-
+    
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year())) continue;
     // monojet id
@@ -288,6 +290,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     if( myTree.nLepLowMT!=1 ) continue; 
     //new cut: we ask specifically the number of leptons with high MT to be zero
     if(myTree.nLepHighMT != 0) continue;
+    
 
     // Selection is over, now apply the weights !
     Double_t weight(1.);

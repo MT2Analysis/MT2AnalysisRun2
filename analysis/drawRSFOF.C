@@ -103,11 +103,11 @@ int main(){
   //                 get the files                 //
   ///////////////////////////////////////////////////
  
-  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/data.root");
+  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_41p9ifb_incl_2017/zllControlRegion/goodFiles/data.root");
   TTree* SF = (TTree*) _file0->Get("data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf")->Clone("SF");
 
 
-  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/data_of.root");
+  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_41p9ifb_incl_2017/zllControlRegion/goodFiles/data_of.root");
   TTree* OF = (TTree*) _file1->Get("data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf")->Clone("OF");
 
 
@@ -287,9 +287,12 @@ int main(){
   mllOF->GetYaxis()->SetTitle("Entries");
 
   //draw and apply cuts
+  TCanvas* ctest = new TCanvas();
   //note that in the following, the dilepton mass and pt cuts are inverted: we compute the ratio SF/OF in a region which is orthogonal to both SR and di-lepton CR
-  SF->Draw("Z_mass>>mllSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.))", "goff");
+  SF->Draw("Z_mass>>mllSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250");// && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.))", "goff");
   OF->Draw("Z_mass>>mllOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.))", "goff");
+
+  ctest->SaveAs("test/histSF.pdf");
 
   //define the ratio
   double integral_sf, error_sf;
