@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
   //MT2Analysis<MT2EstimateTree>* wjets = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "WJets");
   //wjets->setColor(kWJets);
 
-  MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/goodFiles/data_withHEM.root", ZllDir.c_str()) , "data");
+  MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data.root", ZllDir.c_str()) , "data");
  
   data->setFullName("Data");
   Zll->setFullName("Z+jets");
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]){
   top_of->setColor(kTop);
   //MT2Analysis<MT2EstimateTree>* wjets_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of.c_str() ), "WJets");
   // wjets_of->setColor(kWJets);
-  MT2Analysis<MT2EstimateTree>* data_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data_of.root", ZllDir_of.c_str() ) , "data_of");
+  MT2Analysis<MT2EstimateTree>* data_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/goodFiles/data_of.root", ZllDir_of.c_str() ) , "data_of");
 
   Zll_of->setFullName("Z+jets");
   //  wjets_of->setFullName("W+jets");
@@ -1264,8 +1264,8 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-  */
   
+  */
   return 0;
 
 }

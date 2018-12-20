@@ -3339,7 +3339,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 {
   
   //cuts for 2016 and 2017 are the same, except the value of Ht cut
-  if(year == 2016 || year == 2017){
+  if(year == 2016 || year == 2017 || year == 2018){
     
     //Ht cut varies between 2016 and 2017 (1000 vs 1200)
     float cutOnHT;
@@ -3393,7 +3393,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       //    return nVert > 0;
     }
   }
-  
+  /*
   else if(year == 2018){
     //same selection as 2016 and 2017 + nJet30HEMFail == 0
    
@@ -3426,7 +3426,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 	nJet30HEMFail == 0; //new cut for 2018
     }
   }
-  
+  */
   return kFALSE;
 }
 

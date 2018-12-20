@@ -102,7 +102,10 @@ int main( int argc, char* argv[] ) {
 
   std::string regionsSet = cfg.regionsSet();
   std::cout << "Using region set: " << regionsSet << std::endl;
-  
+
+
+
+
   // ********************
   // Do analysis on MC bkg
   // ********************
@@ -117,6 +120,8 @@ int main( int argc, char* argv[] ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
     }
+
+   
     MT2Analysis<MT2EstimateTree>* mcCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet ); // name given here is the name of the parent directory in the output file
     for( unsigned i=0; i < fSamples.size(); ++i ){
       MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
@@ -195,7 +200,7 @@ int main( int argc, char* argv[] ) {
     dataCR->writeToFile( outputdir + "/data.root" );
 
   } // end analysis on data
-
+    
 
   return 0;
 
@@ -207,9 +212,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
 
-  //initialization of the scale factors tools
+  //initialization of the lepton scale factor tool
   MT2LeptonSFTool leptonSF;
-  //MT2BTagSFHelper bTagSF; 
+ 
 
   // Tree initialization
   TFile* file = TFile::Open(sample.file.c_str());

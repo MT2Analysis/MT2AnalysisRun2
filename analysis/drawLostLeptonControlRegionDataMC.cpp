@@ -58,7 +58,7 @@ int main( int argc, char* argv[] ) {
 
 
   std::string mcFile = cfg.getEventYieldDir() + "/llepControlRegion/goodFiles/mc.root";
-  std::string dataFile = cfg.getEventYieldDir() + "/llepControlRegion/data.root";
+  std::string dataFile = cfg.getEventYieldDir() + "/llepControlRegion/goodFiles/data.root";
 
   MT2Analysis<MT2EstimateTree>* mc_ = MT2Analysis<MT2EstimateTree>::readFromFile(mcFile, "llepCR");
   MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(dataFile, "llepCR");
@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   //   please set cuts on Ht here    //
  
   //please consider only ints for the range of ht!
-  int htMin=250, htMax=-1;
+  int htMin=575, htMax=1000;
   
   std::string cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   string ht_min = to_string(htMin);
@@ -101,7 +101,7 @@ int main( int argc, char* argv[] ) {
   //  please decide on e or u here   //
 
   bool plotElectron = false;
-  bool plotMuon = false;  
+  bool plotMuon = true;  
   
   /////////////////////////////////////
   //---------------------------------//

@@ -590,7 +590,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if(!( myTree.nLep==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
-    
+    //cut on HEM fail for 2018
+    if(cfg.year() == 2018){
+      if(myTree.nJet30HEMFail != 0) continue;
+    } 
 
     
     if( cfg.analysisType() == "mt2"){

@@ -27,6 +27,7 @@
 #include "interface/MT2EstimateAllSigSyst.h"
 #include "interface/MT2DrawTools.h"
 #include "interface/MT2Config.h"
+#include "interface/MT2BTagSFHelper.h"
 //#include "interface/MT2GoodrunClass.h"
 
 #include "TRandom3.h"
@@ -42,7 +43,7 @@ using namespace std;
 
 void randomizePoisson( MT2Analysis<MT2EstimateTree>* data );
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, std::string otherRegion="" );
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF, std::string otherRegion="" );
 //template <class T>
 //MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg );
 //template <class T>
@@ -158,18 +159,18 @@ int main( int argc, char* argv[] ) {
   std::map<std::string, MT2Analysis<MT2EstimateTree>*> mcSRMap;
 
   if( cfg.useMC() && !onlyData && !onlySignal ) { // do bkg
-
+    
     // Load samples
     std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
 
-/*    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 101, 999); // not interested in signal here (see later)
-    if( fSamples.size()==0 ) {
-      std::cout << "There must be an error: samples is empty!" << std::endl;
-      exit(120);
-    }
-*/
+    // std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 101, 999); // not interested in signal here (see later)
+    //if( fSamples.size()==0 ) {
+    //  std::cout << "There must be an error: samples is empty!" << std::endl;
+    //  exit(120);
+    //}
+    
     // create Groups of samples, i.e. vectors - e.g. one for Wjets, one for top, etc
     std::map<TString, std::vector<MT2Sample>> fSamplesMap;
     std::cout << "-> Creating sample list for Top " << std::endl;
@@ -188,7 +189,9 @@ int main( int argc, char* argv[] ) {
       mcSRMap[sampleName] = new MT2Analysis<MT2EstimateTree> ( sampleName, cfg.regionsSet() );
       // then fill it from all samples in the group
       for (auto fSample : fSamplesMap[sampleName]){
-        computeYield( fSample, cfg, mcSRMap[sampleName] );
+	MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+        computeYield( fSample, cfg, mcSRMap[sampleName], bTagSF );
+	bTagSF = nullptr;
       }
       std::cout << "-> Done looping on samples for this group" << std::endl;
     }
@@ -198,15 +201,20 @@ int main( int argc, char* argv[] ) {
       EventYields_toWrite.push_back(mcSRMap[sampleName]);
     }
 
-
+    
     //Now create ZJets estimate in the inclusive region (needed to compute Zinv Estimates)
     vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699);
-
+    cout << "apres load sample" << endl;
     MT2Analysis<MT2EstimateTree>* myEstimate = new MT2Analysis<MT2EstimateTree>("ZJets", "13TeV_2016_inclusive");
-    
+    cout << "apres new estimate" << endl;
+
+    cout << "size: " << mySample.size() << endl;
+
     for(int i(0); i<mySample.size(); ++i){
       cout << "Computing for sample " << i+1 << endl; 
-      computeYield(mySample[i], cfg, myEstimate);
+      MT2BTagSFHelper* bTagSF_ZJetsIncl = new MT2BTagSFHelper();
+      computeYield(mySample[i], cfg, myEstimate, bTagSF_ZJetsIncl);
+      bTagSF_ZJetsIncl = nullptr;
     }
 
     myEstimate->writeToFile(outputdir + "/ZJetsInclusive.root");
@@ -272,7 +280,9 @@ int main( int argc, char* argv[] ) {
     MT2Analysis<MT2EstimateTree> *dataSR = new MT2Analysis<MT2EstimateTree> ( "data", cfg.regionsSet() );; 
  
     for (auto fSample : fSamplesData){
-      computeYield( fSample, cfg, dataSR );
+      MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+      computeYield( fSample, cfg, dataSR, bTagSF_data );
+      bTagSF_data = nullptr;
     }
 
     // Add result to output handler
@@ -310,7 +320,7 @@ int main( int argc, char* argv[] ) {
 }
 
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, std::string otherRegion){
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF, std::string otherRegion){
 
   std::string regionsSet = cfg.regionsSet();
   if(otherRegion != ""){
@@ -331,7 +341,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   MT2Tree myTree;
   myTree.Init(tree);
 
-  //We temporally add this line, since it is not a branch of the MT2tree yet
   Bool_t isData = (sample.id >= 1 && sample.id < 100 );
   std::cout << "evt_id=" << myTree.evt_id << " sample.id=" << sample.id << "  isData="<< isData << std::endl;
 
@@ -356,25 +365,35 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   int nentries = tree->GetEntries();
 
+  //for( int iEntry=0; iEntry<20000; ++iEntry ) {
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
-    if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
+    if( iEntry % 50000 == 0 ){
+      std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
+    }
+
     myTree.GetEntry(iEntry);
+
     //if( myTree.isData && !myTree.isGolden ) continue;
     //if(isData && !myTree.isGolden ) continue;
+
+    // apply the filters
     if(isData) {
-      if(cfg.year() == 2016) if( !myTree.passFilters2016() ) continue;
-      if(cfg.year() == 2017) if( !myTree.passFilters2017() ) continue;
+      if(!myTree.passFilters(cfg.year())) continue;
     } else {
-      if(cfg.year() == 2016) if( !myTree.passFiltersMC2016() ) continue;
-      if(cfg.year() == 2017) if( !myTree.passFiltersMC2017() ) continue;
+      if(!myTree.passFiltersMC(cfg.year())) continue;
     } 
-    if (isData) {
-      if(cfg.year() == 2017) if (!myTree.passTriggerSelection2017("SR")) continue;
+
+    // apply the triggers
+    if(isData) {
+      if (!myTree.passTriggerSelection("SR", cfg.year())) continue;
     }
+
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter --> not in nanoAOD
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue; -->not in nanoAOD
+
+
     //crazy events! To be piped into a separate txt file
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
@@ -395,8 +414,12 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
+
+
     // kinematic selections, including lepton veto
-    if( !myTree.passSelection() ) continue;
+    if( !myTree.passSelection("", cfg.year()) ) continue;
+
+
     // monojet id, not needed for 2017, as all jets have tight id
     //if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
 
@@ -404,12 +427,42 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     //Double_t weight = (isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
     Double_t weight_syst = 1.;
     Double_t weight(1.);
+
+    //weight on the cross section  
     if(isData){
       weight = 1.;
     }
     else{
       weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
     }
+
+
+     //b-tagging scale factor
+    if(!isData){
+
+      // declaration of the b-tagged weight
+      float weight_btagsf = 1.;
+      //declaration of the b-tagged weight uncertainty for heavy flavor (b or c)
+      float weight_btagsf_heavy_UP = 1.;
+      float weight_btagsf_heavy_DN = 1.;
+      //declaration of the b-tagged weight uncertainty for light flavor 
+      float weight_btagsf_light_UP = 1.;
+      float weight_btagsf_light_DN = 1.;
+      
+      bool isFastSim = false;
+
+      bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
+
+      //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
+
+      weight *= weight_btagsf;
+    }
+
+
+
+
+
+
     // if(!isData){
     // weight *= myTree.weight_btagsf;
     // weight *= myTree.weight_lepsf;
