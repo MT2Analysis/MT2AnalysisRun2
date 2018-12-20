@@ -60,6 +60,7 @@ class MT2EstimateTree : public MT2Estimate {
   float mht_phi;
   
   int nJets;
+  int nJet30HEMFail;
   int nBJets;
   int nElectrons;
   int nMuons;

@@ -3339,15 +3339,20 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 {
   
   //cuts for 2016 and 2017 are the same, except the value of Ht cut
-  if(year == 2016 || year == 2017){
+//MG  if(year == 2016 || year == 2017){
     
     //Ht cut varies between 2016 and 2017 (1000 vs 1200)
     float cutOnHT;
     if(year==2016){
       cutOnHT = 1000;
     }
-    else if(year==2017){
+    else if(year==2017 || year==2018){
       cutOnHT = 1200;
+    }
+
+    bool doCutHEMFail = false;
+    if (year==2018) {
+      doCutHEMFail = true;
     }
 
     //if (sel=="gamma")
@@ -3364,13 +3369,15 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 	zll_deltaPhiMin > 0.3 &&
 	((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
 	zll_diffMetMht < 0.5*zll_met_pt &&
-	nLep > 1 ;
+	nLep > 1 &&
+        ( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
     }
     else if (sel=="qcd"){
       return PV_npvs > 0 &&
 	nJet30FailId == 0 &&
 	met_pt>30. &&
-	diffMetMht < 0.5*met_pt;
+	diffMetMht < 0.5*met_pt &&
+        ( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
       //else if (sel=="genmet")
       // return PV_npvs > 0 &&
       // nJet30 >=1 &&
@@ -3389,11 +3396,12 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 	( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
 	//( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
 	//      ( (ht<1000. && met_pt>200.) || (ht>=1000. && met_pt>30.) || (nJet30==1 && met_pt>200.) ) &&
-	diffMetMht < 0.5*met_pt;
+	diffMetMht < 0.5*met_pt &&
+        ( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
       //    return nVert > 0;
     }
-  }
-  
+ // }
+/*  
   else if(year == 2018){
     //same selection as 2016 and 2017 + nJet30HEMFail == 0
    
@@ -3426,7 +3434,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 	nJet30HEMFail == 0; //new cut for 2018
     }
   }
-  
+*/  
   return kFALSE;
 }
 
