@@ -26,7 +26,7 @@ MT2BTagSFHelper::MT2BTagSFHelper(){
 
   cout << "Getting the efficiency file" << endl;
   //FIXME: for the efficiency, I guess that we will have to recompute it with our kinematics
-  f_btag_eff = new TFile("/shome/mschoene/btagSF/btageff__ttbar_powheg_pythia8_25ns_Moriond17.root"); // Dominick's b-tagging efficiencies
+  f_btag_eff = new TFile("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/data/b_tagging/btageff__ttbar_powheg_pythia8_25ns_Moriond17.root"); // Bennett's b-tagging efficiencies
   //f_btag_eff = new TFile("/shome/mschoene/btagSF/btageff__ttbar_powheg_pythia8_25ns.root"); // Dominick's b-tagging efficiencies
   h_btag_eff_b    = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_b"   );
   h_btag_eff_c    = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_c"   );

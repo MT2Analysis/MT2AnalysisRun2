@@ -58,7 +58,7 @@ int main( int argc, char* argv[] ) {
 
 
   std::string mcFile = cfg.getEventYieldDir() + "/llepControlRegion/goodFiles/mc.root";
-  std::string dataFile = cfg.getEventYieldDir() + "/llepControlRegion/goodFiles/data.root";
+  std::string dataFile = cfg.getEventYieldDir() + "/llepControlRegion/data.root";
 
   MT2Analysis<MT2EstimateTree>* mc_ = MT2Analysis<MT2EstimateTree>::readFromFile(mcFile, "llepCR");
   MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(dataFile, "llepCR");

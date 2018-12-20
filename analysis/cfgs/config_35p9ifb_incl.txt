@@ -1,4 +1,4 @@
-#this config file works on the miniAOD latest release for 2016 (with b-tagging and isoTracks added to the tree)
+#this config file works on the nanoAOD latest release for 2016 (with b-tagging and isoTracks added to the tree)
 
 lumi 23.246 #this value will have to be changed when getting all the 2016 samples
 year 2016

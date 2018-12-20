@@ -836,6 +836,7 @@ public :
    Int_t           nJet20;
    Int_t           nJet30;
    Int_t           nJet30FailId;
+   Int_t           nJet30HEMFail;
    Int_t           nBJet20;
    Int_t           nElectrons10;
    Int_t           nMuons10;
@@ -1875,6 +1876,7 @@ public :
    TBranch        *b_nJet20;   //!
    TBranch        *b_nJet30;   //!
    TBranch        *b_nJet30FailId;   //!
+   TBranch        *b_nJet30HEMFail;
    TBranch        *b_nBJet20;   //!
    TBranch        *b_nElectrons10;   //!
    TBranch        *b_nMuons10;   //!
@@ -2996,6 +2998,7 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("nJet20", &nJet20, &b_nJet20);
    fChain->SetBranchAddress("nJet30", &nJet30, &b_nJet30);
    fChain->SetBranchAddress("nJet30FailId", &nJet30FailId, &b_nJet30FailId);
+   fChain->SetBranchAddress("nJet30HEMFail", &nJet30HEMFail, &b_nJet30HEMFail);
    fChain->SetBranchAddress("nBJet20", &nBJet20, &b_nBJet20);
    fChain->SetBranchAddress("nElectrons10", &nElectrons10, &b_nElectrons10);
    fChain->SetBranchAddress("nMuons10", &nMuons10, &b_nMuons10);
@@ -3303,6 +3306,9 @@ Bool_t MT2Tree::passFilters(int year) const {
   else if(year == 2017){
     return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
   }
+  else if(year == 2018){
+    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+  }
 }
 
 
@@ -3312,6 +3318,9 @@ Bool_t MT2Tree::passFiltersMC(int year) const {
     return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter ;
   }
   else if(year == 2017){
+    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+  }
+  else if(year == 2018){
     return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
   }
 }
@@ -3328,63 +3337,103 @@ Bool_t MT2Tree::passFiltersMC(int year) const {
 
 Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 {
-  //Ht cut varies between 2016 and 2017 (1000 vs 1200)
-  float cutOnHT;
-  if(year==2016){
-    cutOnHT = 1000;
-  }
-  else if(year==2017){
-    cutOnHT = 1200;
-  }
-  // cout << "[selection] year 2016" << endl;
-  //if (sel=="gamma")
-  //return PV_npvs > 0 &&
-      //gamma_nJet30 >= 1 &&
-      //gamma_nJet30FailId == 0 &&
-      //gamma_deltaPhiMin > 0.3 &&
-      //( (gamma_nJet30 > 1 && gamma_ht<1000. && gamma_met_pt>250.) || (gamma_nJet30 > 1 && gamma_ht>=1000. && gamma_met_pt>30.) || (gamma_nJet30==1 && gamma_met_pt>250.)) &&
-      //gamma_diffMetMht < 0.5*gamma_met_pt;
-  if (sel=="zll"){
-    return PV_npvs > 0 &&
-      nJet30 >= 1 &&
-      nJet30FailId == 0 &&
-      zll_deltaPhiMin > 0.3 &&
-      ((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
-      zll_diffMetMht < 0.5*zll_met_pt &&
-      nLep > 1 ;
-  }
-  else if (sel=="qcd"){
-    return PV_npvs > 0 &&
-      nJet30FailId == 0 &&
-      met_pt>30. &&
-      diffMetMht < 0.5*met_pt;
-   //else if (sel=="genmet")
-   // return PV_npvs > 0 &&
-   // nJet30 >=1 &&
-   // nJet30FailId == 0 &&
-   // deltaPhiMin_genmet > 0.3 &&
-   // ( ( nJet30>1 && ht<1000. && met_genPt>250.) || ( nJet30>1 && ht>=1000. && met_genPt>30.) || (nJet30==1 && met_genPt>250.) ) &&
-   // diffMetMht_genmet < 0.5*met_genPt;
-  // //   return nVert > 0;
-  }
-  else{
-    return PV_npvs > 0 &&
-      //////(nJet30 >= 2 || sel=="monojet") &&
-      nJet30 >=1 &&
-      nJet30FailId == 0 &&
-      deltaPhiMin > 0.3 &&
-      ( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
-      //( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
-      //      ( (ht<1000. && met_pt>200.) || (ht>=1000. && met_pt>30.) || (nJet30==1 && met_pt>200.) ) &&
-      diffMetMht < 0.5*met_pt;
-  //    return nVert > 0;
-  }
+  
+  //cuts for 2016 and 2017 are the same, except the value of Ht cut
+  if(year == 2016 || year == 2017){
+    
+    //Ht cut varies between 2016 and 2017 (1000 vs 1200)
+    float cutOnHT;
+    if(year==2016){
+      cutOnHT = 1000;
+    }
+    else if(year==2017){
+      cutOnHT = 1200;
+    }
 
+    //if (sel=="gamma")
+    //return PV_npvs > 0 &&
+    //gamma_nJet30 >= 1 &&
+    //gamma_nJet30FailId == 0 &&
+    //gamma_deltaPhiMin > 0.3 &&
+    //( (gamma_nJet30 > 1 && gamma_ht<1000. && gamma_met_pt>250.) || (gamma_nJet30 > 1 && gamma_ht>=1000. && gamma_met_pt>30.) || (gamma_nJet30==1 && gamma_met_pt>250.)) &&
+    //gamma_diffMetMht < 0.5*gamma_met_pt;
+    if (sel=="zll"){
+      return PV_npvs > 0 &&
+	nJet30 >= 1 &&
+	nJet30FailId == 0 &&
+	zll_deltaPhiMin > 0.3 &&
+	((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
+	zll_diffMetMht < 0.5*zll_met_pt &&
+	nLep > 1 ;
+    }
+    else if (sel=="qcd"){
+      return PV_npvs > 0 &&
+	nJet30FailId == 0 &&
+	met_pt>30. &&
+	diffMetMht < 0.5*met_pt;
+      //else if (sel=="genmet")
+      // return PV_npvs > 0 &&
+      // nJet30 >=1 &&
+      // nJet30FailId == 0 &&
+      // deltaPhiMin_genmet > 0.3 &&
+      // ( ( nJet30>1 && ht<1000. && met_genPt>250.) || ( nJet30>1 && ht>=1000. && met_genPt>30.) || (nJet30==1 && met_genPt>250.) ) &&
+      // diffMetMht_genmet < 0.5*met_genPt;
+      // //   return nVert > 0;
+    }
+    else{
+      return PV_npvs > 0 &&
+	//////(nJet30 >= 2 || sel=="monojet") &&
+	nJet30 >=1 &&
+	nJet30FailId == 0 &&
+	deltaPhiMin > 0.3 &&
+	( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
+	//( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
+	//      ( (ht<1000. && met_pt>200.) || (ht>=1000. && met_pt>30.) || (nJet30==1 && met_pt>200.) ) &&
+	diffMetMht < 0.5*met_pt;
+      //    return nVert > 0;
+    }
+  }
+  
+  else if(year == 2018){
+    //same selection as 2016 and 2017 + nJet30HEMFail == 0
+   
+    float cutOnHT = 1200; //same cut as for 2017
+
+    if (sel=="zll"){
+      return PV_npvs > 0 &&
+	nJet30 >= 1 &&
+	nJet30FailId == 0 &&
+	zll_deltaPhiMin > 0.3 &&
+	((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
+	zll_diffMetMht < 0.5*zll_met_pt &&
+	nLep > 1 &&
+	nJet30HEMFail == 0; //new cut for 2018
+    }
+    else if (sel=="qcd"){
+      return PV_npvs > 0 &&
+	nJet30FailId == 0 &&
+	met_pt>30. &&
+	diffMetMht < 0.5*met_pt &&
+	nJet30HEMFail == 0; //new cut for 2018
+    }
+    else{
+      return PV_npvs > 0 &&
+	nJet30 >=1 &&
+	nJet30FailId == 0 &&
+	deltaPhiMin > 0.3 &&
+	( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
+	diffMetMht < 0.5*met_pt &&
+	nJet30HEMFail == 0; //new cut for 2018
+    }
+  }
+  
   return kFALSE;
 }
 
+
+
 Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
-  if(year == 2017){
+  if(year == 2017 || year == 2018){
     if(sel == "llep" || sel == "SR"){
       return  HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
     }

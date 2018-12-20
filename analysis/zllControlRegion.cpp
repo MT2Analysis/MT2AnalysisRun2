@@ -241,7 +241,7 @@ int main(int argc, char* argv[]) {
       
     }
     
-    if( cfg.dummyAnalysis() ) {
+    if( cfg.dummyAnalysis() ) { 
       roundLikeData(mcTree);
       mcTree->addToFile(outputdir+"/data.root");
       roundLikeData(mcTree_of);
@@ -360,7 +360,7 @@ int main(int argc, char* argv[]) {
     dataTree->addToFile(outputdir+"/data.root");
     dataTree_of->writeToFile(outputdir+"/data_of.root");
     
-   
+    
     //we create here the estimates in the ttbar enriched CR (inverted cuts on Zmass and ZpT) that are needed to compute R(SF/OF) later on
     MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
     MT2Analysis<MT2EstimateTree>* dataTree_of_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_of_invertedZcuts", cfg.regionsSet() );
@@ -389,8 +389,8 @@ int main(int argc, char* argv[]) {
 
       dataTree_forZinvEst->addToFile(outputdir+"/data_forZinvEst.root");
       dataTree_of_forZinvEst->addToFile(outputdir+"/data_of_forZinvEst.root");
-    }
-
+    } 
+       
     
 
   } // if DATA
@@ -531,7 +531,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   TTree* tree = (TTree*)file->Get("Events");
 
   MT2Tree myTree;
-  //  myTree.loadGenStuff = false;
+  //  myTree.loadGenStuff = false; 
   myTree.Init(tree);
 
   Bool_t isData = (sample.id >= 1 && sample.id < 100 );
@@ -543,12 +543,12 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
-
+ 
   
    
   
   int nentries = tree->GetEntries();
-  //for( int iEntry=0; iEntry<20000; ++iEntry ) {
+  //for( int iEntry=0; iEntry<30000; ++iEntry ) {
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
@@ -559,14 +559,14 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     myTree.GetEntry(iEntry);
 
     // if( myTree.isData && !myTree.isGolden ) continue;
-   
+    
     //we apply the filters
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     } else {
       if(!myTree.passFiltersMC(cfg.year())) continue;
     }
-
+    
 
     //FIXME: uncomment RA2 filter line and line after
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
@@ -584,17 +584,20 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
-
+    
+    
     // Kinematic selections common to both SF and OF
     if(!( myTree.nLep==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
+    
 
+    
     if( cfg.analysisType() == "mt2"){
       if( regionsSet!="13TeV_noCut" )
         if( !myTree.passSelection("zll", cfg.year()) ) continue;
     }
-
+    
     if(( myTree.lep_pdgId[0]*myTree.lep_pdgId[1])>0 )   continue;
     
     //FIXME!! removed next selection criteria for 2017 since jet_id defined differently
@@ -623,7 +626,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb*cfg.lumi();
     
     Double_t weight(1.);
-    
+     
     //weight on cross section
     if(isData){
       weight = 1.;
@@ -741,6 +744,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if(isSF){ //////////SAME FLAVOR//////////////////////////////////////////
       //apply the triggers
       if(isData && !myTree.passTriggerSelection("zllSF", cfg.year()))continue;
+      
       if(do_ZinvEst){
 	      //SF part
 	      if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
@@ -768,12 +772,14 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	      else ++nJetHF30_;
       }
 
-
+     
+      
       MT2EstimateTree* thisTree;
       if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" ){ //
 	      if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
 
 	        thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
+		
 	        if( thisTree==0 ) continue;
 
 	        thisTree->assignVar("ID", ID );
@@ -810,6 +816,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 		thisTree->fillTree_zll(myTree, weight );
 		thisTree->yield->Fill( mt2, weight );
+		
 
 	      }else{
 

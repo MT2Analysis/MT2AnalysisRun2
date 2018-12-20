@@ -229,11 +229,11 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   if(!isData){
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
-  }
+  } 
  
   int nentries = tree->GetEntries();
 
-  //for( int iEntry=0; iEntry<20000; ++iEntry ) {
+  //for( int iEntry=0; iEntry<50000; ++iEntry ) {
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if(iEntry % 50000 == 0){
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
@@ -282,6 +282,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year())) continue;
+    
+
     // monojet id
     // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
