@@ -54,7 +54,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
 
 int main( int argc, char* argv[] ) {
-
+ 
 
   std::cout << std::endl << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
@@ -288,7 +288,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year())) continue;
     
-
+ 
     // monojet id
     // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
