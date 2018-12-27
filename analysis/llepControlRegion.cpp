@@ -293,6 +293,11 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
 
+    //cut on HEM fail for 2018 data
+    if(cfg.year() == 2018){
+      if(myTree.nJet30HEMFail != 0) continue;
+    } 
+
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue; 
     //new cut: we ask specifically the number of leptons with high MT to be zero

@@ -3347,10 +3347,12 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       cutOnHT = 1200;
     }
 
+    /*
     bool doCutHEMFail = false;
-    if (year==2018 || year ==2017) {
+    if (year==2018) {
       doCutHEMFail = true;
     }
+    */
 
     //if (sel=="gamma")
     //return PV_npvs > 0 &&
@@ -3366,15 +3368,15 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 	zll_deltaPhiMin > 0.3 &&
 	((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
 	zll_diffMetMht < 0.5*zll_met_pt &&
-	nLep > 1 &&
-        ( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
+	nLep > 1;
+      //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
     }
     else if (sel=="qcd"){
       return PV_npvs > 0 &&
 	nJet30FailId == 0 &&
 	met_pt>30. &&
-	diffMetMht < 0.5*met_pt &&
-        ( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
+	diffMetMht < 0.5*met_pt;
+      //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
       //else if (sel=="genmet")
       // return PV_npvs > 0 &&
       // nJet30 >=1 &&
@@ -3393,8 +3395,8 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 	( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
 	//( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
 	//      ( (ht<1000. && met_pt>200.) || (ht>=1000. && met_pt>30.) || (nJet30==1 && met_pt>200.) ) &&
-	diffMetMht < 0.5*met_pt &&
-        ( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
+	diffMetMht < 0.5*met_pt;
+      //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
       //    return nVert > 0;
 
   } 

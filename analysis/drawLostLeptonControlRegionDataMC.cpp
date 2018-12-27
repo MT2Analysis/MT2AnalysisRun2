@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
   //   please set cuts on Ht here    //
  
   //please consider only ints for the range of ht!
-  int htMin=575, htMax=1000;
+  int htMin=250, htMax=-1;
   
   std::string cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   string ht_min = to_string(htMin);
@@ -101,7 +101,7 @@ int main( int argc, char* argv[] ) {
   //  please decide on e or u here   //
 
   bool plotElectron = false;
-  bool plotMuon = true;  
+  bool plotMuon = false;  
   
   /////////////////////////////////////
   //---------------------------------//

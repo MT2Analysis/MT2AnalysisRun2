@@ -103,11 +103,11 @@ int main(){
   //                 get the files                 //
   ///////////////////////////////////////////////////
  
-  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_41p9ifb_incl_2017/zllControlRegion/goodFiles/data.root");
+  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data.root");
   TTree* SF = (TTree*) _file0->Get("data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf")->Clone("SF");
 
 
-  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_41p9ifb_incl_2017/zllControlRegion/goodFiles/data_of.root");
+  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data_of.root");
   TTree* OF = (TTree*) _file1->Get("data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf")->Clone("OF");
 
 

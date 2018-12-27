@@ -181,6 +181,8 @@ int main( int argc, char* argv[] ) {
     fSamplesMap["QCD"] = MT2Sample::loadSamples(samplesFileName, 100, 199);
     std::cout << "-> Creating sample list for ZJets " << std::endl;
     fSamplesMap["ZJets"] = MT2Sample::loadSamples(samplesFileName, 600, 699);
+    
+    
 
     // Calculate the yields 
     for(auto sampleName : sampleNames){
@@ -200,13 +202,11 @@ int main( int argc, char* argv[] ) {
     for (auto sampleName : sampleNames){
       EventYields_toWrite.push_back(mcSRMap[sampleName]);
     }
-
+    
     
     //Now create ZJets estimate in the inclusive region (needed to compute Zinv Estimates)
     vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699);
-    cout << "apres load sample" << endl;
     MT2Analysis<MT2EstimateTree>* myEstimate = new MT2Analysis<MT2EstimateTree>("ZJets", "13TeV_2016_inclusive");
-    cout << "apres new estimate" << endl;
 
     cout << "size: " << mySample.size() << endl;
 
@@ -415,6 +415,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       continue;
     }
 
+    //cut on HEM fail for 2018 data
+    if(cfg.year() == 2018){
+      if(myTree.nJet30HEMFail != 0) continue;
+    } 
 
     // kinematic selections, including lepton veto
     if( !myTree.passSelection("", cfg.year()) ) continue;

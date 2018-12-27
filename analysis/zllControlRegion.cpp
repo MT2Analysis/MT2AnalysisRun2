@@ -37,6 +37,8 @@ bool doZinvEst = true;
 bool do_bg = true;
 
 
+
+
 TH1D*  h_muTrk_hi = 0;
 TH2D*  h_elTrk = 0;
 
@@ -45,7 +47,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
 		      MT2BTagSFHelper* bTagSF, 
-		      bool do_ZinvEst, bool invertedZcuts = false );
+		      bool do_ZinvEst,  bool invertedZcuts = false );
 void addVariables(MT2Analysis<MT2EstimateTree>* anaTree);
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
 float getHLTweight( int lep1_pdgId, int lep2_pdgId, float lep1_pt, float lep2_pt, int variation);
@@ -548,8 +550,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
    
   
   int nentries = tree->GetEntries();
-  //for( int iEntry=0; iEntry<30000; ++iEntry ) {
-  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  for( int iEntry=0; iEntry<30000; ++iEntry ) {
+    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
@@ -590,10 +592,11 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if(!( myTree.nLep==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
-    //cut on HEM fail for 2018
-    //if(cfg.year() == 2018){
-    //  if(myTree.nJet30HEMFail != 0) continue;
-    //} 
+    
+    //cut on HEM fail for 2018 data
+    if(cfg.year() == 2018){
+      if(myTree.nJet30HEMFail != 0) continue;
+    } 
 
     
     if( cfg.analysisType() == "mt2"){

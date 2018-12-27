@@ -92,19 +92,19 @@ int main(int argc, char* argv[]){
   std::string ZllDir = cfg.getEventYieldDir() + "/zllControlRegion";
   std::string ZllDir_of = cfg.getEventYieldDir() + "/zllControlRegion";
 
-  MT2Analysis<MT2EstimateTree>* Zll = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_withHEM.root", ZllDir.c_str() ), "DYJets");
+  MT2Analysis<MT2EstimateTree>* Zll = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/goodFiles/ZllPurityTrees.root", ZllDir.c_str() ), "DYJets");
   if( Zll==0 ) {
     std::cout << "-> Please run zllControlRegion first. I need to get the yields from there." << std::endl;    std::cout << "-> Thank you for your cooperation." << std::endl;    exit(197);
   } 
   Zll->setColor(kZinv);
   // MT2Analysis<MT2EstimateTree>* qcd = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str()  ), "QCD");
   // qcd->setColor(kQCD);
-  MT2Analysis<MT2EstimateTree>* top = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_withHEM.root", ZllDir.c_str() ), "Top");
+  MT2Analysis<MT2EstimateTree>* top = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/goodFiles/ZllPurityTrees.root", ZllDir.c_str() ), "Top");
   top->setColor(kTop);
   //MT2Analysis<MT2EstimateTree>* wjets = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "WJets");
   //wjets->setColor(kWJets);
 
-  MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data.root", ZllDir.c_str()) , "data");
+  MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/goodFiles/data.root", ZllDir.c_str()) , "data");
  
   data->setFullName("Data");
   Zll->setFullName("Z+jets");
