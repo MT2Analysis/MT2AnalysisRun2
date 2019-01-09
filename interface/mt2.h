@@ -354,6 +354,8 @@ public :
    Float_t         weight_L1prefire_UP;
    Float_t         weight_L1prefire_DN;
    Float_t         puWeight;
+   Int_t           nVert;
+   Int_t           nTrueInt;
    Int_t           nJet30JECup;
    Int_t           nJet30JECdn;
    Int_t           nBJet20JECup;
@@ -755,6 +757,8 @@ public :
    TBranch         *b_weight_L1prefire_UP;     //!
    TBranch         *b_weight_L1prefire_DN;     //!
    TBranch         *b_puWeight;     //!
+   TBranch         *b_nVert;   //!
+   TBranch         *b_nTrueInt;   //!
    TBranch         *b_nJet30JECup;     //!
    TBranch         *b_nJet30JECdn;     //!
    TBranch         *b_nBJet20JECup;     //!
@@ -1236,6 +1240,8 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("weight_L1prefire_UP", &weight_L1prefire_UP, &b_weight_L1prefire_UP);
    fChain->SetBranchAddress("weight_L1prefire_DN", &weight_L1prefire_DN, &b_weight_L1prefire_DN);
    fChain->SetBranchAddress("puWeight", &puWeight, &b_puWeight);
+   fChain->SetBranchAddress("nVert", &nVert, &b_nVert);
+   fChain->SetBranchAddress("nTrueInt", &nTrueInt, &b_nTrueInt);
    fChain->SetBranchAddress("nJet30JECup", &nJet30JECup, &b_nJet30JECup);
    fChain->SetBranchAddress("nJet30JECdn", &nJet30JECdn, &b_nJet30JECdn);
    fChain->SetBranchAddress("nBJet20JECup", &nBJet20JECup, &b_nBJet20JECup);
