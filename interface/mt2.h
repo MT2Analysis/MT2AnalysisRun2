@@ -1380,13 +1380,13 @@ Bool_t MT2Tree::passFiltersMC2017() const {
 
 Bool_t MT2Tree::passFilters(int year) const {
   if(year == 2016){
-    return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_eeBadScFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter; //use charged hadron or charged candidate?
+    return Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_eeBadScFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter; //use charged hadron or charged candidate?
   }
   else if(year == 2017){
-    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
   }
   else if(year == 2018){
-    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
   }
 }
 
@@ -1394,13 +1394,13 @@ Bool_t MT2Tree::passFilters(int year) const {
 
 Bool_t MT2Tree::passFiltersMC(int year) const {
   if(year == 2016){
-    return PV_npvsGood>0 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter ;
+    return Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter ;
   }
   else if(year == 2017){
-    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
   }
   else if(year == 2018){
-    return PV_npvsGood>0 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
   }
 }
 
@@ -1441,8 +1441,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
     //( (gamma_nJet30 > 1 && gamma_ht<1000. && gamma_met_pt>250.) || (gamma_nJet30 > 1 && gamma_ht>=1000. && gamma_met_pt>30.) || (gamma_nJet30==1 && gamma_met_pt>250.)) &&
     //gamma_diffMetMht < 0.5*gamma_met_pt;
     if (sel=="zll"){
-      return PV_npvs > 0 &&
-	nJet30 >= 1 &&
+      return nJet30 >= 1 &&
 	nJet30FailId == 0 &&
 	zll_deltaPhiMin > 0.3 &&
 	((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
@@ -1451,8 +1450,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
     }
     else if (sel=="qcd"){
-      return PV_npvs > 0 &&
-	nJet30FailId == 0 &&
+      return nJet30FailId == 0 &&
 	met_pt>30. &&
 	diffMetMht < 0.5*met_pt;
       //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
@@ -1466,9 +1464,8 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       // //   return nVert > 0;
     }
     else{
-      return PV_npvs > 0 &&
 	//////(nJet30 >= 2 || sel=="monojet") &&
-	nJet30 >=1 &&
+      return nJet30 >=1 &&
 	nJet30FailId == 0 &&
 	deltaPhiMin > 0.3 &&
 	( ( nJet30>1 && ht<cutOnHT && met_pt>250.) || ( nJet30>1 && ht>=cutOnHT && met_pt>30.) || (nJet30==1 && met_pt>250.) ) &&
