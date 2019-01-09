@@ -40,7 +40,7 @@ if __name__ == "__main__":
   third_block_lines = []
   for t,n in branches_to_add:
     #   fChain->SetBranchAddress("run", &run, &b_run);
-    third_block_lines.append('   fChain->SetBranchAddress("{}", &{}, &b_{}'.format(n, n, n))
+    third_block_lines.append('   fChain->SetBranchAddress("{}", &{}, &b_{});'.format(n, n, n))
   
   print ''
   print '\n'.join(third_block_lines)
