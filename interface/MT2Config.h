@@ -18,6 +18,8 @@ class MT2Config {
   float lumi_DoubleEG()      const;
   float lumi_DoubleMu()      const;
   int year() const {return year_;};
+  int useETHdata() const {return useETHdata_;};
+  int useETHmc() const {return useETHmc_;};
 //  int applyJSONforSR() const {return applyJSONforSR_;};
  
   std::string regionsSet()             const { return regionsSet_; };
@@ -65,6 +67,8 @@ class MT2Config {
   float lumi_DoubleEG_;
   float lumi_DoubleMu_;
   int year_;
+  int useETHdata_;
+  int useETHmc_;
 //  int applyJSONforSR_;
 
   std::string regionsSet_;
