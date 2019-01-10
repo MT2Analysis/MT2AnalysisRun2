@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
 
     
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 700, 799); // DY signal only
+    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 700, 799, cfg.useETHmc()); // DY signal only
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
       MT2Analysis<MT2EstimateTree>* mc_top = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       MT2Analysis<MT2EstimateTree>* mc_top_of = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       addVariables(mc_top);      addVariables(mc_top_of);
-      std::vector<MT2Sample> fSamples_top = MT2Sample::loadSamples(samplesFileName, 300, 499);
+      std::vector<MT2Sample> fSamples_top = MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc());
       for( unsigned i=0; i<fSamples_top.size(); ++i ){
 	MT2BTagSFHelper* bTagSF_top = new MT2BTagSFHelper();
 	computeYieldSnO( fSamples_top[i], cfg, mc_top, mc_top_of, bTagSF_top, false);
@@ -327,7 +327,7 @@ int main(int argc, char* argv[]) {
     std::string samplesFile_data = "../samples/samples_" + cfg.dataSamples() + ".dat";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
-       std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "");
+       std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", 1, 100, cfg.useETHdata());
     //std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "noDuplicates");
 
     //    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "Double");
@@ -405,7 +405,7 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
 
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 999, 2000); // signal only
+    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 999, 2000, cfg.useETHmc()); // signal only
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
@@ -530,25 +530,28 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
 
-  TTree* tree = (TTree*)file->Get("Events");
+  bool isData = (sample.id >= 1 && sample.id < 100 );
+  std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
+  
+  // determine if it is an ETH kind of ntuple or not
+  bool isETH = (isData and cfg.useETHdata()) || (!isData and cfg.useETHmc());
+
+  // Tree initialization
+  TString treeName = isETH ? "Events" : "mt2";
+  TTree* tree = (TTree*)file->Get(treeName);
 
   MT2Tree myTree;
   //  myTree.loadGenStuff = false; 
   myTree.Init(tree);
 
-  Bool_t isData = (sample.id >= 1 && sample.id < 100 );
-  std::cout << "evt_id=" << myTree.evt_id << " sample.id=" << sample.id << " isData=" << isData << std::endl;
-  
  // Sum of weights
   double nGen=-9999; double nGenWeighted=-9999;
-  if(!isData){
+  if(!isData and isETH){
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
  
-  
-   
-  
+    
   int nentries = tree->GetEntries();
   for( int iEntry=0; iEntry<30000; ++iEntry ) {
     //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
@@ -556,25 +559,28 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
 
- 
-
     myTree.GetEntry(iEntry);
 
     // if( myTree.isData && !myTree.isGolden ) continue;
     
     //we apply the filters
+    // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     } else {
       if(!myTree.passFiltersMC(cfg.year())) continue;
     }
-    
 
+    // apply good vertex cut once for all 
+    if (isETH) {
+      if(myTree.PV_npvs <= 0) continue;
+    } else {
+      if(myTree.nVert <= 0) continue;
+    }
+    
     //FIXME: uncomment RA2 filter line and line after
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
-    
-    if(myTree.PV_npvsGood < 1) continue;
     
     //crazy events! To be piped into a separate txt file
     if(myTree.jet_pt[0] > 13000){
@@ -586,18 +592,24 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
-    
-    
+
+    //cut on HEM fail for 2018 data
+    //if(cfg.year() == 2018){
+    //  if(myTree.nJet30HEMFail != 0) continue;
+    //} 
+
+
+    // monojet id
+    if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    //
+    // apply HEM veto
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH)) continue;
+           
     // Kinematic selections common to both SF and OF
-    if(!( myTree.nLep==2 )) continue;
+    int nLep_to_be_used = isETH ? myTree.nLep : myTree.nlep;
+    if(!( nLep_to_be_used==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
-    
-    //cut on HEM fail for 2018 data
-    if(cfg.year() == 2018){
-      if(myTree.nJet30HEMFail != 0) continue;
-    } 
-
     
     if( cfg.analysisType() == "mt2"){
       if( regionsSet!="13TeV_noCut" )
@@ -638,7 +650,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       weight = 1.;
     }
     else{
-      weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      else weight = myTree.evt_scale1fb * myTree.weight_lepsf * myTree.weight_btagsf;
     }
 
     if(ID >999)
@@ -647,10 +660,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
     //lepton scale factors
     
-    //we apply the same scale factor on same and opposite CR
-    
-    //QUESTION: it it correct to apply lepton scale factor on MC. In the previous version, it seems that it was applied on data
-    if(!isData){
+    //we apply the same scale factor on same and opposite CR    
+    if(!isData and isETH){
       //we apply the same weight for both leptons
       for(int i(0); i<2; ++i){
 	if(abs(myTree.lep_pdgId[i])<12){ //electrons (lep_pdgID = +- 11)
@@ -673,7 +684,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     
     
     //b-tagging scale factor
-    if(!isData){
+    if(!isData and isETH){
 
       // declaration of the b-tagged weight
       float weight_btagsf = 1.;
@@ -738,7 +749,17 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }//end of loop over objects
     }//end of applying SF
     */
-    
+
+    float HLT_weight = getHLTweight( myTree.lep_pdgId[0], myTree.lep_pdgId[1], myTree.lep_pt[0], myTree.lep_pt[1], 0 );
+    // variation -1 and +1 are for the weight up and down
+
+    int nJetHF30_ = 0;
+    int nJet_to_use = (isETH) ? myTree.nJet : myTree.njet;
+    for(int j=0; j<nJet_to_use; ++j){
+      if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
+      else ++nJetHF30_;
+    }
+
    
     bool isSF = false;
     bool isOF = false;
@@ -749,7 +770,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
     if(isSF){ //////////SAME FLAVOR//////////////////////////////////////////
       //apply the triggers
-      if(isData && !myTree.passTriggerSelection("zllSF", cfg.year()))continue;
+      if(isData && isETH && !myTree.passTriggerSelection("zllSF", cfg.year()))continue;
       
       if(do_ZinvEst){
 	      //SF part
@@ -766,22 +787,9 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       // if( abs(myTree.lep_pdgId[0])==11 && myTree.lep_tightId[0]< 0.5 ) continue;
       //if( abs(myTree.lep_pdgId[1])==11 && myTree.lep_tightId[1]< 0.5 ) continue;
 
-      float HLT_weight = getHLTweight( myTree.lep_pdgId[0], myTree.lep_pdgId[1], myTree.lep_pt[0], myTree.lep_pt[1], 0 );
-      // variation -1 and +1 are for the weight up and down
-
-      //if( !isData) weight *= myTree.weight_btagsf * HLT_weight * myTree.weight_lepsf;
-      ///////////////////////////
-
-      int nJetHF30_ = 0;
-      for(int j=0; j<myTree.nJet; ++j){
-	      if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
-	      else ++nJetHF30_;
-      }
-
-     
       
       MT2EstimateTree* thisTree;
-      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" ){ //
+      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond19" ){ //
 	      if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
 
 	        thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
@@ -795,7 +803,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree->assignVar("Z_eta", Zvec.Eta() );
 		thisTree->assignVar("Z_mass", myTree.zll_mass );
 		thisTree->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
-		thisTree->assignVar("nLep", myTree.nLep );
+		thisTree->assignVar("nLep", nLep_to_be_used );
 		thisTree->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 		thisTree->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -837,7 +845,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		thisTree->assignVar("Z_mass", myTree.zll_mass );
 		thisTree->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-		thisTree->assignVar("nLep", myTree.nLep );
+		thisTree->assignVar("nLep", nLep_to_be_used );
 		thisTree->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 		thisTree->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -876,7 +884,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		thisTree->assignVar("Z_mass", myTree.zll_mass );
 		thisTree->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-		thisTree->assignVar("nLep", myTree.nLep );
+		thisTree->assignVar("nLep", nLep_to_be_used );
 		thisTree->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 		thisTree->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -915,7 +923,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		thisTree->assignVar("Z_mass", myTree.zll_mass );
 		thisTree->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-		thisTree->assignVar("nLep", myTree.nLep );
+		thisTree->assignVar("nLep", nLep_to_be_used );
 		thisTree->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 		thisTree->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -961,7 +969,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
         thisTree->assignVar("Z_mass", myTree.zll_mass );
         thisTree->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-        thisTree->assignVar("nLep", myTree.nLep );
+        thisTree->assignVar("nLep", nLep_to_be_used );
         thisTree->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
         thisTree->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
         thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -1009,21 +1017,12 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       //      if( abs(myTree.lep_pdgId[0])==11 && myTree.lep_tightId[0]< 0.5 ) continue;
       //if( abs(myTree.lep_pdgId[1])==11 && myTree.lep_tightId[1]< 0.5 ) continue;
 
-      float HLT_weight = getHLTweight( myTree.lep_pdgId[0], myTree.lep_pdgId[1], myTree.lep_pt[0], myTree.lep_pt[1], 0 );
-
       //      if( !myTree.isData){
       //	      weight *= myTree.weight_btagsf * myTree.weight_lepsf * HLT_weight;
       //}
 
-      int nJetHF30_ = 0;
-      for(int j=0; j<myTree.nJet; ++j){
-	      if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
-	      else ++nJetHF30_;
-      }
-
-
       MT2EstimateTree* thisTree_of;
-      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" ){ //
+      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond19" ){ //
 	      if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
 
 	        thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
@@ -1037,7 +1036,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
 	        thisTree_of->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-	        thisTree_of->assignVar("nLep", myTree.nLep );
+	        thisTree_of->assignVar("nLep", nLep_to_be_used );
 	        thisTree_of->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 	        thisTree_of->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -1080,7 +1079,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
 	        thisTree_of->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-	        thisTree_of->assignVar("nLep", myTree.nLep );
+	        thisTree_of->assignVar("nLep", nLep_to_be_used );
 	        thisTree_of->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 	        thisTree_of->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -1120,7 +1119,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
 	        thisTree_of->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-	        thisTree_of->assignVar("nLep", myTree.nLep );
+	        thisTree_of->assignVar("nLep", nLep_to_be_used );
 	        thisTree_of->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 	        thisTree_of->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -1161,7 +1160,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
 	        thisTree_of->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-	        thisTree_of->assignVar("nLep", myTree.nLep );
+	        thisTree_of->assignVar("nLep", nLep_to_be_used );
 	        thisTree_of->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 	        thisTree_of->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
@@ -1205,7 +1204,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	      thisTree_of->assignVar("Z_mass", myTree.zll_mass );
 	      thisTree_of->assignVar("Z_lepId", abs(myTree.lep_pdgId[0]) );
 
-	      thisTree_of->assignVar("nLep", myTree.nLep );
+	      thisTree_of->assignVar("nLep", nLep_to_be_used );
 	      thisTree_of->assignVar("lep_pdgId0", myTree.lep_pdgId[0] );
 	      thisTree_of->assignVar("lep_pdgId1", myTree.lep_pdgId[1] );
 	      thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
