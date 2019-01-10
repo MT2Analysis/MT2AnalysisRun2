@@ -217,7 +217,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   MT2LeptonSFTool leptonSF;
 
   // determine if it's data or mc here
-  Bool_t isData = (sample.id >= 1 && sample.id < 100 );
+  bool  isData = (sample.id >= 1 && sample.id < 100 );
   std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
 
   // determine if it is an ETH kind of ntuple or not
@@ -300,8 +300,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     
  
     // monojet id
-    // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
+    // apply HEM veto
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH)) continue; 
 
     //cut on HEM fail for 2018 data <= this needs to be reworked
     //if(cfg.year() == 2018){

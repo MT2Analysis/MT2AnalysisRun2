@@ -423,6 +423,7 @@ public :
    Float_t         weight_pdfs_UP;
    Float_t         weight_pdfs_DN;
    Float_t         weight_toppt;
+   Int_t           njet;
    // 
    
 
@@ -826,6 +827,7 @@ public :
    TBranch         *b_weight_pdfs_UP;     //!
    TBranch         *b_weight_pdfs_DN;     //!
    TBranch         *b_weight_toppt;     //!
+   TBranch        *b_njet;   //!
    //
 
    MT2Tree(TTree *tree=0);
@@ -849,9 +851,10 @@ public :
    //virtual Bool_t   passFiltersMC2016   () const;
    //virtual Bool_t   passFiltersMC2017   () const;
    // virtual Bool_t   passGammaAdditionalSelection( int sampleId ) const;
-   // virtual Bool_t   passMonoJetId( int j ) const;
+   virtual Bool_t   passMonoJetId( int j ) const;
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
    virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
+   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true) const;
 };
 
 #endif
@@ -1309,6 +1312,7 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("weight_pdfs_UP", &weight_pdfs_UP, &b_weight_pdfs_UP);
    fChain->SetBranchAddress("weight_pdfs_DN", &weight_pdfs_DN, &b_weight_pdfs_DN);
    fChain->SetBranchAddress("weight_toppt", &weight_toppt, &b_weight_toppt);   
+   fChain->SetBranchAddress("njet", &njet, &b_njet);
    Notify();
 }
 
@@ -1415,10 +1419,10 @@ Bool_t MT2Tree::passFiltersMC(int year) const {
 
 
 
-//Bool_t MT2Tree::passMonoJetId( int j ) const {
+Bool_t MT2Tree::passMonoJetId( int j ) const {
 // //  return jet_id[j]>=3 && jet_chHEF[j]>0.05 && jet_neHEF[j]<0.8 && jet_phEF[j]<0.7;
-//return jet_id[j]>=4;
-//}
+  return jet_id[j]>=4;
+}
 
 Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
 {
@@ -1513,7 +1517,29 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
   }
 }
 
+// hem fail veto
+Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
 
+  if (year!=2018) return true; // only apply for 2018
+
+  int jetSize = 0;
+  jetSize = isETH ? nJet : njet; // different branches names bw ETH and SnT
+
+  bool hasHEMFailJet = false;
+
+  for (int i=0; i<jetSize; i++){
+    if (jet_pt[i] > 30 && 
+        jet_eta[i] > -4.7 && jet_eta[i] < -1.4 && 
+        jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
+    
+          hasHEMFailJet=true;
+          break; // exit from the loop as soon as you find a jet in the hem fail region
+    }
+  }
+
+  return !hasHEMFailJet;
+
+}
 
 
 /*
