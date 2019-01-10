@@ -183,7 +183,7 @@ int main( int argc, char* argv[] ) {
     fSamplesMap["ZJets"] = MT2Sample::loadSamples(samplesFileName, 600, 699);
     
     
-
+    
     // Calculate the yields 
     for(auto sampleName : sampleNames){
       std::cout << "-> Considering group " << sampleName << std::endl;
@@ -203,6 +203,7 @@ int main( int argc, char* argv[] ) {
       EventYields_toWrite.push_back(mcSRMap[sampleName]);
     }
     
+    cout << "Now ZJets samples" << endl;
     
     //Now create ZJets estimate in the inclusive region (needed to compute Zinv Estimates)
     vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699);
@@ -394,7 +395,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue; -->not in nanoAOD
 
 
-    //crazy events! To be piped into a separate txt file
+    //crazy events! To be piped into a separate txt file 
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;

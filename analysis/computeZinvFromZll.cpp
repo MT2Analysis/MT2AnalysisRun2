@@ -47,10 +47,10 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo );
 
 void plotEstimates(MT2Analysis<MT2Estimate>* toGetPlotted, const TString& saveName, std::set<MT2Region> regions, const TString& directory);
 
+ 
 
 
-
-int main( int argc, char* argv[] ) {
+int main( int argc, char* argv[] ) { 
 
 
   std::cout << std::endl << std::endl;
@@ -70,7 +70,7 @@ int main( int argc, char* argv[] ) {
     exit(11);
   }
 
-
+ 
   std::string configFileName(argv[1]);
   MT2Config cfg(configFileName);
 
@@ -117,8 +117,10 @@ int main( int argc, char* argv[] ) {
     (*zllData_of) = (*zllData_of) +  (*TopMC_of);
   }
  
+ 
 
   MT2Analysis<MT2EstimateTree>* TopTree_mc = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/ZllPurityTrees.root", "Top");
+
 
   //MT2Analysis<MT2EstimateTree>* TopTree_mc = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/ZllPurityTrees_of.root", "Top");
 
@@ -127,26 +129,27 @@ int main( int argc, char* argv[] ) {
   (*TTZ) *= lumi;
   TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
 
+ 
 
    MT2Analysis<MT2Estimate>* TopMC_woTTZ = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/mc_Top_forZinvEst.root", "zllCR");
   (*TopMC_woTTZ) = (*TopMC_woTTZ) * lumi;
   (*TopMC_woTTZ) = (*TopMC_woTTZ) - (*TTZ);
 
-
    MT2Analysis<MT2Estimate>* MC_of = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/mc_of_forZinvEst.root", "zllCR_of");
   (*MC_of) = (*MC_of) * lumi;
   (*MC_of) = (*MC_of) +  (*TopMC_of);
 
-  
+
   // //static MT2Analysis<MT2EstimateTree>* makeAnalysisFromInclusiveTree( const std::string& aname, const std::string& regionsSet, MT2Analysis<MT2EstimateTree>* analysis, const std::string& selection="" ) { return makeRebinnedAnalysisFromInclusiveTree( aname, regionsSet, analysis, selection ); };
 
 
   // MT2Analysis<MT2Estimate>* bg_tot;
   // (*bg_tot) = (*zllData_of) +  (*TTZ);
 
+  
  
   MT2Analysis<MT2Estimate>* zllMC_ = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/mc_forZinvEst.root", "zllCR");
-
+   
   MT2Analysis<MT2Estimate>* zllMC2_ = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/mc_forZinvEst.root", "zllCR");
 
   MT2Analysis<MT2Estimate>* zllMC_temp = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/mc_forZinvEst.root", "zllCR");
@@ -273,41 +276,61 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2EstimateTree>* zllData_tree_of = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/data_of.root", "data_of");
 
-  MT2Analysis<MT2EstimateTree>* zinvMC_tree = MT2Analysis<MT2EstimateTree>::readFromFile(cfg.getEventYieldDir() + "/ZJetsIncl.root", "ZJets"); 
+  MT2Analysis<MT2EstimateTree>* zinvMC_tree = MT2Analysis<MT2EstimateTree>::readFromFile(cfg.getEventYieldDir() + "/ZJetsInclusive.root", "ZJets"); 
  
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this
   TFile* temp = new TFile("temp.root","RECREATE");
 
 
+  //the regions are not the same for Moriond2019 compared to Moriond2017, and this has an impact on the regionsSet we use to integrate over Nb
+  //first choose the convention you want to compute the estimate with:
+  bool forMoriond2017 = false;
+  bool forMoriond2019 = true; 
 
-  //we fill the shapes
+  std::string region_forExtrapol;
+  if(forMoriond2017){
+    region_forExtrapol = "zurich2016_forExtrapol";
+    cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2017" << endl << endl;
+  }
+  else if(forMoriond2019){
+    region_forExtrapol = "Moriond2019_forExtrapol";
+    cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019" << endl << endl;
+  }
 
+  //we fill the shapes  
   cout << "Filling the shapes..." << endl;
   
-  //Before: they used instead of cfg.regionSet() "zurich2016_forExtrapol"
+  MT2Analysis<MT2EstimateTree>* zinvMC_forShape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zinv_forShape" , region_forExtrapol, zinvMC_tree,  "");
  
-  MT2Analysis<MT2EstimateTree>* zinvMC_forShape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zinv_forShape" , "zurich2016_forExtrapol", zinvMC_tree,  "");
-  //MT2Analysis<MT2EstimateTree>* zllMC_forShape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_forShape" , "zurich2016_forExtrapol", zllMC_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  //I add temporary those lines to check use of extrapolToTopoRegion function
+  //MT2Analysis<MT2Estimate>* zinvMC_forShape_TR = new MT2Analysis<MT2Estimate>( "zinvMC_forShape_TR", cfg.regionsSet() );
+  //extrapolToTopoRegion( zinvMC_forShape_TR, (MT2Analysis<MT2Estimate>*)zinvMC_forShape, 1 ); //1 means it is mc
+  
+  
+  //MT2Analysis<MT2EstimateTree>* zllMC_forShape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_forShape" , region_forExtrapol, zllMC_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
 
   cout << "Shape 1/7 filled" << endl;
   
   //MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , cfg.regionsSet(), zllData_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
 
-  MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , "zurich2016_forExtrapol", zllData_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , region_forExtrapol, zllData_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
 
-
+  //I add temporalily those lines
+  //MT2Analysis<MT2Estimate>* zllData_shape_TR = new MT2Analysis<MT2Estimate>("zllData_shape_TR", cfg.regionsSet() ); 
+  //extrapolToTopoRegion( zllData_shape_TR, (MT2Analysis<MT2Estimate>*)zllData_shape );
+  
   cout << "Shape 2/7 filled" << endl;
   
-  MT2Analysis<MT2EstimateTree>* zllData_shape_of = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape_of" , "zurich2016_forExtrapol", zllData_tree_of,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  MT2Analysis<MT2EstimateTree>* zllData_shape_of = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape_of" , region_forExtrapol, zllData_tree_of,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
 
   cout << "Shape 3/7 filled" << endl;
 
   // MT2Analysis<MT2EstimateTree>* zllData_shape_noTTZ = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape_noTTZ" , "zurich2016_forExtrapol", zllData_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
-  MT2Analysis<MT2EstimateTree>* TTZ_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "TTZ_shape" , "zurich2016_forExtrapol", TopTree_mc,  "(id==411 && (fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  MT2Analysis<MT2EstimateTree>* TTZ_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "TTZ_shape" , region_forExtrapol, TopTree_mc,  "(id==411 && (fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
 
   cout << "Shape 4/7 filled" << endl;
 
-  MT2Analysis<MT2EstimateTree>* zllMC_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape" , "zurich2016_forExtrapol", zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  MT2Analysis<MT2EstimateTree>* zllMC_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape" , region_forExtrapol, zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
 
   cout << "Shape 5/7 filled" << endl;
 
@@ -316,7 +339,7 @@ int main( int argc, char* argv[] ) {
 
   cout << "Shape 6/7 filled" << endl;
 
-  MT2Analysis<MT2EstimateTree>* zllMC_shape_withTTZ = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_withTTZ" , "zurich2016_forExtrapol", zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  MT2Analysis<MT2EstimateTree>* zllMC_shape_withTTZ = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_withTTZ" , region_forExtrapol, zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
 
   // MT2Analysis<MT2EstimateTree>* zllMC_shape_TR = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_TR" , cfg.regionsSet(), zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
 
@@ -429,7 +452,7 @@ int main( int argc, char* argv[] ) {
 
 
   ////////////////////////////////////////////////
-  //            Topological region              //
+  //                Hybrid shape                //
   ////////////////////////////////////////////////
 
 
@@ -476,8 +499,8 @@ int main( int argc, char* argv[] ) {
   //              Publicity plots               //
   ////////////////////////////////////////////////
 
-  MT2Analysis<MT2Estimate>* zllHybrid_shape = new MT2Analysis<MT2Estimate>( "zllHybrid_shape", "zurich2016_forExtrapol" ); 
-  MT2Analysis<MT2Estimate>* bin_extrapol_nonTR   = new MT2Analysis<MT2Estimate>( "bin_extrapol_nonTR ","zurich2016_forExtrapol" );
+  MT2Analysis<MT2Estimate>* zllHybrid_shape = new MT2Analysis<MT2Estimate>( "zllHybrid_shape", region_forExtrapol ); 
+  MT2Analysis<MT2Estimate>* bin_extrapol_nonTR   = new MT2Analysis<MT2Estimate>( "bin_extrapol_nonTR ", region_forExtrapol );
 
   MT2Analysis<MT2EstimateSyst>* purity_shape2 = computePurityOF((MT2Analysis<MT2Estimate>*)zllData_shape, (MT2Analysis<MT2Estimate>*)zllData_shape_of, cfg );
 
@@ -655,7 +678,7 @@ int main( int argc, char* argv[] ) {
     plotEstimates(zllMC_shape_TR, "zllMC_shape_TR", regions, cfg.getEventYieldDir());
     plotEstimates(zllMC_shape_forExtremeHT_TR, "zllMC_shape_forExtremeHT_TR", regions, cfg.getEventYieldDir());
   }
-  
+ 
   return 0;
 
 }
@@ -777,7 +800,7 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
         R_sfof_err = 0.0; // old err, now in create DC= 0.15;
       }
       else if(cfg.year()==2017){
-	R_sfof = 1.79;
+	R_sfof = 1.06;
 	R_sfof_err = 0.15; // FIXME: adjust this value
       }
 	
@@ -820,9 +843,6 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
       //std::cout << niceNames[0] << " " << niceNames[1] << std::endl;
       //std::cout << "SF= " << contentSF << " OF= " << contentOF << std::endl;
       //std::cout << "purity=  " << purity << " p_err= " <<  purity_err << std::endl;
-
-
-
 
     }
     newData.insert( thisNewEstimate );
@@ -892,56 +912,59 @@ MT2Analysis<MT2EstimateSyst>* combineDataAndMC( MT2Analysis<MT2EstimateSyst>* da
 
 
 void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool isMC ) {
- 
-  cout << endl << "entering the extrapolTR function" << endl;
+
 
   std::set<MT2Region> regions       = shape_TR->getRegions();
-  std::set<MT2Region> regions_shape = shape   ->getRegions();
+  std::set<MT2Region> regions_shape = shape->getRegions();
   
   //////////////loop over the SR regions, fill if contained//////////////
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
  
     MT2Region* regionToMatch = new MT2Region( *iR );
+    cout << endl << endl << "Analysis for the NORMAL REGION: " << regionToMatch->getName() << endl;
 
-    TH1D* this_shape_TR    = shape_TR   ->get( *iR)->yield;
+    TH1D* this_shape_TR    = shape_TR   ->get(*iR)->yield;
     int nBins = this_shape_TR->GetNbinsX();
-    cout << "nBins = " << nBins << endl;
+    //cout << "nBins = " << nBins << endl;
 
     //Loop over the shape regions///////////FILL CORRECTLY THE DATA SHAPE (NON NORMALIZED)
     for( std::set<MT2Region>::iterator iR_shape=regions_shape.begin(); iR_shape!=regions_shape.end(); ++iR_shape ) { 
       MT2Region* regionToMatch_shape = new MT2Region( *iR_shape );
-      cout << "Region_zllData_shape_TR->nJetsMin() = " << regionToMatch->nJetsMin() << endl;
-      cout << "Region_zllData_shape_TR->nJetsMax() = " << regionToMatch->nJetsMax() << endl;
-      if( !(regionToMatch->MT2Region::isIncluded(regionToMatch_shape)) && !(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3 ) )  ){ cout << "ciao 1" << endl;  continue;} else{cout << "good 1" << endl;} //not contained, doesn't matter
-      if( regionToMatch->htMin() != regionToMatch_shape->htMin() ){ cout << "ciao 2 " << endl; continue;}else{cout << "good 2" << endl;} //HT has to match both high and low  for all regions
-      if( regionToMatch->htMax() != regionToMatch_shape->htMax() ){cout << "ciao 3 " << endl; continue;}else{cout << "good 3" << endl;}
+      cout << "Try with forExtrapol region: " << regionToMatch_shape->getName() << endl;
+
+      //cout << "Region_zllData_shape_TR->nJetsMin() = " << regionToMatch->nJetsMin() << endl;
+      //cout << "Region_zllData_shape_TR->nJetsMax() = " << regionToMatch->nJetsMax() << endl;
+      if( !(regionToMatch->MT2Region::isIncluded(regionToMatch_shape)) && !(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) )  ){continue;}  //not contained, doesn't matter
+      if( regionToMatch->htMin() != regionToMatch_shape->htMin() ){continue;} //HT has to match both high and low  for all regions
+      if( regionToMatch->htMax() != regionToMatch_shape->htMax() ){continue;}
 
       if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1) ){
-	cout << "entering if 1" << endl;
 	//not true anymore due to 2 & 3 jets splitting, those have not to be summed no matter what,	if( (regionToMatch->nJetsMin() != regionToMatch_shape->nJetsMin()) && (regionToMatch->nJetsMax() != regionToMatch_shape->nJetsMax() ) ) continue; //lower or upper njets has to match, but not both
-	if ( regionToMatch->nBJetsMin()==3 && regionToMatch_shape->nJetsMin()==2 && regionToMatch->htMin()!=1500 ){cout << "ciao 4 " << endl; continue;}else{cout << "good 4" << endl;} //removing the 2j bin for the 3b shape (3b is ~requiring 3j)
+	if ( regionToMatch->nBJetsMin()==3 && regionToMatch_shape->nJetsMin()==2 && regionToMatch->htMin()!=1500 ){continue;} //removing the 2j bin for the 3b shape (3b is ~requiring 3j)
       }
 
 
       if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3   ){
-	cout << "entering if 2" << endl;
-      if( !(regionToMatch_shape->nJetsMin()==2 || regionToMatch_shape->nJetsMin()==3) ){cout << "ciao 5 " << endl; continue;}else{cout << "good 5" << endl; }
+	if( !(regionToMatch_shape->nJetsMin()==2 || regionToMatch_shape->nJetsMin()==3) ){continue;}
       }
 
 
-      if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3  && regionToMatch->nBJetsMin()==0 )
-	cout << "entering if 3" << endl;
-	std::cout << "doing the 2-3 region " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax()<<  " using the shape region " << regionToMatch_shape->nJetsMin() << "to" << regionToMatch_shape->nJetsMax() << "jets " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax() << std::endl;
+      if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3  && regionToMatch->nBJetsMin()==0 ){
+       	std::cout << "doing the 2-3 region " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax()<<  " using the shape region " << regionToMatch_shape->nJetsMin() << "to" << regionToMatch_shape->nJetsMax() << "jets " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax() << std::endl;
+      }
 
-      cout << "I have not been rejected by one of the above conditions" << endl;
+      cout << "not rejected" << endl;
+      //cout << "I have not been rejected by one of the above conditions" << endl;
 
+      //yields from the forExtrapol regions
       TH1D* this_shape  = shape->get(*iR_shape)->yield;
       int   nBins_shape = this_shape->GetNbinsX();
 
+      //we loop on the bins of main region set
       for(int iBin=1; iBin<= nBins; iBin++){
+	cout << "iBin : nBins : nBins_forExtrapol : " << iBin << " : " << nBins << " : " << nBins_shape << endl;
 
 	if(iBin == nBins && nBins_shape > nBins){
-	  cout << "do I enter here check 1" << endl;
 	  if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3 ) && this_shape_TR->GetBinContent( iBin )!=0 ){
 	    	  
 	    //If MC
@@ -953,7 +976,7 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
 	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) );
 	      this_shape_TR->SetBinError( iBin, sqrt( int_err*int_err +int_err_previous_Region *int_err_previous_Region ) );
 	    }else{ 
-	      cout << "extrapolTR: check 1" << endl;
+	      cout << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) << endl;
 	      this_shape_TR->SetBinError( iBin, sqrt( this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 )*this_shape_TR->Integral( iBin,-1 )) );
 	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) );
 	    }
@@ -965,30 +988,30 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
 	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin, -1) );
 	      this_shape_TR->SetBinError( iBin, int_err );
 	    }else{
-	      cout << "extrapolTR: check 2" << endl;
+	      cout << "[2] Filling with... " << this_shape->Integral(iBin, -1) << endl;
 	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin, -1) );
 	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->Integral(iBin, -1)) );
 	    }
 	  }
-	}else{
-	  cout << "I think you should see me here " << endl;
+	}else{ //if it is not the last bin
 	  if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3 ) && this_shape_TR->GetBinContent( iBin )!=0 ){
 	    //if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6|| regionToMatch->nJetsMax()==-1) && this_shape_TR->GetBinContent( iBin )!=0 ){
 
 	    if( !isMC ){
+	      cout << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) << endl;
 	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin)));
 	      this_shape_TR->SetBinContent(iBin,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) );
 	    }else{ 
-	      cout << "extraopolTR: check 3" << endl;
+	     
 	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin)*this_shape_TR->GetBinError(iBin)));
 	      this_shape_TR->SetBinContent(iBin,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) );
 	    }  
 	  }else{
 	    if( !isMC ){
+	      cout << "[4] Filling with... " << this_shape->GetBinContent(iBin)<< endl;
 	      this_shape_TR->SetBinContent( iBin, this_shape->GetBinContent(iBin));
 	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->GetBinContent(iBin)));
 	    }else{
-	      cout << "extrapolTR: check 4" << endl;
 	      this_shape_TR->SetBinContent( iBin, this_shape->GetBinContent(iBin));
 	      this_shape_TR->SetBinError( iBin, this_shape->GetBinError(iBin) );
 	    }
@@ -999,7 +1022,7 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
     }//end loop over shape regions
   }//end loop over TR 
 
-  cout << "Leaving extrapolTR function" << endl << endl << endl << endl;
+ 
   return;
 
 }
@@ -1070,8 +1093,9 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
    
     MT2Region* region = new MT2Region( *iR );
-
-    cout << endl << "Region " << n << endl;
+   
+    cout << endl << "Region: " << region->getName() << endl;
+    
     if(writeToExtFile){
       writeToFile << endl << "Region " << n << endl;
       writeToFile << region->getNiceNames()[0] << " " << region->getNiceNames()[1] << endl;
@@ -1106,7 +1130,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     //    std::cout << niceNames[0] << " " << niceNames[1] << std::endl;
 
 
-    bool getExtrapolBin = 1;
+    bool getExtrapolBin = 0;
     if(getExtrapolBin){
 
       if( region->nJetsMax()==1){ 
@@ -1121,20 +1145,21 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 	  errData  = 0.;
 	  integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
 	}else{
-	  cout << "bin_extrapol != nBins" << endl;
+	  //cout << "bin_extrapol != nBins" << endl;
 	  bin_extrapol = bin_extrapol;
 	  integral = this_shape_data->IntegralAndError( bin_extrapol, -1, errData);
-	  cout << "Result of this_shape_data->IntegralAndError( bin_extrapol, -1, errData): " << integral << endl;
+	  //cout << "Result of this_shape_data->IntegralAndError( bin_extrapol, -1, errData): " << integral << endl;
 	  integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
 	}
       }
       
     }else{
+      //cout << "Determining bin extrapol according to the number of statistics in the distribution tail" << endl;
       for( int iBin=nBins; iBin>= 1; iBin-- ){
 	// std::cout << this_shape_data->Integral( iBin, -1)  << std::endl;
 	// if( this_shape_data->Integral( iBin, -1) >= 10. ){
 	
-	cout << "Maximum number of statistics in MC CR: " <<  this_shape_MCcr->Integral( iBin, -1) << endl;
+	//cout << "Maximum number of statistics in MC CR: " <<  this_shape_MCcr->Integral( iBin, -1) << endl;
 	if(writeToExtFile){
 	  writeToFile << "Maximum number of statistics in MC CR: " <<  this_shape_MCcr->Integral( iBin, -1) << endl;
 	}
@@ -1177,7 +1202,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 	}
     }
     
-    cout << "Check: bin_extrapol / bin_extrapol_fixed / nBins :  " << bin_extrapol << " / " << bin_extrapol_fixed << " / " << nBins << endl;
+    //cout << "Check: bin_extrapol / bin_extrapol_fixed / nBins :  " << bin_extrapol << " / " << bin_extrapol_fixed << " / " << nBins << endl;
     if(writeToExtFile){
       writeToFile << "Check: bin_extrapol / bin_extrapol_fixed / nBins :  " << bin_extrapol << " / " << bin_extrapol_fixed << " / " << nBins << endl;
     }
@@ -1315,7 +1340,8 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 
       this_shape_hybrid->SetBinContent(iBin, this_shape_data->GetBinContent(iBin) );
       this_shape_hybrid->SetBinError  (iBin, this_shape_data->GetBinError(iBin) );
-
+      
+      cout << "zllHybrid_shape_TR filled with: " << this_shape_data->GetBinContent(iBin) << endl;
     }
 
 
