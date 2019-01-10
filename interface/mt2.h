@@ -424,6 +424,7 @@ public :
    Float_t         weight_pdfs_DN;
    Float_t         weight_toppt;
    Int_t           njet;
+   Int_t           nlep;
    // 
    
 
@@ -828,6 +829,7 @@ public :
    TBranch         *b_weight_pdfs_DN;     //!
    TBranch         *b_weight_toppt;     //!
    TBranch        *b_njet;   //!
+   TBranch        *b_nlep;   //!
    //
 
    MT2Tree(TTree *tree=0);
@@ -1313,6 +1315,7 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("weight_pdfs_DN", &weight_pdfs_DN, &b_weight_pdfs_DN);
    fChain->SetBranchAddress("weight_toppt", &weight_toppt, &b_weight_toppt);   
    fChain->SetBranchAddress("njet", &njet, &b_njet);
+   fChain->SetBranchAddress("nlep", &nlep, &b_nlep);
    Notify();
 }
 
