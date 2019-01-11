@@ -22,6 +22,8 @@
 #include "interface/MT2EstimateSigSyst.h"
 #include "interface/MT2EstimateSigContSyst.h"
 
+using namespace std;
+
 bool use_hybrid = true;
 bool use_extrapolation = false;
 bool use_extrapolation_zinv = false;
@@ -33,9 +35,10 @@ bool copy2SE = false; // copy datacards to SE
 bool doGenAverage = true;
 bool addSigLepSF= true;
 
+bool doQCDEstimate = false; //for the moment we didn't get the ntuples from SnT
 
 
-int round(float d) {
+int Round(float d) {
   return (int)(floor(d + 0.5));
 }
 
@@ -63,6 +66,7 @@ int main( int argc, char* argv[] ) {
     exit(11);
   }
 
+  cout << "WARNING: for the moment, qcd estimates are not taken into account. Uncomment the corresponding lines when we get the necessary ntuples";
 
   std::string configFileName(argv[1]);
   MT2Config cfg(configFileName);
@@ -163,32 +167,33 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* qcdCR_monojet;
   MT2Analysis<MT2Estimate>* qcd_ratio_monojet;
 
+  if(doQCDEstimate){
+    if( useMC_qcd )
+      qcd = MT2Analysis<MT2Estimate>::readFromFile( mc_fileName, "QCD"  );
+    else{
+      // qcd = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "qcdEstimate" );
+      // qcdCR = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "nCR" );
+      // qcd_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "r_effective" );
+      // qcd_purity = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "qcdPurity" );
+      // qcd_fjets = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "f_jets_mc" );
+      // //qcd_fjets_vlht = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdEstimateMC.root", "f_jets_mc_noPS" );
+      // qcd_rb = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "r_hat_mc" );
+      // //    qcd_ratioSystFit = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "r_systFit" );
 
-  if( useMC_qcd )
-    qcd = MT2Analysis<MT2Estimate>::readFromFile( mc_fileName, "QCD"  );
-  else{
-    // qcd = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "qcdEstimate" );
-    // qcdCR = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "nCR" );
-    // qcd_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "r_effective" );
-    // qcd_purity = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "qcdPurity" );
-    // qcd_fjets = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "f_jets_mc" );
-    // //qcd_fjets_vlht = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdEstimateMC.root", "f_jets_mc_noPS" );
-    // qcd_rb = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "r_hat_mc" );
-    // //    qcd_ratioSystFit = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMC.root", "r_systFit" );
+      qcd = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "qcdEstimate" );
+      qcdCR = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "nCR" );
+      qcd_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "r_effective" );
+      qcd_purity = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "qcdPurity" );
+      qcd_fjets = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "f_jets_data" );
+      //qcd_fjets_vlht = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdEstimateData.root", "f_jets_data_noPS" );
+      qcd_rb = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "r_hat_data" );
+      qcd_ratioSystFit = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "r_systFit" );
+      //qcd_mc = MT2Analysis<MT2Estimate>::readFromFile( mc_fileName, "QCD"  );
 
-    qcd = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "qcdEstimate" );
-    qcdCR = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "nCR" );
-    qcd_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "r_effective" );
-    qcd_purity = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "qcdPurity" );
-    qcd_fjets = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "f_jets_data" );
-    //qcd_fjets_vlht = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdEstimateData.root", "f_jets_data_noPS" );
-    qcd_rb = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "r_hat_data" );
-    qcd_ratioSystFit = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateData.root", "r_systFit" );
-    //qcd_mc = MT2Analysis<MT2Estimate>::readFromFile( mc_fileName, "QCD"  );
-
-    qcd_monojet = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMonojet.root", "monojet_qcdEstimate" );
-    qcdCR_monojet = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMonojet.root", "monojet_nCR" );
-    qcd_ratio_monojet = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMonojet.root", "monojet_r" );
+      qcd_monojet = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMonojet.root", "monojet_qcdEstimate" );
+      qcdCR_monojet = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMonojet.root", "monojet_nCR" );
+      qcd_ratio_monojet = MT2Analysis<MT2Estimate>::readFromFile( dir + "/qcdControlRegion/qcdEstimateMonojet.root", "monojet_r" );
+    }
   }
 
 
@@ -356,8 +361,13 @@ int main( int argc, char* argv[] ) {
   
   // Start loop over topological regions
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) { 
+
+    //MT2Region* thisRegion = new MT2Region(*iR);
+    //cout << "Region: " << thisRegion->getName() << endl;
+    
     // Getting data yield histogram
     TH1D* this_data = data->get(*iR)->yield;
+    
     
     // Getting QCD yield histograms, plus uncertainties from QCD estimate
     TH1D* this_qcd;
@@ -371,51 +381,53 @@ int main( int argc, char* argv[] ) {
     std::string qcd_fjetsCR_name;       
     std::string qcd_rbCR_name;       
     
-
-    if( iR->nJetsMax()==1 ){ // First QCD estimate from monojet
+    if(doQCDEstimate){
+      if( iR->nJetsMax()==1 ){ // First QCD estimate from monojet
       
-      this_qcd = qcd_monojet->get(*iR)->yield;
-      this_qcdCR = qcdCR_monojet->get(*iR)->yield;
-      this_qcd_ratio = qcd_ratio_monojet->get(*iR)->yield;
+	this_qcd = qcd_monojet->get(*iR)->yield;
+	this_qcdCR = qcdCR_monojet->get(*iR)->yield;
+	this_qcd_ratio = qcd_ratio_monojet->get(*iR)->yield;
       
-    }
-    else{ // Then QCD estimate for multijet
+      }
+      else{ // Then QCD estimate for multijet
       
-      this_qcd = qcd->get(*iR)->yield;
-      this_qcdCR = qcdCR->get(*iR)->yield;
-      this_qcd_ratio = qcd_ratio->get(*iR)->yield;
-      this_qcd_purity = qcd_purity->get(*iR)->yield;
-      this_qcd_ratioSystFit = qcd_ratioSystFit->get(*iR)->yield;
+	this_qcd = qcd->get(*iR)->yield;
+	this_qcdCR = qcdCR->get(*iR)->yield;
+	this_qcd_ratio = qcd_ratio->get(*iR)->yield;
+	this_qcd_purity = qcd_purity->get(*iR)->yield;
+	this_qcd_ratioSystFit = qcd_ratioSystFit->get(*iR)->yield;
+     
+	// not anymore due to new PFHT125 trigger 
+	// if( iR->htMin() < 450 ){ // For very low HT, read different analysis for F(J)
+	// 	MT2Region* thisQCDCR = qcd_fjets_vlht->matchRegion(*iR);
+	// 	this_qcd_fjets = qcd_fjets_vlht->get(*thisQCDCR)->yield;
+	// 	qcd_fjetsCR_name = thisQCDCR->getName();
+	// }
+	// else{ // From low HT, read from main analysis
+      
+     
+	MT2Region* thisQCDCR = qcd_fjets->matchRegion(*iR);
+	this_qcd_fjets = qcd_fjets->get(*thisQCDCR)->yield;
+	qcd_fjetsCR_name = thisQCDCR->getName();
+      
    
-      // not anymore due to new PFHT125 trigger 
-      // if( iR->htMin() < 450 ){ // For very low HT, read different analysis for F(J)
-      // 	MT2Region* thisQCDCR = qcd_fjets_vlht->matchRegion(*iR);
-      // 	this_qcd_fjets = qcd_fjets_vlht->get(*thisQCDCR)->yield;
-      // 	qcd_fjetsCR_name = thisQCDCR->getName();
-      // }
-      // else{ // From low HT, read from main analysis
-	
-      MT2Region* thisQCDCR = qcd_fjets->matchRegion(*iR);
-      this_qcd_fjets = qcd_fjets->get(*thisQCDCR)->yield;
+	// }
+	// For regions 2-6j, 3b, very low ht, 4-inf use special regionsR(B) from 4-6 jets region 
+	if( iR->nJetsMin()==4 &&  iR->htMin()==250 && iR->htMax()==450 )
+	  thisQCDCR = new MT2Region( 250, -1, 4, -1, 0, -1 );
+	else if( iR->nJetsMin()==2 && iR->nBJetsMin()==3 &&  iR->htMin()==250 && iR->htMax()==450 )
+	  thisQCDCR = new MT2Region( 250, -1, 2, -1, 0, -1 );
+	else if( iR->nBJetsMin()==3 && iR->nJetsMin()==2 && iR->nJetsMax()==6   ) 
+	  thisQCDCR = new MT2Region( 250, -1, 4, 6, 0, -1 );
+	else  
+	  thisQCDCR = qcd_rb->matchRegion(*iR);
       
-      qcd_fjetsCR_name = thisQCDCR->getName();
-
-      // }
-      // For regions 2-6j, 3b, very low ht, 4-inf use special regionsR(B) from 4-6 jets region 
-      if( iR->nJetsMin()==4 &&  iR->htMin()==250 && iR->htMax()==450 )
-	thisQCDCR = new MT2Region( 250, -1, 4, -1, 0, -1 );
-      else if( iR->nJetsMin()==2 && iR->nBJetsMin()==3 &&  iR->htMin()==250 && iR->htMax()==450 )
-	thisQCDCR = new MT2Region( 250, -1, 2, -1, 0, -1 );
-      else if( iR->nBJetsMin()==3 && iR->nJetsMin()==2 && iR->nJetsMax()==6   ) 
-	thisQCDCR = new MT2Region( 250, -1, 4, 6, 0, -1 );
-      else  
-	thisQCDCR = qcd_rb->matchRegion(*iR);
+	this_qcd_rb = qcd_rb->get(*thisQCDCR)->yield; // Get R(B) fraction
       
-      this_qcd_rb = qcd_rb->get(*thisQCDCR)->yield; // Get R(B) fraction
-      
-      qcd_rbCR_name = thisQCDCR->getName();
+	qcd_rbCR_name = thisQCDCR->getName();
+      }
     }
-    
+
     // Get histograms for invisible Z estimate
     TH1D* this_zinv;
     TH1D* this_zinv_ratio;
@@ -469,6 +481,8 @@ int main( int argc, char* argv[] ) {
     else
       err_jec_zinv = 0.02;
 
+  
+
     // Calculating shape uncertainty for invisible Z (default: linear extrapolation)
     float shapeErr_zinv=0.;
     for( int iBin=1; iBin<this_data->GetNbinsX()+1; ++iBin ) {
@@ -508,6 +522,7 @@ int main( int argc, char* argv[] ) {
     float lastR_llep; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero. 
     float lastR_qcd_mono; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero. 
     
+
     // Start loop over MT2 bins for this topological region
     for( int iBin=1; iBin<this_data->GetNbinsX()+1; ++iBin ) {
       
@@ -518,6 +533,7 @@ int main( int argc, char* argv[] ) {
       
       // If MT2 bin low edge > max HT continue (should never happen by construction)
       if(this_data->GetBinLowEdge( iBin ) > iR->htMax() && iR->htMax()>0 ) continue;
+      
       
       // Getting MT2 bin edges
       float mt2Min = this_data->GetBinLowEdge( iBin );
@@ -534,7 +550,7 @@ int main( int argc, char* argv[] ) {
 	binName = std::string( Form("%s_m%.0fto%.0f", iR->getName().c_str(), mt2Min, mt2Max) );
       else
 	binName = std::string( Form("%s_m%.0ftoInf", iR->getName().c_str(), mt2Min) );
-	
+
 
       std::string binName_7j;
       if(iR->nJetsMin()>=7 && iR->nBJetsMin()>=1){
@@ -567,13 +583,19 @@ int main( int argc, char* argv[] ) {
 
       // Set template datacard name for this bin
       std::string datacardName( Form("%s/datacard_%s.txt", path_templ.c_str(), binName.c_str()) );
+
       
+
       std::ifstream thisDatacard( datacardName.c_str() );
+   
       if( thisDatacard.good() ) continue; // If template already exists, move on
+
+     
 
       if(iR->htMin()==1500 && iR->nJetsMin()>1 && mt2Min==200 )     
 	continue; //don't even write the first bin for extreme HT
-      
+
+
       std::ofstream datacard( datacardName.c_str() );
       
       // Initializing table for estimates + observation
@@ -587,7 +609,11 @@ int main( int argc, char* argv[] ) {
       // Start writing template card
      // Read background estimates values
       float yield_llep = fabs(this_llep->GetBinContent(iBin));
-      float yield_qcd = fabs(this_qcd ->GetBinContent(iBin));
+      float yield_qcd(0.);
+      if(doQCDEstimate){
+	yield_qcd = fabs(this_qcd ->GetBinContent(iBin));
+      }
+     
 
       float yield_zinv = 0;
       if( !doZllOnly ) yield_zinv = fabs(this_zinv->GetBinContent(iBin));
@@ -917,13 +943,13 @@ int main( int argc, char* argv[] ) {
 	  zinv_systDn += err_zinv_uncorr_2b*err_zinv_uncorr_2b;
 	} else {
 	  if ( (!use_extrapolation || !use_extrapolation_zinv) && !use_hybrid ){
-	    Ngamma = round(this_zinvCR->GetBinContent(iBin)); //If NOT using extrapolation, photon CR is corresponding bin
-	    Nzll = round(this_zinvCR_zll->GetBinContent(iBin)); //If NOT using extrapolation, zll CR is corresponding bin
+	    Ngamma = Round(this_zinvCR->GetBinContent(iBin)); //If NOT using extrapolation, photon CR is corresponding bin
+	    Nzll = Round(this_zinvCR_zll->GetBinContent(iBin)); //If NOT using extrapolation, zll CR is corresponding bin
 	  }else if( use_hybrid ){
-	    Nzll = round(this_zinvCR_zll->Integral()); //If using extrapolation (DEFAULT), zll CR is integrated over MT2
+	    Nzll = Round(this_zinvCR_zll->Integral()); //If using extrapolation (DEFAULT), zll CR is integrated over MT2
 	  }else{
-	    Ngamma = round(this_zinvCR->Integral()); // If using extrapolation (DEFAULT), photon CR is integrated over MT2
-	    Nzll = round(this_zinvCR_zll->Integral()); // If using extrapolation (DEFAULT), zll CR is integrated over MT2
+	    Ngamma = Round(this_zinvCR->Integral()); // If using extrapolation (DEFAULT), photon CR is integrated over MT2
+	    Nzll = Round(this_zinvCR_zll->Integral()); // If using extrapolation (DEFAULT), zll CR is integrated over MT2
 	  }
 	  
 	  //	  Double_t x_tmp_zll, p_zll, p_errUp_zll, p_errDown_zll;
@@ -1375,18 +1401,18 @@ int main( int argc, char* argv[] ) {
 	  datacard << "llep_" << llepCR_name << "  lnU  - - 5.0 -" << std::endl;
 	else{
 	  if( !use_hybrid  )
-	    datacard << "llep_CRstat_" << gammaConvention( yield_llep, round(N_llep_CR), 2, llepCR_name, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
+	    datacard << "llep_CRstat_" << gammaConvention( yield_llep, Round(N_llep_CR), 2, llepCR_name, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
 	  else  
 	    if( iBin < extrapol_bin_llep ) //BIN BY BIN!
-	      datacard << "llep_CRstat_" << gammaConvention( yield_llep, round(N_llep_CR), 2,  binName_7j, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
+	      datacard << "llep_CRstat_" << gammaConvention( yield_llep, Round(N_llep_CR), 2,  binName_7j, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
 	    else //Extrapolation, so just 1 name
-	      datacard << "llep_CRstat_" << gammaConvention( yield_llep, round(N_llep_CR), 2,  llepCR_name, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
+	      datacard << "llep_CRstat_" << gammaConvention( yield_llep, Round(N_llep_CR), 2,  llepCR_name, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
 	}
 	// Get Poisson uncertainty for table
 	double yield_llep_up, yield_llep_dn;
-	RooHistError::instance().getPoissonInterval(round(N_llep_CR),yield_llep_dn,yield_llep_up,1.);
-	yield_llep_up *= (round(N_llep_CR)>0) ? yield_llep/round(N_llep_CR) : (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
-	yield_llep_dn *= (round(N_llep_CR)>0) ? yield_llep/round(N_llep_CR) : (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
+	RooHistError::instance().getPoissonInterval(Round(N_llep_CR),yield_llep_dn,yield_llep_up,1.);
+	yield_llep_up *= (Round(N_llep_CR)>0) ? yield_llep/Round(N_llep_CR) : (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
+	yield_llep_dn *= (Round(N_llep_CR)>0) ? yield_llep/Round(N_llep_CR) : (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
 	llep_statUp = yield_llep_up-yield_llep;
 	llep_statDn = yield_llep-yield_llep_dn;
 
@@ -1472,143 +1498,143 @@ int main( int argc, char* argv[] ) {
 
 
 
-
+      if(doQCDEstimate){
        // QCD SYSTEMATICS:
-       int NQCD_cr;
+	int NQCD_cr;
 
-       if( yield_qcd>=0. ) {
+	if( yield_qcd>=0. ) {
 
-	 // QCD estimate for monojet
-	 if( iR->nJetsMax()==1 ){
+	  // QCD estimate for monojet
+	  if( iR->nJetsMax()==1 ){
 	   
-	   NQCD_cr = round(this_qcdCR->GetBinContent(iBin));
-	   float thisRqcd = this_qcd_ratio->GetBinContent(iBin);
+	    NQCD_cr = Round(this_qcdCR->GetBinContent(iBin));
+	    float thisRqcd = this_qcd_ratio->GetBinContent(iBin);
 	   
-	   if( thisRqcd > 0 ) lastR_qcd_mono = thisRqcd;
+	    if( thisRqcd > 0 ) lastR_qcd_mono = thisRqcd;
 	   
-	   if(doSimultaneousFit && includeCR)
-	     datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd>0) ? thisRqcd : lastR_qcd_mono ) << " - -" << std::setprecision(3) << std::endl;
-	   else
-	     datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd>0) ? thisRqcd : lastR_qcd_mono ) << std::setprecision(3) << std::endl;
+	    if(doSimultaneousFit && includeCR)
+	      datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd>0) ? thisRqcd : lastR_qcd_mono ) << " - -" << std::setprecision(3) << std::endl;
+	    else
+	      datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd>0) ? thisRqcd : lastR_qcd_mono ) << std::setprecision(3) << std::endl;
 
-	   // Get Poisson uncertainty (from CR) for table
-           double yield_qcd_up, yield_qcd_dn;
-	   RooHistError::instance().getPoissonInterval(NQCD_cr,yield_qcd_dn,yield_qcd_up,1.);
-           yield_qcd_up *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : lastR_qcd_mono;
-           yield_qcd_dn *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : lastR_qcd_mono;
-           qcd_statUp = yield_qcd_up-yield_qcd;
-           qcd_statDn = yield_qcd-yield_qcd_dn;
+	    // Get Poisson uncertainty (from CR) for table
+	    double yield_qcd_up, yield_qcd_dn;
+	    RooHistError::instance().getPoissonInterval(NQCD_cr,yield_qcd_dn,yield_qcd_up,1.);
+	    yield_qcd_up *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : lastR_qcd_mono;
+	    yield_qcd_dn *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : lastR_qcd_mono;
+	    qcd_statUp = yield_qcd_up-yield_qcd;
+	    qcd_statDn = yield_qcd-yield_qcd_dn;
 
-	   // Get uncertainty on TF
-	   float thisRQCDErr_monojet = ( thisRqcd > 0 ) ? this_qcd_ratio->GetBinError(iBin)/thisRqcd : 1.0;
-	   if(doSimultaneousFit && includeCR)
-	     datacard << "qcd_alphaErr_" << binName << " lnN - - - " << 1.+thisRQCDErr_monojet << " - -" << std::endl;
-	   else
-	     datacard << "qcd_alphaErr_" << binName << " lnN - - - " << 1.+thisRQCDErr_monojet << std::endl;
-           qcd_systUp += thisRQCDErr_monojet*thisRQCDErr_monojet;
-           qcd_systDn += thisRQCDErr_monojet*thisRQCDErr_monojet;
+	    // Get uncertainty on TF
+	    float thisRQCDErr_monojet = ( thisRqcd > 0 ) ? this_qcd_ratio->GetBinError(iBin)/thisRqcd : 1.0;
+	    if(doSimultaneousFit && includeCR)
+	      datacard << "qcd_alphaErr_" << binName << " lnN - - - " << 1.+thisRQCDErr_monojet << " - -" << std::endl;
+	    else
+	      datacard << "qcd_alphaErr_" << binName << " lnN - - - " << 1.+thisRQCDErr_monojet << std::endl;
+	    qcd_systUp += thisRQCDErr_monojet*thisRQCDErr_monojet;
+	    qcd_systDn += thisRQCDErr_monojet*thisRQCDErr_monojet;
 	 
-	 }
+	  }
 	 
-	 else{ // QCD estimate for multi-jet
+	  else{ // QCD estimate for multi-jet
 
-	   // Get events in CR
-	   NQCD_cr = round(this_qcdCR->GetBinContent(iBin));
+	    // Get events in CR
+	    NQCD_cr = Round(this_qcdCR->GetBinContent(iBin));
 	   
-	   // Get dPhi ratio
-	   float thisRqcd = this_qcd_ratio->GetBinContent(iBin);
-	   float thisRqcdErr = this_qcd_ratio->GetBinError(iBin);
+	    // Get dPhi ratio
+	    float thisRqcd = this_qcd_ratio->GetBinContent(iBin);
+	    float thisRqcdErr = this_qcd_ratio->GetBinError(iBin);
 	   
-	   // Get Purity
-	   float thisQCDPurity = this_qcd_purity->GetBinContent(iBin);
-	   float thisQCDPurityErr = this_qcd_purity->GetBinError(iBin);
+	    // Get Purity
+	    float thisQCDPurity = this_qcd_purity->GetBinContent(iBin);
+	    float thisQCDPurityErr = this_qcd_purity->GetBinError(iBin);
 	   
-	   if( thisRqcd>0 && thisRqcdErr>0) thisRqcdErr=thisRqcdErr/thisRqcd;
-	   else thisRqcdErr=0.0;
+	    if( thisRqcd>0 && thisRqcdErr>0) thisRqcdErr=thisRqcdErr/thisRqcd;
+	    else thisRqcdErr=0.0;
 
-	   if( thisQCDPurity>0 && thisQCDPurityErr>0) thisQCDPurityErr=thisQCDPurityErr/thisQCDPurity;
-	   else thisQCDPurityErr=0.0;
+	    if( thisQCDPurity>0 && thisQCDPurityErr>0) thisQCDPurityErr=thisQCDPurityErr/thisQCDPurity;
+	    else thisQCDPurityErr=0.0;
 	   
-	   // Get uncertainty on dPhi ratio from fit window variation
-	   float thisRFitVarErr = this_qcd_ratioSystFit->GetBinContent(iBin);
+	    // Get uncertainty on dPhi ratio from fit window variation
+	    float thisRFitVarErr = this_qcd_ratioSystFit->GetBinContent(iBin);
 	   
-	   // Get F(J) and R(B)
-	   int thisFJetsBin = this_qcd_fjets->FindBin( iR->nJetsMin() );
-	   int thisRBBin = this_qcd_rb->FindBin( iR->nBJetsMin() );
+	    // Get F(J) and R(B)
+	    int thisFJetsBin = this_qcd_fjets->FindBin( iR->nJetsMin() );
+	    int thisRBBin = this_qcd_rb->FindBin( iR->nBJetsMin() );
 	   
-	   float thisFJets = this_qcd_fjets->GetBinContent(thisFJetsBin);
-	   float thisRB = this_qcd_rb->GetBinContent(thisRBBin);
+	    float thisFJets = this_qcd_fjets->GetBinContent(thisFJetsBin);
+	    float thisRB = this_qcd_rb->GetBinContent(thisRBBin);
 	   
-	   float thisFJetsErr = this_qcd_fjets->GetBinError(thisFJetsBin);
-	   float thisRBErr = this_qcd_rb->GetBinError(thisRBBin);
+	    float thisFJetsErr = this_qcd_fjets->GetBinError(thisFJetsBin);
+	    float thisRBErr = this_qcd_rb->GetBinError(thisRBBin);
 	   
-	   // For TR 2-6j, 3b get F(J) as 2-3j + 4-6j
-	   //and also for very low HT
+	    // For TR 2-6j, 3b get F(J) as 2-3j + 4-6j
+	    //and also for very low HT
 
-	   if( iR->nBJetsMin()==3 && iR->nJetsMin()==2 ) {
+	    if( iR->nBJetsMin()==3 && iR->nJetsMin()==2 ) {
 	     
-	     int otherFJetsBin  = this_qcd_fjets->FindBin(4);
-	     thisFJets += this_qcd_fjets->GetBinContent( otherFJetsBin );
-	     thisFJetsErr *= thisFJetsErr;
-	     thisFJetsErr += this_qcd_fjets->GetBinError( otherFJetsBin )*this_qcd_fjets->GetBinError( otherFJetsBin );
-	     thisFJetsErr  = sqrt(thisFJetsErr);
-	   }
+	      int otherFJetsBin  = this_qcd_fjets->FindBin(4);
+	      thisFJets += this_qcd_fjets->GetBinContent( otherFJetsBin );
+	      thisFJetsErr *= thisFJetsErr;
+	      thisFJetsErr += this_qcd_fjets->GetBinError( otherFJetsBin )*this_qcd_fjets->GetBinError( otherFJetsBin );
+	      thisFJetsErr  = sqrt(thisFJetsErr);
+	    }
 
 
-	   if( thisFJets>0 && thisFJetsErr>0 ) thisFJetsErr=thisFJetsErr/thisFJets;
-	   else thisFJetsErr=0.0;
+	    if( thisFJets>0 && thisFJetsErr>0 ) thisFJetsErr=thisFJetsErr/thisFJets;
+	    else thisFJetsErr=0.0;
 	   
-	   if( thisRB>0  && thisRBErr>0 ) thisRBErr=thisRBErr/thisRB;
-	   else thisRBErr=0.0;
+	    if( thisRB>0  && thisRBErr>0 ) thisRBErr=thisRBErr/thisRB;
+	    else thisRBErr=0.0;
 	   
-	   float thisFractionsErr = TMath::Sqrt(thisRBErr*thisRBErr+thisFJetsErr*thisFJetsErr+thisQCDPurityErr*thisQCDPurityErr);
-	   float thisFractions = thisFJets*thisRB;
-	   if( thisQCDPurity > 0 ) thisFractions *= thisQCDPurity;
+	    float thisFractionsErr = TMath::Sqrt(thisRBErr*thisRBErr+thisFJetsErr*thisFJetsErr+thisQCDPurityErr*thisQCDPurityErr);
+	    float thisFractions = thisFJets*thisRB;
+	    if( thisQCDPurity > 0 ) thisFractions *= thisQCDPurity;
 
-	   if(doSimultaneousFit && includeCR)
-	     datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd*thisFractions>0) ? thisRqcd*thisFractions : 1.0 ) << " - -" << std::setprecision(3) << std::endl;
-	   else
-	     datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd*thisFractions>0) ? thisRqcd*thisFractions : 1.0 ) << std::setprecision(3) << std::endl;   
+	    if(doSimultaneousFit && includeCR)
+	      datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd*thisFractions>0) ? thisRqcd*thisFractions : 1.0 ) << " - -" << std::setprecision(3) << std::endl;
+	    else
+	      datacard << "qcd_CRstat_" << std::setprecision(3) << gammaConvention( yield_qcd, NQCD_cr, 3, binName, binName, (thisRqcd*thisFractions>0) ? thisRqcd*thisFractions : 1.0 ) << std::setprecision(3) << std::endl;   
 
-	   // Get Poisson uncertainty from CR for tables
-	   double yield_qcd_up, yield_qcd_dn;
-	   RooHistError::instance().getPoissonInterval(NQCD_cr,yield_qcd_dn,yield_qcd_up,1.);
-	   yield_qcd_up *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : thisRqcd*thisFJets*thisRB;
-	   yield_qcd_dn *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : thisRqcd*thisFJets*thisRB;
-	   qcd_statUp = yield_qcd_up-yield_qcd;
-	   qcd_statDn = yield_qcd-yield_qcd_dn;
+	    // Get Poisson uncertainty from CR for tables
+	    double yield_qcd_up, yield_qcd_dn;
+	    RooHistError::instance().getPoissonInterval(NQCD_cr,yield_qcd_dn,yield_qcd_up,1.);
+	    yield_qcd_up *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : thisRqcd*thisFJets*thisRB;
+	    yield_qcd_dn *= (NQCD_cr>0.) ? yield_qcd/NQCD_cr : thisRqcd*thisFJets*thisRB;
+	    qcd_statUp = yield_qcd_up-yield_qcd;
+	    qcd_statDn = yield_qcd-yield_qcd_dn;
 
-	   // Uncertainty on F(J) and R(B)
-	   if(doSimultaneousFit && includeCR)
-	     datacard << "qcd_FJRBsyst_" << binName << " lnN - - - " <<  1.+thisFractionsErr  << " - -" << std::endl;
-	   else
-	     datacard << "qcd_FJRBsyst_" << binName << " lnN - - - " <<  1.+thisFractionsErr  << std::endl;
-	   qcd_systUp += thisFractionsErr*thisFractionsErr;
-           qcd_systDn += thisFractionsErr*thisFractionsErr;
+	    // Uncertainty on F(J) and R(B)
+	    if(doSimultaneousFit && includeCR)
+	      datacard << "qcd_FJRBsyst_" << binName << " lnN - - - " <<  1.+thisFractionsErr  << " - -" << std::endl;
+	    else
+	      datacard << "qcd_FJRBsyst_" << binName << " lnN - - - " <<  1.+thisFractionsErr  << std::endl;
+	    qcd_systUp += thisFractionsErr*thisFractionsErr;
+	    qcd_systDn += thisFractionsErr*thisFractionsErr;
 
-	   // Stat. uncertainty on r(dPhi)
-	   if(doSimultaneousFit && includeCR)
-	     datacard << "qcd_RPHIstat_" << htName << " lnN - - - " <<  1.+thisRqcdErr  << " - -" << std::endl;
-	   else
-	     datacard << "qcd_RPHIstat_" << htName << " lnN - - - " <<  1.+thisRqcdErr  << std::endl;
-	   qcd_systUp += thisRqcdErr*thisRqcdErr;
-	   qcd_systDn += thisRqcdErr*thisRqcdErr;
+	    // Stat. uncertainty on r(dPhi)
+	    if(doSimultaneousFit && includeCR)
+	      datacard << "qcd_RPHIstat_" << htName << " lnN - - - " <<  1.+thisRqcdErr  << " - -" << std::endl;
+	    else
+	      datacard << "qcd_RPHIstat_" << htName << " lnN - - - " <<  1.+thisRqcdErr  << std::endl;
+	    qcd_systUp += thisRqcdErr*thisRqcdErr;
+	    qcd_systDn += thisRqcdErr*thisRqcdErr;
 	 
 
-	   // // Syst. ucnertainty on r(dPhi)
-	   if(doSimultaneousFit && includeCR)
-	     datacard << "qcd_RPHIsyst_" << htName << " lnN - - - " <<  1.+thisRFitVarErr  << " - -" << std::endl;
-	   else
-	     datacard << "qcd_RPHIsyst_" << htName << " lnN - - - " <<  1.+thisRFitVarErr  << std::endl;
-	   qcd_systUp += thisRFitVarErr*thisRFitVarErr;
-	   qcd_systDn += thisRFitVarErr*thisRFitVarErr;
+	    // // Syst. ucnertainty on r(dPhi)
+	    if(doSimultaneousFit && includeCR)
+	      datacard << "qcd_RPHIsyst_" << htName << " lnN - - - " <<  1.+thisRFitVarErr  << " - -" << std::endl;
+	    else
+	      datacard << "qcd_RPHIsyst_" << htName << " lnN - - - " <<  1.+thisRFitVarErr  << std::endl;
+	    qcd_systUp += thisRFitVarErr*thisRFitVarErr;
+	    qcd_systDn += thisRFitVarErr*thisRFitVarErr;
 
-	 }
+	  }
 	
-	 qcd_nCR = NQCD_cr; // Events in CR for table
+	  qcd_nCR = NQCD_cr; // Events in CR for table
 	 
-       }
-
+	}
+      }
 
        datacard.close();
 
@@ -1626,10 +1652,12 @@ int main( int argc, char* argv[] ) {
        llep_systUp = yield_llep*sqrt(llep_systUp);
        llep_systDn = yield_llep*sqrt(llep_systDn);
 
-       qcd_systUp = yield_qcd*sqrt(qcd_systUp);
-       qcd_systDn = yield_qcd*sqrt(qcd_systDn);
+       if(doQCDEstimate){
+	 qcd_systUp = yield_qcd*sqrt(qcd_systUp);
+	 qcd_systDn = yield_qcd*sqrt(qcd_systDn);
+       }
 
-       int nData = round(this_data->GetBinContent(iBin));
+       int nData = Round(this_data->GetBinContent(iBin));
 
        // Print the table:
        table << "### bg_name yield statUp statDown systUp systDown" << std::endl;
@@ -1638,13 +1666,17 @@ int main( int argc, char* argv[] ) {
       
        //table << "zinv    " << yield_zinv << " " << zinv_statUp << " " << zinv_statDn << "  " << zinv_systUp << " " << zinv_systDn << std::endl;
        table << "llep    " << yield_llep << " " << llep_statUp << " " << llep_statDn << "  " << llep_systUp << " " << llep_systDn << std::endl;
-       table << "qcd     " << yield_qcd << " " << qcd_statUp << " " << qcd_statDn << "  " << qcd_systUp << " " << qcd_systDn << std::endl;
+       if(doQCDEstimate){
+	 table << "qcd     " << yield_qcd << " " << qcd_statUp << " " << qcd_statDn << "  " << qcd_systUp << " " << qcd_systDn << std::endl;
+       }
        table << "data    " << nData  <<std::endl;
 
        // table << "zinv_nCR    " << std::setprecision(3) << zinv_nCR << std::setprecision(3) <<std::endl;
        table << "zinv_nCR " << std::setprecision(3) << zinv_zll_nCR << std::setprecision(3) <<std::endl;
        table << "llep_nCR    " << std::setprecision(3) << llep_nCR << std::setprecision(3) <<std::endl;
-       table << "qcd_nCR     " << std::setprecision(3) << qcd_nCR << std::setprecision(3)   <<std::endl;
+       if(doQCDEstimate){
+	 table << "qcd_nCR     " << std::setprecision(3) << qcd_nCR << std::setprecision(3)   <<std::endl;
+       }
 
      
 
@@ -1654,10 +1686,10 @@ int main( int argc, char* argv[] ) {
 
        
      }// for bins
-
+ 
   } // for regions
   
-  
+  /*
   
   // now create datacards for all signals
   //////  std::vector<MT2Analysis<MT2Estimate>*> signals = MT2Analysis<MT2Estimate>::readAllFromFile( mc_fileName, "SMS" );
@@ -1756,11 +1788,15 @@ int main( int argc, char* argv[] ) {
     // Start loop over topological regions
     for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
 
+      MT2Region* thisRegion = new MT2Region(*iR);
+      cout << "Region: " << thisRegion->getName() << endl;
 
       //For signal contamination
       TH1D* this_llep_bin_extrapol = llep_bin_extrapol->get(*iR)->yield;
       int llep_hybridBin = this_llep_bin_extrapol->GetBinContent(1);
       int extrapol_bin_llep = ( use_hybrid ) ?  llep_hybridBin : 1;
+
+      cout << "check 1" << endl;
 
       TH3D* this_signal3d_central;
       TH1D* this_signalParent;
@@ -1768,17 +1804,23 @@ int main( int argc, char* argv[] ) {
       // Read signal analysis, and take 3D histogram if it exists for this region
       MT2EstimateSigContSyst* thisSigSystCentral = signals[isig]->get(*iR);
 
+      cout << "check 2" << endl;
+
       //MT2Estimate* thisSigSystCentral = signalVeto[isig]->get(*iR);
+
       if( thisSigSystCentral->yield3d!=0 ){
+	cout << "do I enter if" << endl;
 	//this_signal3d_central = signalVeto[isig]->get(*iR)->yield3d;
-	this_signal3d_central        = signals[isig]->get(*iR)->yield3d;
-	
+	this_signal3d_central        = signals[isig]->get(*iR)->yield3d;	
       }
-      else continue;
+      else {cout << "in the else" << endl; continue;}
       
+      cout << "check 3" << endl;
       // Project SUSY parent mass on 1D histogram (to be used to loop over scan masses)
       this_signalParent = this_signal3d_central->ProjectionY("mParent");
-      
+
+      cout << "check 4" << endl;
+
       // Initialize histograms for signal systematics
       TH3D* this_signal3d_bTagHeavy_Up;
       TH3D* this_signal3d_bTagLight_Up;
@@ -1790,6 +1832,8 @@ int main( int argc, char* argv[] ) {
       MT2EstimateSigSyst* thisSigSyst_bTagHeavy;
       MT2EstimateSigSyst* thisSigSyst_bTagLight;
       MT2EstimateSigSyst* thisSigSyst_lepEff;
+
+      cout << "do you see me" << endl;
 
       if( includeSignalUnc ){
 	
@@ -2230,10 +2274,8 @@ int main( int argc, char* argv[] ) {
 		  }
 		}
 	      }
-	      
-	      
 	    }
-	    
+	   
 	  } // for bins X (MT2)
 	} // for bins Z (mLSP)
       }// for bins Y (mParent)      
@@ -2280,9 +2322,9 @@ int main( int argc, char* argv[] ) {
 //      } // for regions
     
     std::cout << "-> Created datacards in " << path_mass << std::endl;
-       
+   
   } // for signals
-
+  */
   return 0;
 
 } 

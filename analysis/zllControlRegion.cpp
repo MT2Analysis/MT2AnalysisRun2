@@ -252,10 +252,11 @@ int main(int argc, char* argv[]) {
     
     
     if(do_bg==true){
-      //MC
+       //MC
       MT2Analysis<MT2EstimateTree>* mc_top = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       MT2Analysis<MT2EstimateTree>* mc_top_of = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       addVariables(mc_top);      addVariables(mc_top_of);
+
       std::vector<MT2Sample> fSamples_top = MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc());
       for( unsigned i=0; i<fSamples_top.size(); ++i ){
 	MT2BTagSFHelper* bTagSF_top = new MT2BTagSFHelper();
@@ -299,7 +300,7 @@ int main(int argc, char* argv[]) {
       mc_top_of->addToFile( outFile_of );
       //     mc_qcd_of->addToFile( outFile_of );
       //     mc_wjets_of->addToFile( outFile_of );
-
+      
       if(doZinvEst){
 	MT2Analysis<MT2EstimateTree>* mc_top_forZinvEst = new MT2Analysis<MT2EstimateTree>( "zllCR", cfg.regionsSet() );
 	addVariables(mc_top_forZinvEst); //Adds some additional variables Zpt,Zmass, raw MT2...
@@ -553,8 +554,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
  
     
   int nentries = tree->GetEntries();
-  for( int iEntry=0; iEntry<30000; ++iEntry ) {
-    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  //for( int iEntry=0; iEntry<30000; ++iEntry ) {
+  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
