@@ -7,18 +7,23 @@
 #include "TH2D.h"
 #include "TH1D.h"
 #include "TF1.h"
+#include "TH2.h"
 #include "TFile.h"
 #include "THStack.h"
 #include "TGraphErrors.h"
 #include "TStyle.h"
 #include "TLine.h"
 #include "TPaveText.h"
+#include "TGraph2D.h"
 #include "TString.h"
+
+#define mt2_cxx
+#include "../interface/mt2.h"
 
 using namespace std;
 
 int main(){
-
+ 
   ///////////////////////////////////////////////////
   //                 style settings                //
   ///////////////////////////////////////////////////
@@ -93,15 +98,16 @@ int main(){
   // for histograms:
   gStyle->SetHistLineColor(1);
 
+
   ///////////////////////////////////////////////////
   //                 get the files                 //
   ///////////////////////////////////////////////////
  
-  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/data.root");
+  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data.root");
   TTree* SF = (TTree*) _file0->Get("data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf")->Clone("SF");
 
 
-  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/data_of.root");
+  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data_of.root");
   TTree* OF = (TTree*) _file1->Get("data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf")->Clone("OF");
 
 
@@ -110,10 +116,106 @@ int main(){
   gStyle->SetOptFit(1);
 
 
+ 
+
+  ///////////////////////////////////////////////////
+  //           Correlation of variables            //
+  ///////////////////////////////////////////////////
+  
+  // we want to check here if there is a correlation between cuts and OF
+
+
+  bool studyCorrelation = false;
+  if(studyCorrelation){
+  
+  //total number of entries in the tree SF and OF:
+  int nEntriesSF = SF->GetEntries();
+  int nEntriesOF = OF->GetEntries();
+
   cout << "Number of entries in SF data tree: " << SF->GetEntries() << endl;
   cout << "Number of entries in OF data tree: " << OF->GetEntries() << endl;
 
+  //we set access to some of the branches
+  float Z_pT;
+  float Z_mass;
+  SF -> SetBranchAddress("Z_pt", &Z_pT);
+  SF -> SetBranchAddress("Z_mass", &Z_mass);
+  
+  float Z_pT_OF;
+  float Z_mass_OF;
+  OF -> SetBranchAddress("Z_pt", &Z_pT_OF);
+  OF -> SetBranchAddress("Z_mass", &Z_mass_OF);
 
+
+  //we declare 2D histogram that will contain the four bins (OF<, OF>, SF<, SF>)
+  TH2D *hist = new TH2D("hist", "hist", 2, 0, 10, 2, 0, 10);
+  cout << "Total number of bins of the histogram: " << hist->GetNbinsX() + hist->GetNbinsY() << endl;
+  
+  //Int_t bin01 = hist->GetBin(1, 4);
+  //Int_t bin10 = hist->GetBin(9, 4);
+  //Int_t bin11 = hist->GetBin(9, 9);
+  //Int_t bin00 = hist->GetBin(3, 3);
+
+  //cout << "bin01: " << bin01 << endl;
+  //cout << "bin10: " << bin10 << endl;
+  //cout << "bin11: " << bin11 << endl;
+  //cout << "bin00: " << bin00 << endl;
+
+  //loop on SF
+  for(int i=0; i<SF->GetEntries(); ++i){ 
+    if(i % 5000 == 0){ 
+      cout << "   Entry: " << i << " / " << nEntriesSF << endl;
+    }
+    
+    SF -> GetEntry(i);
+  
+    if(Z_pT <= 200 && Z_mass >= 50){
+      hist->Fill(1., 9.); //those number are chosen in the way that small is between 1 and 5 and high between 6 and 9 (to access different region in the rectangle)
+    }
+    else{
+      hist->Fill(9.,9.);
+    } 
+  }
+  
+  //cout << "bin01 content: " << hist->GetBinContent(bin01) << endl;
+  //cout << "total bin content SF: " <<  hist->GetBinContent(bin11) +  hist->GetBinContent(bin01) << endl;
+  
+  
+  //loop on OF
+  for(int iEntry(0); iEntry<nEntriesOF; ++iEntry){ 
+    if(iEntry % 500 == 0){ 
+      cout << "Entry: " << iEntry << " / " << nEntriesOF << endl;
+    }
+
+    OF->GetEntry(iEntry);
+ 
+    if(Z_pT_OF<=200 && Z_mass_OF>=50){
+      hist->Fill(1., 1.);
+    }
+    else{
+      hist->Fill(9., 1.);
+    }
+  }
+  
+  //cout << "total bin content OF: " <<  hist->GetBinContent(bin00) +  hist->GetBinContent(bin10) << endl;
+    
+
+  double correlationFactor = hist->GetCorrelationFactor();
+  cout << "Correlation Factor: " << correlationFactor << endl;
+
+
+  TCanvas *c = new TCanvas();
+  hist->Draw("colz");
+  c->SetRightMargin(0.2);
+  c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_incl_2017/plotsZllEstimates/correlation/2Dhist_data.pdf");
+
+  }
+ 
+
+
+
+  bool computeRatio = true;
+  if(computeRatio){
 
   ///////////////////////////////////////////////////
   //      ratio as a function of mll (Z mass)      //
@@ -161,7 +263,7 @@ int main(){
   label_top->SetTextSize(0.038);
   label_top->SetTextAlign(31); // align right
   label_top->SetTextFont(42);  // label_top->SetTextFont(62);
-  label_top->AddText("35.9 fb^{-1} (13 TeV)");
+  label_top->AddText("41.9 fb^{-1} (13 TeV)");
 
   TPaveText* label_cms = new TPaveText(0.143,0.96,0.27,0.965, "brNDC");
   label_cms->SetBorderSize(0);
@@ -185,9 +287,12 @@ int main(){
   mllOF->GetYaxis()->SetTitle("Entries");
 
   //draw and apply cuts
+  TCanvas* ctest = new TCanvas();
   //note that in the following, the dilepton mass and pt cuts are inverted: we compute the ratio SF/OF in a region which is orthogonal to both SR and di-lepton CR
-  SF->Draw("Z_mass>>mllSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.))", "goff");
+  SF->Draw("Z_mass>>mllSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250");// && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.))", "goff");
   OF->Draw("Z_mass>>mllOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.))", "goff");
+
+  ctest->SaveAs("test/histSF.pdf");
 
   //define the ratio
   double integral_sf, error_sf;
@@ -233,7 +338,7 @@ int main(){
   TCanvas* c1r=new TCanvas("c1r", "", 600, 600);
   c1r->cd();
   mllRSFOF->Draw("PE");
-//  //  mllRSFOF->Fit("pol0");
+  // mllRSFOF->Fit("pol0");
   
   TLine* lr = new TLine(50, (float) RSFOF, 200, (float)RSFOF);
   TLine* lrup = new TLine(50, (float)(RSFOF+err_R), 200, (float)(RSFOF+err_R));
@@ -291,7 +396,89 @@ int main(){
   htSF->GetYaxis()->SetTitle("Entries");
   htOF->GetYaxis()->SetTitle("Entries");
 
+  //study of the variation of the value of the ratio as a function of the cut values (commented)
 
+  /*
+//modification of the cut on Z_pT, to estimate how strongly the value of the ratio depends on it
+
+  vector<int> npT = {160, 165, 170, 175, 180, 185, 190, 195, 198, 199, 200, 155, 150, 145, 140, 135, 130};
+  int size = npT.size();
+  vector<double> nMass = {50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130};
+  int sizeM = nMass.size();
+  Double_t x[size]; //will store the value of the cut on Z_pt
+  Double_t y[sizeM]; //will store the value of the cut on Z_mass
+  Double_t z[size]; //will store the value of the ratio
+  Double_t x_err[size];
+  Double_t y_err[sizeM];
+  Double_t z_err[size];
+  Double_t percentage[size]; //will contain the error in % to the value of the ratio with Z_pt<=200
+  Double_t percentagex[size];
+  Double_t xx[size];
+  Double_t percentagey[sizeM];
+  //for 2D plots
+  Double_t t[size][size]; //will contain the value of the ratio as a function of the cuts on Z_pt and Z_mass
+  Double_t percentage2d[size][sizeM]; //will contain the error in % to the value of R(SF/OF) compared to Z_pt <= 200 && Z_mass >= 50 
+  
+
+ 
+  for(int i(0); i<size; ++i){
+    for(int j(0); j<sizeM; ++j){
+
+      TString valpT = to_string(npT[i]);
+      TString valMass = to_string(nMass[j]);
+
+      SF->Draw("ht>>htSF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nLep==2 ", "goff");
+      OF->Draw("ht>>htOF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nLep==2", "goff");
+  
+      integral_sf = htSF->IntegralAndError(1,-1, error_sf);
+      integral_of = htOF->IntegralAndError(1,-1, error_of);
+  
+      // cout << "[HT] R^{SF/OF} = ("<<integral_sf<<" +- "<<error_sf<<")/("<<integral_of<<" +- "<<error_of<<")"<<endl;
+      RSFOF = integral_sf/integral_of;
+      err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
+      //cout << "[HT] Z_pT<=" << valpT << "Z_mass<=" << valMass << " R^{SF/OF} = "<< RSFOF << "+-" << err_R << endl;
+ 
+      x[i] = npT[i];
+      x_err[i] = 0.;
+      y[j] = nMass[j];
+      y_err[i] = 0.;
+      z[i] = RSFOF;
+      z_err[i] = err_R;
+      percentage[i] = (z[i]-1.79424)/1.79424*100;
+      //percentagex[i] = (npT[i]-200.)/200. *100;
+      //percentagey[j] = (nMass[i]-50.)/50. *100;
+    
+      //for 2D graph
+      t[i][j] = RSFOF; 
+      percentage2d[i][j] = (t[i][j]-1.12695)/1.12695*100;
+       
+    }
+  }
+ 
+ 
+  
+  //we make a 2D plot of value of R(SF/OF) as a function of the value of cuts on Z_pt and Z_mass
+  TCanvas* e = new TCanvas("e", "", 600, 600);
+  TGraph2D* mygraph2d = new TGraph2D();
+  int n(0); //index to fill the plot
+  for(int i(0); i<size; ++i){
+    for(int j(0); j<sizeM; ++j){
+      cout << "percentagex: " << percentagex[i] << " percentagey: " << percentagey[j] << endl;
+       mygraph2d->SetPoint(n, x[i], y[j], percentage2d[i][j]); //fills the graph
+       ++n;
+    }
+  }
+  mygraph2d->SetTitle("Variation of R(SF/OF) with cuts on Z_pT & Z_mass; cut on Z_pT; cut on Z_mass; [%]");
+  mygraph2d->Draw("colz");
+ 
+  e->SetRightMargin(0.15);
+  e->SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_2016.pdf");
+  e->SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_2016.png");
+*/
+
+ 
+
+  
   SF->Draw("ht>>htSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
   OF->Draw("ht>>htOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
   
@@ -302,6 +489,7 @@ int main(){
   RSFOF = integral_sf/integral_of;
   err_R = sqrt( (error_sf/integral_of)*(error_sf/integral_of) + (error_of*integral_sf/(integral_of*integral_of))*(error_of*integral_sf/(integral_of*integral_of)) );
   cout << "[HT] R^{SF/OF} = "<< RSFOF << "+-" << err_R << endl;
+  
 
 
   TCanvas* c2=new TCanvas("c2", "", 600, 600);
@@ -321,7 +509,7 @@ int main(){
   TCanvas* c2r=new TCanvas("c2r", "", 600, 600);
   c2r->cd();
   htRSFOF->Draw("PE");
-  //  htRSFOF->Fit("pol0");
+  // htRSFOF->Fit("pol0");
 
   TLine* lrht = new TLine(250, (float) RSFOF, 2000, (float)RSFOF);
   TLine* lrhtup = new TLine(250, (float)(RSFOF+err_R), 2000, (float)(RSFOF+err_R));
@@ -408,7 +596,7 @@ int main(){
   TCanvas* c3r=new TCanvas("c3r", "", 600, 600);
   c3r->cd();
   njRSFOF->Draw("PE");
-  //  njRSFOF->Fit("pol0");
+  //njRSFOF->Fit("pol0");
 
   TLine* lrnj = new TLine(1, (float) RSFOF, 10, (float)RSFOF);
   TLine* lrnjup = new TLine(1, (float)(RSFOF+err_R), 10, (float)(RSFOF+err_R));
@@ -494,7 +682,7 @@ int main(){
   TCanvas* c4r=new TCanvas("c4r", "", 600, 600);
   c4r->cd();
   nbRSFOF->Draw("PE");
-  //  nbRSFOF->Fit("pol0");
+  // nbRSFOF->Fit("pol0");
 
   TLine* lrnb   = new TLine(0, (float) RSFOF, 4, (float)RSFOF);
   TLine* lrnbup = new TLine(0, (float)(RSFOF+err_R), 4, (float)(RSFOF+err_R));
@@ -551,9 +739,10 @@ int main(){
   mt2OF->GetYaxis()->SetTitle("Entries");
 
 
-  SF->Draw("mt2>>mt2SF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) && nJets>1", "goff");
-  OF->Draw("mt2>>mt2OF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) && nJets>1", "goff");
-  
+  // SF->Draw("mt2>>mt2SF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) && nJets>1", "goff");
+  //OF->Draw("mt2>>mt2OF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) && nJets>1", "goff");
+  SF->Draw("mt2>>mt2SF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) ", "goff");
+  OF->Draw("mt2>>mt2OF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) ", "goff");
 
   integral_sf = mt2SF->IntegralAndError(1,-1, error_sf);
   integral_of = mt2OF->IntegralAndError(1,-1, error_of);
@@ -582,7 +771,7 @@ int main(){
   TCanvas* c5r=new TCanvas("c5r", "", 600, 600);
   c5r->cd();
   mt2RSFOF->Draw("PE");
-  //  mt2RSFOF->Fit("pol0");
+  // mt2RSFOF->Fit("pol0");
 
   TLine* lrmt2   = new TLine(200, (float) RSFOF,        1500., (float)RSFOF);
   TLine* lrmt2up = new TLine(200, (float)(RSFOF+err_R), 1500., (float)(RSFOF+err_R));
@@ -1041,7 +1230,9 @@ int main(){
   c5r->SaveAs(directoryName + "RSFOF_mt2.pdf");
   c5 ->SaveAs(directoryName + "SFandOF_mt2.png");
   c5r->SaveAs(directoryName + "RSFOF_mt2.png");
-  
+
+
+  } // end of if(computeRatio)  
 
 //  c6 ->SaveAs("RSFOF_noZwindow_2016re-reco_full_l1pt100_l2pt30/SFnOF_drll.pdf");
 //  c6r->SaveAs("RSFOF_noZwindow_2016re-reco_full_l1pt100_l2pt30/RSFOF_drll.pdf");

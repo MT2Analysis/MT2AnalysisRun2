@@ -21,15 +21,15 @@ MT2Sample::~MT2Sample() {};
 
 
 
-std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, int idMin, int idMax) {
+std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, int idMin, int idMax, int isETH) {
 
-  return loadSamples(filename, "", idMin, idMax);
+  return loadSamples(filename, "", idMin, idMax, isETH);
 
 }
 
 
 
-std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const std::string& filter, int idMin, int idMax) {
+std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const std::string& filter, int idMin, int idMax, int isETH) {
 
 
   std::vector<MT2Sample> fSamples;
@@ -83,10 +83,9 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       exit(1101);
     }
     TFile* file = TFile::Open(s.file.c_str());
-    //In the ntuples of the 2016 data, the tree is called mt2
-    // TTree* tree = (TTree*)file->Get("mt2");
-    //In the ntuples of the 2017 data, the tree is called Events
-     TTree* tree = (TTree*)file->Get("Events");
+
+    TString treeName = isETH ? "Events" : "mt2";
+    TTree* tree = (TTree*)file->Get(treeName);
     
     ULong64_t evt_nEvts;
     int evt_id;

@@ -60,6 +60,7 @@ void MT2EstimateTree::initTree( ) {
 
   tree->Branch( "met", &met, "met/F");
   tree->Branch( "nJets", &nJets, "nJets/I");
+  tree->Branch( "nJet30HEMFail", &nJet30HEMFail, "nJet30HEMFail/I");
   tree->Branch( "nBJets", &nBJets, "nBJets/I");
   
   tree->Branch( "nJetHF", &nJetHF, "nJetHF/I");
@@ -84,6 +85,8 @@ void MT2EstimateTree::initTree( ) {
   tree->Branch( "lepMass", &lepMass, "lepMass/F");
   tree->Branch( "lepID", &lepID, "lepID/F");
   tree->Branch( "lepMiniRelIso", &lepMiniRelIso, "lepMiniRelISo/F");
+  tree->Branch( "isotrackPt", &isotrackPt, "isotrackPt/F");
+  tree->Branch( "isotrack_pdgId", &isotrack_pdgId, "isotrack_pdgId/I");
 
   //tree->Branch( "GenSusyMScan1", &GenSusyMScan1, "GenSusyMScan1/I");
   //tree->Branch( "GenSusyMScan2", &GenSusyMScan2, "GenSusyMScan2/I");
@@ -111,8 +114,10 @@ void MT2EstimateTree::initTree4read( ) {
   tree->SetBranchAddress( "ht"           , &ht           );
   tree->SetBranchAddress( "met"          , &met          );
   tree->SetBranchAddress( "nJets"        , &nJets        );
+  tree->SetBranchAddress( "nJet30HEMFail"        , &nJet30HEMFail        );
   tree->SetBranchAddress( "nBJets"       , &nBJets       );
   tree->SetBranchAddress( "nJetHF"       , &nJetHF       );
+  tree->SetBranchAddress( "nJet30HEMFail", &nJet30HEMFail);
   tree->SetBranchAddress( "deltaPhiMin"  , &deltaPhiMin  );
   tree->SetBranchAddress( "diffMetMht"   , &diffMetMht   );
   tree->SetBranchAddress( "nVert"        , &nVert        );
@@ -132,7 +137,9 @@ void MT2EstimateTree::initTree4read( ) {
   tree->SetBranchAddress( "lepPhi"       , &lepPhi       );
   tree->SetBranchAddress( "lepMass"      , &lepMass      );
   tree->SetBranchAddress( "lepID"        , &lepID        );
-  tree->SetBranchAddress( "lepMiniRelIso", &lepMiniRelIso);
+  tree->SetBranchAddress( "lepMiniRelIso", &lepMiniRelIso); 
+  tree->SetBranchAddress( "isotrackPt"   , &isotrackPt   );
+  tree->SetBranchAddress( "isotrack_pdgId", &isotrack_pdgId);
 
   for (std::map< std::string, float* >::iterator i= extraVars.begin(); i!=extraVars.end(); i++)
     tree->SetBranchAddress(i->first.c_str(), (i->second));
@@ -397,14 +404,6 @@ void MT2EstimateTree::assignVector( const std::string& name, std::vector<float> 
 
 
 
-//void MT2EstimateTree::assignVar( const std::string& name, int value ) {
-//
-//  int* x = (int*)extraVars[name];
-//  *x = value;
-//
-//}
-
-
 
 
 void MT2EstimateTree::fillTree( const MT2Tree& mt2tree, float w  ) {
@@ -413,12 +412,6 @@ void MT2EstimateTree::fillTree( const MT2Tree& mt2tree, float w  ) {
 }
 
 
-
-/*void MT2EstimateTree::fillTree_gamma( const MT2Tree& mt2tree, float w ) {
-  this->assignTree_gamma( mt2tree, w );
-  tree->Fill();
-}
-*/
 
 void MT2EstimateTree::fillTree_zll( const MT2Tree& mt2tree, float w ) {
   this->assignTree_zll( mt2tree, w );
@@ -456,6 +449,7 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   
 
   nJets  = mt2tree.nJet30;
+  nJet30HEMFail = mt2tree.nJet30HEMFail;
   nBJets = mt2tree.nBJet20;
 
   deltaPhiMin   = mt2tree.deltaPhiMin;
@@ -473,6 +467,8 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   lepMass  = mt2tree.lep_mass[0];
   lepID    = mt2tree.lep_pdgId[0];
   lepMiniRelIso = mt2tree.lep_miniRelIso[0];
+  isotrackPt    = mt2tree.isoTrack_pt[0];
+  isotrack_pdgId = mt2tree.isoTrack_pdgId[0];
     
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;
   //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
@@ -516,6 +512,7 @@ void MT2EstimateTree::assignTree_zll( const MT2Tree& mt2tree, float w ) {
 
 
   nJets         = mt2tree.nJet30;
+  nJet30HEMFail = mt2tree.nJet30HEMFail;
   nBJets        = mt2tree.nBJet20;
 
   nElectrons    = mt2tree.nElectrons10;
@@ -536,48 +533,6 @@ void MT2EstimateTree::assignTree_zll( const MT2Tree& mt2tree, float w ) {
 
 }
 
-
-/*void MT2EstimateTree::assignTree_gamma( const MT2Tree& mt2tree, float w ) {
-
-  run    = mt2tree.run;
-  lumi   = mt2tree.lumi;
-  evt    = mt2tree.event;
-  weight = w;
-//  puWeight = mt2tree.puWeight;
-  id     = mt2tree.evt_id;
-
-  nVert  = mt2tree.PV_npvsGood;
-
-  if(mt2tree.gamma_nJet30>1)
-    mt2    = mt2tree.gamma_mt2;
-  else if(mt2tree.gamma_nJet30==1)
-    mt2    = mt2tree.gamma_ht;
-
-  ht            = mt2tree.gamma_ht;
-  met           = mt2tree.gamma_met_pt;
-  deltaPhiMin   = mt2tree.gamma_deltaPhiMin;
-  diffMetMht    = mt2tree.gamma_diffMetMht;
-  nJets         = mt2tree.gamma_nJet30;
-  nBJets        = mt2tree.gamma_nBJet20;
-  nElectrons    = mt2tree.nElectrons10;
-  nMuons        = mt2tree.nMuons10;
-  nPFLep        = mt2tree.nPFLep5LowMT;
-  nPFHad        = mt2tree.nPFHad10LowMT;
-
-  nJetHF = mt2tree.get_nJetHF();
-
-  GenSusyMScan1 = mt2tree.GenSusyMGluino;
-  GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
-
-//  LHEweight_original = mt2tree.LHEweight_original;
-//  for (int i=0; i < 446; ++i){
-//    LHEweight_id[i] = mt2tree.LHEweight_id[i];
-//    LHEweight_wgt[i] = mt2tree.LHEweight_wgt[i];
-//  }
-
-}
-
-*/  
 
 void MT2EstimateTree::assignVars( float aht, int anJets, int anBJets, float amet, float amt2 ) {
 
@@ -669,52 +624,6 @@ MT2EstimateTree MT2EstimateTree::operator+( const MT2EstimateTree& rhs ) const{
 
 
 
-
-//MT2EstimateTree MT2EstimateTree::operator*( float k ) const{
-//
-//std::cout << "aaaaaaaaaaaa here! " << std::endl;
-//  MT2EstimateTree result( this->getName(), *(this->region) );
-//  result.yield = new TH1D(*(this->yield));
-//  result.yield->Scale(k);
-//
-//  // loop on entries and multiply weight
-//
-//
-//  std::string oldName(tree->GetName());
-//  result.tree->SetName("willBeKilled");
-//
-//  result.tree->SetBranchStatus( "weight", 0 );
-//  Float_t oldWeight;
-//  result.tree->SetBranchAddress("weight", &oldWeight);
-//
-//  TTree* newTree = new TTree(oldName.c_str(), "");
-//  newTree = result.tree->CloneTree(0);
-//  Float_t newWeight;
-//  newTree->Branch( "weight", &newWeight, "newWeight/F" );
-// 
-//  int nentries = result.tree->GetEntries();
-//
-//  // loop on entries and multiply weight
-//  for( unsigned iEntry=0; iEntry<nentries; ++iEntry ) {
-//
-//    result.tree->GetEntry(iEntry);
-//    newWeight = oldWeight*k;
-//    newTree->Fill();
-//
-//  }
-//
-//
-//  delete result.tree;
-//  result.tree = newTree;
-//  result.tree->SetName( oldName.c_str() );
-//
-//  return result;
-//
-//}
-
-
-
-
 MT2EstimateTree MT2EstimateTree::operator*( float k ) const{
 
   MT2EstimateTree result( this->getName(), *(this->region) );
@@ -779,53 +688,6 @@ const MT2EstimateTree& MT2EstimateTree::operator+=( const MT2EstimateTree& rhs )
 
 
 
-
-
-//const MT2EstimateTree& MT2EstimateTree::operator*=( float k ) {
-//
-//
-//  this->yield->Scale(k);
-//
-//
-//  std::string oldName(tree->GetName());
-//  tree->SetName("willBeKilled");
-//
-//  TTree* newTree = new TTree(oldName.c_str(), "");
-//
-//  newTree->Branch( "run", &run, "run/I");
-//  newTree->Branch( "lumi", &lumi, "lumi/I");
-//  newTree->Branch( "evt", &evt, "evt/i");
-//  newTree->Branch( "weight", &weight, "weight/F");
-//  newTree->Branch( "id", &id, "id/I");
-//
-//  newTree->Branch( "mt2", &mt2, "mt2/F");
-//  newTree->Branch( "ht", &ht, "ht/F");
-//  newTree->Branch( "met", &met, "met/F");
-//  newTree->Branch( "nJets", &nJets, "nJets/I");
-//  newTree->Branch( "nBJets", &nBJets, "nBJets/I");
-//
-//
-//  int nentries = tree->GetEntries();
-//
-//  // loop on entries and multiply weight
-//  for( unsigned iEntry=0; iEntry<nentries; ++iEntry ) {
-//
-//    tree->GetEntry(iEntry);
-//
-//    weight *= k;
-//
-//    newTree->Fill();
-//
-//  }
-//
-//
-//  delete tree;
-//  tree = newTree;
-//  tree->SetName( oldName.c_str() );
-//
-//  return (*this);
-//
-//}
 
 
 const MT2EstimateTree& MT2EstimateTree::operator*=( float k ) {

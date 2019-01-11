@@ -25,6 +25,8 @@ MT2Config::MT2Config( const std::string& name ) {
   lumi_DoubleEG_ = 0.;
   lumi_DoubleMu_ = 0.;
   year_ = 0;
+  useETHdata_ = 1;
+  useETHmc_ = 1;
 //  applyJSONforSR_ = 0.;
 
   regionsSet_ = "";
@@ -78,6 +80,10 @@ MT2Config::MT2Config( const std::string& name ) {
       lumi_DoubleMu_ = atof(StringValue);
     else if( this_name=="year")
       year_ = atoi(StringValue);
+    else if( this_name=="useETHdata")
+      useETHdata_ = atoi(StringValue);
+    else if( this_name=="useETHmc")
+      useETHmc_ = atoi(StringValue);
 //    else if( this_name=="applyJSONforSR")
 //      applyJSONforSR_ = atoi(StringValue);
     else if( this_name=="regionsSet" )
@@ -236,6 +242,8 @@ void MT2Config::saveAs( const std::string& filename ) const {
   ofs << "lumi_DoubleEG "     <<   lumi_DoubleEG_       << std::endl;
   ofs << "lumi_DoubleMu "     <<   lumi_DoubleMu_       << std::endl;
   ofs << "year "     <<   year_       << std::endl;
+  ofs << "useETHdata " << useETHdata_ << std::endl;
+  ofs << "useETHmc " << useETHmc_ << std::endl;
 //  ofs << "applyJSONforSR "     <<   applyJSONforSR_       << std::endl;
 
   ofs << "regionsSet " << regionsSet_ << std::endl;

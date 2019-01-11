@@ -7,8 +7,12 @@ using namespace std;
 
 
 MT2BTagSFHelper::MT2BTagSFHelper(){
+  cout << "Initializing b-tagging tool" << endl;
 
-  calib = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSVv2Moriond17_2017_1_26_BtoH.csv");
+  cout << "Getting the csv file" << endl;
+  //CSVv2 scale factors from 94X BTV POG recommendation
+  calib = new BTagCalibrationStandalone("csvv2", "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/data/b_tagging/CSVv2_94XSF_V2_B_F.csv");
+  //calib = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSVv2Moriond17_2017_1_26_BtoH.csv"); 
   //calib = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSVv2_ichep.csv");
   reader_fullSim_heavy    = new BTagCalibrationStandaloneReader(BTagEntryStandalone::OP_MEDIUM, "central",{"up","down"}); 
   reader_fullSim_light    = new BTagCalibrationStandaloneReader(BTagEntryStandalone::OP_MEDIUM, "central",{"up","down"}); 
@@ -20,14 +24,17 @@ MT2BTagSFHelper::MT2BTagSFHelper(){
   reader_fullSim_light->load(*calib,BTagEntryStandalone::FLAV_B,"incl");
   reader_fullSim_light->load(*calib,BTagEntryStandalone::FLAV_C,"incl");
 
-  f_btag_eff = new TFile("/shome/mschoene/btagSF/btageff__ttbar_powheg_pythia8_25ns_Moriond17.root"); // Dominick's b-tagging efficiencies
+  cout << "Getting the efficiency file" << endl;
+  //FIXME: for the efficiency, I guess that we will have to recompute it with our kinematics
+  f_btag_eff = new TFile("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/data/b_tagging/btageff__ttbar_powheg_pythia8_25ns_Moriond17.root"); // Bennett's b-tagging efficiencies
   //f_btag_eff = new TFile("/shome/mschoene/btagSF/btageff__ttbar_powheg_pythia8_25ns.root"); // Dominick's b-tagging efficiencies
   h_btag_eff_b    = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_b"   );
   h_btag_eff_c    = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_c"   );
   h_btag_eff_udsg = (TH2D*) f_btag_eff->Get("h2_BTaggingEff_csv_med_Eff_udsg");
 
+  //fastSimulation files: not needed anymore, kept the old ones 
   calib_fast = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/fastsim_csvv2_ttbar_26_1_2017.csv"); // <- this is the fixed version, the one on the twiki had a bug in the format (too many "")
-     //    calib_fast = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSV_13TEV_Combined_14_7_2016.csv"); // 25 ns official version of SFs
+  //calib_fast = new BTagCalibrationStandalone("csvv2", "/shome/mschoene/btagSF/CSV_13TEV_Combined_14_7_2016.csv"); // 25 ns official version of SFs
  
   reader_fastSim    = new BTagCalibrationStandaloneReader(BTagEntryStandalone::OP_MEDIUM, "central", {"up","down"}); 
 
@@ -77,6 +84,7 @@ void MT2BTagSFHelper::get_SF_btag(float pt, float eta, int mcFlavour, float &SF,
   float pt_cutoff  = std::max(29.999 ,std::min(669., double(pt)));
   //  float pt_cutoff  = std::max(30. ,std::min(669., double(pt)));
   float eta_cutoff = std::min(2.39,fabs(double(eta)));
+  //FIXME: update the values 
 
   if ( flavour==BTagEntryStandalone::FLAV_UDSG ){
     SF     = reader_fullSim_light->eval_auto_bounds("central",flavour,eta_cutoff, pt_cutoff);
@@ -110,6 +118,7 @@ float MT2BTagSFHelper::getBtagEffFromFile(float pt, float eta, int mcFlavour, bo
   }
   
   // only use pt bins up to 400 GeV for charm and udsg
+  //FIXME: update the values
   float pt_cutoff = std::max(20.,std::min(399.,double(pt)));
   TH2D* h(0);
   if (abs(mcFlavour) == 5) {
@@ -133,6 +142,7 @@ float MT2BTagSFHelper::getBtagEffFromFile(float pt, float eta, int mcFlavour, bo
 
 void MT2BTagSFHelper::get_weight_btag(int nobj, float* obj_pt, float* obj_eta, int* obj_mcFlavour, float* obj_btagCSV, float &wtbtag, float &wtbtagUp_heavy, float &wtbtagDown_heavy, float &wtbtagUp_light, float &wtbtagDown_light, bool isFastSim){
 
+
   float mcTag = 1.;
   float mcNoTag = 1.;
   float dataTag = 1.;
@@ -155,6 +165,9 @@ void MT2BTagSFHelper::get_weight_btag(int nobj, float* obj_pt, float* obj_eta, i
     float eta = fabs(obj_eta[indj]);
     float pt  = obj_pt[indj];
 
+    //cout << "nobj: " << indj << " eta: " << eta << " pt: " << pt << " mcFlavour: " << mcFlavour << endl;
+
+  
     if(eta > 2.4) continue;
     if(pt  < 20 ) continue;
     //if(mcFlavour==0) continue; //for jets with flavour 0, we ignore.
@@ -163,8 +176,8 @@ void MT2BTagSFHelper::get_weight_btag(int nobj, float* obj_pt, float* obj_eta, i
     // get efficiency
     float eff = getBtagEffFromFile(pt, eta, mcFlavour, isFastSim);
 
-
-    bool istag = (csv >= 0.8484 && eta <= 2.4 && pt>=20);
+  
+    bool istag = (csv >= 0.8838 && eta <= 2.4 && pt>=20);
     float SF = 0.;
     float SFup = 0.;
     float SFdown = 0.;
@@ -217,6 +230,7 @@ void MT2BTagSFHelper::get_weight_btag(int nobj, float* obj_pt, float* obj_eta, i
   wtbtagDown_heavy = errHdown / ( mcNoTag * mcTag );
   wtbtagDown_light = errLdown / ( mcNoTag * mcTag );
  
+  //cout << "[bTaggingComputation] j'arrive au bout" << endl; 
 }
 
 

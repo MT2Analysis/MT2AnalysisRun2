@@ -8,6 +8,14 @@
 
 #include "TH1F.h"
 
+using namespace std;
+
+//--------------------------------
+//Choose binning here:
+bool doBinning_Moriond2019 = true;
+bool doBinning_Moriond2017 = false;
+//--------------------------------
+
 
 ////////////////////////////////////////////////////////
 //
@@ -679,780 +687,1169 @@ MT2Region::MT2Region( const std::string& regionName ) {
 void MT2Region::getBins( int &nBins, double*& bins) const {
 
   std::string regionName = this->getName();
+  cout << "[MT2Region.cc] region: " << regionName << endl;
 
+  //new binning for Moriond2019
 
+  //very low HT region:
+  if(doBinning_Moriond2019){
+    if(regionName == "HT250to450_j2to3_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j2to3_b1"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j2to3_b2"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j4to6_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j4to6_b1"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j4to6_b2"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j7toInf_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j7toInf_b1"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j7toInf_b2"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j2to6_b3toInf"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT250to450_j7toInf_b3toInf"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1200.};
+      nBins = nBins_tmp;
+    }
 
-  if( regionName == "HT450toInf_j2toInf_b0toInf" ) {  // this is the inclusive region
+    //low HT region
+    else if(regionName == "HT450to575_j2to3_b0"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j2to3_b1"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j2to3_b2"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j4to6_b0"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j4to6_b1"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j4to6_b2"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j7toInf_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j7toInf_b1"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT450to575_j7toInf_b2"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
+     else if(regionName == "HT450to575_j2to6_b3toInf"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1200.};
+      nBins = nBins_tmp;
+    }
+     else if(regionName == "HT450to575_j7toInf_b3toInf"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1200.};
+      nBins = nBins_tmp;
+    }
 
-    //    const int nBins_tmp                        = 7;
-    //    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000. };
-    //    const int nBins_tmp                        = 5;
-    //    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000., 1500.};
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000.};
-    //    const int nBins_tmp                        = 3;
-    //    bins = new double[nBins_tmp+1]{200., 300., 400., 600.};
-    nBins = nBins_tmp;
+    //medium HT region
+    else if(regionName == "HT575to1200_j2to3_b0"){
+      const int nBins_tmp                        = 10;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 700., 800., 900., 1000., 1100., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j2to3_b1"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1000., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j2to3_b2"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j4to6_b0"){
+      const int nBins_tmp                        = 10;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 700., 800., 900., 1000., 1100., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j4to6_b1"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1000., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j4to6_b2"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j7to9_b0"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j7to9_b1"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j7to9_b2"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j2to6_b3toInf"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j7to9_b3"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j7to9_b4toInf"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j10toInf_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 500., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j10toInf_b1"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 500., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j10toInf_b2"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 500., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j10toInf_b3"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT575to1200_j10toInf_b4toInf"){
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{200., 2400.};
+      nBins = nBins_tmp;
+    }
 
-  } 
-  // Plot
-  else if( regionName == "HT0toInf_j0toInf_b0toInf" ){ //this is as inclusive as it gets
+    //high HT region
+    else if(regionName == "HT1200to1500_j2to3_b0"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j2to3_b1"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j2to3_b2"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j4to6_b0"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j4to6_b1"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j4to6_b2"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j7to9_b0"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j7to9_b1"){
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j7to9_b2"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j2to6_b3toInf"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j7to9_b3"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j7to9_b4toInf"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j10toInf_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j10toInf_b1"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j10toInf_b2"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1200to1500_j10toInf_b3"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
     
-    const int nBins_tmp                        = 40;
-    bins = new double[nBins_tmp+1]{0.,50.,100., 150.,200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
+    else if(regionName == "HT1200to1500_j10toInf_b4toInf"){
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{200., 2400.};
+      nBins = nBins_tmp;
+    }
     
-  }
-  else if( regionName == "HT200to1000_j2to3_b0" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT200to1000_j2to3_b1toInf" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT200to1000_j4toInf_b0" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT200to1000_j4toInf_b1toInf" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  //
-  else if( regionName == "HT1000toInf_j2to3_b0" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT1000toInf_j2to3_b1toInf" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT1000toInf_j4toInf_b0" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT1000toInf_j4toInf_b1toInf" ){
-    
-    const int nBins_tmp                        = 36;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
-    nBins = nBins_tmp;
-    
-  }  
-  // Monojet
-  else if( regionName == "HT200toInf_j1_b0toInf" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 7;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT200toInf_j1_b0" ){ // monojet 0b
-    
-    const int nBins_tmp                        = 7;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT200toInf_j1_b1toInf" ){ // monojet 1b
-    
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1500.};
-    nBins = nBins_tmp;
-    
+    //ultra high HT region
+    else if(regionName == "HT1500toInf_j2to3_b0"){
+      const int nBins_tmp                        = 8;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1400., 1800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j2to3_b1"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j2to3_b2"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j4to6_b0"){
+      const int nBins_tmp                        = 8;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1400., 1600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j4to6_b1"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j4to6_b2"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j7to9_b0"){
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j7to9_b1"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j7to9_b2"){
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j2to6_b3toInf"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j7to9_b3"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j7to9_b4toInf"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j10toInf_b0"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j10toInf_b1"){
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 800., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j10toInf_b2"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j10toInf_b3"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+    else if(regionName == "HT1500toInf_j10toInf_b4toInf"){
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 2400.};
+      nBins = nBins_tmp;
+    }
+
+    // default binning, e.g for inclusive region
+    else { 
+      const int nBins_tmp                        = 9;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1200., 1400., 1800. };
+      nBins = nBins_tmp;
+    }
   }
 
-  else if( regionName == "HT200to250_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT250to350_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT350to450_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT450to575_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT575to700_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT700to1000_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }
-  else if( regionName == "HT1000to1200_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
-    
-  }  else if( regionName == "HT1200toInf_j1_b0" ){ // monojet inclusive
-    
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 2000.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
-    
-  }
+  //previous binning used for Moriond2017
+  if(doBinning_Moriond2017){
 
-  else if( regionName == "HT200to250_j1_b1toInf" ){ // monojet inclusive
+    if( regionName == "HT450toInf_j2toInf_b0toInf" ) {  // this is the inclusive region
+
+      //    const int nBins_tmp                        = 7;
+      //    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000. };
+      //    const int nBins_tmp                        = 5;
+      //    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000., 1500.};
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000.};
+      //    const int nBins_tmp                        = 3;
+      //    bins = new double[nBins_tmp+1]{200., 300., 400., 600.};
+      nBins = nBins_tmp;
+
+    } 
+    // Plot
+    else if( regionName == "HT0toInf_j0toInf_b0toInf" ){ //this is as inclusive as it gets
     
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 40;
+      bins = new double[nBins_tmp+1]{0.,50.,100., 150.,200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
     
-  }
-  else if( regionName == "HT250to350_j1_b1toInf" ){ // monojet inclusive
+    }
+    else if( regionName == "HT200to1000_j2to3_b0" ){
     
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
     
-  }
-  else if( regionName == "HT350to450_j1_b1toInf" ){ // monojet inclusive
+    }
+    else if( regionName == "HT200to1000_j2to3_b1toInf" ){
     
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
     
-  }
-  else if( regionName == "HT450to575_j1_b1toInf" ){ // monojet inclusive
+    }
+    else if( regionName == "HT200to1000_j4toInf_b0" ){
     
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
     
-  }
-  else if( regionName == "HT575to700_j1_b1toInf" ){ // monojet inclusive
+    }
+    else if( regionName == "HT200to1000_j4toInf_b1toInf" ){
     
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
     
-  }
-  else if( regionName == "HT700toInf_j1_b1toInf" ){ // monojet inclusive
+    }
+    //
+    else if( regionName == "HT1000toInf_j2to3_b0" ){
     
-    const int nBins_tmp                        = 1;
-    bins = new double[nBins_tmp+1]{0., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
     
-  }
+    }
+    else if( regionName == "HT1000toInf_j2to3_b1toInf" ){
+    
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT1000toInf_j4toInf_b0" ){
+    
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT1000toInf_j4toInf_b1toInf" ){
+    
+      const int nBins_tmp                        = 36;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 350., 400., 450., 500., 550., 600., 650., 700., 750., 800., 850., 900., 950., 1000., 1050., 1100., 1150., 1200., 1250., 1300., 1350., 1400., 1450., 1500., 1550., 1600., 1650., 1700., 1750., 1800., 1850., 1900., 1950., 2000.};
+      nBins = nBins_tmp;
+    
+    }  
+    // Monojet
+    else if( regionName == "HT200toInf_j1_b0toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 7;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT200toInf_j1_b0" ){ // monojet 0b
+    
+      const int nBins_tmp                        = 7;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT200toInf_j1_b1toInf" ){ // monojet 1b
+    
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+
+    else if( regionName == "HT200to250_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT250to350_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT350to450_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT450to575_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT575to700_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT700to1000_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT1000to1200_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }  else if( regionName == "HT1200toInf_j1_b0" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 2000.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
+    
+    }
+
+    else if( regionName == "HT200to250_j1_b1toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT250to350_j1_b1toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT350to450_j1_b1toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT450to575_j1_b1toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT575to700_j1_b1toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
+    else if( regionName == "HT700toInf_j1_b1toInf" ){ // monojet inclusive
+    
+      const int nBins_tmp                        = 1;
+      bins = new double[nBins_tmp+1]{0., 1500.};
+      nBins = nBins_tmp;
+    
+    }
 
   
-  else if( regionName == "HT250to450_j2to3_b0" ){ // new MT2 binning
+    else if( regionName == "HT250to450_j2to3_b0" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT250to450_j2_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT250to450_j2_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT250to450_j3_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT250to450_j3_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT250to450_j2to3_b1" ){ // new MT2 binning
+    } 
+    else if( regionName == "HT250to450_j2to3_b1" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT250to450_j2to3_b2" ){ // new MT2 binning
+    } 
+    else if( regionName == "HT250to450_j2to3_b2" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT250to450_j4toInf_b0toInf" ){ // for extrapolation
+    } 
+    else if( regionName == "HT250to450_j4toInf_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  }  
-  else if( regionName == "HT250to450_j4toInf_b0" ){ // new MT2 binning
+    }  
+    else if( regionName == "HT250to450_j4toInf_b0" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT250to450_j4toInf_b1" ){ // new MT2 binning
+    } 
+    else if( regionName == "HT250to450_j4toInf_b1" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT250to450_j4toInf_b2" ){ // new MT2 binning
+    } 
+    else if( regionName == "HT250to450_j4toInf_b2" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT250to450_j2toInf_b3toInf" ){ // new MT2 binning
+    } 
+    else if( regionName == "HT250to450_j2toInf_b3toInf" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  } 
+    } 
 
 
 
 
 
 
-  //////// Old very low HT region (for zurichPlus, not zurich2016) /////////////
+    //////// Old very low HT region (for zurichPlus, not zurich2016) /////////////
 
-  else if( regionName == "HT200to450_j2to3_b0" ){ // new MT2 binning // old ZurichPlusRegions
+    else if( regionName == "HT200to450_j2to3_b0" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT200to450_j2to3_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT200to450_j2to3_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j2to3_b1" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j2to3_b1" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j2to3_b2" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j2to3_b2" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j4to6_b0toInf" ){ // for extrapolation
+    } 
+    else if( regionName == "HT200to450_j4to6_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  }  
-  else if( regionName == "HT200to450_j4to6_b0" ){ // new MT2 binning // old ZurichPlusRegions
+    }  
+    else if( regionName == "HT200to450_j4to6_b0" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j4to6_b1" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j4to6_b1" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j4to6_b2" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j4to6_b2" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j7toInf_b0toInf" ){ // for extrapolation
+    } 
+    else if( regionName == "HT200to450_j7toInf_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j7toInf_b0" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j7toInf_b0" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j7toInf_b1" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j7toInf_b1" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j7toInf_b2" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j7toInf_b2" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  }   
-  else if( regionName == "HT200to450_j2to6_b3toInf" ){ // new MT2 binning // old ZurichPlusRegions
+    }   
+    else if( regionName == "HT200to450_j2to6_b3toInf" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  } 
-  else if( regionName == "HT200to450_j7toInf_b3toInf" ){ // new MT2 binning // old ZurichPlusRegions
+    } 
+    else if( regionName == "HT200to450_j7toInf_b3toInf" ){ // new MT2 binning // old ZurichPlusRegions
     
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 300., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 300., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
     
-  } 
-  //////End of mono-jet
+    } 
+    //////End of mono-jet
   
-//else if( regionName == "HT450to575_j2toInf_b0toInf" ) {  // inclusive low HT trigger region
+    //else if( regionName == "HT450to575_j2toInf_b0toInf" ) {  // inclusive low HT trigger region
 
-//  const int nBins_tmp                        = 50;
-//  bins = new double[nBins_tmp+1];
-//  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
-//    bins[i] = (double)i*10.;
-//  nBins = nBins_tmp;
+    //  const int nBins_tmp                        = 50;
+    //  bins = new double[nBins_tmp+1];
+    //  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
+    //    bins[i] = (double)i*10.;
+    //  nBins = nBins_tmp;
 
-//} 
+    //} 
 
-//else if( regionName == "HT575to1000_j2toInf_b0toInf" ) {  // inclusive medium HT trigger region
+    //else if( regionName == "HT575to1000_j2toInf_b0toInf" ) {  // inclusive medium HT trigger region
 
-//  const int nBins_tmp                        = 50;
-//  bins = new double[nBins_tmp+1];
-//  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
-//    bins[i] = (double)i*10.;
-//  nBins = nBins_tmp;
+    //  const int nBins_tmp                        = 50;
+    //  bins = new double[nBins_tmp+1];
+    //  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
+    //    bins[i] = (double)i*10.;
+    //  nBins = nBins_tmp;
 
-//} 
+    //} 
 
-//else if( regionName == "HT575to900_j2toInf_b0toInf" ) {  // modified inclusive medium HT trigger region
+    //else if( regionName == "HT575to900_j2toInf_b0toInf" ) {  // modified inclusive medium HT trigger region
 
-//  const int nBins_tmp                        = 50;
-//  bins = new double[nBins_tmp+1];
-//  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
-//    bins[i] = (double)i*10.;
-//  nBins = nBins_tmp;
+    //  const int nBins_tmp                        = 50;
+    //  bins = new double[nBins_tmp+1];
+    //  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
+    //    bins[i] = (double)i*10.;
+    //  nBins = nBins_tmp;
 
-//} 
+    //} 
 
-//else if( regionName == "HT1000toInf_j2toInf_b0toInf" ) {  // inclusive high HT trigger region
+    //else if( regionName == "HT1000toInf_j2toInf_b0toInf" ) {  // inclusive high HT trigger region
 
-//  const int nBins_tmp                        = 50;
-//  bins = new double[nBins_tmp+1];
-//  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
-//    bins[i] = (double)i*10.;
-//  nBins = nBins_tmp;
+    //  const int nBins_tmp                        = 50;
+    //  bins = new double[nBins_tmp+1];
+    //  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
+    //    bins[i] = (double)i*10.;
+    //  nBins = nBins_tmp;
 
-//} 
+    //} 
 
-//else if( regionName == "HT900toInf_j2toInf_b0toInf" ) {  // modified inclusive high HT trigger region
+    //else if( regionName == "HT900toInf_j2toInf_b0toInf" ) {  // modified inclusive high HT trigger region
 
-//  const int nBins_tmp                        = 50;
-//  bins = new double[nBins_tmp+1];
-//  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
-//    bins[i] = (double)i*10.;
-//  nBins = nBins_tmp;
+    //  const int nBins_tmp                        = 50;
+    //  bins = new double[nBins_tmp+1];
+    //  for( unsigned i=0; i<nBins_tmp+1; ++i ) 
+    //    bins[i] = (double)i*10.;
+    //  nBins = nBins_tmp;
 
-//} 
+    //} 
 
-////HERE (is the important stuff)
+    ////HERE (is the important stuff)
 
-  else if( regionName == "HT450to575_j2_b0toInf" ){ // for extrapolation
+    else if( regionName == "HT450to575_j2_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  }else if( regionName == "HT450to575_j3_b0toInf" ){ // for extrapolation
+    }else if( regionName == "HT450to575_j3_b0toInf" ){ // for extrapolation
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  }else if( regionName == "HT450to575_j2to3_b0" ){ // new MT2 binning
+    }else if( regionName == "HT450to575_j2to3_b0" ){ // new MT2 binning
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT450to575_j2to3_b1" ){
+    } else if( regionName == "HT450to575_j2to3_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4to6_b0toInf" ){ //for extrapolation
+    } else if( regionName == "HT450to575_j4to6_b0toInf" ){ //for extrapolation
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4to6_b0" ){
+    } else if( regionName == "HT450to575_j4to6_b0" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4to6_b1" ){
+    } else if( regionName == "HT450to575_j4to6_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};   //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j7toInf_b0toInf" ){ //for extrapolation
+    } else if( regionName == "HT450to575_j7toInf_b0toInf" ){ //for extrapolation
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j7toInf_b0" ){
+    } else if( regionName == "HT450to575_j7toInf_b0" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j7toInf_b1" ){
+    } else if( regionName == "HT450to575_j7toInf_b1" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j2to3_b2" ){
+    } else if( regionName == "HT450to575_j2to3_b2" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};  //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};  //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4to6_b2" ){
+    } else if( regionName == "HT450to575_j4to6_b2" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};  //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};  //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j7toInf_b2" ){
+    } else if( regionName == "HT450to575_j7toInf_b2" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  }  else if( regionName == "HT450to575_j2to6_b3toInf" ){
+    }  else if( regionName == "HT450to575_j2to6_b3toInf" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j7toInf_b3toInf" ){
+    } else if( regionName == "HT450to575_j7toInf_b3toInf" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200.,300., 400., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200.,300., 400., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2_b0toInf" ){ //for extrapolation
+    } else if( regionName == "HT575to1000_j2_b0toInf" ){ //for extrapolation
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j3_b0toInf" ){ //for extrapolation
+    } else if( regionName == "HT575to1000_j3_b0toInf" ){ //for extrapolation
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2to3_b0" ){ 
+    } else if( regionName == "HT575to1000_j2to3_b0" ){ 
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2to3_b1" ){
+    } else if( regionName == "HT575to1000_j2to3_b1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4to6_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT575to1000_j4to6_b0toInf" ){ // for extrapolation
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4to6_b0" ){
+    } else if( regionName == "HT575to1000_j4to6_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning (same)
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning (same)
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4to6_b1" ){
+    } else if( regionName == "HT575to1000_j4to6_b1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j7toInf_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT575to1000_j7toInf_b0toInf" ){ // for extrapolation
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j7toInf_b0" ){
+    } else if( regionName == "HT575to1000_j7toInf_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j7toInf_b1" ){
+    } else if( regionName == "HT575to1000_j7toInf_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2to3_b2" ){
+    } else if( regionName == "HT575to1000_j2to3_b2" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4to6_b2" ){
+    } else if( regionName == "HT575to1000_j4to6_b2" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j7toInf_b2" ){
+    } else if( regionName == "HT575to1000_j7toInf_b2" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  }  else if( regionName == "HT575to1000_j2to6_b3toInf" ){
+    }  else if( regionName == "HT575to1000_j2to6_b3toInf" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};   //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};   //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j7toInf_b3toInf" ){
+    } else if( regionName == "HT575to1000_j7toInf_b3toInf" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT1000to1500_j2_b0toInf" ){ // for extrapolation
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j3_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT1000to1500_j3_b0toInf" ){ // for extrapolation
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2to3_b0" ){
+    } else if( regionName == "HT1000to1500_j2to3_b0" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2to3_b1" ){
+    } else if( regionName == "HT1000to1500_j2to3_b1" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4to6_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT1000to1500_j4to6_b0toInf" ){ // for extrapolation
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4to6_b0" ){
+    } else if( regionName == "HT1000to1500_j4to6_b0" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4to6_b1" ){
+    } else if( regionName == "HT1000to1500_j4to6_b1" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j7toInf_b0toInf" ){ // for extrapolation
+    } else if( regionName == "HT1000to1500_j7toInf_b0toInf" ){ // for extrapolation
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j7toInf_b0" ){
+    } else if( regionName == "HT1000to1500_j7toInf_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j7toInf_b1" ){
+    } else if( regionName == "HT1000to1500_j7toInf_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2to3_b2" ){
+    } else if( regionName == "HT1000to1500_j2to3_b2" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4to6_b2" ){
+    } else if( regionName == "HT1000to1500_j4to6_b2" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j7toInf_b2" ){
+    } else if( regionName == "HT1000to1500_j7toInf_b2" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.}; //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.}; //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2to6_b3toInf" ){
+    } else if( regionName == "HT1000to1500_j2to6_b3toInf" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j7toInf_b3toInf" ){
+    } else if( regionName == "HT1000to1500_j7toInf_b3toInf" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 1500.}; //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 1500.}; //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2to3_b0" ){
+    } else if( regionName == "HT1500toInf_j2to3_b0" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2to3_b1" ){
+    } else if( regionName == "HT1500toInf_j2to3_b1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.}; //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.}; //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j4to6_b0" ){
+    } else if( regionName == "HT1500toInf_j4to6_b0" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.}; //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.}; //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j4to6_b1" ){
+    } else if( regionName == "HT1500toInf_j4to6_b1" ){
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.}; //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.}; //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2toInf_b0toInf" ){ // for extrapolation //only extreme HT region needed
+    } else if( regionName == "HT1500toInf_j2toInf_b0toInf" ){ // for extrapolation //only extreme HT region needed
 
-    const int nBins_tmp                        = 6;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.};//NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 6;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1400., 1800.};//NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j7toInf_b0" ){
+    } else if( regionName == "HT1500toInf_j7toInf_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};//NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};//NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j7toInf_b1" ){
+    } else if( regionName == "HT1500toInf_j7toInf_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};//NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};//NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2to3_b2" ){
+    } else if( regionName == "HT1500toInf_j2to3_b2" ){
 
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 400.,  1500.};  //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400.,  1500.};  //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j4to6_b2" ){
+    } else if( regionName == "HT1500toInf_j4to6_b2" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800.,1500.};//NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800.,1500.};//NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j7toInf_b2" ){
+    } else if( regionName == "HT1500toInf_j7toInf_b2" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};//NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};//NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2to6_b3toInf" ){
+    } else if( regionName == "HT1500toInf_j2to6_b3toInf" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 1500.}; //NEW EOY 2016 binning
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 1500.}; //NEW EOY 2016 binning
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j7toInf_b3toInf" ){
+    } else if( regionName == "HT1500toInf_j7toInf_b3toInf" ){
 
-    const int nBins_tmp                        = 2;
-    bins = new double[nBins_tmp+1]{200., 400., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 2;
+      bins = new double[nBins_tmp+1]{200., 400., 1500.};
+      nBins = nBins_tmp;
 
-  } 
+    } 
 
 
 
@@ -1465,337 +1862,337 @@ void MT2Region::getBins( int &nBins, double*& bins) const {
 
 
 
-  ////// DARK MATTER
-  else if( regionName == "HT450to575_j2_b0" ){
+    ////// DARK MATTER
+    else if( regionName == "HT450to575_j2_b0" ){
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT450to575_j2_b1" ){
+    } else if( regionName == "HT450to575_j2_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j2_b0toInf" ){
+    } else if( regionName == "HT450to575_j2_b0toInf" ){
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT450to575_j2_b0to1" ){
+    } else if( regionName == "HT450to575_j2_b0to1" ){
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT450to575_j3_b0" ){ 
+    } else if( regionName == "HT450to575_j3_b0" ){ 
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT450to575_j3_b1" ){
+    } else if( regionName == "HT450to575_j3_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j3_b0to1" ){ 
+    } else if( regionName == "HT450to575_j3_b0to1" ){ 
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
     
-  } else if( regionName == "HT450to575_j2_b0toInf" ){
+    } else if( regionName == "HT450to575_j2_b0toInf" ){
     
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
     
-  } 
+    } 
 
-  else if( regionName == "HT575to1000_j2_b0" ){
+    else if( regionName == "HT575to1000_j2_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2_b1" ){
+    } else if( regionName == "HT575to1000_j2_b1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2_b0to1" ){
+    } else if( regionName == "HT575to1000_j2_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j2_b0toInf" ){
+    } else if( regionName == "HT575to1000_j2_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j3_b0" ){
+    } else if( regionName == "HT575to1000_j3_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j3_b1" ){
+    } else if( regionName == "HT575to1000_j3_b1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j3_b0to1" ){
+    } else if( regionName == "HT575to1000_j3_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j3_b0toInf" ){
+    } else if( regionName == "HT575to1000_j3_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } 
+    } 
 
-  else if( regionName == "HT1000to1500_j2_b0" ){
+    else if( regionName == "HT1000to1500_j2_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2_b1" ){
+    } else if( regionName == "HT1000to1500_j2_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2_b0to1" ){
+    } else if( regionName == "HT1000to1500_j2_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j2_b0toInf" ){
+    } else if( regionName == "HT1000to1500_j2_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j3_b0" ){
+    } else if( regionName == "HT1000to1500_j3_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j3_b1" ){
+    } else if( regionName == "HT1000to1500_j3_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j3_b0to1" ){
+    } else if( regionName == "HT1000to1500_j3_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j3_b0toInf" ){
+    } else if( regionName == "HT1000to1500_j3_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  }
+    }
 
-  else if( regionName == "HT1500toInf_j2_b0" ){
+    else if( regionName == "HT1500toInf_j2_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2_b1" ){
+    } else if( regionName == "HT1500toInf_j2_b1" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2_b0to1" ){
+    } else if( regionName == "HT1500toInf_j2_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j2_b0toInf" ){
+    } else if( regionName == "HT1500toInf_j2_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j3_b0" ){
+    } else if( regionName == "HT1500toInf_j3_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j3_b1" ){
+    } else if( regionName == "HT1500toInf_j3_b1" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j3_b0to1" ){
+    } else if( regionName == "HT1500toInf_j3_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j3_b0toInf" ){
+    } else if( regionName == "HT1500toInf_j3_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } 
+    } 
 
-  else if( regionName == "HT450to575_j4toInf_b0" ){
+    else if( regionName == "HT450to575_j4toInf_b0" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4toInf_b1" ){
+    } else if( regionName == "HT450to575_j4toInf_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4toInf_b0to1" ){
+    } else if( regionName == "HT450to575_j4toInf_b0to1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT450to575_j4toInf_b0toInf" ){
+    } else if( regionName == "HT450to575_j4toInf_b0toInf" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 1500.};
+      nBins = nBins_tmp;
 
-  } 
+    } 
 
-  else if( regionName == "HT575to1000_j4toInf_b0" ){
+    else if( regionName == "HT575to1000_j4toInf_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4toInf_b1" ){
+    } else if( regionName == "HT575to1000_j4toInf_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4toInf_b0to1" ){
+    } else if( regionName == "HT575to1000_j4toInf_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT575to1000_j4toInf_b0toInf" ){
+    } else if( regionName == "HT575to1000_j4toInf_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } 
+    } 
   
-  else if( regionName == "HT1000to1500_j4toInf_b0" ){
+    else if( regionName == "HT1000to1500_j4toInf_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4toInf_b1" ){
+    } else if( regionName == "HT1000to1500_j4toInf_b1" ){
 
-    const int nBins_tmp                        = 4;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 4;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4toInf_b0to1" ){
+    } else if( regionName == "HT1000to1500_j4toInf_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1000to1500_j4toInf_b0toInf" ){
+    } else if( regionName == "HT1000to1500_j4toInf_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } 
+    } 
   
-  else if( regionName == "HT1500toInf_j4toInf_b0" ){
+    else if( regionName == "HT1500toInf_j4toInf_b0" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j4toInf_b1" ){
+    } else if( regionName == "HT1500toInf_j4toInf_b1" ){
 
-    const int nBins_tmp                        = 3;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j4toInf_b0to1" ){
+    } else if( regionName == "HT1500toInf_j4toInf_b0to1" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } else if( regionName == "HT1500toInf_j4toInf_b0toInf" ){
+    } else if( regionName == "HT1500toInf_j4toInf_b0toInf" ){
 
-    const int nBins_tmp                        = 5;
-    bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
-    nBins = nBins_tmp;
+      const int nBins_tmp                        = 5;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1500.};
+      nBins = nBins_tmp;
 
    
-  } else if( regionName == "HT450toInf_j1_b0toInf" ){ // monojet old inclusive
+    } else if( regionName == "HT450toInf_j1_b0toInf" ){ // monojet old inclusive
 
-//    const int nBins_tmp                        = 3;
-//    bins = new double[nBins_tmp+1]{450., 575., 1000., 1500.};
-    const int nBins_tmp                        = 7;
-    bins = new double[nBins_tmp+1]{200., 250., 300., 400., 450., 575., 1000., 1500.};
-    nBins = nBins_tmp;
+      //    const int nBins_tmp                        = 3;
+      //    bins = new double[nBins_tmp+1]{450., 575., 1000., 1500.};
+      const int nBins_tmp                        = 7;
+      bins = new double[nBins_tmp+1]{200., 250., 300., 400., 450., 575., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  } 
-  //////END DARKMATTER
+    } 
+    //////END DARKMATTER
 
-  else { // default binning
+    else { // default binning
  
-    //    const int nBins_tmp                        = 7;
-    //    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1500. };
-    const int nBins_tmp                        = 9;
-    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1200., 1400., 1800. };
-//    const int nBins_tmp                        = 9;
-//    bins = new double[nBins_tmp+1]{0., 100., 200., 300., 400., 500., 600., 800., 1000., 1500. };
-    //const int nBins_tmp                        = 4;
-    //bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000.};
-    //const int nBins_tmp                        = 5;
-    //bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000., 1500.};
-    nBins = nBins_tmp;
+      //    const int nBins_tmp                        = 7;
+      //    bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1500. };
+      const int nBins_tmp                        = 9;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1200., 1400., 1800. };
+      //    const int nBins_tmp                        = 9;
+      //    bins = new double[nBins_tmp+1]{0., 100., 200., 300., 400., 500., 600., 800., 1000., 1500. };
+      //const int nBins_tmp                        = 4;
+      //bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000.};
+      //const int nBins_tmp                        = 5;
+      //bins = new double[nBins_tmp+1]{200., 300., 400., 600., 1000., 1500.};
+      nBins = nBins_tmp;
 
-  }
-
+    }
+  } //end of Moriond2017
 
 }
 

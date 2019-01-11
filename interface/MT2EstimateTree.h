@@ -60,6 +60,7 @@ class MT2EstimateTree : public MT2Estimate {
   float mht_phi;
   
   int nJets;
+  int nJet30HEMFail;
   int nBJets;
   int nElectrons;
   int nMuons;
@@ -77,6 +78,8 @@ class MT2EstimateTree : public MT2Estimate {
   float lepMass;
   float lepID; //to discriminate between electrons and muons
   float lepMiniRelIso; //lepton isolation
+  float isotrackPt;
+  int   isotrack_pdgId;
 
 //  float GenSusyMScan1;
 //  float GenSusyMScan2;
