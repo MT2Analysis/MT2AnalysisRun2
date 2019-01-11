@@ -114,8 +114,8 @@ int main( int argc, char* argv[] ) {
     std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
-
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 300, 599); // only top (tt, t, ttW, ttZ) and W+jets
+    std::cout << "useETHMC()" << cfg.useETHmc() << std::endl;
+    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 300, 599, cfg.useETHmc()); // only top (tt, t, ttW, ttZ) and W+jets
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
@@ -146,7 +146,7 @@ int main( int argc, char* argv[] ) {
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading signal samples from file: " << samplesFileName << std::endl;
 
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000); // only signal (id>=1000)
+    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc()); // only signal (id>=1000)
 
 
     if( fSamples.size()==0 ) {
@@ -178,8 +178,9 @@ int main( int argc, char* argv[] ) {
 
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
+    //std::cout << " cfg.useETHdata()" <<  cfg.useETHdata() << std::endl;
 
-    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "" );
+    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", 1, 100, cfg.useETHdata() ); // only data samples
 
     if( samples_data.size()==0 ) {
       std::cout << "There must be an error: samples_data is empty!" << std::endl;
@@ -214,11 +215,18 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   //initialization of the lepton scale factor tool
   MT2LeptonSFTool leptonSF;
- 
+
+  // determine if it's data or mc here
+  bool  isData = (sample.id >= 1 && sample.id < 100 );
+  std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
+
+  // determine if it is an ETH kind of ntuple or not
+  bool isETH = (isData and cfg.useETHdata()) || (!isData and cfg.useETHmc());
 
   // Tree initialization
+  TString treeName = isETH ? "Events" : "mt2";
   TFile* file = TFile::Open(sample.file.c_str());
-  TTree* tree = (TTree*)file->Get("Events");
+  TTree* tree = (TTree*)file->Get(treeName);
 
   MT2Tree myTree;
   myTree.Init(tree);
@@ -226,12 +234,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   std::string regionsSet = cfg.regionsSet();
   std::cout << "Using region set: " << regionsSet << std::endl;
 
-  Bool_t isData = (sample.id >= 1 && sample.id < 100 );
-  std::cout << "evt_id=" << myTree.evt_id << " sample.id=" << sample.id << " isData=" << isData << std::endl;
-
   // Sum of weights
   double nGen=-9999; double nGenWeighted=-9999;
-  if(!isData){
+  if(!isData and isETH){
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   } 
@@ -257,20 +262,25 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
    
     
     // apply the filters
+    // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     } else {
       if(!myTree.passFiltersMC(cfg.year())) continue;
     } 
      
-    
     // apply the triggers
-    if(isData) {
+    if(isData and isETH) {
       if (!myTree.passTriggerSelection("llep", cfg.year())) continue;
     }
-    
-    
 
+    // apply good vertex cut once for all 
+    if (isETH) {
+      if(myTree.PV_npvs <= 0) continue;
+    } else {
+      if(myTree.nVert <= 0) continue;
+    }
+    
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
@@ -290,13 +300,15 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     
  
     // monojet id
-    // if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
+    // apply HEM veto
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH)) continue; 
 
-    //cut on HEM fail for 2018 data
-    if(cfg.year() == 2018){
-      if(myTree.nJet30HEMFail != 0) continue;
-    } 
+    //cut on HEM fail for 2018 data <= this needs to be reworked
+    //if(cfg.year() == 2018){
+      //if(myTree.nJet30HEMFail != 0) continue;
+    //} 
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue; 
@@ -313,11 +325,12 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       weight = 1.;
     }
     else{
-      weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      else weight = myTree.evt_scale1fb * myTree.weight_lepsf * myTree.weight_btagsf;
     }
     
-    //lepton scale factor (only on !data)
-    if(!isData){
+    //lepton scale factor (only on !data and isETH)
+    if(!isData and isETH){
       //MT2LeptonSFTool leptonSF;
       if(abs(myTree.lep_pdgId[0])<12){ //electrons (lep_pdgID = +- 11)
 	bool electronHist = leptonSF.setElHist("llep"); //checks if all the electron sf files can be loaded
@@ -339,7 +352,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
     
     //b-tagging scale factor
-    if(!isData){
+    if(!isData and isETH){
 
       // declaration of the b-tagged weight
       float weight_btagsf = 1.;
@@ -359,6 +372,11 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       weight *= weight_btagsf;
     }
     
+    // ISR weights , ETH does not have
+    //if(!isData and !isETH){
+    //  weight *= myTree.b_weight_isr;
+    //}
+
 
    /* if( !myTree.isData ){
       weight *= myTree.weight_btagsf;

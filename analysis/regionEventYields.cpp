@@ -174,13 +174,13 @@ int main( int argc, char* argv[] ) {
     // create Groups of samples, i.e. vectors - e.g. one for Wjets, one for top, etc
     std::map<TString, std::vector<MT2Sample>> fSamplesMap;
     std::cout << "-> Creating sample list for Top " << std::endl;
-    fSamplesMap["Top"] = MT2Sample::loadSamples(samplesFileName, 300, 499);
+    fSamplesMap["Top"] = MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc());
     std::cout << "-> Creating sample list for WJets " << std::endl;
-    fSamplesMap["WJets"] = MT2Sample::loadSamples(samplesFileName, 500, 509);
+    fSamplesMap["WJets"] = MT2Sample::loadSamples(samplesFileName, 500, 509, cfg.useETHmc());
     std::cout << "-> Creating sample list for QCD " << std::endl;
-    fSamplesMap["QCD"] = MT2Sample::loadSamples(samplesFileName, 100, 199);
+    fSamplesMap["QCD"] = MT2Sample::loadSamples(samplesFileName, 100, 199, cfg.useETHmc());
     std::cout << "-> Creating sample list for ZJets " << std::endl;
-    fSamplesMap["ZJets"] = MT2Sample::loadSamples(samplesFileName, 600, 699);
+    fSamplesMap["ZJets"] = MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc());
     
     
     
@@ -206,7 +206,7 @@ int main( int argc, char* argv[] ) {
     cout << "Now ZJets samples" << endl;
     
     //Now create ZJets estimate in the inclusive region (needed to compute Zinv Estimates)
-    vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699);
+    vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc());
     MT2Analysis<MT2EstimateTree>* myEstimate = new MT2Analysis<MT2EstimateTree>("ZJets", "13TeV_2016_inclusive");
 
     cout << "size: " << mySample.size() << endl;
@@ -239,7 +239,7 @@ int main( int argc, char* argv[] ) {
     std::cout << "     signal name " << signalName << std::endl;
 
     //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, signalName); // only signal (id>=1000)
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000); // only signal (id>=1000)
+    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc()); // only signal (id>=1000)
 
     if( fSamples.size()==0 ) {
 
@@ -271,7 +271,7 @@ int main( int argc, char* argv[] ) {
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFileNameData << std::endl;
 
-    std::vector<MT2Sample> fSamplesData = MT2Sample::loadSamples(samplesFileNameData, ""); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
+    std::vector<MT2Sample> fSamplesData = MT2Sample::loadSamples(samplesFileNameData, "", 1, 100, cfg.useETHdata()); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
     if( fSamplesData.size()==0 ) {
       std::cout << "There must be an error: fSamplesData is empty!" << std::endl;
       exit(1209);
@@ -331,23 +331,26 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
 
+
+  // determine if it's data or mc here
+  bool  isData = (sample.id >= 1 && sample.id < 100 );
+  std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
+
+  // determine if it is an ETH kind of ntuple or not
+  bool isETH = (isData and cfg.useETHdata()) || (!isData and cfg.useETHmc());
+
+  // Tree initialization
+  TString treeName = isETH ? "Events" : "mt2";
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
-
-  //For 2016 ntuples, the tree is called mt2
-  //TTree* tree = (TTree*)file->Get("mt2");
-  //For 2017 ntuples, the tree is called Events
-  TTree* tree = (TTree*)file->Get("Events");
+  TTree* tree = (TTree*)file->Get(treeName);
 
   MT2Tree myTree;
   myTree.Init(tree);
 
-  Bool_t isData = (sample.id >= 1 && sample.id < 100 );
-  std::cout << "evt_id=" << myTree.evt_id << " sample.id=" << sample.id << "  isData="<< isData << std::endl;
-
   // number of gen events
   double nGen=-9999; double nGenWeighted=-9999;
-  if(!isData){
+  if(!isData and isETH){
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
@@ -379,6 +382,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     //if(isData && !myTree.isGolden ) continue;
 
     // apply the filters
+    // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     } else {
@@ -386,16 +390,22 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     } 
 
     // apply the triggers
-    if(isData) {
+    if(isData and isETH) {
       if (!myTree.passTriggerSelection("SR", cfg.year())) continue;
+    }
+
+    if (isETH) {
+      if(myTree.PV_npvs <= 0) continue;
+    } else {
+      if(myTree.nVert <= 0) continue;
     }
 
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter --> not in nanoAOD
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue; -->not in nanoAOD
 
-
     //crazy events! To be piped into a separate txt file 
+
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
@@ -416,17 +426,21 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       continue;
     }
 
+    // apply HEM veto
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH)) continue; 
+
     //cut on HEM fail for 2018 data
-    if(cfg.year() == 2018){
-      if(myTree.nJet30HEMFail != 0) continue;
-    } 
+    //if(cfg.year() == 2018){
+    //  if(myTree.nJet30HEMFail != 0) continue;
+    //} 
 
     // kinematic selections, including lepton veto
     if( !myTree.passSelection("", cfg.year()) ) continue;
 
 
-    // monojet id, not needed for 2017, as all jets have tight id
-    //if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    // monojet id
+    if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+
 
     // Selection is over, now apply the weights !
     //Double_t weight = (isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
@@ -438,12 +452,13 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       weight = 1.;
     }
     else{
-      weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      else weight = myTree.evt_scale1fb * myTree.weight_lepsf * myTree.weight_btagsf;
     }
 
 
      //b-tagging scale factor
-    if(!isData){
+    if(!isData and isETH){
 
       // declaration of the b-tagged weight
       float weight_btagsf = 1.;
@@ -462,10 +477,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
       weight *= weight_btagsf;
     }
-
-
-
-
 
 
     // if(!isData){
@@ -862,7 +873,7 @@ void randomizePoisson( MT2Analysis<MT2EstimateTree>* data ) {
 
 }
 
-
+/*
 int matchPartonToJet( int index, MT2Tree* myTree ) {
 
   float deltaRMin = 0.3; // at least 0.3
@@ -871,7 +882,7 @@ int matchPartonToJet( int index, MT2Tree* myTree ) {
   TLorentzVector jet;
   jet.SetPtEtaPhiM( myTree->jet_pt[index], myTree->jet_eta[index], myTree->jet_phi[index], myTree->Jet_mass[index] );
 
-  /*
+ 
   for( int i=0; i<myTree->ngenPart; ++i ) {
 
     if( myTree->genPart_status[i]!=23 ) continue;
@@ -885,8 +896,10 @@ int matchPartonToJet( int index, MT2Tree* myTree ) {
       deltaRMin = thisDeltaR;
       foundId = myTree->genPart_pdgId[i];
       }
-      }*/
+      }
 
   return foundId;
 
 }
+
+*/

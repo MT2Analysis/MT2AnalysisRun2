@@ -495,8 +495,8 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   lepMass  = mt2tree.lep_mass[0];
   lepID    = mt2tree.lep_pdgId[0];
   lepMiniRelIso = mt2tree.lep_miniRelIso[0];
-  isotrackPt    = mt2tree.IsoTrack_pt[0];
-  isotrack_pdgId = mt2tree.IsoTrack_pdgId[0];
+  isotrackPt    = mt2tree.isoTrack_pt[0];
+  isotrack_pdgId = mt2tree.isoTrack_pdgId[0];
     
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;
   //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
