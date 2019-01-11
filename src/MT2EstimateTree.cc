@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cmath>
 
+#include "TCanvas.h"
+
 
 
 
@@ -223,15 +225,34 @@ void MT2EstimateTree::projectFromTree( const MT2EstimateTree* treeEst, const std
   TDirectory* dir = TDirectory::CurrentDirectory();
 
   std::string fullSelection = region->getRegionCuts();
+  //cout << "[projectFromTree] getRegionCuts avant: " << fullSelection << endl;
+ 
   if( selection!="" ) fullSelection = fullSelection + " && " + selection;
+  
+  //cout << "[projectFromTree] getRegionCuts apres: " << fullSelection << endl;
 
   treeEst->tree->Project( yield->GetName(), variable.c_str(), Form("weight*(%s)", fullSelection.c_str()) );
+  //treeEst->tree->Project( yield->GetName(), variable.c_str(), Form("weight*(%s)", "" ));
+  
 
+  cout << "[projectFromTree] yield name: " << yield->GetName() << endl;
+  TCanvas* c = new TCanvas();
+  c->cd();
+  yield->Draw();
+  TString regionName = region->getName();
+  TString yieldName = yield->GetName();
+  c->SaveAs("test/" + yieldName + "_yield.pdf");
+  
+  //cout << "Entries of the tree: " << treeEst->tree->GetEntries() << endl;
+  
   gROOT->cd();
 
   this->tree = treeEst->tree->CopyTree( Form("%s", fullSelection.c_str()) );
   this->tree->SetDirectory(0);
   this->tree->SetName( this->getHistoName("tree").c_str() );
+  
+  //cout << "Entries of the copied tree: " << this->tree->GetEntries() << endl;
+ 
 
   dir->cd();
   
@@ -299,6 +320,8 @@ MT2Analysis<MT2EstimateTree>* MT2EstimateTree::makeRebinnedAnalysisFromInclusive
 
 MT2Analysis<MT2EstimateTree>* MT2EstimateTree::makeRebinnedAnalysisFromInclusiveTree( const std::string& aname, const std::string& regionsSet, MT2Analysis<MT2EstimateTree>* estimate, const std::string& selection, int nBins, double* bins, const std::string& variable ) {
 
+  cout << "Rebinned function 2" << endl;
+
   std::set<MT2Region> regions = estimate->getRegions();
 
   if( regions.size()!=1 ) {
@@ -316,7 +339,12 @@ MT2Analysis<MT2EstimateTree>* MT2EstimateTree::makeRebinnedAnalysisFromInclusive
   if ( nBins!=0 )
     MT2Estimate::rebinYields( (MT2Analysis<MT2Estimate>*)analysis, nBins, bins );
 
+  cout << "after rebinning the yields" << endl;
+
   for( std::set<MT2Region>::iterator iR=newRegions.begin(); iR!=newRegions.end(); ++iR ) {
+    MT2Region* thisRegion = new MT2Region(*iR);
+    cout << "Region: " << thisRegion->getName() << endl;
+
     MT2EstimateTree* thisEstimateTree = analysis->get( *iR );
     thisEstimateTree->projectFromTree( treeInclusive, selection, variable );
   } // for regions
