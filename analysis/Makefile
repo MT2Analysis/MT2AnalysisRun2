@@ -270,6 +270,9 @@ drawLostLeptonControlRegionDataMC_EAs: drawLostLeptonControlRegionDataMC_EAs.cpp
 drawLostLeptonControlRegionDataMC_compareData: drawLostLeptonControlRegionDataMC_compareData.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o drawLostLeptonControlRegionDataMC_compareData drawLostLeptonControlRegionDataMC_compareData.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
+drawLostLeptonControlRegionDataMC_combined: drawLostLeptonControlRegionDataMC_combined.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -o drawLostLeptonControlRegionDataMC_combined drawLostLeptonControlRegionDataMC_combined.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
+
 drawRSFOF: drawRSFOF.C 
 	$(CC) -Wall $(INCLUDES) -o drawRSFOF drawRSFOF.C $(ROOTFLAG) $(EXTRALIBS)
 
