@@ -1433,7 +1433,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
     //Ht cut varies between 2016 and 2017/2018 (1000 vs 1200)
     float cutOnHT;
     if(year==2016){
-      cutOnHT = 1000;
+      cutOnHT = 1200;
     }
     else if(year==2017 || year==2018){
       cutOnHT = 1200;
@@ -1445,7 +1445,6 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       doCutHEMFail = true;
     }
     */
-
     //if (sel=="gamma")
     //return PV_npvs > 0 &&
     //gamma_nJet30 >= 1 &&
@@ -1477,6 +1476,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       // //   return nVert > 0;
     }
     else{
+
 	//////(nJet30 >= 2 || sel=="monojet") &&
       return nJet30 >=1 &&
 	nJet30FailId == 0 &&
