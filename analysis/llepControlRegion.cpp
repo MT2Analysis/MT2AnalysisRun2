@@ -180,7 +180,7 @@ int main( int argc, char* argv[] ) {
     std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
     //std::cout << " cfg.useETHdata()" <<  cfg.useETHdata() << std::endl;
 
-    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", 1, 100, cfg.useETHdata() ); // only data samples
+    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", -1, 100, cfg.useETHdata() ); // only data samples
 
     if( samples_data.size()==0 ) {
       std::cout << "There must be an error: samples_data is empty!" << std::endl;
@@ -217,7 +217,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   MT2LeptonSFTool leptonSF;
 
   // determine if it's data or mc here
-  bool  isData = (sample.id >= 1 && sample.id < 100 );
+  bool  isData = (sample.id >= -1 && sample.id < 100 );
   std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
 
   // determine if it is an ETH kind of ntuple or not
@@ -228,8 +228,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   TFile* file = TFile::Open(sample.file.c_str());
   TTree* tree = (TTree*)file->Get(treeName);
 
-  MT2Tree myTree;
-  myTree.Init(tree);
+  MT2Tree myTree(tree, isETH);
+  //MT2Tree myTree;
+  //myTree.Init(tree);
 
   std::string regionsSet = cfg.regionsSet();
   std::cout << "Using region set: " << regionsSet << std::endl;
@@ -260,14 +261,13 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // if( myTree.isData && !myTree.isGolden ) continue;
    
-    
     // apply the filters
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    } else {
-      if(!myTree.passFiltersMC(cfg.year())) continue;
-    } 
+    }  //else {
+//      if(!myTree.passFiltersMC(cfg.year())) continue;
+//    } 
      
     // apply the triggers
     if(isData and isETH) {
@@ -296,9 +296,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
     
     // apply the main kinematic selections here
-    if( !myTree.passBaselineKinematic("",cfg.year())) continue;
+    if( !myTree.passBaselineKinematic("",cfg.year(), isETH)) continue;
     
- 
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     
@@ -312,6 +311,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue; 
+
     //new cut: we ask specifically the number of leptons with high MT to be zero
     if(myTree.nLepHighMT != 0) continue;
     
@@ -412,7 +412,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
    
     MT2EstimateTree* thisEstimate;
 
-    if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" ){ // To avoid signal contamination in 7j 2b and 7j 3b
+    if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond17"){ // To avoid signal contamination in 7j 2b and 7j 3b
       if( ht>450. && njets>=7 && nbjets>2 ) continue;
       else if( ht<450 || njets<7 || nbjets<1 ) {
 	thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );

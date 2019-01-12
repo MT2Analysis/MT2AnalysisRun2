@@ -49,6 +49,7 @@ cuts['mini']['2016']['zll_HTmiss-Etmiss'] = '(zll_diffMetMht < 0.5*zll_met_pt)'
 cuts['mini']['2016']['zll_MT2'] =           '((((zll_mt2>200 && zll_ht<1500) || (zll_mt2>400 && zll_ht>=1500)) &&(nJet30>1) )  ||  ( zll_ht>200 && nJet30==1 )  )'
 cuts['mini']['2016']['ZmassPt'] =           '(zll_pt > 200. && fabs(zll_mass-91.19)<20)'
 cuts['mini']['2016']['2leptons'] =          '(lep_pt[0]>100 && lep_pt[1]>30)'
+cuts['mini']['2016']['HEM_fail'] =          '(nJet30HEMFail==0)'
 # abs(myTree.lep_pdgId[0])==11 && myTree.lep_tightId[0]< 0.5
 # abs(myTree.lep_pdgId[1])==11 && myTree.lep_tightId[1]< 0.5
 
@@ -79,27 +80,37 @@ cuts['mini']['2017']['zll_HTmiss-Etmiss'] = cuts['mini']['2016']['zll_HTmiss-Etm
 cuts['mini']['2017']['zll_MT2'] =           cuts['mini']['2016']['zll_MT2']
 cuts['mini']['2017']['ZmassPt'] =           cuts['mini']['2016']['ZmassPt']
 cuts['mini']['2017']['2leptons'] =          cuts['mini']['2016']['2leptons']
+cuts['mini']['2017']['HEM_fail'] =          cuts['mini']['2016']['HEM_fail']
+
 
 cuts['nano']={}
 cuts['nano']['2017'] = {}
 for key in cuts['mini']['2017'].keys():
-  if 'trigger' not in key:
-    cuts['nano']['2017'][key] = cuts['mini']['2017'][key]
-  else:
-    cuts['nano']['2017']['triggers'] = '(1)'
-    cuts['nano']['2017']['zll_SF_triggers'] = '(1)'
-    cuts['nano']['2017']['zll_OF_triggers'] = '(1)'
+  if 'trigger' in key:
+    cuts['nano']['2017']['triggers'] = '(HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60)'
+    cuts['nano']['2017']['zll_SF_triggers'] = '(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200)'
 
+    cuts['nano']['2017']['zll_OF_triggers'] = '(HLT_Mu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu27_Ele37_CaloIdL_MW || HLT_Mu37_Ele27_CaloIdL_MW || HLT_Photon200)'
+  elif key=='goodVertex':
+    cuts['nano']['2017'][key] = '(PV_npvsGood>0)'
+  else:
+    cuts['nano']['2017'][key] = cuts['mini']['2017'][key]
+
+cuts['nano']['2018'] = {}
+cuts['nano']['2018'] = cuts['nano']['2017']
+
+print 'debug'
+print cuts['nano']['2018']['zll_SF_triggers']
 
 ordered_cutNames = {}
-ordered_cutNames['SR'] =     ['noCut' ,'isGolden', 'goodVertex', 'filters', 'triggers', 'HT_Etmiss', 'nJets>0', 'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', 'leptonVeto','isoTrackVetoLep', 'isoTrackVetoHad' ]
-ordered_cutNames['CR1lep'] = ['noCut' ,'isGolden', 'goodVertex', 'filters', 'triggers', 'HT_Etmiss', 'nJets>0', 'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', '1lepton', 'incl1leptonCR']
-ordered_cutNames['CR2lep'] = ['noCut' ,'isGolden', 'goodVertex', 'filters', 'zll_SF_triggers', 'zll_HT_Etmiss', 'nJets>0', 'zll_deltaPhi>0.3', 'zll_HTmiss-Etmiss', 'zll_MT2', 'ZmassPt', '2leptons']
+ordered_cutNames['SR'] =     ['noCut' , 'goodVertex', 'triggers', 'HT_Etmiss', 'nJets>0', 'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', 'leptonVeto','isoTrackVetoLep', 'isoTrackVetoHad', 'HEM_fail' ]
+ordered_cutNames['CR1lep'] = ['noCut' , 'goodVertex', 'triggers', 'HT_Etmiss', 'nJets>0', 'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', '1lepton', 'incl1leptonCR', 'HEM_fail']
+ordered_cutNames['CR2lep'] = ['noCut' , 'goodVertex', 'zll_SF_triggers', 'zll_HT_Etmiss', 'nJets>0', 'zll_deltaPhi>0.3', 'zll_HTmiss-Etmiss', 'zll_MT2', 'ZmassPt', '2leptons', 'HEM_fail']
 #ordered_cutNames['CR1ph'] =
 #ordered_cutNames['SR'] = ['noCut', 'cleanings']
-ordered_cutNames['SR_kinematic'] = ['noCut' , 'HT_Etmiss',  'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', 'leptonVeto','isoTrackVetoLep', 'isoTrackVetoHad' ]
-ordered_cutNames['CR1lep_kinematic'] = ['noCut', 'HT_Etmiss',  'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', '1lepton', 'incl1leptonCR']
-ordered_cutNames['CR2lep_kinematic'] = ['noCut', 'zll_HT_Etmiss',  'zll_deltaPhi>0.3', 'zll_HTmiss-Etmiss', 'zll_MT2', 'ZmassPt', '2leptons']
+ordered_cutNames['SR_kinematic'] =     ['noCut' , 'HT_Etmiss',  'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', 'leptonVeto','isoTrackVetoLep', 'isoTrackVetoHad', 'HEM_fail' ]
+ordered_cutNames['CR1lep_kinematic'] = ['noCut', 'HT_Etmiss',  'deltaPhi>0.3', 'HTmiss-Etmiss', 'MT2', '1lepton', 'incl1leptonCR', 'HEM_fail']
+ordered_cutNames['CR2lep_kinematic'] = ['noCut', 'zll_HT_Etmiss',  'zll_deltaPhi>0.3', 'zll_HTmiss-Etmiss', 'zll_MT2', 'ZmassPt', '2leptons', 'HEM_fail']
 
 
 class SampleCutflow(object):
@@ -125,7 +136,7 @@ class SampleCutflow(object):
   def fill(self):
     chain = TChain(self.treeName)
     for fileName in self.fileNames:
-      if not os.path.isfile(fileName): raise RuntimeError('{} not a file'.format(fileName))
+      #if not os.path.isfile(fileName): raise RuntimeError('{} not a file'.format(fileName))
       chain.Add(fileName)
     selection = '(1)'
     for cutName in ordered_cutNames[self.region]:

@@ -298,7 +298,8 @@ public :
    Float_t         lep_phi[5];   //[nLep]
    Float_t         lep_mass[5];   //[nLep]
    Float_t         lep_charge[5];   //[nLep]
-   Float_t         lep_pdgId[5];   //[nLep]
+   Float_t         lep_pdgId[5];   //[nLep]  
+   Int_t         lep_pdgId_INT[5];   //[nLep]  
    Float_t         lep_dxy[5];   //[nLep]
    Float_t         lep_dz[5];   //[nLep]
    Float_t         lep_miniRelIso[5];   //[nLep]
@@ -425,6 +426,7 @@ public :
    Float_t         weight_toppt;
    Int_t           njet;
    Int_t           nlep;
+
    // 
    
 
@@ -704,6 +706,7 @@ public :
    TBranch        *b_lep_mass;   //!
    TBranch        *b_lep_charge;   //!
    TBranch        *b_lep_pdgId;   //!
+   TBranch        *b_lep_pdgId_INT;   //!
    TBranch        *b_lep_dxy;   //!
    TBranch        *b_lep_dz;   //!
    TBranch        *b_lep_miniRelIso;   //!
@@ -832,18 +835,18 @@ public :
    TBranch        *b_nlep;   //!
    //
 
-   MT2Tree(TTree *tree=0);
+   MT2Tree(TTree *tree=0, bool isETH=true);
    virtual ~MT2Tree();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
-   virtual void     Init(TTree *tree);
+   virtual void     Init(TTree *tree, bool isETH=true);
 //   virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
-   virtual Bool_t   passSelection(TString sel = "", int year = 2016) const;
-   virtual Bool_t   passBaselineKinematic (TString sel = "", int year = 2016) const;
+   virtual Bool_t   passSelection(TString sel = "", int year = 2016, bool isETH=true) const;
+   virtual Bool_t   passBaselineKinematic (TString sel = "", int year = 2016, bool isETH=true) const;
    virtual Bool_t   passLeptonVeto  () const;
    virtual Bool_t   passIsoTrackVeto() const;
    virtual Bool_t   passFilters (int year) const;
@@ -862,7 +865,7 @@ public :
 #endif
 
 #ifdef mt2_cxx
-MT2Tree::MT2Tree(TTree *tree) : fChain(0) 
+MT2Tree::MT2Tree(TTree *tree, bool isETH) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -874,7 +877,7 @@ MT2Tree::MT2Tree(TTree *tree) : fChain(0)
       f->GetObject("Events",tree);
 
    }
-   Init(tree);
+   Init(tree, isETH);
 }
 
 MT2Tree::~MT2Tree()
@@ -902,7 +905,7 @@ Long64_t MT2Tree::LoadTree(Long64_t entry)
    return centry;
 }
 
-void MT2Tree::Init(TTree *tree)
+void MT2Tree::Init(TTree *tree, bool isETH)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -1189,7 +1192,8 @@ void MT2Tree::Init(TTree *tree)
    fChain->SetBranchAddress("lep_phi", lep_phi, &b_lep_phi);
    fChain->SetBranchAddress("lep_mass", lep_mass, &b_lep_mass);
    fChain->SetBranchAddress("lep_charge", lep_charge, &b_lep_charge);
-   fChain->SetBranchAddress("lep_pdgId", lep_pdgId, &b_lep_pdgId);
+   if (isETH) fChain->SetBranchAddress("lep_pdgId", lep_pdgId, &b_lep_pdgId);
+   else       fChain->SetBranchAddress("lep_pdgId", lep_pdgId_INT, &b_lep_pdgId_INT);
    fChain->SetBranchAddress("lep_dxy", lep_dxy, &b_lep_dxy);
    fChain->SetBranchAddress("lep_dz", lep_dz, &b_lep_dz);
    fChain->SetBranchAddress("lep_miniRelIso", lep_miniRelIso, &b_lep_miniRelIso);
@@ -1346,12 +1350,12 @@ Int_t MT2Tree::Cut(Long64_t entry)
 }
 
 
-Bool_t MT2Tree::passSelection(TString sel, int year) const
+Bool_t MT2Tree::passSelection(TString sel, int year, bool isETH) const
 {
   if(sel=="zll" || sel=="singleLepton"){
-    return passBaselineKinematic(sel, year);
+    return passBaselineKinematic(sel, year, isETH);
   }else{
-    return passBaselineKinematic(sel, year) && passLeptonVeto() && passIsoTrackVeto();
+    return passBaselineKinematic(sel, year, isETH) && passLeptonVeto() && passIsoTrackVeto();
   }
 }
 
@@ -1427,39 +1431,21 @@ Bool_t MT2Tree::passMonoJetId( int j ) const {
   return jet_id[j]>=4;
 }
 
-Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
+Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 {
      
-    //Ht cut varies between 2016 and 2017/2018 (1000 vs 1200)
-    float cutOnHT;
-    if(year==2016){
-      cutOnHT = 1000;
-    }
-    else if(year==2017 || year==2018){
-      cutOnHT = 1200;
-    }
+    float cutOnHT=1200;
 
-    /*
-    bool doCutHEMFail = false;
-    if (year==2018) {
-      doCutHEMFail = true;
-    }
-    */
-
-    //if (sel=="gamma")
-    //return PV_npvs > 0 &&
-    //gamma_nJet30 >= 1 &&
-    //gamma_nJet30FailId == 0 &&
-    //gamma_deltaPhiMin > 0.3 &&
-    //( (gamma_nJet30 > 1 && gamma_ht<1000. && gamma_met_pt>250.) || (gamma_nJet30 > 1 && gamma_ht>=1000. && gamma_met_pt>30.) || (gamma_nJet30==1 && gamma_met_pt>250.)) &&
-    //gamma_diffMetMht < 0.5*gamma_met_pt;
     if (sel=="zll"){
+    int lepSize = 0;
+    lepSize = isETH ? nLep : nlep;
+
       return nJet30 >= 1 &&
 	nJet30FailId == 0 &&
 	zll_deltaPhiMin > 0.3 &&
 	((nJet30>1 && zll_ht<cutOnHT && zll_met_pt>250.) || (nJet30>1 && zll_ht>=cutOnHT && zll_met_pt>30.) || (nJet30==1 && zll_met_pt>250.)) &&
 	zll_diffMetMht < 0.5*zll_met_pt &&
-	nLep > 1;
+	lepSize > 1;
       //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
     }
     else if (sel=="qcd"){
@@ -1477,6 +1463,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year) const
       // //   return nVert > 0;
     }
     else{
+
 	//////(nJet30 >= 2 || sel=="monojet") &&
       return nJet30 >=1 &&
 	nJet30FailId == 0 &&
