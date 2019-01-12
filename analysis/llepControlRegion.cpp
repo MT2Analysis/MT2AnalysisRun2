@@ -228,8 +228,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   TFile* file = TFile::Open(sample.file.c_str());
   TTree* tree = (TTree*)file->Get(treeName);
 
-  MT2Tree myTree;
-  myTree.Init(tree);
+  MT2Tree myTree(tree, isETH);
+  //MT2Tree myTree;
+  //myTree.Init(tree);
 
   std::string regionsSet = cfg.regionsSet();
   std::cout << "Using region set: " << regionsSet << std::endl;
@@ -295,7 +296,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
     
     // apply the main kinematic selections here
-    if( !myTree.passBaselineKinematic("",cfg.year())) continue;
+    if( !myTree.passBaselineKinematic("",cfg.year(), isETH)) continue;
     
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;

@@ -345,8 +345,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
   TTree* tree = (TTree*)file->Get(treeName);
 
-  MT2Tree myTree;
-  myTree.Init(tree);
+  MT2Tree myTree(tree, isETH);
+  //MT2Tree myTree;
+  //myTree.Init(tree);
 
   // number of gen events
   double nGen=-9999; double nGenWeighted=-9999;
@@ -435,7 +436,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     //} 
 
     // kinematic selections, including lepton veto
-    if( !myTree.passSelection("", cfg.year()) ) continue;
+    if( !myTree.passSelection("", cfg.year()), isETH ) continue;
 
 
     // monojet id
