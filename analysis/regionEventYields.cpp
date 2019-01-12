@@ -271,7 +271,7 @@ int main( int argc, char* argv[] ) {
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFileNameData << std::endl;
 
-    std::vector<MT2Sample> fSamplesData = MT2Sample::loadSamples(samplesFileNameData, "", 1, 100, cfg.useETHdata()); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
+    std::vector<MT2Sample> fSamplesData = MT2Sample::loadSamples(samplesFileNameData, "", -1, 100, cfg.useETHdata()); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
     if( fSamplesData.size()==0 ) {
       std::cout << "There must be an error: fSamplesData is empty!" << std::endl;
       exit(1209);
@@ -333,7 +333,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
 
   // determine if it's data or mc here
-  bool  isData = (sample.id >= 1 && sample.id < 100 );
+  bool  isData = (sample.id >= -1 && sample.id < 100 );
   std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
 
   // determine if it is an ETH kind of ntuple or not
@@ -385,9 +385,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    } else {
-      if(!myTree.passFiltersMC(cfg.year())) continue;
-    } 
+    } //else {
+      //if(!myTree.passFiltersMC(cfg.year())) continue;
+    //} 
 
     // apply the triggers
     if(isData and isETH) {
