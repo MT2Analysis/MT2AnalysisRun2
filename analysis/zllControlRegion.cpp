@@ -328,7 +328,7 @@ int main(int argc, char* argv[]) {
     std::string samplesFile_data = "../samples/samples_" + cfg.dataSamples() + ".dat";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
-       std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", 1, 100, cfg.useETHdata());
+    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", -1, 100, cfg.useETHdata());
     //std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "noDuplicates");
 
     //    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "Double");
@@ -531,7 +531,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
 
-  bool isData = (sample.id >= 1 && sample.id < 100 );
+  bool isData = (sample.id >= -1 && sample.id < 100 );
   std::cout << " sample.id=" << sample.id << " isData=" << isData << std::endl;
   
   // determine if it is an ETH kind of ntuple or not
@@ -568,9 +568,9 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    } else {
-      if(!myTree.passFiltersMC(cfg.year())) continue;
-    }
+    } //else {
+    //  if(!myTree.passFiltersMC(cfg.year())) continue;
+    //}
 
     // apply good vertex cut once for all 
     if (isETH) {
