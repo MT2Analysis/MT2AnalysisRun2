@@ -866,11 +866,9 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 
   system( Form("mkdir -p %s", outdir_.c_str()) );
 
-
+  
   float binWidth = (xMax-xMin)/nBins;
   if( axisName=="" ) axisName = varName;
-
-
 
 
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this
@@ -890,15 +888,14 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 
     std::vector<TTree*> tree_data = {tree_data1, tree_data2, tree_data3};
 
+   
 
     TH1D* h1_data1 = 0;
     TH1D* h1_data2 = 0;
     TH1D* h1_data3 = 0;
 
     std::vector<TH1D*> h1_data_sep = {h1_data1, h1_data2, h1_data3};
-
-    //TGraphAsymmErrors* gr_data = 0;
-
+   
     for(unsigned int i(0); i<h1_data_sep.size(); ++i){ //we loop on the years 
       TString index = to_string(i+1);
       if( tree_data[i] ) {
@@ -907,24 +904,28 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 	//tree_data->Project( "h1_data", varName.c_str(), Form("%f*(%s)", data_->getWeight(), selection.c_str()) );
 	if( addOverflow_ )
 	  MT2DrawTools::addOverflowSingleHisto(h1_data_sep[i]);
-	//gr_data = MT2DrawTools::getPoissonGraph(h1_data_sep[i], false, "binWidth");
-	//gr_data->SetMarkerStyle(20);
-	//gr_data->SetMarkerSize(1.2);
       }
     }
 
-    //we combine the three years
-    TH1D* h1_data_intermediate = (TH1D*) h1_data_sep[0]->Clone();
-    h1_data_intermediate->Add(h1_data_sep[1]);
-    TH1D* h1_data = (TH1D*) h1_data_intermediate->Clone(); //this histogram will contain all the years
-    h1_data->Add(h1_data_sep[2]);
+  
+    TH1D* h1_data = 0;
+    //if there is only one year
+    if(!tree_data[2] || !tree_data[3]){
+      h1_data = (TH1D*) h1_data_sep[0]->Clone();
+    }
+    else{ //we combine the three years
+      TH1D* h1_data_intermediate = (TH1D*) h1_data_sep[0]->Clone();
+      h1_data_intermediate->Add(h1_data_sep[1]);
+      h1_data = (TH1D*) h1_data_intermediate->Clone(); //this histogram will contain all the years
+      h1_data->Add(h1_data_sep[2]);
+    }
 
     TGraphAsymmErrors* gr_data = 0;
     gr_data = MT2DrawTools::getPoissonGraph(h1_data, false, "binWidth");
     gr_data->SetMarkerStyle(20);
     gr_data->SetMarkerSize(1.2);
 
-   
+    
     std::vector<TH1D*> histos_mc1;
     std::vector<TH1D*> histos_mc2;
     std::vector<TH1D*> histos_mc3;
@@ -933,15 +934,15 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     std::vector<TH1D*> histos_mc_sep;
 
     for( unsigned i=0; i<mc1_->size(); ++i ) {//loop on the different contributions of the background 
-      TTree* tree_mc1 = (mc1_->at(i)->get(thisRegion)->tree);
-      TTree* tree_mc2 = (mc2_->at(i)->get(thisRegion)->tree);
-      TTree* tree_mc3 = (mc3_->at(i)->get(thisRegion)->tree);
+      TTree* tree_mc1 = (mc1_) ? (mc1_->at(i)->get(thisRegion)->tree) : 0;
+      TTree* tree_mc2 = (mc2_) ? (mc2_->at(i)->get(thisRegion)->tree) : 0;
+      TTree* tree_mc3 = (mc3_) ? (mc3_->at(i)->get(thisRegion)->tree) : 0;
 
       std::vector<TTree*> tree_mc = {tree_mc1, tree_mc2, tree_mc3};
 
-      std::string thisName1 = "h1_1_" + mc1_->at(i)->getName() + "_" + thisRegion.getName(); 
-      std::string thisName2 = "h1_2_" + mc2_->at(i)->getName() + "_" + thisRegion.getName(); 
-      std::string thisName3 = "h1_3_" + mc3_->at(i)->getName() + "_" + thisRegion.getName(); 
+      std::string thisName1 = (tree_mc1) ? "h1_1_" + mc1_->at(i)->getName() + "_" + thisRegion.getName() : 0;
+      std::string thisName2 = (tree_mc2) ? "h1_2_" + mc2_->at(i)->getName() + "_" + thisRegion.getName() : ""; 
+      std::string thisName3 = (tree_mc2) ? "h1_3_" + mc3_->at(i)->getName() + "_" + thisRegion.getName() : ""; 
 
       std::vector<std::string> thisName = {thisName1, thisName2, thisName3};
       std::vector<float> lumi = {lumi1_, lumi2_, lumi3_};
@@ -960,13 +961,18 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 	h1_mc[j] = new TH1D( thisName[j].c_str(), "", nBins, xMin, xMax );
 	h1_mc[j]->Sumw2();
 
-	if( selection!="" )
-	  tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight*(%s)", lumi[j], selection.c_str()) );
-	//tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*(%s)", lumi_*mc_->at(i)->getWeight(), selection.c_str()) );
-	else
-	  tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight", lumi[j]) );
-	//tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f", lumi_*mc_->at(i)->getWeight()) );
-
+	if( selection!="" ){
+	  if(tree_mc[j]){
+	    tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight*(%s)", lumi[j], selection.c_str()) );
+	    //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*(%s)", lumi_*mc_->at(i)->getWeight(), selection.c_str()) );
+	  }
+	}
+	else{
+	  if(tree_mc[j]){
+	    tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight", lumi[j]) );
+	    //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f", lumi_*mc_->at(i)->getWeight()) );
+	  }
+	}
 	if( addOverflow_ )
 	  MT2DrawTools::addOverflowSingleHisto(h1_mc[j]);
 	
@@ -981,7 +987,8 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 
       }
     }
-    
+
+       
     std::vector<TH1D*> histos_mc(2);
 
     TH1D* h1_int1 = (TH1D*) histos_mc_sep[0]->Clone();
@@ -1260,7 +1267,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     if( data1_ ) {
       TString year = to_string(year_);
       TString nameOfDataLegend = "Data " + year;
-      if(data2_ = 0){
+      if(!data2_){
 	legend->AddEntry( gr_data, nameOfDataLegend, "P" );
       }
        //std::cout<< h1_data->GetName() <<std::endl;
@@ -1405,7 +1412,11 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     delete h2_axes_ratio;
     
     delete h1_data;
-  
+    delete h1_data_sep[0];
+    delete h1_data_sep[1];
+    delete h1_data_sep[2];
+
+   
     //for( unsigned i=0; i<histos_mc.size(); ++i )
     //  delete histos_mc[i];
 

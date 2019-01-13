@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
 
 
   if( argc>2 ) {
-    std::string normType(argv[2]);
+    std::string normType(argv[4]);
     if( normType=="lumi" ) shapeNorm=false;
     else if( normType=="shape" ) shapeNorm=true;
     else {
@@ -60,104 +60,181 @@ int main(int argc, char* argv[]){
   else
     std::cout << "-> Using lumi normalization." << std::endl;
 
-  if( argc<2 ) {
-    std::cout << "USAGE: ./drawZllControlRegion [configFileName] (lumi/shape)" << std::endl;
+  if( argc<4 ) {
+    std::cout << "USAGE: ./drawZllControlRegion [configFileName1] [configFileName2] [configFileName3] (lumi/shape)" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
 
-  std::string configFileName(argv[1]);
-  MT2Config cfg( configFileName);
-  regionsSet = cfg.regionsSet();
+  std::string configFileName1(argv[1]);
+  MT2Config cfg1( configFileName1);
 
-  std::string outputdir = cfg.getEventYieldDir() + "/zllPurity";
-  std::string outputdir_of = cfg.getEventYieldDir() + "/zllPurity_of";
+  std::string configFileName2(argv[2]);
+  MT2Config cfg2( configFileName2);
+
+  std::string configFileName3(argv[3]);
+  MT2Config cfg3( configFileName3);
+ 
+  regionsSet = cfg1.regionsSet();
+
+  std::string outputdir1 = cfg1.getEventYieldDir() + "/zllPurity";
+  std::string outputdir_of1 = cfg1.getEventYieldDir() + "/zllPurity_of";
+
+  std::string outputdir2 = cfg2.getEventYieldDir() + "/zllPurity";
+  std::string outputdir_of2 = cfg2.getEventYieldDir() + "/zllPurity_of";
+
+  std::string outputdir3 = cfg3.getEventYieldDir() + "/zllPurity";
+  std::string outputdir_of3 = cfg3.getEventYieldDir() + "/zllPurity_of";
 
   std::cout << "-> Using regions: " << regionsSet << std::endl;
   MT2DrawTools::setStyle();
  
   TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
 
-  double intpart;
-  double fracpart = modf(cfg.lumi(), &intpart);
-  std::string suffix;
-  if( fracpart>0. )
-    suffix = std::string( Form("_%.0fp%.0ffb", intpart, 10.*fracpart ) );
-  else
-    suffix = std::string( Form("_%.0ffb", intpart ) );
   
-  system(Form("mkdir -p %s", outputdir.c_str()));
+  double intpart;
+  double fracpart1 = modf(cfg1.lumi(), &intpart);
+  std::string suffix1;
+  if( fracpart1>0. )
+    suffix1 = std::string( Form("_%.0fp%.0ffb", intpart, 10.*fracpart1 ) );
+  else
+    suffix1 = std::string( Form("_%.0ffb", intpart ) );
+  
+  
+  //system(Form("mkdir -p %s", outputdir.c_str()));
 
 
-  std::string ZllDir = cfg.getEventYieldDir() + "/zllControlRegion/goodFiles";
-  std::string ZllDir_of = cfg.getEventYieldDir() + "/zllControlRegion/goodFiles";
+  std::string ZllDir1 = cfg1.getEventYieldDir() + "/zllControlRegion";
+  std::string ZllDir_of1 = cfg1.getEventYieldDir() + "/zllControlRegion";
 
-  MT2Analysis<MT2EstimateTree>* Zll = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "DYJets");
-  if( Zll==0 ) {
-    std::cout << "-> Please run zllControlRegion first. I need to get the yields from there." << std::endl;    std::cout << "-> Thank you for your cooperation." << std::endl;    exit(197);
+  std::string ZllDir2 = cfg2.getEventYieldDir() + "/zllControlRegion";
+  std::string ZllDir_of2 = cfg2.getEventYieldDir() + "/zllControlRegion";
+
+  std::string ZllDir3 = cfg3.getEventYieldDir() + "/zllControlRegion";
+  std::string ZllDir_of3 = cfg3.getEventYieldDir() + "/zllControlRegion";
+
+  MT2Analysis<MT2EstimateTree>* Zll1 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir1.c_str() ), "DYJets");
+  MT2Analysis<MT2EstimateTree>* Zll2 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir2.c_str() ), "DYJets");
+  MT2Analysis<MT2EstimateTree>* Zll3 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir3.c_str() ), "DYJets");
+
+  if( Zll1==0 || Zll2==0 || Zll3==0 ) {
+    std::cout << "-> Please run zllControlRegion first. I need to get the yields from there." << std::endl;    std::cout << "-> Thank you for your cooperation." << std::endl;        exit(197);
   } 
-  Zll->setColor(kZinv);
+
+  Zll1->setColor(kZinv);
+  Zll2->setColor(kZinv);
+  Zll3->setColor(kZinv);
+
   // MT2Analysis<MT2EstimateTree>* qcd = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str()  ), "QCD");
   // qcd->setColor(kQCD);
-  MT2Analysis<MT2EstimateTree>* top = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "Top");
-  top->setColor(kTop);
+
+  MT2Analysis<MT2EstimateTree>* top1 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir1.c_str() ), "Top");
+  MT2Analysis<MT2EstimateTree>* top2 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir2.c_str() ), "Top");
+  MT2Analysis<MT2EstimateTree>* top3 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir3.c_str() ), "Top");
+
+  top1->setColor(kTop);
+  top2->setColor(kTop);
+  top3->setColor(kTop);
+
   //MT2Analysis<MT2EstimateTree>* wjets = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "WJets");
   //wjets->setColor(kWJets);
 
-  MT2Analysis<MT2EstimateTree>* data = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data.root", ZllDir.c_str()) , "data");
+  MT2Analysis<MT2EstimateTree>* data1 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data.root", ZllDir1.c_str()) , "data");
+  MT2Analysis<MT2EstimateTree>* data2 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data.root", ZllDir2.c_str()) , "data");
+  MT2Analysis<MT2EstimateTree>* data3 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data.root", ZllDir3.c_str()) , "data");
  
-  data->setFullName("Data");
-  Zll->setFullName("Z+jets");
-  // wjets->setFullName("W+jets");
+  data1->setFullName("Data1");
+  data2->setFullName("Data2");
+  data3->setFullName("Data3");
 
-  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields; 
-  bgYields.push_back( Zll );
-  //  bgYields.push_back( qcd );
-  //  bgYields.push_back( wjets );
-  bgYields.push_back( top );
+  Zll1->setFullName("Z+jets1");
+  Zll2->setFullName("Z+jets2");
+  Zll3->setFullName("Z+jets3");
+
+ 
+  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields1; 
+  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields2; 
+  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields3; 
+
+  bgYields1.push_back( Zll1 );
+  bgYields2.push_back( Zll2 );
+  bgYields3.push_back( Zll3 );
+  
+  bgYields1.push_back( top1 );
+  bgYields2.push_back( top2 );
+  bgYields3.push_back( top3 );
 
 
   //OPPOSITE FLAVOR TREES
-  MT2Analysis<MT2EstimateTree>* Zll_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of.c_str() ), "DYJets");
-  Zll_of->setColor(kZinv);
+  MT2Analysis<MT2EstimateTree>* Zll_of1 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of1.c_str() ), "DYJets");
+  MT2Analysis<MT2EstimateTree>* Zll_of2 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of2.c_str() ), "DYJets");
+  MT2Analysis<MT2EstimateTree>* Zll_of3 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of3.c_str() ), "DYJets");
+
+  Zll_of1->setColor(kZinv);
+  Zll_of2->setColor(kZinv);
+  Zll_of3->setColor(kZinv);
+
   // MT2Analysis<MT2EstimateTree>* qcd_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of.c_str()  ), "QCD");
   // qcd_of->setColor(kQCD);
-  MT2Analysis<MT2EstimateTree>* top_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of.c_str() ), "Top");
-  top_of->setColor(kTop);
+
+  MT2Analysis<MT2EstimateTree>* top_of1 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of1.c_str() ), "Top");
+  MT2Analysis<MT2EstimateTree>* top_of2 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of2.c_str() ), "Top");
+  MT2Analysis<MT2EstimateTree>* top_of3 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of3.c_str() ), "Top");
+
+  top_of1->setColor(kTop);
+  top_of2->setColor(kTop);
+  top_of3->setColor(kTop);
+
+
   //MT2Analysis<MT2EstimateTree>* wjets_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees_of.root", ZllDir_of.c_str() ), "WJets");
   // wjets_of->setColor(kWJets);
-  MT2Analysis<MT2EstimateTree>* data_of = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data_of.root", ZllDir_of.c_str() ) , "data_of");
 
-  Zll_of->setFullName("Z+jets");
+  MT2Analysis<MT2EstimateTree>* data_of1 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data_of.root", ZllDir_of1.c_str() ) , "data_of");
+  MT2Analysis<MT2EstimateTree>* data_of2 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data_of.root", ZllDir_of2.c_str() ) , "data_of");
+  MT2Analysis<MT2EstimateTree>* data_of3 = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/data_of.root", ZllDir_of3.c_str() ) , "data_of");
+
+  Zll_of1->setFullName("Z+jets");
+  Zll_of2->setFullName("Z+jets");
+  Zll_of3->setFullName("Z+jets");
+
   //  wjets_of->setFullName("W+jets");
-  data_of->setFullName("Data");
 
-  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields_of; 
-  bgYields_of.push_back( top_of );
-  //  bgYields_of.push_back( qcd_of );
-  //  bgYields_of.push_back( wjets_of );
-  bgYields_of.push_back( Zll_of );
+  data_of1->setFullName("Data");
+  data_of2->setFullName("Data");
+  data_of3->setFullName("Data");
 
-  std::string plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/plots/plotsDataMC";
+  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields_of1; 
+  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields_of2; 
+  std::vector<MT2Analysis<MT2EstimateTree>* > bgYields_of3; 
+
+  bgYields_of1.push_back( top_of1 );
+  bgYields_of2.push_back( top_of2 );
+  bgYields_of3.push_back( top_of3 );
+
+  bgYields_of1.push_back( Zll_of1 );
+  bgYields_of2.push_back( Zll_of2 );
+  bgYields_of3.push_back( Zll_of3 );
+
+  std::string plotsDir = "combined_CRplots/zllControlRegion/SF";
   if( shapeNorm ) plotsDir += "_shape";
 
-  std::string plotsDir_of = cfg.getEventYieldDir() + "/zllControlRegion/plots/plotsDataMC_of";
+  std::string plotsDir_of = "combined/CRplots/zllControlRegion/OF";
   if( shapeNorm ) plotsDir_of += "_shape";
 
 
-  MT2DrawTools dt(plotsDir, cfg.lumi() );
+  MT2DrawTools dt(plotsDir, cfg1.lumi(), cfg2.lumi(), cfg3.lumi());
   dt.set_shapeNorm( shapeNorm );
-  dt.set_data( data );
-  dt.set_mc( &bgYields );
-  dt.set_lumi( cfg.lumi() );
-  dt.set_year(cfg.year());
-
-  MT2DrawTools dt_of(plotsDir_of, cfg.lumi() );
+  dt.set_data( data1, data2, data3 );
+  dt.set_mc( &bgYields1, &bgYields2, &bgYields3 );
+  dt.set_lumi( cfg1.lumi(), cfg2.lumi(), cfg3.lumi() );
+  dt.set_year( cfg1.year() );
+ 
+  MT2DrawTools dt_of(plotsDir_of, cfg1.lumi(), cfg2.lumi(), cfg3.lumi());
   dt_of.set_shapeNorm( shapeNorm );
-  dt_of.set_data( data_of );
-  dt_of.set_mc( &bgYields_of );
-  dt_of.set_lumi( cfg.lumi() );
-  dt_of.set_year(cfg.year());
+  dt_of.set_data( data_of1, data_of2, data_of3 );
+  dt_of.set_mc( &bgYields_of1, &bgYields_of2, &bgYields_of3 );
+  dt_of.set_lumi( cfg1.lumi(), cfg2.lumi(), cfg3.lumi() );
+ 
   
 // +++++++++++++++++++++++++
   // +++      monojet   +++
@@ -267,8 +344,8 @@ int main(int argc, char* argv[]){
 
   htMin=575, htMax=1000;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-  plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/test/ht575to1000/plotsDataMC";
-  if( shapeNorm ) plotsDir += "_shape";
+  //plotsDir = cfg.getEventYieldDir() + "/zllControlRegion/test/ht575to1000/plotsDataMC";
+  //if( shapeNorm ) plotsDir += "_shape";
   selection = "(ht>575. && ht<1000 && nJets==1  && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20 )";
   dt.drawRegionYields_fromTree("HT575to1000_monojet_Z_pt", "Z_pt", selection, 40, 10., 810., "Z p_{T}", "GeV", cutsLabel, "#geq1j, #geq0b");
   dt.drawRegionYields_fromTree("HT575to1000_monojet_mt2", "mt2", selection, 45, 550, 1000, "M_{T2}", "GeV", cutsLabel, "=1j, #geq0b");
@@ -346,9 +423,9 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree( "incl_mll_el"   , "Z_mass"   , selection_mass_el, 50 , 50., 150., "M_{e^{+}e^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
   selection_mass_mu = "(ht>250. && nJets>=1 && mt2>200. && Z_lepId==13 )";
   dt.drawRegionYields_fromTree( "incl_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
-  /*
+  
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -454,7 +531,7 @@ int main(int argc, char* argv[]){
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
 
-
+  
 
   // +++++++++++++++++++++++++
   // +++     b vetoed     +++
@@ -1264,7 +1341,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-
+  
   */
   return 0;
 
