@@ -1,6 +1,8 @@
-lumi 41.86
+lumi 41.53
 year 2017
-regionsSet 13TeV_2016_inclusive
+regionsSet Moriond2019
+useETHdata 1
+useETHmc 0
 
 gammaTemplateRegions 13TeV_2016_inclusive
 crRegionsSet 13TeV_2016_inclusive
