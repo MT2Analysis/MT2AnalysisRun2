@@ -8,7 +8,7 @@ gammaTemplateRegions 13TeV_2016_inclusive
 crRegionsSet 13TeV_2016_inclusive
 qcdRegionsSet zurich2016_noMonojet
 
-mcSamples 2016mc_201901
+mcSamples 2016MC_201901
 dataSamples 2016data_201901
 
 qcdMCSamples Summer16_SnT_06Mar_forQCD

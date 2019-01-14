@@ -81,12 +81,15 @@ Run the background estimation !
 ./computeZinvFromZll <cfg-file-name>
 ```
 
-Note that the 1.13 factor present in https://github.com/MT2Analysis/MT2Analysis2015/blob/mg-data2017/analysis/computeZinvFromZll.cpp#L629
-is derived from plotZllGratio_2d.C   --> this script is also used to make the purity plots (?)
+To compute the purity of the Zll region current, 
+edit drawRSFOF.C with the year chosen, edit the input directory.
 
-To compute the purity of the Zll region current script is below. You must create the output dir of the plots to run it
+You must manually  create the output dir of the plots 
+ratio2016 , ratio2017, ratio2018, ratioCombined
+
+Compile as usual and run:
 ```
-root -l -b -q drawRSFOF.C
+./drawRSFOF
 ```
 
 Create the template data card. For the general syntax of data card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/

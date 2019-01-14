@@ -33,7 +33,7 @@ int Round(float d) {
   return (int)(floor(d + 0.5));
 }
 
-bool doZinvEst = false;
+bool doZinvEst = true;
 bool do_bg = true;
 
 
