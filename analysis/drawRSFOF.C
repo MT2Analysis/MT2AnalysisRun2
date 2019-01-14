@@ -102,13 +102,46 @@ int main(){
   ///////////////////////////////////////////////////
   //                 get the files                 //
   ///////////////////////////////////////////////////
+
+  TString year = "all"; // 2016, 2017, 2018, all
+
+  TString parentDir = "/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/master_13Jan/analysis/";
+  TString crDir = "/zllControlRegion/";
+  TString fileName1 = parentDir    + "EventYields_config_35p9ifb_incl"      + crDir + "data.root";
+  TString fileName2 = parentDir    + "EventYields_config_41p9ifb_incl_2017" + crDir + "data.root";
+  TString fileName3 = parentDir    + "EventYields_config_59p9ifb_incl_2018" + crDir + "data.root";
+  TString fileName1_OF = parentDir + "EventYields_config_35p9ifb_incl"      + crDir + "data_of.root";
+  TString fileName2_OF = parentDir + "EventYields_config_41p9ifb_incl_2017" + crDir + "data_of.root";
+  TString fileName3_OF = parentDir + "EventYields_config_59p9ifb_incl_2018" + crDir + "data_of.root";
+
+  TString directoryName;
+  if (year=="2016") directoryName = "ratio2016/";
+  else if (year=="2017") directoryName = "ratio2017/";
+  else if (year=="2018") directoryName = "ratio2018/";
+  else if (year=="all") directoryName = "ratioCombined/";
  
-  TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data.root");
-  TTree* SF = (TTree*) _file0->Get("data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf")->Clone("SF");
+  TChain *SF = new TChain("SF");
+  if (year=="2016" or year=="all") SF->Add( fileName1 +  "/data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf");
+  if (year=="2017" or year=="all") SF->Add( fileName2 +  "/data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf");
+  if (year=="2018" or year=="all") SF->Add( fileName3 +  "/data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf");
+
+  TChain *OF = new TChain("OF");
+  if (year=="2016" or year=="all")   OF->Add( fileName1_OF + "/data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf");
+  if (year=="2017" or year=="all")   OF->Add( fileName2_OF + "/data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf");
+  if (year=="2018" or year=="all")   OF->Add( fileName3_OF + "/data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf");
+
+  TString lumiLabel;
+  if (year=="2016") lumiLabel = "35.9 fb^{-1} (13 TeV)";
+  if (year=="2017") lumiLabel = "41.5 fb^{-1} (13 TeV)";
+  if (year=="2018") lumiLabel  = "60.0 fb^{-1} (13 TeV)";
+  if (year=="all") lumiLabel  = "137.4 fb^{-1} (13 TeV)";
 
 
-  TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data_of.root");
-  TTree* OF = (TTree*) _file1->Get("data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf")->Clone("OF");
+  //TFile *_file0 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data.root");
+  //TTree* SF = (TTree*) _file0->Get("data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf")->Clone("SF");
+
+  //TFile *_file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_config_35p9ifb_incl/zllControlRegion/goodFiles/data_of.root");
+  //TTree* OF = (TTree*) _file1->Get("data_of/HT250toInf_j1toInf_b0toInf/tree_data_of_HT250toInf_j1toInf_b0toInf")->Clone("OF");
 
 
   gDirectory->cd("");
@@ -263,7 +296,8 @@ int main(){
   label_top->SetTextSize(0.038);
   label_top->SetTextAlign(31); // align right
   label_top->SetTextFont(42);  // label_top->SetTextFont(62);
-  label_top->AddText("41.9 fb^{-1} (13 TeV)");
+  //label_top->AddText("41.9 fb^{-1} (13 TeV)");
+  label_top->AddText(lumiLabel);
 
   TPaveText* label_cms = new TPaveText(0.143,0.96,0.27,0.965, "brNDC");
   label_cms->SetBorderSize(0);
@@ -328,10 +362,10 @@ int main(){
   TH1D* mllRSFOF = (TH1D*) mllSF->Clone("mllRSFOF");
   mllRSFOF->Divide(mllOF);
 
-  mllRSFOF->SetMinimum(0.);
-  mllRSFOF->SetMaximum(2.);
+  //mllRSFOF->SetMinimum(0.);
+  //mllRSFOF->SetMaximum(2.);
   
-  mllRSFOF->GetYaxis()->SetRangeUser(1.,3.);
+  mllRSFOF->GetYaxis()->SetRangeUser(0., 2.);
   mllRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   mllRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
@@ -500,9 +534,9 @@ int main(){
   TH1D* htRSFOF = (TH1D*) htSF->Clone("htRSFOF");
   htRSFOF->Divide(htOF);
 
-  htRSFOF->SetMinimum(0.);
-  htRSFOF->SetMaximum(2.);
-  htRSFOF->GetYaxis()->SetRangeUser(1.,3.);
+//  htRSFOF->SetMinimum(0.);
+//  htRSFOF->SetMaximum(2.);
+  htRSFOF->GetYaxis()->SetRangeUser(0.,2.);
   htRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   htRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
@@ -586,10 +620,10 @@ int main(){
   TH1D* njRSFOF = (TH1D*) njSF->Clone("njRSFOF");
   njRSFOF->Divide(njOF);
 
-  njRSFOF->SetMinimum(0.);
-  njRSFOF->SetMaximum(2.);
+  //njRSFOF->SetMinimum(0.);
+  //njRSFOF->SetMaximum(2.);
   
-  njRSFOF->GetYaxis()->SetRangeUser(1.,3.);
+  njRSFOF->GetYaxis()->SetRangeUser(0., 2.);
   njRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   njRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
@@ -672,10 +706,10 @@ int main(){
   TH1D* nbRSFOF = (TH1D*) nbSF->Clone("nbRSFOF");
   nbRSFOF->Divide(nbOF);
 
-  nbRSFOF->SetMinimum(0.);
-  nbRSFOF->SetMaximum(2.);
+  //nbRSFOF->SetMinimum(0.);
+  //nbRSFOF->SetMaximum(2.);
   
-  nbRSFOF->GetYaxis()->SetRangeUser(1.,3.);
+  nbRSFOF->GetYaxis()->SetRangeUser(0., 2.);
   nbRSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   nbRSFOF->GetYaxis()->SetTitleOffset(1.4);
 
@@ -761,10 +795,10 @@ int main(){
   TH1D* mt2RSFOF = (TH1D*) mt2SF->Clone("mt2RSFOF");
   mt2RSFOF->Divide(mt2OF);
 
-  mt2RSFOF->SetMinimum(0.);
-  mt2RSFOF->SetMaximum(2.);
+  //mt2RSFOF->SetMinimum(0.);
+  //mt2RSFOF->SetMaximum(2.);
   
-  mt2RSFOF->GetYaxis()->SetRangeUser(1.,3.);
+  mt2RSFOF->GetYaxis()->SetRangeUser(0., 2.);
   mt2RSFOF->GetYaxis()->SetTitle("R^{SF/OF}");
   mt2RSFOF->GetYaxis()->SetTitleOffset(1.4);
 
@@ -1204,7 +1238,7 @@ int main(){
 
 
   //SAVE as:
-  TString directoryName = "EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/";
+  //TString directoryName = "EventYields_dataETH_SnTMC_41p9ifb_incl_2017/zllControlRegion/RSFOF_data/";
 
   c1 ->SaveAs(directoryName + "SFandOF_mll.pdf");
   c1r->SaveAs(directoryName + "RSFOF_mll.pdf");
