@@ -39,13 +39,13 @@ class MT2DrawTools {
 
  public:
 
-  MT2DrawTools( const std::string& outputdir="plots_tmp", float lumi1=0., float lumi2=0., float lumi3=0. );
+  MT2DrawTools( const std::string& outputdir="plots_tmp", float lumi=0. );
   //MT2DrawTools( const MT2Config& cfg );
 
   void set_outDir( const std::string& outdir );
-  void set_data( MT2Analysis<MT2EstimateTree>* data1,  MT2Analysis<MT2EstimateTree>* data2=0,  MT2Analysis<MT2EstimateTree>* data3=0  );
-  void set_mc( std::vector< MT2Analysis<MT2EstimateTree>* >* mc1,  std::vector< MT2Analysis<MT2EstimateTree>* >* mc2=0,  std::vector< MT2Analysis<MT2EstimateTree>* >* mc3=0 );
-  void set_lumi( float lumi1, float lumi2=0., float lumi3=0. );
+  void set_data( MT2Analysis<MT2EstimateTree>* data );
+  void set_mc( std::vector< MT2Analysis<MT2EstimateTree>* >* mc );
+  void set_lumi( float lumi );
   void set_lumiErr( float lumiErr );
   void set_year(int year);
   void set_shapeNorm( bool shapeNorm );
@@ -108,9 +108,7 @@ class MT2DrawTools {
  private:
 
   std::string outdir_;
-  float lumi1_;
-  float lumi2_;
-  float lumi3_;
+  float lumi_;
   float lumiErr_;
   int year_;
   bool shapeNorm_;
@@ -118,14 +116,8 @@ class MT2DrawTools {
   bool displaySF_;
   bool doPaperPlots_;
 
-  MT2Analysis<MT2EstimateTree>* data1_;
-  MT2Analysis<MT2EstimateTree>* data2_;
-  MT2Analysis<MT2EstimateTree>* data3_;
-
-  std::vector< MT2Analysis<MT2EstimateTree>* >* mc1_;
-  std::vector< MT2Analysis<MT2EstimateTree>* >* mc2_;
-  std::vector< MT2Analysis<MT2EstimateTree>* >* mc3_;
-  
+  MT2Analysis<MT2EstimateTree>* data_;
+  std::vector< MT2Analysis<MT2EstimateTree>* >* mc_;
   float mcSF_;
   
 

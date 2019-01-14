@@ -9,15 +9,22 @@
 
 using namespace std;
 
-MT2DrawTools::MT2DrawTools( const std::string& outDir, float lumi ) {
+MT2DrawTools::MT2DrawTools( const std::string& outDir, float lumi1, float lumi2, float lumi3 ) {
 
-  lumi_    = lumi;
+  lumi1_    = lumi1;
+  lumi2_    = lumi2;
+  lumi3_    = lumi3;
   lumiErr_ = 0.12;
   shapeNorm_ = false;
   outdir_ = outDir;
 
-  data_ = 0;
-  mc_ = 0;
+  data1_ = 0;
+  data2_ = 0;
+  data3_ = 0;
+  
+  mc1_ = 0;
+  mc2_ = 0;
+  mc3_ = 0;
 
   mcSF_ = 1.;
 
@@ -28,7 +35,7 @@ MT2DrawTools::MT2DrawTools( const std::string& outDir, float lumi ) {
   doPaperPlots_ = false;
 
   std::cout << "[MT2DrawTools] Initiating: " << std::endl;
-  std::cout << "     lumi: " << lumi_ << std::endl;
+  std::cout << "     lumiTot: " << lumi1_ + lumi2_ + lumi3_ << std::endl;
   std::cout << "     lumiErr: " << lumiErr_ << std::endl;
   std::cout << "     shapeNorm: " << shapeNorm_ << std::endl;
   std::cout << "     mcSF: " << mcSF_ << std::endl;
@@ -38,16 +45,20 @@ MT2DrawTools::MT2DrawTools( const std::string& outDir, float lumi ) {
 }
 
 
-void MT2DrawTools::set_data( MT2Analysis<MT2EstimateTree>* data ) {
+void MT2DrawTools::set_data( MT2Analysis<MT2EstimateTree>* data1, MT2Analysis<MT2EstimateTree>* data2, MT2Analysis<MT2EstimateTree>* data3 ) {
 
-  data_ = data;
+  data1_ = data1;
+  data2_ = data2;
+  data3_ = data3;
 
 }
 
 
-void MT2DrawTools::set_mc( std::vector< MT2Analysis<MT2EstimateTree>* >* mc ) {
+void MT2DrawTools::set_mc(std::vector< MT2Analysis<MT2EstimateTree>* >* mc1, std::vector< MT2Analysis<MT2EstimateTree>* >* mc2, std::vector< MT2Analysis<MT2EstimateTree>* >* mc3) {
 
-  mc_ = mc;
+  mc1_ = mc1;
+  mc2_ = mc2;
+  mc3_ = mc3;
 
 }
 
@@ -61,10 +72,12 @@ void MT2DrawTools::set_outDir( const std::string& outdir ) {
 }
 
 
-void MT2DrawTools::set_lumi( float lumi) { 
+void MT2DrawTools::set_lumi(float lumi1, float lumi2, float lumi3) { 
 
-  std::cout << "[MT2DrawTools] Setting lumi to: " << lumi<< std::endl;
-  lumi_ = lumi; 
+  std::cout << "[MT2DrawTools] Setting total lumi to: " << lumi1 + lumi2 + lumi3<< std::endl;
+  lumi1_ = lumi1; 
+  lumi2_ = lumi2;
+  lumi3_ = lumi3;
 
 }
 
@@ -853,16 +866,14 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 
   system( Form("mkdir -p %s", outdir_.c_str()) );
 
-
+  
   float binWidth = (xMax-xMin)/nBins;
   if( axisName=="" ) axisName = varName;
 
 
-
-
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this
 
-  std::set<MT2Region> MT2Regions = mc_->at(0)->getRegions();
+  std::set<MT2Region> MT2Regions = mc1_->at(0)->getRegions();
   
   for( std::set<MT2Region>::iterator iMT2 = MT2Regions.begin(); iMT2!=MT2Regions.end(); ++iMT2 ) {
 
@@ -870,65 +881,156 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     if( old_c1 != 0 ) delete old_c1;
   
     MT2Region thisRegion( (*iMT2) );
+   
+    TTree* tree_data1 = (data1_) ? data1_->get(thisRegion)->tree : 0;
+    TTree* tree_data2 = (data2_) ? data2_->get(thisRegion)->tree : 0;
+    TTree* tree_data3 = (data3_) ? data3_->get(thisRegion)->tree : 0;
 
-    TTree* tree_data = (data_) ? data_->get(thisRegion)->tree : 0;
-    TH1D* h1_data = 0;
-    TGraphAsymmErrors* gr_data = 0;
-    if( tree_data ) {
-      h1_data = new TH1D("h1_data", "", nBins, xMin, xMax );
-      tree_data->Project( "h1_data", varName.c_str(), selection.c_str() );
-      //tree_data->Project( "h1_data", varName.c_str(), Form("%f*(%s)", data_->getWeight(), selection.c_str()) );
-      if( addOverflow_ )
-        MT2DrawTools::addOverflowSingleHisto(h1_data);
-      gr_data = MT2DrawTools::getPoissonGraph(h1_data, false, "binWidth");
-      gr_data->SetMarkerStyle(20);
-      gr_data->SetMarkerSize(1.2);
-    }
-    
+    std::vector<TTree*> tree_data = {tree_data1, tree_data2, tree_data3};
 
+   
 
-    std::vector< TH1D* > histos_mc;
-    for( unsigned i=0; i<mc_->size(); ++i ) { 
-      TTree* tree_mc = (mc_->at(i)->get(thisRegion)->tree);
-      std::string thisName = "h1_" + mc_->at(i)->getName() + "_" + thisRegion.getName();
-      TObject* obj = gROOT->FindObject(thisName.c_str());
-      if( obj ) delete obj;
-      TH1D* h1_mc = new TH1D( thisName.c_str(), "", nBins, xMin, xMax );
-      h1_mc->Sumw2();
-      if( selection!="" )
-        tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*weight*(%s)", lumi_, selection.c_str()) );
-      //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*(%s)", lumi_*mc_->at(i)->getWeight(), selection.c_str()) );
-      else
-        tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*weight", lumi_) );
-      //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f", lumi_*mc_->at(i)->getWeight()) );
+    TH1D* h1_data1 = 0;
+    TH1D* h1_data2 = 0;
+    TH1D* h1_data3 = 0;
 
-      if( addOverflow_ )
-        MT2DrawTools::addOverflowSingleHisto(h1_mc);
-
-      histos_mc.push_back(h1_mc);
-      //if( varName == "nBJets"){
-      // for(int iBin=1; iBin< h1_mc->GetNbinsX(); iBin++){
-      //   std::cout << "iBin " << i << " = " << h1_mc->GetBinContent(iBin) << std::endl;
-      //}}
-    }
-
-    //TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
-
-    TH1D* mc_sum;
-    for( unsigned i=0; i<histos_mc.size(); ++i ) { 
-      if( i==0 ) {
-        mc_sum = new TH1D( *histos_mc[i] );
-        mc_sum->SetName("mc_sum");
-      } else {
-        mc_sum->Add( histos_mc[i] );
+    std::vector<TH1D*> h1_data_sep = {h1_data1, h1_data2, h1_data3};
+   
+    for(unsigned int i(0); i<h1_data_sep.size(); ++i){ //we loop on the years 
+      TString index = to_string(i+1);
+      if( tree_data[i] ) {
+	h1_data_sep[i] = new TH1D("h1_data_sep" + index, "", nBins, xMin, xMax );
+	tree_data[i]->Project( "h1_data_sep" + index, varName.c_str(), selection.c_str() );
+	//tree_data->Project( "h1_data", varName.c_str(), Form("%f*(%s)", data_->getWeight(), selection.c_str()) );
+	if( addOverflow_ )
+	  MT2DrawTools::addOverflowSingleHisto(h1_data_sep[i]);
       }
     }
+
+  
+    TH1D* h1_data = 0;
+    //if there is only one year
+    if(!tree_data[2] || !tree_data[3]){
+      h1_data = (TH1D*) h1_data_sep[0]->Clone();
+    }
+    else{ //we combine the three years
+      TH1D* h1_data_intermediate = (TH1D*) h1_data_sep[0]->Clone();
+      h1_data_intermediate->Add(h1_data_sep[1]);
+      h1_data = (TH1D*) h1_data_intermediate->Clone(); //this histogram will contain all the years
+      h1_data->Add(h1_data_sep[2]);
+    }
+
+    TGraphAsymmErrors* gr_data = 0;
+    gr_data = MT2DrawTools::getPoissonGraph(h1_data, false, "binWidth");
+    gr_data->SetMarkerStyle(20);
+    gr_data->SetMarkerSize(1.2);
+
+    
+    std::vector<TH1D*> histos_mc1;
+    std::vector<TH1D*> histos_mc2;
+    std::vector<TH1D*> histos_mc3;
+
+    //std::vector<vector<TH1D*>> histos_mc = {histos_mc1, histos_mc2, histos_mc3};
+    std::vector<TH1D*> histos_mc_sep;
+
+    for( unsigned i=0; i<mc1_->size(); ++i ) {//loop on the different contributions of the background 
+      TTree* tree_mc1 = (mc1_) ? (mc1_->at(i)->get(thisRegion)->tree) : 0;
+      TTree* tree_mc2 = (mc2_) ? (mc2_->at(i)->get(thisRegion)->tree) : 0;
+      TTree* tree_mc3 = (mc3_) ? (mc3_->at(i)->get(thisRegion)->tree) : 0;
+
+      std::vector<TTree*> tree_mc = {tree_mc1, tree_mc2, tree_mc3};
+
+      std::string thisName1 = (tree_mc1) ? "h1_1_" + mc1_->at(i)->getName() + "_" + thisRegion.getName() : 0;
+      std::string thisName2 = (tree_mc2) ? "h1_2_" + mc2_->at(i)->getName() + "_" + thisRegion.getName() : ""; 
+      std::string thisName3 = (tree_mc2) ? "h1_3_" + mc3_->at(i)->getName() + "_" + thisRegion.getName() : ""; 
+
+     
+      std::vector<std::string> thisName = {thisName1, thisName2, thisName3};
+      std::vector<float> lumi = {lumi1_, lumi2_, lumi3_};
+
+      TH1D* h1_mc1 = 0;
+      TH1D* h1_mc2 = 0;
+      TH1D* h1_mc3 = 0;
+
+      std::vector<TH1D*> h1_mc = {h1_mc1, h1_mc2, h1_mc3};
+
+      for(unsigned int j(0); j<tree_mc.size(); ++j){ //we loop on the years
+
+	TObject* obj = gROOT->FindObject(thisName[j].c_str());
+	if( obj ) delete obj;
+
+	h1_mc[j] = new TH1D( thisName[j].c_str(), "", nBins, xMin, xMax );
+	h1_mc[j]->Sumw2();
+
+	if( selection!="" ){
+	  if(tree_mc[j]){
+	    tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight*(%s)", lumi[j], selection.c_str()) );
+	    //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*(%s)", lumi_*mc_->at(i)->getWeight(), selection.c_str()) );
+	  }
+	}
+	else{
+	  if(tree_mc[j]){
+	    tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight", lumi[j]) );
+	    //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f", lumi_*mc_->at(i)->getWeight()) );
+	  }
+	}
+	if( addOverflow_ )
+	  MT2DrawTools::addOverflowSingleHisto(h1_mc[j]);
+	
+	histos_mc_sep.push_back(h1_mc[j]);
+      
+	//if( varName == "nBJets"){
+	// for(int iBin=1; iBin< h1_mc->GetNbinsX(); iBin++){
+	//   std::cout << "iBin " << i << " = " << h1_mc->GetBinContent(iBin) << std::endl;
+	//}}
+
+      }
+     
+    }
+  
+   
+    std::vector<TH1D*> histos_mc(2);
+
+    if(!mc2_ && !mc3_){ //only one year
+      histos_mc[0] = histos_mc_sep[0];
+      histos_mc[1] = histos_mc_sep[3];
+    }
+    else{ //we combine the years per MC category
+    
+    TH1D* h1_int1 = (TH1D*) histos_mc_sep[0]->Clone();
+    h1_int1->Add(histos_mc_sep[1]);
+    TH1D* h1_int2 = (TH1D*) h1_int1->Clone();
+    h1_int2->Add(histos_mc_sep[2]);
+
+    histos_mc[0] = h1_int2;
+
+    TH1D* h1_int3 = (TH1D*) histos_mc_sep[3]->Clone();
+    h1_int3->Add(histos_mc_sep[4]);
+    TH1D* h1_int4 = (TH1D*) h1_int3->Clone();
+    h1_int4->Add(histos_mc_sep[5]);
+
+    histos_mc[1] = h1_int4;  
+    }
+
+    //we combine MC categories
+    TH1D* mc_sum;
+ 
+    for( unsigned i=0; i<histos_mc.size(); ++i ) { 
+      if( i==0 ) {
+	mc_sum = new TH1D( *histos_mc[i] );
+	mc_sum->SetName("mc_sum");
+      } else {
+	mc_sum->Add( histos_mc[i] );
+      }
+    }
+         
+    
 
     float scaleFactor = mcSF_;
     
     double integralData = -9999, integralMC = -9999, errorData = -9999, errorMC = -9999;
 
-    if( data_ ) {
+    if( data1_ ) {
 
       float sf =-9999;
 
@@ -950,14 +1052,18 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
       if( shapeNorm_ ) scaleFactor *= sf;
     }
 
+    
 
     TObject* oldStack = gROOT->FindObject("bgStack");
     if( oldStack ) delete oldStack;
+    
     TH1D* histo_mc;
     THStack* bgStack = new THStack("bgStack", "");
+    
+    
     for( unsigned i=0; i<histos_mc.size(); ++i ) { 
-      int index = mc_->size() - i - 1;
-      histos_mc[index]->SetFillColor( mc_->at(index)->getColor() );
+      int index = mc1_->size() - i - 1;
+      histos_mc[index]->SetFillColor( mc1_->at(index)->getColor() );
       histos_mc[index]->SetLineColor( kBlack );
       //if( shapeNorm_ && data_ )
       histos_mc[index]->Scale( scaleFactor );
@@ -967,17 +1073,16 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
       bgStack->Add(histos_mc[index]);
     }
 
-
     TH1D* mcBand = MT2DrawTools::getMCBandHisto( histo_mc, lumiErr_ );
     
     TGraphAsymmErrors* g_ratio = 0;
-    if( data_ ) g_ratio = MT2DrawTools::getRatioGraph(h1_data, mcBand);
+    if( data1_ ) g_ratio = MT2DrawTools::getRatioGraph(h1_data, mcBand);
     
     TLine* lineCentral = new TLine(xMin, 1.0, xMax, 1.0);
     lineCentral->SetLineColor(1);
     //TGraphErrors* systBand = MT2DrawTools::getSystBand(xMin, xMax, lumiErr_);
     
-    TF1* fSF = (data_) ? MT2DrawTools::getSFFit(g_ratio, xMin, xMax) : 0;
+    TF1* fSF = (data1_) ? MT2DrawTools::getSFFit(g_ratio, xMin, xMax) : 0;
     TGraphErrors* SFFitBand = (fSF) ? MT2DrawTools::getSFFitBand(fSF, xMin, xMax) : 0;
     
     double errorDataMC = MT2DrawTools::getSFError(integralData, errorData, integralMC, errorMC );
@@ -988,8 +1093,8 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     TCanvas* c1_log = new TCanvas(Form("c1_log_%s", iMT2->getName().c_str()), "", 600, 600);
 
     float yMaxScale = 1.1;
-    float yMax1 = (data_) ? h1_data->GetMaximum()*yMaxScale : 0.;
-    float yMax2 = (data_) ? yMaxScale*(h1_data->GetMaximum() + sqrt(h1_data->GetMaximum())) : 0.;
+    float yMax1 = (data1_) ? h1_data->GetMaximum()*yMaxScale : 0.;
+    float yMax2 = (data1_) ? yMaxScale*(h1_data->GetMaximum() + sqrt(h1_data->GetMaximum())) : 0.;
     float yMax3 = yMaxScale*(bgStack->GetMaximum());
     float yMax = (yMax1>yMax2) ? yMax1 : yMax2;
     if( yMax3 > yMax ) yMax = yMax3;
@@ -1038,7 +1143,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 
     h2_axes->Draw();
 
-    float yMin_log = (data_ && h1_data->GetMinimum()>2.) ? 1. : 0.1;
+    float yMin_log = (data1_ && h1_data->GetMinimum()>2.) ? 1. : 0.1;
 
     TH2D* h2_axes_log = new TH2D("axes_log", "", 10, xMin, xMax, 10, yMin_log, yMax*10.0 );
     h2_axes_log->SetXTitle(xAxisTitle.c_str());
@@ -1146,25 +1251,27 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     }
 
 
-    int addLines = (data_) ? 2 : 0;
-    TLegend* legend = new TLegend( 0.67, 0.9-(mc_->size()+addLines)*0.06, 0.93, 0.9 );
+    int addLines = (data1_) ? 2 : 0;
+    TLegend* legend = new TLegend( 0.67, 0.9-(mc1_->size()+addLines)*0.06, 0.93, 0.9 );
     legend->SetTextSize(0.038);
     legend->SetTextFont(42);
     legend->SetFillColor(0);
     //float data_int = 0.;
 
-    if( data_ ) {
+    if( data1_ ) {
       TString year = to_string(year_);
       TString nameOfDataLegend = "Data " + year;
-      legend->AddEntry( gr_data, nameOfDataLegend, "P" );
-      //std::cout<< h1_data->GetName() << std::endl;
+      if(!data2_){
+	legend->AddEntry( gr_data, nameOfDataLegend, "P" );
+      }
+       //std::cout<< h1_data->GetName() <<std::endl;
       //std::cout << "integral: " << h1_data->Integral(3, -1) << std::endl;
       //std::cout << "data(30-60): "<< h1_data->GetBinContent(3) + h1_data->GetBinContent(4) << std::endl;
       //data_int = h1_data->GetBinContent(3) + h1_data->GetBinContent(4);
     }
     //float mc_int = 0.;
     for( unsigned i=0; i<histos_mc.size(); ++i ) {  
-      legend->AddEntry( histos_mc[i], mc_->at(i)->getFullName().c_str(), "F" );
+      legend->AddEntry( histos_mc[i], mc1_->at(i)->getFullName().c_str(), "F" );
       //std::cout<< histos_mc[i]->GetName() << std::endl;
       //std::cout << "integral: " << histos_mc[i]->Integral(3, -1) << std::endl;
       //std::cout << "30-60: "<< histos_mc[i]->GetBinContent(3) + histos_mc[i]->GetBinContent(4) << std::endl;
@@ -1175,7 +1282,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     //std::cout << "qcd estimate: " << data_int*qcdFrac << std::endl;
     //std::cout << "qcd true (0-30): " <<  1.27*(histos_mc[0]->GetBinContent(1) + histos_mc[0]->GetBinContent(2)) << std::endl;
     //std::cout << "qcd true (30-60): " << 1.27*(histos_mc[0]->GetBinContent(3) + histos_mc[0]->GetBinContent(3)) << std::endl;
-    if( data_ ) 
+    if( data1_ ) 
       legend->AddEntry( mcBand, "MC Uncert.", "F" );
 
    
@@ -1199,7 +1306,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
       pad1->cd();
     legend->Draw("same");
     bgStack->Draw("histo same");
-    if( data_ ) {
+    if( data1_ ) {
       mcBand->Draw("E2 same");
       gr_data->Draw("p same");
     }
@@ -1208,7 +1315,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     if (shapeNorm_ && ratioText)
       ratioText->Draw("same");
 
-    (data_) ? MT2DrawTools::addLabels( (TCanvas*)pad1, lumi_, CMStext.c_str() ) : MT2DrawTools::addLabels( (TCanvas*)c1, lumi_, "CMS Simulation"); 
+    (data1_) ? MT2DrawTools::addLabels( (TCanvas*)pad1, lumi1_+lumi2_+lumi3_, CMStext.c_str() ) : MT2DrawTools::addLabels( (TCanvas*)c1, lumi1_+lumi2_+lumi3_, "CMS Simulation"); 
     //(data_) ? MT2DrawTools::addLabels( (TCanvas*)pad1, lumi_, CMStext.c_str() ) : MT2DrawTools::addLabels( (TCanvas*)pad1, lumi_, "CMS Simulation"); 
 
     gPad->RedrawAxis();
@@ -1218,7 +1325,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
       pad1_log->cd();
     legend->Draw("same");
     bgStack->Draw("histo same");
-    if( data_ ) {
+    if( data1_ ) {
       mcBand->Draw("E2 same");
       gr_data->Draw("p same");
     }
@@ -1227,7 +1334,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     if (shapeNorm_ && ratioText)
       ratioText->Draw("same");
     
-    (data_) ? MT2DrawTools::addLabels( (TCanvas*)pad1_log, lumi_, CMStext.c_str() ) : MT2DrawTools::addLabels( (TCanvas*)c1_log, lumi_, "CMS Simulation"); 
+    (data1_) ? MT2DrawTools::addLabels( (TCanvas*)pad1_log, lumi1_+lumi2_+lumi3_, CMStext.c_str() ) : MT2DrawTools::addLabels( (TCanvas*)c1_log, lumi1_+lumi2_+lumi3_, "CMS Simulation"); 
     //(data_) ? MT2DrawTools::addLabels( (TCanvas*)pad1_log, lumi_, CMStext.c_str() ) : MT2DrawTools::addLabels( (TCanvas*)pad1_log, lumi_, "CMS Simulation"); 
 
     gPad->RedrawAxis();
@@ -1245,7 +1352,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
         //systBand->Draw("3,same");
         lineCentral->Draw("same");
 
-        if( data_ ) {
+        if( data1_ ) {
           SFFitBand->Draw("3,same");
           fSF->Draw("same");
         }
@@ -1268,7 +1375,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
         //systBand->Draw("3,same");
         lineCentral->Draw("same");
 
-        if( data_ ) {
+        if( data1_ ) {
           SFFitBand->Draw("3,same");
           fSF->Draw("same");
         }       
@@ -1299,7 +1406,18 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     delete h2_axes_ratio;
     
     delete h1_data;
-  
+    delete h1_data_sep[0];
+    delete h1_data_sep[1];
+    delete h1_data_sep[2];
+
+    mc_sum = 0;
+    histos_mc_sep[0] = 0;
+    histos_mc_sep[1] = 0;
+    histos_mc_sep[2] = 0;
+    
+   
+
+   
     //for( unsigned i=0; i<histos_mc.size(); ++i )
     //  delete histos_mc[i];
 
@@ -1377,6 +1495,6 @@ TList* MT2DrawTools::getCorrectList( TCanvas* c1 ) {
 
 bool MT2DrawTools::twoPads() const {
 
-  return data_ && mc_;
+  return data1_ && mc1_;
 
 }
