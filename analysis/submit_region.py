@@ -10,23 +10,21 @@ def getOptions():
   parser.add_argument('-w', '--what', type=str, dest='what', help='data or mc', default='data', choices=['data', 'mc', 'all'])
   parser.add_argument('-y','--year', type=int, dest='year', help='year of data taking / MC taking :)', default=-1, choices=[2016,2017,2018,-1])
   parser.add_argument('-i', '--incl', type=str, dest='incl', help='Inclusive regions ?', default='all', choices=['incl', 'excl', 'all'])
+  parser.add_argument('-p', '--PL', type=str, dest='PL', help='production label', default='pippo',)
 
   return parser.parse_args()
 
 if __name__ == "__main__":
 
+  options = getOptions()
+
   import subprocess
-  logsDir = 'logs'
+  logsDir = 'logs_{}'.format(options.PL)
   # create logs dir
   command = 'mkdir -p {l}'.format(l=logsDir)
   if not os.path.isdir(logsDir):
     subprocess.check_output(command, shell=True)
   #else: raise RuntimeError('logsDir {l} already present please check'.format(l=logsDir))
-
-
-
-
-  options = getOptions()
 
   if options.region == 'llep': scripts_to_submit = ['llepControlRegion']
   elif options.region == 'zll': scripts_to_submit = ['zllControlRegion']
@@ -88,7 +86,7 @@ if __name__ == "__main__":
         template = '\n'.join(template)
 
         command_nickname = command.replace(' ', '_').replace('./', '')
-        print command_nickname
+#        print command_nickname
 
         sub_merge_file = 'submit_{}.sh'.format(command_nickname)
         with open( '{}/{}'.format(logsDir,sub_merge_file), 'w') as f:
@@ -96,7 +94,7 @@ if __name__ == "__main__":
 
         qsub_command = 'qsub -o {l} -e {l} -N {n} -q short.q -cwd {l}/{s}'.format(l=logsDir, s=sub_merge_file, n=command_nickname) # short queue should be enough
         # submit
-        print qsub_command
-        os.system(qsub_command)
+#        print qsub_command
+#        os.system(qsub_command)
         
 
