@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
         qsub_command = 'qsub -o {l} -e {l} -N {n} -q short.q -cwd {l}/{s}'.format(l=logsDir, s=sub_merge_file, n=command_nickname) # short queue should be enough
         # submit
-#        print qsub_command
-#        os.system(qsub_command)
+        #print qsub_command
+        #os.system(qsub_command)
         
 

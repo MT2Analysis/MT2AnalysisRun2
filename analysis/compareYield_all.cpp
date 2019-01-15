@@ -384,7 +384,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
         hdata->SetBinContent(iRegion, int_data);
         hdata->SetBinError(iRegion, err_data);
 
-	std::cout<<"Filled data  with: " << int_data << std::endl;
+	std::cout<<"Filled data  with: " << int_data << "err data  " << err_data<< std::endl;
 
 	if( iMT2->nJetsMax()==1 )
 	  hdata->GetXaxis()->SetBinLabel( iRegion, labelsMono[iRegion-1].c_str() );
@@ -644,12 +644,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
       float thisDataErr = gdata->GetErrorY(iBin-1);
       std::cout << "TEST!" << std::endl;
       std::cout << thisData << "\t" << gdata->GetY()[iBin-1] << "\t" << thisDataErr << std::endl;
-
+      std::cout << "debug 0" << std::endl;
       float thisEst     = hestimate_all->GetBinContent(iBin);
+      std::cout << "debug 1" << std::endl;
       float thisEstErr  = hestimate_all->GetBinError(iBin);
+      std::cout << "debug 2" << std::endl;
 
       
       hPull->Fill( (thisEst-thisData)/( TMath::Sqrt( thisDataErr*thisDataErr + thisEstErr*thisEstErr ) ) );
+      std::cout << "debug 3" << std::endl;
       
 
   }
@@ -1088,6 +1091,14 @@ BGTable getTable( const std::string& tableFileName ) {
     }
 
   }
+
+  // MG temporary putting all QCD to 0 
+  table.qcd = 0;
+  table.qcd_statUp = 0;
+  table.qcd_statDn = 0;
+  table.qcd_systUp = 0;
+  table.qcd_systDn = 0;
+
 
   return table;
 
