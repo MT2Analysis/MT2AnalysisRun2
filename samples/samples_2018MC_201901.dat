@@ -1,3 +1,4 @@
+#we use 2017MC in place of 2018MC
 /scratch/mmasciov/SnTtrees/2017/dyjetsll_ht100to200.root
 /scratch/mmasciov/SnTtrees/2017/dyjetsll_ht1200to2500.root
 /scratch/mmasciov/SnTtrees/2017/dyjetsll_ht200to400.root
@@ -52,4 +53,6 @@
 /scratch/mmasciov/SnTtrees/2017/zinv_ht400to600.root
 /scratch/mmasciov/SnTtrees/2017/zinv_ht600to800.root
 /scratch/mmasciov/SnTtrees/2017/zinv_ht800to1200.root
+
+
 

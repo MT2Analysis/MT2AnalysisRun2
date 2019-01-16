@@ -12,6 +12,7 @@
 #include "THStack.h"
 #include "TGraphErrors.h"
 #include "TStyle.h"
+#include "TLine.h"
 
 
 #include "../interface/MT2Config.h"
@@ -49,7 +50,7 @@ int main( int argc, char* argv[] ) {
   // enter the name of the estimate you wish to study:
   string estimateName = "ZinvEstimateFromZll_hybrid"; //"ZinvZllRatio_TR_int"; // "zllHybrid_shape_TR"; //"purity_forHybrid"; //"alpha"; //"zllData_forHybrid"; //"bin_extrapol"; 
   
-  bool doComparison = false;
+  bool doComparison = true;
   bool checkRegion = false;
   bool plotRatio = false;
 
@@ -71,7 +72,7 @@ int main( int argc, char* argv[] ) {
     studyHybridShape_comparisonToReference(estimateName);
   }
 
-  bool MT2vsNb = true;
+  bool MT2vsNb = false;
   if(MT2vsNb){
   //in order to check if MT2 shape depends on Nb in each region
     plotEstimateVSNb();
@@ -84,166 +85,237 @@ int main( int argc, char* argv[] ) {
 
 
 void plotMoriond2017vsETH2018(string estimateName, bool checkRegion, bool plotRatio){
-    //normalization to luminosity added
 
-
-    //we select the files and estimates we want to compare together
-    //file 1: ZinvEstimateFromZll_hybrid from Moriond 2017
-    string file1 = "/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
-    MT2Analysis<MT2Estimate>* estimate1 = MT2Analysis<MT2Estimate>::readFromFile(file1, estimateName);
+  //----------------------------------------------------------------------------------
+  //please add the files that you want to compare, as well as their luminosity
+   
+  //we select the files and estimates we want to compare together
+  //file 1: ZinvEstimateFromZll_hybrid from Moriond 2017
+  string file1 = "/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
+  MT2Analysis<MT2Estimate>* estimate1 = MT2Analysis<MT2Estimate>::readFromFile(file1, estimateName);
   
-    //file 2: ZinvEstimateFromZll_hybrid from ETH framework 2018
-    //string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
-    string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_dataETH_SnTMC_41p9ifb_2017/zinvFromZll.root";
-    MT2Analysis<MT2Estimate>* estimate2 = MT2Analysis<MT2Estimate>::readFromFile(file2, estimateName);
+  //file 2: ZinvEstimateFromZll_hybrid from ETH framework 2018
+  //string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
+  string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_zurich2016_35p9ifb/zinvFromZll.root";
+  MT2Analysis<MT2Estimate>* estimate2 = MT2Analysis<MT2Estimate>::readFromFile(file2, estimateName);
 
+  float lumi1 = 35.9;
+  float lumi2 = 35.9;
+
+  //-----------------------------------------------------------------------------------
   
-    // regions (from zurich2016)
-    std::set<MT2Region> regions = estimate1->getRegions();
+  // regions (from zurich2016)
+  std::set<MT2Region> regions = estimate1->getRegions();
  
 
-    //check if two files are working in the same region
+  //check if two files are working in the same region
    
-    if(checkRegion){
-      std::set<MT2Region> regions2 = estimate2->getRegions();
-      cout << "region1 size: " << regions.size() << endl;
-      cout << "region2 size: " << regions2.size() << endl;
+  if(checkRegion){
+    std::set<MT2Region> regions2 = estimate2->getRegions();
+    cout << "region1 size: " << regions.size() << endl;
+    cout << "region2 size: " << regions2.size() << endl;
   
-      for(std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR){
-	for(std::set<MT2Region>::iterator iR2=regions2.begin(); iR2!=regions2.end(); ++iR2){
+    for(std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR){
+      for(std::set<MT2Region>::iterator iR2=regions2.begin(); iR2!=regions2.end(); ++iR2){
    
-	  //current region
-	  MT2Region thisRegion((*iR));
-	  MT2Region thisRegion2((*iR2));
+	//current region
+	MT2Region thisRegion((*iR));
+	MT2Region thisRegion2((*iR2));
 
-	  vector<string> regionNames = thisRegion.getNiceNames();
-	  vector<string> regionNames2 = thisRegion2.getNiceNames();
-	  if((*iR) == (*iR2)){
-	    if(regionNames[0]!=regionNames2[0]){
-	      cout << "erreur: les deux regions ne matchent pas!" << endl;
-	    }
-	    else{
-	      cout << "tout va bien" << endl;
-	    }
+	vector<string> regionNames = thisRegion.getNiceNames();
+	vector<string> regionNames2 = thisRegion2.getNiceNames();
+	if((*iR) == (*iR2)){
+	  if(regionNames[0]!=regionNames2[0]){
+	    cout << "erreur: les deux regions ne matchent pas!" << endl;
+	  }
+	  else{
+	    cout << "tout va bien" << endl;
 	  }
 	}
       }
     }
-
-
+  }
 
   
-    // we declare the histograms where the estimates that will contain the yields
-    TH1D* hist1;
-    TH1D* hist2;
-    TH1D* hist_ratio;
+  // we declare the histograms where the estimates that will contain the yields
+  TH1D* hist1;
+  TH1D* hist2;
+  TH1D* hist_ratio;
   
-    //for the naming of the plots
-    int n(1); 
+  //for the naming of the plots
+  int n(1); 
     
-    // we loop on all the regions and get the yield histogram there
-    for(std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR){
+  // we loop on all the regions and get the yield histogram there
+  for(std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR){
    
-      //current region
-      MT2Region thisRegion((*iR));
-      vector<string> regionNames = thisRegion.getNiceNames();
-      TString name = (regionNames[0]+regionNames[1]).c_str();
+    //current region
+    MT2Region thisRegion((*iR));
+    vector<string> regionNames = thisRegion.getNiceNames();
+    TString name = (regionNames[0]+regionNames[1]).c_str();
 
 
-      hist1 = estimate1->get(*iR)->yield;
-      hist2 = estimate2->get(*iR)->yield;
+    hist1 = estimate1->get(*iR)->yield;
+    hist2 = estimate2->get(*iR)->yield;
 
-      //histogram that will contain the ratio of the two previous ones
-      hist_ratio = (TH1D*) hist1->Clone("hist_ratio");
-      hist_ratio->Divide(hist2);
+    //histogram that will contain the ratio of the two previous ones
+    hist_ratio = (TH1D*) hist1->Clone("hist_ratio");
+    hist_ratio->Divide(hist2);
 
-      //normalization to the luminosity
-      hist1->Scale(1/35.9);
-      hist2->Scale(1/41.9);
+    //normalization to the luminosity
+    hist1->Scale(lumi1);
+    hist2->Scale(lumi2);
 
-      TCanvas *c = new TCanvas();
+    TCanvas *c = new TCanvas();
+    // c->SetLogy(); //y log scale
+    c->SetGrid();
+
+    TAxis *Xaxis = hist1->GetXaxis();
+    TAxis *Yaxis = hist1->GetYaxis();
+    Xaxis->SetTitle("bins");
+    Xaxis->SetTitleSize(0.045);
+    Xaxis->SetLabelSize(0.045);
+    Xaxis->SetTitleOffset(1.1);
+    //Yaxis->SetRangeUser(-1000,1000);
+    Yaxis->SetTitleSize(0.045);
+    Yaxis->SetLabelSize(0.045);
+    Yaxis->SetTitleOffset(1.26);
+
+    TLegend *leg = new TLegend(0.55, 0.7, 0.75, 0.9);
+    leg -> AddEntry(hist1, "Moriond 2017");
+    leg -> AddEntry(hist2, "Moriond 2019, with zurich2016" );
+    leg -> SetTextSize(0.04);
+    leg -> SetLineColor(0);
+    leg -> SetFillColorAlpha(0, 0);
+    leg -> SetBorderSize(0);
+    //leg -> Draw();
+
+    gStyle->SetOptStat(0);
+
+    hist1->SetTitle("ZinvEstimateFromZll_hybrid: " + name);
+    hist1->SetLineColor(4);
+    hist1->SetLineWidth(2);
+    hist2->SetLineColor(2);
+    hist2->SetLineWidth(2);
+
+    //hist2->Draw();
+    //hist1->Draw("same");
+
+
+    TPad *pad1 = new TPad("pad1", "pad1", 0, 0.3, 1, 1.0);
+    pad1->SetBottomMargin(0.05); // Upper and lower plot are joined
+    pad1->SetGridx();         // Vertical grid
+    pad1->Draw();             // Draw the upper pad: pad1
+    pad1->cd();               // pad1 becomes the current pad
+    hist1->SetStats(0);          // No statistics on upper plot
+    hist1->Draw();
+    hist2->Draw("same");
+    leg->Draw("same");
+
+
+    /*
+    int nBins = hist_ratio->GetNbinsX();
+    
+    Double_t x[nBins];
+    Double_t y[nBins];
+   
+    TGraph* graph = new TGraph();
+
+    for(int iBin(1); iBin<=nBins; ++iBin){
+      //x[iBin] = hist_ratio->GetXaxis()->GetBinCenter( hist_ratio->GetXaxis()->FindBin(iBin) );
+      //x[iBin] =  hist_ratio->GetXaxis()->FindBin(iBin);
+      x[iBin] = iBin;
+      y[iBin] = hist_ratio->GetBinContent(iBin);
+      graph->SetPoint(iBin-1, x[iBin], y[iBin]);
+    }
+    */
+  
+
+   
+
+    TLine* line = new TLine(0.1, 1, 5., 1);
+
+    // lower plot will be in pad
+    c->cd();          // Go back to the main canvas before defining pad2
+    TPad *pad2 = new TPad("pad2", "pad2", 0, 0.05, 1, 0.3);
+    pad2->SetTopMargin(0);
+    pad2->SetBottomMargin(0.2);
+    pad2->SetGridx(); // vertical grid
+    pad2->Draw();
+    pad2->cd();       // pad2 beco
+    
+    hist_ratio->SetLineColor(1);
+    hist_ratio->SetLineWidth(2);
+    hist_ratio->Draw("ep");
+    //graph->Draw("A*");
+    //line->Draw("same");
+
+    TAxis *Xaxisr = hist_ratio->GetXaxis();
+    TAxis *Yaxisr = hist_ratio->GetYaxis();
+    Xaxisr->SetTitle("");
+    Xaxisr->SetTitleSize(0.1);
+    Xaxisr->SetLabelSize(0.1);
+    Xaxisr->SetTitleOffset(0.3);
+    //Yaxisr->SetRangeUser(-1000,1000);
+    Yaxisr->SetTitle("Ratio");
+    Yaxisr->SetTitleSize(0.1);
+    Yaxisr->SetLabelSize(0.1);
+    Yaxisr->SetTitleOffset(0.26);
+
+    /*
+    graph->GetXaxis()->SetTitle("");
+    graph->GetYaxis()->SetTitle("Ratio");  
+    graph->GetXaxis()->SetTitleSize(0.1);
+    graph->GetXaxis()->SetLabelSize(0.1);
+    graph->GetXaxis()->SetTitleOffset(1.1);     
+    graph->GetYaxis()->SetTitleSize(0.1);
+    graph->GetYaxis()->SetRangeUser(0.35, 1.65);
+    graph->GetYaxis()->SetLabelSize(0.1);
+    graph->GetYaxis()->SetTitleOffset(1.26);
+    */
+       
+    TString nameOfEstimate = estimateName.c_str();
+    TString savename = nameOfEstimate + "_" + to_string(n);
+  
+    c->SaveAs("EventYields_moriond2019_zurich2016_35p9ifb/plotsZllEstimates/"  + savename + ".pdf");
+   
+    if(plotRatio){
+      //we repeat the same for the ratio
+      TCanvas *cr = new TCanvas();
       // c->SetLogy(); //y log scale
-      c->SetGrid();
+      cr->SetGrid();
 
-      TAxis *Xaxis = hist1->GetXaxis();
-      TAxis *Yaxis = hist1->GetYaxis();
-      Xaxis->SetTitle("bins");
-      Xaxis->SetTitleSize(0.045);
-      Xaxis->SetLabelSize(0.045);
-      Xaxis->SetTitleOffset(1.1);
-      //Yaxis->SetRangeUser(-1000,1000);
-      Yaxis->SetTitleSize(0.045);
-      Yaxis->SetLabelSize(0.045);
-      Yaxis->SetTitleOffset(1.26);
+      TAxis *Xaxisr = hist_ratio->GetXaxis();
+      TAxis *Yaxisr = hist_ratio->GetYaxis();
+      Xaxisr->SetTitle("bins");
+      Xaxisr->SetTitleSize(0.045);
+      Xaxisr->SetLabelSize(0.045);
+      Xaxisr->SetTitleOffset(1.1);
+      //Yaxisr->SetRangeUser(-1000,1000);
+      Yaxisr->SetTitleSize(0.045);
+      Yaxisr->SetLabelSize(0.045);
+      Yaxisr->SetTitleOffset(1.26);
 
-      TLegend *leg = new TLegend(0.65, 0.7, 0.85, 0.9);
-      leg -> AddEntry(hist1, "Moriond 2017");
-      leg -> AddEntry(hist2, "ETH 2018 - 2017 samples" );
-      leg -> SetTextSize(0.04);
-      leg -> SetLineColor(0);
-      leg -> SetFillColorAlpha(0, 0);
-      leg -> SetBorderSize(0);
-      //leg -> Draw();
-
+      TLegend *legr = new TLegend(0.55, 0.7, 0.75, 0.9);
+      legr -> AddEntry(hist_ratio, "Moriond 2017/Moriond 2019");
+      legr -> SetTextSize(0.04);
+      legr -> SetLineColor(0);
+      legr -> SetFillColorAlpha(0, 1);
+      legr -> SetBorderSize(0);
+  
       gStyle->SetOptStat(0);
 
-      hist1->SetTitle("ZinvEstimateFromZll_hybrid: " + name);
-      hist1->SetLineColor(4);
-      hist1->SetLineWidth(2);
-      hist2->SetLineColor(2);
-      hist2->SetLineWidth(2);
-
-      //hist2->Draw();
-      //hist1->Draw("same");
-      hist1->Draw();
-      hist2->Draw("same");
-      leg->Draw("same");
+      hist_ratio->SetTitle("ZinvEstimateFromZll_hybrid: " + name);
+      hist_ratio->SetLineColor(4);
+      hist_ratio->SetLineWidth(2);
     
-      TString savename = to_string(n);//+"_" + name;
-      TString nameOfEstimate = estimateName.c_str();
-      //c->SaveAs("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/plotsZllEstimates/" + nameOfEstimate + "/" + savename + ".pdf");
-      //c->SaveAs("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/plotsZllEstimates/" + nameOfEstimate + "/" + savename + ".png");
-      c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_2017/plotsZllEstimates/" + nameOfEstimate + "/" + savename + ".pdf");
-      //c->SaveAs("EventYields_dataETH_SnTMC_41p9ifb_2017/plotsZllEstimates/" + nameOfEstimate + "/" + savename + ".png");
-
-      if(plotRatio){
-	//we repeat the same for the ratio
-	TCanvas *cr = new TCanvas();
-	// c->SetLogy(); //y log scale
-	cr->SetGrid();
-
-	TAxis *Xaxisr = hist_ratio->GetXaxis();
-	TAxis *Yaxisr = hist_ratio->GetYaxis();
-	Xaxisr->SetTitle("bins");
-	Xaxisr->SetTitleSize(0.045);
-	Xaxisr->SetLabelSize(0.045);
-	Xaxisr->SetTitleOffset(1.1);
-	//Yaxisr->SetRangeUser(-1000,1000);
-	Yaxisr->SetTitleSize(0.045);
-	Yaxisr->SetLabelSize(0.045);
-	Yaxisr->SetTitleOffset(1.26);
-
-	TLegend *legr = new TLegend(0.55, 0.7, 0.75, 0.9);
-	legr -> AddEntry(hist_ratio, "Moriond 2017/ETH 2018");
-	legr -> SetTextSize(0.04);
-	legr -> SetLineColor(0);
-	legr -> SetFillColorAlpha(0, 1);
-	legr -> SetBorderSize(0);
-  
-	gStyle->SetOptStat(0);
-
-	hist_ratio->SetTitle("ZinvEstimateFromZll_hybrid: " + name);
-	hist_ratio->SetLineColor(4);
-	hist_ratio->SetLineWidth(2);
+      hist_ratio->Draw();
+      legr->Draw("same");
     
-	hist_ratio->Draw();
-	legr->Draw("same");
-    
-	cr->SaveAs("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/plotsZllEstimates/" + nameOfEstimate + "/ratio_" + savename + ".pdf");
-	cr->SaveAs("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/plotsZllEstimates/" + nameOfEstimate + "/ratio_" + savename + ".png");
-      }
+      cr->SaveAs("EventYields_moriond2019_zurich2016_35p9ifb/plotsZllEstimates/ratio_" + savename + ".pdf");
+      // cr->SaveAs("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/plotsZllEstimates/" + nameOfEstimate + "/ratio_" + savename + ".png");
+    }
 
-      ++n;
+    ++n;
        
   }
 }
