@@ -47,6 +47,7 @@ int main( int argc, char* argv[] ) {
 
       float this_new_yield = this_new_TopoYield->GetBinContent(iBin);
       float this_old_yield = this_old_TopoYield->GetBinContent(iBin);
+      std::cout << "debug new=" << this_new_yield << " old=" << this_old_yield << std::endl;
       float diff = -999;
       if (this_old_yield == 0 && this_new_yield==0) diff=0;
       else if(this_old_yield ==0 && this_new_yield!=0) diff=999.99;
