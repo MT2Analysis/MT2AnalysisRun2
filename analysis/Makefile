@@ -209,6 +209,9 @@ compareYield_all_post_pull_OneMLfile: compareYield_all_post_pull_OneMLfile.cpp M
 checkYields: checkYields.cpp MT2Estimate.o MT2Region.o
 	$(CC) -Wall $(INCLUDES) -o checkYields checkYields.cpp MT2Estimate.o MT2Region.o $(ROOTFLAG) $(EXTRALIBS)
 
+checkQCDEstimate: checkQCDEstimate.cpp MT2Estimate.o MT2Region.o
+	$(CC) -Wall $(INCLUDES) -o checkQCDEstimate checkQCDEstimate.cpp MT2Estimate.o MT2Region.o $(ROOTFLAG) $(EXTRALIBS)
+
 fakeQCDestimate: fakeQCDestimate.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateSyst.o
 	$(CC) -Wall $(INCLUDES) -o fakeQCDestimate fakeQCDestimate.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateSyst.o $(ROOTFLAG) $(EXTRALIBS)
 
