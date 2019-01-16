@@ -436,7 +436,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     //} 
 
     // kinematic selections, including lepton veto
-    if( !myTree.passSelection("", cfg.year()), isETH ) continue;
+    if( !myTree.passSelection("", cfg.year(), isETH )) continue;
 
 
     // monojet id
