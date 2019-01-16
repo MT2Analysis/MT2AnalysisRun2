@@ -12,8 +12,8 @@ using namespace std;
 
 //--------------------------------
 //Choose binning here:
-bool doBinning_Moriond2019 = true;
-bool doBinning_Moriond2017 = false;
+bool doBinning_Moriond2019 = false;
+bool doBinning_Moriond2017 = true;
 //--------------------------------
 
 

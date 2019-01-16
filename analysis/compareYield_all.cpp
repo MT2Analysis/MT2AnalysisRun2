@@ -990,6 +990,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.C", fullPath.c_str()) );
   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.png", fullPath.c_str()) );
   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.eps", fullPath.c_str()) );
+   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.root", fullPath.c_str()) );
+
   
   bigHistoFile->cd();
   h_band->Write();
