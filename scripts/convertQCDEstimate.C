@@ -120,12 +120,13 @@ void convertQCDEstimate(){
 
   // dictionary to convert name of histo
 	std::map<TString, TString> varNamesMap;
-	varNamesMap["nom"] = "h_mt2bins";
-	varNamesMap["jer"] = "h_mt2bins_JERvar";
-	varNamesMap["tail"] = "h_mt2bins_TailVar";
-	varNamesMap["sigmasoft"] = "h_mt2bins_SigmaSoftVar";
-	varNamesMap["njetshape"] = "h_mt2bins_NJetShape";
-	varNamesMap["nbjetshape"] = "h_mt2bins_NBJetShape";
+	varNamesMap["nominal"] = "h_mt2bins";
+	varNamesMap["syst_jer"] = "h_mt2bins_JERvar";
+	varNamesMap["syst_tail"] = "h_mt2bins_TailVar";
+	varNamesMap["syst_sigmasoft"] = "h_mt2bins_SigmaSoftVar";
+	varNamesMap["syst_njetshape"] = "h_mt2bins_NJetShape";
+	varNamesMap["syst_nbjetshape"] = "h_mt2bins_NBJetShape";
+	
 	std::vector<TString> varNamesETH; // = {"nom", "jer"};
 	std::vector<TString> varNamesSnT;
 	varNamesETH.reserve(varNamesMap.size());
@@ -141,40 +142,43 @@ void convertQCDEstimate(){
 
   // create the directory structure of the output
   TFile *fileQCD = new TFile("qcdEstimate.root", "recreate");
-	TDirectory *dir = fileQCD->mkdir("qcd");
-	dir->cd();
 
+  TDirectory *dirs[varNamesETH.size()];
+	TDirectory* regDirs[varNamesETH.size()][regionsETH.size()];
 
-	TDirectory* regDirs[regionsETH.size()];
-	TH1D* histos[regionsETH.size()][varNamesETH.size()];
+	TH1D* histos[varNamesETH.size()][regionsETH.size()];
 
-	// create a sub-dir for each region
-	for (int i=0; i<regionsETH.size(); i++){ // must define regions properly ireg should be a string
-		regDirs[i]=dir->mkdir(regionsETH.at(i));
-		regDirs[i]->cd();
-    //std::cout << "created dir" << std::endl;
+	// create as many dirs as variations
+	for (int j=0; j<varNamesETH.size(); j++){
 
-		// for each region a bunch of histograms
-		for (int j=0; j<varNamesETH.size(); j++){
+	  dirs[j] = fileQCD->mkdir(varNamesETH[j]);
+	  dirs[j]->cd();
+
+	  // create a sub-dir for each region
+	  for (int i=0; i<regionsETH.size(); i++){ // must define regions properly ireg should be a string
+
+		  regDirs[j][i]=dirs[j]->mkdir(regionsETH[i]);
+		  regDirs[j][i]->cd();
+      //std::cout << "created dir" << std::endl;
+
 
       // name of the output histogram
-			TString hname;
-			if(varNamesETH.at(j)=="nom") hname = "yield_qcdEstimate_" + regionsETH[i];
-			else                         hname = "yield_" + varNamesETH.at(j) + "_UP" + "_qcdEstimate_" + regionsETH[i];
+			TString hname = "yield_qcdEstimate_" + regionsETH[i];
+			//if(varNamesETH.at(j)=="nom") hname = "yield_qcdEstimate_" + regionsETH[i];
+			//else                         hname = "yield_" + varNamesETH.at(j) + "_UP" + "_qcdEstimate_" + regionsETH[i];
 
 			TH1D *hSnT = (TH1D*) fileSnT->Get( regionsSnT[i] + "/" + varNamesSnT[j]);
 			if (hSnT){
-			//std::cout << "debug after" << std::endl;
-			//std::cout << "regionsSnT[i]" << regionsSnT[i] << " varNamesSnT[j]" << varNamesSnT[j] << std::endl;
-		    histos[i][j] = (TH1D*) hSnT->Clone();  // want to clone it from  //new TH1F(hname,htitle,100,0,100);
-		    histos[i][j]->SetName(hname);
-		  } else{
-				histos[i][j] = new TH1D(hname, hname, 1., 0., 1.);
+			  //std::cout << "regionsSnT[i]" << regionsSnT[i] << " varNamesSnT[j]" << varNamesSnT[j] << std::endl;
+		    histos[j][i] = (TH1D*) hSnT->Clone();  // want to clone it from  //new TH1F(hname,htitle,100,0,100);
+		    histos[j][i]->SetName(hname);
+	    }else{
+				histos[j][i] = new TH1D(hname, hname, 1., 0., 1.);
 				//histos[i][j]->SetName(hname);
 			}
-		}
-		dir->cd();
-	} // end loop over top regions
+		  dirs[j]->cd();
+	  }  // end loop over top regions
+	} // end loop over systematics
 
 	fileQCD->Write();
 	delete fileQCD;
