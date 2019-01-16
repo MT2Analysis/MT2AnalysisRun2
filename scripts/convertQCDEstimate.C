@@ -126,7 +126,7 @@ void convertQCDEstimate(){
 	varNamesMap["syst_sigmasoft"] = "h_mt2bins_SigmaSoftVar";
 	varNamesMap["syst_njetshape"] = "h_mt2bins_NJetShape";
 	varNamesMap["syst_nbjetshape"] = "h_mt2bins_NBJetShape";
-	
+
 	std::vector<TString> varNamesETH; // = {"nom", "jer"};
 	std::vector<TString> varNamesSnT;
 	varNamesETH.reserve(varNamesMap.size());
@@ -147,6 +147,7 @@ void convertQCDEstimate(){
 	TDirectory* regDirs[varNamesETH.size()][regionsETH.size()];
 
 	TH1D* histos[varNamesETH.size()][regionsETH.size()];
+	TH3D* histos3D[varNamesETH.size()][regionsETH.size()];
 
 	// create as many dirs as variations
 	for (int j=0; j<varNamesETH.size(); j++){
@@ -163,7 +164,7 @@ void convertQCDEstimate(){
 
 
       // name of the output histogram
-			TString hname = "yield_qcdEstimate_" + regionsETH[i];
+			TString hname = "yield_" + varNamesETH[j] + "_" + regionsETH[i];
 			//if(varNamesETH.at(j)=="nom") hname = "yield_qcdEstimate_" + regionsETH[i];
 			//else                         hname = "yield_" + varNamesETH.at(j) + "_UP" + "_qcdEstimate_" + regionsETH[i];
 
@@ -176,6 +177,10 @@ void convertQCDEstimate(){
 				histos[j][i] = new TH1D(hname, hname, 1., 0., 1.);
 				//histos[i][j]->SetName(hname);
 			}
+
+			TString h3name = "yield3d_" + varNamesETH[j] + "_" + regionsETH[i];
+			histos3D[j][i] = new TH3D(h3name, h3name, 1, 0., 1., 1, 0., 1., 1, 0., 1.);
+
 		  dirs[j]->cd();
 	  }  // end loop over top regions
 	} // end loop over systematics
