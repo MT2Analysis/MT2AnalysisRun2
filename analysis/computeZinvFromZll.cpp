@@ -297,7 +297,7 @@ int main( int argc, char* argv[] ) {
     region_forExtrapol = "Moriond2019_forExtrapol";
     cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019" << endl << endl;
   }
-  
+ 
   //we fill the shapes  
   cout << "Filling the shapes..." << endl;
   
@@ -313,8 +313,11 @@ int main( int argc, char* argv[] ) {
   cout << "Shape 1/7 filled" << endl;
   
   //MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , cfg.regionsSet(), zllData_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
-
+  
+ 
   MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , region_forExtrapol, zllData_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  //check if we get entries without selection: 
+  //MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , region_forExtrapol, zllData_tree);
   
   //I add temporalily those lines
   //MT2Analysis<MT2Estimate>* zllData_shape_TR = new MT2Analysis<MT2Estimate>("zllData_shape_TR", cfg.regionsSet() ); 
@@ -382,7 +385,7 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* zllData_of_shape_TR = new MT2Analysis<MT2Estimate>("zllData_of_shape_TR", cfg.regionsSet()); 
  
   MT2Analysis<MT2Estimate>* zllMC_shape_TR = new MT2Analysis<MT2Estimate>( "zllMC_shape_TR", cfg.regionsSet() );
-
+  
   //will be the equivalent of k_hybrid in the transfert function of Z invisible estimate
   MT2Analysis<MT2Estimate>* zllHybrid_shape_TR = new MT2Analysis<MT2Estimate>( "zllHybrid_shape_TR", cfg.regionsSet() ); 
 
@@ -443,8 +446,8 @@ int main( int argc, char* argv[] ) {
 
 
   //check: we plot zllData_shape_TR before it gets modified in the buildHybrid function
-  std::set<MT2Region> regionstmp = zllData_shape_TR->getRegions();
-  plotEstimates(zllData_shape_TR, "zllData_shape_TR_beforeBuildHybrid", regionstmp, cfg.getEventYieldDir());
+  //std::set<MT2Region> regionstmp = zllData_shape_TR->getRegions();
+  //plotEstimates(zllData_shape_TR, "zllData_shape_TR_beforeBuildHybrid", regionstmp, cfg.getEventYieldDir());
   //plotEstimates((MT2Analysis<MT2Estimate>*)zllData_shape, "zllData_shape_beforeBuildHybrid", regionstmp, cfg.getEventYieldDir());
  
   
@@ -457,10 +460,10 @@ int main( int argc, char* argv[] ) {
 //  (*zinvZllRatio_forShape_TR) = (*zinvMC_forShape_TR) / (*zllMC_shape_TR);
 
 
-
-  std::string outFile1 = cfg.getEventYieldDir() + "/test_avant.root";
-  zllHybrid_shape_TR->writeToFile( outFile1, "recreate" );
-  zllData_shape_TR->writeToFile( outFile1, "recreate" );
+  //this was useful for debugging
+  //std::string outFile1 = cfg.getEventYieldDir() + "/test_avant.root";
+  //zllHybrid_shape_TR->writeToFile( outFile1, "recreate" );
+  //zllData_shape_TR->writeToFile( outFile1, "recreate" );
   
 
   ////////////////////////////////////////////////
@@ -478,8 +481,9 @@ int main( int argc, char* argv[] ) {
   buildHybrid( zllHybrid_shape_TR, zllData_shape_TR, zinvMC_forShape_TR, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol, minStatistics[i] );
   //  buildHybrid( zllHybrid_shape_TR, zllData_shape_TR,zllMC_shape_TR ,zinvZllRatio_forShape_TR, bin_extrapol );
 
-  std::string outFile2 = cfg.getEventYieldDir() + "/test_apres.root";
-  zllHybrid_shape_TR->writeToFile( outFile2, "recreate" );
+  //this was useful for debugging
+  //std::string outFile2 = cfg.getEventYieldDir() + "/test_apres.root";
+  //zllHybrid_shape_TR->writeToFile( outFile2, "recreate" );
 
 
 
@@ -487,6 +491,7 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* alpha = new MT2Analysis<MT2Estimate>( "alpha", cfg.regionsSet() );
   (*alpha) =  (*zllHybrid_shape_TR) * (*ZinvZllRatioHybrid);
  
+  //this was useful for debugging
   std::string outFile3 = cfg.getEventYieldDir() + "/test3.root";
   zllHybrid_shape_TR->writeToFile( outFile3, "recreate" );
 
@@ -502,6 +507,7 @@ int main( int argc, char* argv[] ) {
   (*ZinvEstimateFromZll_hybrid) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha) ;
   //(*ZinvEstimateFromZll_hybrid) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha) ;
 
+  //this was useful for debugging
   std::string outFile4 = cfg.getEventYieldDir() + "/test4.root";
   zllHybrid_shape_TR->writeToFile( outFile4, "recreate" );
   
@@ -1411,14 +1417,18 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     }
 
 
-    //And now it has to be normalized
+    //And now it has to be normalized if there is at least one event
     this_shape_MCcr   ->Scale( 1./this_shape_MCcr->Integral());
-    this_shape_data   ->Scale( 1./this_shape_data->Integral());
-    this_shape_hybrid ->Scale( 1./this_shape_hybrid->Integral());
-
-    cout << "normalized by its integral: " << this_shape_hybrid->Integral() << endl;
+    cout << "entries this_shape_data: " << this_shape_data->GetEntries() << endl;
+    cout << "entries this_shape_integral: " << this_shape_data->Integral() << endl;
+    if(this_shape_data->Integral() != 0){
+      this_shape_data   ->Scale( 1./this_shape_data->Integral());
+      this_shape_hybrid ->Scale( 1./this_shape_hybrid->Integral());
+      cout << "normalized by its integral: " << this_shape_hybrid->Integral() << endl;
+    }else{
+      cout << "Hybrid shape filled with 0, and not normalized to avoid propagation of nan" << endl;
+    }
   
-
     if( nBins == 1) this_shape_hybrid->SetBinError( 1, 0.0 );
 
   

@@ -1,4 +1,4 @@
-CC = g++
+CC = g++ 
 CFLAGS = -Wall -c -g -fpermissive 
 
 ROOFIT_INCLUDE := $(shell cd $(CMSSW_BASE); scram tool info roofitcore | grep INCLUDE= | sed 's|INCLUDE=||')

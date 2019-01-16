@@ -1263,8 +1263,8 @@ void MT2Region::getBins( int &nBins, double*& bins) const {
 
     // default binning, e.g for inclusive region
     else { 
-      const int nBins_tmp                        = 9;
-      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1200., 1400., 1800.};
+      const int nBins_tmp                        = 10;
+      bins = new double[nBins_tmp+1]{200., 300., 400., 500., 600., 800., 1000., 1200., 1400., 1800., 2400.};
       nBins = nBins_tmp;
     }
   }
