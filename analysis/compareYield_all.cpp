@@ -384,7 +384,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
         hdata->SetBinContent(iRegion, int_data);
         hdata->SetBinError(iRegion, err_data);
 
-	std::cout<<"Filled data  with: " << int_data << std::endl;
+	std::cout<<"Filled data  with: " << int_data << "err data  " << err_data<< std::endl;
 
 	if( iMT2->nJetsMax()==1 )
 	  hdata->GetXaxis()->SetBinLabel( iRegion, labelsMono[iRegion-1].c_str() );
@@ -644,7 +644,6 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
       float thisDataErr = gdata->GetErrorY(iBin-1);
       std::cout << "TEST!" << std::endl;
       std::cout << thisData << "\t" << gdata->GetY()[iBin-1] << "\t" << thisDataErr << std::endl;
-
       float thisEst     = hestimate_all->GetBinContent(iBin);
       float thisEstErr  = hestimate_all->GetBinError(iBin);
 

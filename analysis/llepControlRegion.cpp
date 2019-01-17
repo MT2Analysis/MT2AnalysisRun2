@@ -424,7 +424,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
       else {
 	thisEstimate = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
-	cout << "[Ht] " << ht << endl;
+	//cout << "[Ht] " << ht << endl;
 	if( thisEstimate==0 ) continue;
 	thisEstimate->assignTree( myTree, weight );
 	thisEstimate->tree->Fill();

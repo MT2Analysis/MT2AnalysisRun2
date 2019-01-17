@@ -99,9 +99,9 @@ Compile as usual and run:
 ```
 
 Create the template data card. For the general syntax of data card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
-
+Edit the script to allow QCD estimate or not, currently supported only for Moriond19 
 ```
-./createDatacards_general_zllZinvEst <cfg-file-name> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
+./createDatacards <cfg-file-name> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
 ```
 
 Data/Bkg plotting:
