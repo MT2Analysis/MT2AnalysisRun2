@@ -89,8 +89,8 @@ int main(int argc, char* argv[]){
   system(Form("mkdir -p %s", outputdir.c_str()));
 
 
-  std::string ZllDir = cfg.getEventYieldDir() + "/zllControlRegion";
-  std::string ZllDir_of = cfg.getEventYieldDir() + "/zllControlRegion";
+  std::string ZllDir = cfg.getEventYieldDir() + "/zllControlRegion/goodFiles";
+  std::string ZllDir_of = cfg.getEventYieldDir() + "/zllControlRegion/goodFiles";
 
   MT2Analysis<MT2EstimateTree>* Zll = MT2Analysis<MT2EstimateTree>::readFromFile(Form("%s/ZllPurityTrees.root", ZllDir.c_str() ), "DYJets");
   if( Zll==0 ) {
@@ -346,9 +346,9 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree( "incl_mll_el"   , "Z_mass"   , selection_mass_el, 50 , 50., 150., "M_{e^{+}e^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
   selection_mass_mu = "(ht>250. && nJets>=1 && mt2>200. && Z_lepId==13 )";
   dt.drawRegionYields_fromTree( "incl_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
-  
-  //plots in 4 different ranges of Ht
   /*
+  //plots in 4 different ranges of Ht
+
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -454,7 +454,7 @@ int main(int argc, char* argv[]){
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
 
-  
+
 
   // +++++++++++++++++++++++++
   // +++     b vetoed     +++
@@ -1264,7 +1264,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-  
+
   */
   return 0;
 

@@ -59,6 +59,12 @@ and then recompile
 ## Run - time !
 
 ### Data and backgrounds
+
+Preliminary comment:
+Check that you use the correct binning by setting the correct booleans to true in:
+- src/MT2Region.cc
+- analysis/computeZinvFromZll.cc
+
 First you need to make the regions selections and compute the yields
 
 ```
