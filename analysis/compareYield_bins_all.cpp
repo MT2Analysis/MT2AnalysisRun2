@@ -53,7 +53,7 @@ struct BGTable {
 float lumi; //fb-1 
 
 BGTable getTable( const std::string& tableFileName );
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir );
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo = "moriond2019" );
 
 
 int main( int argc, char* argv[] ) {
@@ -63,15 +63,15 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
-  std::cout << "|           Running computeLostLepton                |" << std::endl;
+  std::cout << "|           Running compareYield_bins_all            |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << std::endl << std::endl;
   
   
-  if( argc!=2 ) {
-    std::cout << "USAGE: ./computeLostLepton [configFileName]" << std::endl;
+  if( argc!=2  && argc!=3  ) {
+    std::cout << "USAGE: ./compareYield_bins_all [configFileName] [moriond2019/moriond2017]" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
@@ -82,6 +82,20 @@ int main( int argc, char* argv[] ) {
 
   // lumi = 18.1;
   lumi = cfg.lumi();
+
+  //switch between the different regions sets of Moriond2017 and Moriond2019
+  std::string whatToDo;
+  if(argc == 2){
+    whatToDo = "moriond2019";
+  }
+  else if(argc == 3){
+    whatToDo = argv[2];
+    if(whatToDo != "moriond2017"){
+      cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
+      cout << "Aborted" << endl;
+      exit(11);
+    }
+  }
   
   TH1::AddDirectory(kTRUE);
   
@@ -114,14 +128,20 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2Estimate>* data = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
   
-  drawYields( outputdir.c_str(), data, dir );
+  drawYields( outputdir.c_str(), data, dir, whatToDo );
 
   return 0;
 
 }
 
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir ) {
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo ) {
 
+  bool doMoriond2017 = false;
+  bool doMoriond2019 = true;
+  if(whatToDo == "moriond2017"){
+    doMoriond2017 = true;
+    doMoriond2019 = false;
+  }
   
   MT2DrawTools::setStyle();
 
@@ -614,7 +634,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   //  yMin=0;
   yMax*=20.;
   
-  int thisBin=213;
+  int thisBin(1);
+  if(doMoriond2017){
+    thisBin=213;
+  }
+  else if(doMoriond2019){
+    thisBin=299;
+  }
 
   hestimate_all->GetXaxis()->SetRangeUser(0, thisBin);
   hdata->GetXaxis()->SetRangeUser(0, thisBin);
@@ -932,7 +958,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   pad1_1->SetLogy();
     
   oldBin=thisBin;
-  thisBin=12+21;
+  if(doMoriond2017){
+    thisBin=12+21;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30;
+  }
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1081,7 +1112,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   yMin= 1e-2;
 
   oldBin=thisBin;
-  thisBin=12+21+40;
+  if(doMoriond2017){
+    thisBin=12+21+40;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30 + 40;
+  }
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1229,7 +1265,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     
   yMin = 1e-2;
   oldBin=thisBin;
-  thisBin=12+21+40+51;
+  if(doMoriond2017){
+    thisBin=12+21+40+51;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30 + 40 + 81;
+  }
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1374,7 +1415,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   pad1_4->SetLogy();
     
   oldBin=thisBin;
-  thisBin=12+21+40+51+53;
+  if(doMoriond2017){
+    thisBin=12+21+40+51+53;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30 + 40 + 81 + 68;
+  }
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1521,7 +1567,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     
   yMax  /= 10;
   oldBin=thisBin;
-  thisBin=213;
+  if(doMoriond2019){
+    thisBin=213;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30 + 40 + 81 + 68 + 68;
+  }
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
