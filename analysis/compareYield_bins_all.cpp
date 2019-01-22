@@ -210,7 +210,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   
   TFile* bigHistoFile = TFile::Open( Form("%s/histograms_ALL.root", fullPath.c_str()), "recreate" );
 
-  int nBins_[63];
+  int nBins_[85]; //85 regions in total
+  
 
   int iRegion = 1;
   int iTR = 1;
@@ -707,12 +708,22 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   
   int nHTRegions = 6;
   std::vector< std::string > htRegions;
-  htRegions.push_back("Monojet Region");
-  htRegions.push_back("H_{T} [250, 450] GeV");
-  htRegions.push_back("H_{T} [450, 575] GeV");
-  htRegions.push_back("H_{T} [575, 1000] GeV");
-  htRegions.push_back("H_{T} [1000, 1500] GeV");
-  htRegions.push_back("H_{T} > 1500 GeV");
+  if(doMoriond2017){
+    htRegions.push_back("Monojet Region");
+    htRegions.push_back("H_{T} [250, 450] GeV");
+    htRegions.push_back("H_{T} [450, 575] GeV");
+    htRegions.push_back("H_{T} [575, 1000] GeV");
+    htRegions.push_back("H_{T} [1000, 1500] GeV");
+    htRegions.push_back("H_{T} > 1500 GeV");
+  }
+  else if(doMoriond2019){
+    htRegions.push_back("Monojet Region");
+    htRegions.push_back("H_{T} [250, 450] GeV");
+    htRegions.push_back("H_{T} [450, 575] GeV");
+    htRegions.push_back("H_{T} [575, 1200] GeV");
+    htRegions.push_back("H_{T} [1200, 1500] GeV");
+    htRegions.push_back("H_{T} > 1500 GeV");
+  }
 //  htRegions.push_back("#it{H}_{T} [200, 450] GeV");
 //  htRegions.push_back("#it{H}_{T} [450, 575] GeV");
 //  htRegions.push_back("#it{H}_{T} [575, 1000] GeV");
@@ -1002,10 +1013,36 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   ibin = 0;
-  TString vlJ[7] = {"2-3j","2-3j","2-3j","#geq4j","#geq4j","#geq4j", "#geq2j"};
-  TString vlB[7] = {"0b", "1b", "2b", "0b", "1b", "2b", "#geq3b"};
+  
+  int nRtot(1); //number of different regions in j and b for this given HT region
 
-  for(int nR=0; nR<7; nR++){ 
+  TString vlJ[11];
+  TString vlB[11];
+  
+
+  if(doMoriond2017){
+    nRtot = 7;
+    TString vlJint[nRtot] = {"2-3j","2-3j","2-3j","#geq4j","#geq4j","#geq4j", "#geq2j"};
+    TString vlBint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "#geq3b"};
+    for(int i(0); i<nRtot; ++i){ 
+      vlJ[i] = vlJint[i];
+      vlB[i] = vlBint[i];
+    }
+  }
+  else if(doMoriond2019){
+    nRtot = 11;
+    cout << nRtot << endl;
+    TString vlJint[nRtot] = {"2-3j", "2-3j", "2-3j", "4-6j", "4-6j", "4-6j", "#geq7j", "#geq7j", "#geq7j", "2-6j", "#geq7j"};
+    TString vlBint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b", "#geq3b", "#geq3b"};
+    for(int i(0); i<nRtot; ++i){
+      vlJ[i] = vlJint[i];     
+      vlB[i] = vlBint[i];    
+    }
+  }
+
+ 
+
+  for(int nR=0; nR<nRtot; nR++){ 
     
     xcenter = left+binWidth*(ibin+(nBins_[oldBin+nR])*0.5);
     text->SetTextAlign(23);
@@ -1031,7 +1068,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   
   ibin=0;
 
-  for(int nR=0; nR<7; nR++){
+  for(int nR=0; nR<nRtot; nR++){
 
     ibin+=nBins_[oldBin+nR];
     x = left+ibin*binWidth;
@@ -1085,7 +1122,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   line->SetLineWidth(1);
   line->SetLineColor(kBlack);
   ibin = oldBin;
-  for(int nR=0; nR<7; nR++){
+  for(int nR=0; nR<nRtot; nR++){
     ibin += nBins_[oldBin+nR];
     line->DrawLine(ibin,0.0,ibin,2.0);
   }
@@ -1156,24 +1193,57 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   ibin = 0;
-  TString Jlab[11] = {"2-3j","2-3j","2-3j","4-6j","4-6j","4-6j","#geq7j","#geq7j","#geq7j","2-6j", "#geq7j"};
-  TString Blab[11] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b","#geq3b","#geq3b"};
 
-  for(int nR=0; nR<11; nR++){
+  TString Jlab[11];
+  TString Blab[11];
 
-    xcenter = left+binWidth*(ibin+(nBins_[12+7+nR])*0.5);
+   if(doMoriond2017){
+    nRtot = 11;
+    TString Jlabint[nRtot] = {"2-3j","2-3j","2-3j","4-6j","4-6j","4-6j","#geq7j","#geq7j","#geq7j","2-6j", "#geq7j"};
+    TString Blabint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b","#geq3b","#geq3b"};
+    for(int i(0); i<nRtot; ++i){ 
+      Jlab[i] = Jlabint[i];
+      Blab[i] = Blabint[i];
+    }
+  }
+  else if(doMoriond2019){
+    nRtot = 11;
+    cout << nRtot << endl;
+    TString Jlabint[nRtot] = {"2-3j", "2-3j", "2-3j", "4-6j", "4-6j", "4-6j", "#geq7j", "#geq7j", "#geq7j", "2-6j", "#geq7j"};
+    TString Blabint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b", "#geq3b", "#geq3b"};
+    for(int i(0); i<nRtot; ++i){
+      Jlab[i] = Jlabint[i];
+      Blab[i] = Blabint[i];
+    }
+  }
+
+
+  for(int nR=0; nR<nRtot; nR++){
+    if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+nR])*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+11+nR])*0.5);
+    }
     text->SetTextAlign(23);
     text->SetTextFont(62);
     text->SetTextSize(0.030);
 
     float y=bot+(1-top-bot)*0.85;
-    if (xcenter>1-right-0.19)
+    if (xcenter>1-right-0.19){
       y=0.67;
+    }
 
     text->DrawLatex(xcenter, y, Jlab[nR]);
     text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Blab[nR]);
 
-    ibin+=nBins_[12+7+nR];
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+11+nR];
+    }
+      
 
   }
 
@@ -1185,9 +1255,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   ibin=0;
 
-  for(int nR=0; nR<11; nR++){
-
-    ibin+=nBins_[12+7+nR];
+  for(int nR=0; nR<nRtot; nR++){
+    
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+11+nR];
+    }
+   
     x = left+ibin*binWidth;
 
     if(left+binWidth*(ibin+(nBins_[12+7+nR])*0.5)>1-right-0.19)
@@ -1238,8 +1314,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   line->SetLineWidth(1);
   line->SetLineColor(kBlack);
   ibin = oldBin;
-  for(int nR=0; nR<11; nR++){
-    ibin += nBins_[12+7+nR];
+
+  for(int nR=0; nR<nRtot; nR++){
+    if(doMoriond2017){
+      ibin += nBins_[12+7+nR];
+    }
+    else if(doMoriond2019){
+      ibin += nBins_[12+11+nR];
+    }
     line->DrawLine(ibin,0,ibin,3.5);
   }
 
@@ -1309,9 +1391,39 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   ibin = 0;
-  for(int nR=0; nR<11; nR++){
 
-    xcenter = left+binWidth*(ibin+(nBins_[12+7+11+nR])*0.5);
+  TString Jmed[17];
+  TString Bmed[17];
+
+   if(doMoriond2017){
+    nRtot = 11;
+    TString Jmedint[nRtot] = {"2-3j","2-3j","2-3j","4-6j","4-6j","4-6j","#geq7j","#geq7j","#geq7j","2-6j", "#geq7j"};
+    TString Bmedint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b","#geq3b","#geq3b"};
+    for(int i(0); i<nRtot; ++i){ 
+      Jmed[i] = Jmedint[i];
+      Bmed[i] = Bmedint[i];
+    }
+  }
+  else if(doMoriond2019){
+    nRtot = 17;
+    cout << nRtot << endl;
+    TString Jmedint[nRtot] = {"2-3j", "2-3j", "2-3j", "4-6j", "4-6j", "4-6j", "7-9j", "7-9j", "7-9j", "7-9j", "#geq10j", "#geq10j", "#geq10j", "#geq10j", "2-6j", "7-9j", "#geq10j"};
+    TString Bmedint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b", "3b", "0b", "1b", "2b", "3b", "#geq3b", "#geq4b", "#geq4b"};
+    for(int i(0); i<nRtot; ++i){
+      Jmed[i] = Jmedint[i];
+      Bmed[i] = Bmedint[i];
+    }
+  }
+
+
+  for(int nR=0; nR<nRtot; nR++){
+    
+    if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+11+nR])*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+nR])*0.5);
+    }
     text->SetTextAlign(23);
     text->SetTextFont(62);
     text->SetTextSize(0.030);
@@ -1320,10 +1432,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     if (xcenter>1-right-0.19)
       y=0.67;
 
-    text->DrawLatex(xcenter, y, Jlab[nR]);
-    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Blab[nR]);
+    text->DrawLatex(xcenter, y, Jmed[nR]);
+    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
 
-    ibin+=nBins_[12+7+11+nR];
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+11+11+nR];
+    }
 
   }
 
@@ -1335,15 +1452,30 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   ibin=0;
 
-  for(int nR=0; nR<11; nR++){
+  
 
-    ibin+=nBins_[12+7+11+nR];
+  for(int nR=0; nR<nRtot; nR++){
+
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+11+11+nR];
+    }
     x = left+ibin*binWidth;
 
-    if(left+binWidth*(ibin+(nBins_[12+7+11+nR])*0.5)>1-right-0.19)
-      line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-    else
-      line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+11+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+       if(left+binWidth*(ibin+(nBins_[12+11+11+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
 
 
   }
@@ -1389,8 +1521,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   line->SetLineWidth(1);
   line->SetLineColor(kBlack);
   ibin = oldBin;
-  for(int nR=0; nR<11; nR++){
-    ibin += nBins_[12+7+11+nR];
+
+  for(int nR=0; nR<nRtot; nR++){
+    if(doMoriond2017){
+      ibin += nBins_[12+7+11+nR];
+    }
+    else if(doMoriond2019){
+      ibin += nBins_[12+11+11+nR];
+    }
     line->DrawLine(ibin,0.,ibin,2.0);
   }
 
@@ -1459,9 +1597,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   ibin = 0;
-  for(int nR=0; nR<11; nR++){
 
-    xcenter = left+binWidth*(ibin+(nBins_[12+7+11*2+nR])*0.5);
+  for(int nR=0; nR<nRtot; nR++){
+    
+    if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+11*2+nR])*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+17+nR])*0.5);
+    }
     text->SetTextAlign(23);
     text->SetTextFont(62);
     text->SetTextSize(0.030);
@@ -1470,10 +1614,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     if (xcenter>1-right-0.19)
       y=0.67;
 
-    text->DrawLatex(xcenter, y, Jlab[nR]);
-    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Blab[nR]);
+    text->DrawLatex(xcenter, y, Jmed[nR]);
+    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
 
-    ibin+=nBins_[12+7+11*2+nR];
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11*2+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17+11*2+nR];
+    }
 
   }
 
@@ -1485,15 +1634,29 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   ibin=0;
 
-  for(int nR=0; nR<11; nR++){
+  for(int nR=0; nR<nRtot; nR++){
 
-    ibin+=nBins_[12+7+11*2+nR];
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11*2+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17+11*2+nR];
+    }
+
     x = left+ibin*binWidth;
 
-    if(left+binWidth*(ibin+(nBins_[12+7+11*2+nR])*0.5)>1-right-0.19)
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+11*2+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+      if(left+binWidth*(ibin+(nBins_[12+17+11*2+nR])*0.5)>1-right-0.19)
       line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
     else
       line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
 
 
   }
@@ -1540,8 +1703,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   line->SetLineWidth(1);
   line->SetLineColor(kBlack);
   ibin = oldBin;
-  for(int nR=0; nR<11; nR++){
-    ibin += nBins_[12+7+11*2+nR];
+
+  for(int nR=0; nR<nRtot; nR++){
+    if(doMoriond2017){
+      ibin += nBins_[12+7+11*2+nR];
+    }
+    else if(doMoriond2019){
+      ibin += nBins_[12+17+11*2+nR];
+    }
     line->DrawLine(ibin,0,ibin,5.0);
   }
 

@@ -815,7 +815,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       
       MT2EstimateTree* thisTree;
-      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond19" ){ //
+      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond2019" ){ //
 	      if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
 
 	        thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );

@@ -1,4 +1,4 @@
-#include <iostream>  
+#include <iostream> 
 #include <sstream>
 #include <fstream>
 #include <iomanip>
@@ -250,9 +250,10 @@ int main( int argc, char* argv[] ) {
 void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* bin_extrapol ) {
 
   std::set<MT2Region> regions       = shape_data->getRegions();
-
+ 
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
     MT2Region* region = new MT2Region( *iR );
+    cout << endl <<  "Region: " << region->getName() << endl;
 
     TH1D* this_shape_data    = (TH1D*)shape_data   ->get( *iR)->yield;
     TH1D* this_shape_MCsr    = (TH1D*)shape_MCsr   ->get( *iR)->yield;
@@ -279,10 +280,12 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
 	  bin_extrapol = iBin+1;
 	  integral = 1.;    //we don't have to do a special normalization in this case
 	  integralMC = this_shape_MCcr->IntegralAndError( iBin, -1, errMC);
+	  cout << "[5] integral: " << integral << endl;
 	}else{
 	  bin_extrapol = iBin;
 	  integral = this_shape_data->Integral( iBin, -1);
 	  integralMC = this_shape_MCcr->IntegralAndError( iBin, -1, errMC);
+	  cout << "[4] integral: " << integral << endl;
 	}
 	break;
       }
@@ -291,6 +294,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
 	bin_extrapol = 1;
 	integral  = this_shape_data->Integral( bin_extrapol, -1);
 	integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
+	cout << "[3] integral: " << integral << endl;
 
       }
     }
@@ -298,7 +302,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
     //Filling the histo that knows where we extrapolate
     this_binExtrapol->SetBinContent( 1, bin_extrapol );
     
-    std::cout << "extrapol bin / total bins= " << bin_extrapol << " / " << nBins << " : " << integral << std::endl;
+    // std::cout << "extrapol bin / total bins= " << bin_extrapol << " / " << nBins << " : " << integral << std::endl;
 
     for(int iBin=1; iBin<= nBins; iBin++){
       float MCsr_cont;
@@ -327,7 +331,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
       float relativeErrorData;
       float relativeErrorMC;
       
-      std::cout << "Bin Content " << iBin << ": " << this_shape_MCcr->GetBinContent(iBin) << " : " << this_shape_MCsr->GetBinContent(iBin) << " : " << ratioMC_cont << std::endl;
+      //std::cout << "Bin Content " << iBin << ": " << this_shape_MCcr->GetBinContent(iBin) << " : " << this_shape_MCsr->GetBinContent(iBin) << " : " << ratioMC_cont << std::endl;
 
       if(ratioMC_cont > 3){
 	std::cout << ratioMC_cont << std::endl;
@@ -341,6 +345,8 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
 
 	this_nlepCR->SetBinContent(iBin, this_shape_data->GetBinContent(iBin));
 	this_nlepCR->SetBinError(iBin, this_shape_data->GetBinError(iBin));
+
+	cout << "[2] this_nlepCR: " << this_nlepCR->GetBinContent(iBin) << endl;
 
 	this_shape_data ->SetBinContent(iBin, ratioMC_cont);
 	this_shape_data ->SetBinError(iBin, ratioMC_cont*ratioMC_err);
@@ -357,6 +363,8 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
 	this_nlepCR ->SetBinContent(iBin, integral);
 	this_nlepCR ->SetBinError(iBin, sqrt(integral));
 
+	cout << "[1] this_nlepCR: " << this_nlepCR->GetBinContent(iBin) << endl;
+
 	this_shape_data ->SetBinContent(iBin, ratioMC_cont);
 	this_shape_data ->SetBinError(iBin, ratioMC_cont*ratioMC_err);
 
@@ -366,9 +374,9 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
 	this_shape_MCcr ->SetBinContent(iBin, integralMC*ratioMC_cont);
 	this_shape_MCcr ->SetBinError(iBin, relativeErrorMC*this_shape_MCcr->GetBinContent(iBin));
       }
-
+      /*
       std::cout << "Bin Content " << iBin << ": " << this_shape_MCcr->GetBinContent(iBin) << " : "  <<  this_nlepCR->GetBinContent(iBin) << " : " << this_shape_data->GetBinContent(iBin) << " : " << this_shape_MCsr->GetBinContent(iBin) << " : " << integral << " : "  <<  ratioMC_cont << std::endl;
-
+      */
     }
 
 //    //And now it has to be normalized
@@ -382,6 +390,8 @@ void buildHybrid( MT2Analysis<MT2Estimate>* nlepCR, MT2Analysis<MT2Estimate>* sh
 
       this_shape_hybrid->SetBinContent(iBin, this_shape_data->GetBinContent(iBin) );
       this_shape_hybrid->SetBinError  (iBin, this_shape_data->GetBinError(iBin) );
+      
+      cout << "this_shape_hybrid: " << this_shape_data->GetBinContent(iBin) << endl;
 
     }
 //      if( ( bin_extrapol==nBins+1 ) || ( iBin<bin_extrapol && (bin_extrapol != nBins) ) ){

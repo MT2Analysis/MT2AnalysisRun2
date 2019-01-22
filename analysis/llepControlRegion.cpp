@@ -412,7 +412,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
    
     MT2EstimateTree* thisEstimate;
 
-    if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond17"){ // To avoid signal contamination in 7j 2b and 7j 3b
+    if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond2019"){ // To avoid signal contamination in 7j 2b and 7j 3b
       if( ht>450. && njets>=7 && nbjets>2 ) continue;
       else if( ht<450 || njets<7 || nbjets<1 ) {
 	thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
