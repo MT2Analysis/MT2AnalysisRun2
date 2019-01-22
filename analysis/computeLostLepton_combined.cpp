@@ -28,8 +28,8 @@
 #include "TLorentzVector.h"
 
 
-// FIXME: remove duplicates  hybrid_llepCR16 , 17, 18
-// FIXME: remove duplicates for extrapol_bin16
+// FIXME: remove duplicates hybrid_llepCR16 , 17, 18
+// FIXME: remove duplicates extrapol_bin16
 
 void buildHybrid( MT2Analysis<MT2Estimate>* hybrid_llepCR, MT2Analysis<MT2Estimate>* hybrid_shape, MT2Analysis<MT2Estimate>* data_forShape, MT2Analysis<MT2Estimate>* MCsr_forShape, MT2Analysis<MT2Estimate>* MCcr_forShape, MT2Analysis<MT2Estimate>* bin_extrapol );
 
@@ -186,14 +186,10 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* hybrid_shape18 = new MT2Analysis<MT2Estimate>( "hybrid_shape18", cfg18.regionsSet() );
 
   // for the moment keep three separate for sanity checks
-  MT2Analysis<MT2Estimate>* hybrid_llepCR16 = new MT2Analysis<MT2Estimate>( "hybrid_llepCR16", cfg16.regionsSet() );
-  MT2Analysis<MT2Estimate>* hybrid_llepCR17 = new MT2Analysis<MT2Estimate>( "hybrid_llepCR17", cfg17.regionsSet() );
-  MT2Analysis<MT2Estimate>* hybrid_llepCR18 = new MT2Analysis<MT2Estimate>( "hybrid_llepCR18", cfg18.regionsSet() );
+  MT2Analysis<MT2Estimate>* hybrid_llepCR = new MT2Analysis<MT2Estimate>( "hybrid_llepCR", cfg16.regionsSet() );
 
   // extrapol bin that will be computed - only one for all three years
-  MT2Analysis<MT2Estimate>* extrapol_bin16 = new MT2Analysis<MT2Estimate>( "extrapol_bin16", cfg16.regionsSet() );
-  MT2Analysis<MT2Estimate>* extrapol_bin17 = new MT2Analysis<MT2Estimate>( "extrapol_bin17", cfg17.regionsSet() );
-  MT2Analysis<MT2Estimate>* extrapol_bin18 = new MT2Analysis<MT2Estimate>( "extrapol_bin18", cfg18.regionsSet() );
+  MT2Analysis<MT2Estimate>* extrapol_bin = new MT2Analysis<MT2Estimate>( "extrapol_bin", cfg16.regionsSet() );
 
   // MC Signal Region (multiplied by lumi) - one for each year
   MT2Analysis<MT2Estimate>* MCsr_forShape16   = MT2Analysis<MT2Estimate>::readFromFile(cfg16.getEventYieldDir() + "/analyses.root", "Top");
@@ -251,9 +247,9 @@ int main( int argc, char* argv[] ) {
   (*llepCR_data_forShape) += (*(llepCR_data_forShape18));
 
   //Building the hybrid shapes
-  buildHybrid( hybrid_llepCR16, hybrid_shape16, llepCR_data_forShape, MCsr_forShape16, MCcr_forShape, extrapol_bin16 );
-  buildHybrid( hybrid_llepCR17, hybrid_shape17, llepCR_data_forShape, MCsr_forShape17, MCcr_forShape, extrapol_bin17 );
-  buildHybrid( hybrid_llepCR18, hybrid_shape18, llepCR_data_forShape, MCsr_forShape18, MCcr_forShape, extrapol_bin18 );
+  buildHybrid( hybrid_llepCR, hybrid_shape16, llepCR_data_forShape, MCsr_forShape16, MCcr_forShape, extrapol_bin );
+  buildHybrid( hybrid_llepCR, hybrid_shape17, llepCR_data_forShape, MCsr_forShape17, MCcr_forShape, extrapol_bin );
+  buildHybrid( hybrid_llepCR, hybrid_shape18, llepCR_data_forShape, MCsr_forShape18, MCcr_forShape, extrapol_bin );
   // final estimate will be hybrid_llepCR * hybrid_shape
 
   ////////////////////////////////////////////////////////////////
@@ -262,13 +258,13 @@ int main( int argc, char* argv[] ) {
 
   // Lost lepton estimate
   MT2Analysis<MT2Estimate>* llepEstimate16 = new MT2Analysis<MT2Estimate>( "llepEstimate16", cfg16.regionsSet() );
-  (*llepEstimate16) = (*hybrid_llepCR16) * (*hybrid_shape16);
+  (*llepEstimate16) = (*hybrid_llepCR) * (*hybrid_shape16);
 
   MT2Analysis<MT2Estimate>* llepEstimate17 = new MT2Analysis<MT2Estimate>( "llepEstimate17", cfg17.regionsSet() );
-  (*llepEstimate17) = (*hybrid_llepCR17) * (*hybrid_shape17);
+  (*llepEstimate17) = (*hybrid_llepCR) * (*hybrid_shape17);
 
   MT2Analysis<MT2Estimate>* llepEstimate18 = new MT2Analysis<MT2Estimate>( "llepEstimate18", cfg18.regionsSet() );
-  (*llepEstimate18) = (*hybrid_llepCR18) * (*hybrid_shape18);
+  (*llepEstimate18) = (*hybrid_llepCR) * (*hybrid_shape18);
 
   // save everything in the first directory ...
   std::string outFile = cfg16.getEventYieldDir() + "/llepEstimateCombined";
@@ -284,14 +280,8 @@ int main( int argc, char* argv[] ) {
   hybrid_shape17->addToFile( outFile );
   hybrid_shape18->addToFile( outFile );
 
-  hybrid_llepCR16->addToFile( outFile ); // these two should be the same
-  hybrid_llepCR17->addToFile( outFile ); // these two should be the same
-  hybrid_llepCR18->addToFile( outFile ); // these two should be the same
-
-  extrapol_bin16->addToFile( outFile ); // these two should be the same
-  extrapol_bin17->addToFile( outFile ); // these two should be the same
-  extrapol_bin18->addToFile( outFile ); // these two should be the same
-  //RatioMC->addToFile( outFile );
+  hybrid_llepCR->addToFile( outFile ); // these two should be the same
+  extrapol_bin->addToFile( outFile ); // these two should be the same
 
   MCcr->addToFile(outFile);
   MCcr16->addToFile(outFile);
