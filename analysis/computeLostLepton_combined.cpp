@@ -280,8 +280,8 @@ int main( int argc, char* argv[] ) {
   hybrid_shape17->addToFile( outFile );
   hybrid_shape18->addToFile( outFile );
 
-  hybrid_llepCR->addToFile( outFile ); // these two should be the same
-  extrapol_bin->addToFile( outFile ); // these two should be the same
+  hybrid_llepCR->addToFile( outFile );
+  extrapol_bin->addToFile( outFile ); 
 
   MCcr->addToFile(outFile);
   MCcr16->addToFile(outFile);
