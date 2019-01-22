@@ -58,8 +58,8 @@ doSmearing: doSmearing.cpp Davismt2.o Hemisphere.o MT2Region.o MT2Sample.o MT2Es
 computeLostLepton: computeLostLepton.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o computeLostLepton computeLostLepton.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)
 
-computeLostLepton_combined: computeLostLepton_combined.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o
-	$(CC) -Wall $(INCLUDES) -o computeLostLepton_combined computeLostLepton_combined.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)
+computeLostLepton_combined: computeLostLepton_combined.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -o computeLostLepton_combined computeLostLepton_combined.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
 llepControlRegion: llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o
 	$(CC) -Wall $(INCLUDES) -o llepControlRegion llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -211,6 +211,9 @@ compareYield_all_post_pull_OneMLfile: compareYield_all_post_pull_OneMLfile.cpp M
 
 checkYields: checkYields.cpp MT2Estimate.o MT2Region.o
 	$(CC) -Wall $(INCLUDES) -o checkYields checkYields.cpp MT2Estimate.o MT2Region.o $(ROOTFLAG) $(EXTRALIBS)
+
+checkLlepEstimates: checkLlepEstimates.cpp MT2Estimate.o MT2Region.o
+	$(CC) -Wall $(INCLUDES) -o checkLlepEstimates checkLlepEstimates.cpp MT2Estimate.o MT2Region.o $(ROOTFLAG) $(EXTRALIBS)
 
 checkQCDEstimate: checkQCDEstimate.cpp MT2Estimate.o MT2Region.o
 	$(CC) -Wall $(INCLUDES) -o checkQCDEstimate checkQCDEstimate.cpp MT2Estimate.o MT2Region.o $(ROOTFLAG) $(EXTRALIBS)
