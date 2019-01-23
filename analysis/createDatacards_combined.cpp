@@ -53,7 +53,7 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
-  std::cout << "|              Running createDatacards               |" << std::endl;
+  std::cout << "|         Running createDatacards_combined           |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
@@ -65,8 +65,6 @@ int main( int argc, char* argv[] ) {
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
-
-  cout << "WARNING: for the moment, qcd estimates are not taken into account. Uncomment the corresponding lines when we get the necessary ntuples";
 
   std::string configFileName(argv[1]);
   MT2Config cfg(configFileName);
@@ -135,25 +133,23 @@ int main( int argc, char* argv[] ) {
   (*data) += (*(data18));
 
   // Reading invisible Z estimate // FIXME: for the moment reading three times the same thing
-  std::string fileName = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/zinvFromZll.root";
-  // FIXME now reading AM file directly
-  MT2Analysis<MT2Estimate>* zinv_zll16 = MT2Analysis<MT2Estimate>::readFromFile( fileName, "ZinvEstimateFromZll_hybrid1");
-  MT2Analysis<MT2Estimate>* zinv_zll17 = MT2Analysis<MT2Estimate>::readFromFile( fileName, "ZinvEstimateFromZll_hybrid2");
-  MT2Analysis<MT2Estimate>* zinv_zll18 = MT2Analysis<MT2Estimate>::readFromFile( fileName, "ZinvEstimateFromZll_hybrid3");
+  MT2Analysis<MT2Estimate>* zinv_zll16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid1");
+  MT2Analysis<MT2Estimate>* zinv_zll17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid2");
+  MT2Analysis<MT2Estimate>* zinv_zll18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid3");
   MT2Analysis<MT2Estimate>* zinv_zll = new MT2Analysis<MT2Estimate>( *(zinv_zll16) ); // also build the sum of the three
   (*zinv_zll) += (*(zinv_zll17));
   (*zinv_zll) += (*(zinv_zll18));
 
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha16 = MT2Analysis<MT2Estimate>::readFromFile( fileName, "alpha1");
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha17 = MT2Analysis<MT2Estimate>::readFromFile( fileName, "alpha2");
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha18 = MT2Analysis<MT2Estimate>::readFromFile( fileName, "alpha3");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha1");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha2");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha3");
   MT2Analysis<MT2Estimate>* zinv_zll_alpha = new MT2Analysis<MT2Estimate>( *(zinv_zll_alpha16) );    // FIXME: add in computeZinvFromZll_combined
   (*zinv_zll_alpha) += (*(zinv_zll_alpha17));
   (*zinv_zll_alpha) += (*(zinv_zll_alpha18));
 
-  MT2Analysis<MT2Estimate>* zinvCR_zll = MT2Analysis<MT2Estimate>::readFromFile( fileName, "dataCR");
-  MT2Analysis<MT2Estimate>* purity_zll = MT2Analysis<MT2Estimate>::readFromFile( fileName, "purity_forHybrid");
-  MT2Analysis<MT2Estimate>* zinv_zll_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( fileName, "bin_extrapol");
+  MT2Analysis<MT2Estimate>* zinvCR_zll = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "dataCR");
+  MT2Analysis<MT2Estimate>* purity_zll = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "purity_forHybrid");
+  MT2Analysis<MT2Estimate>* zinv_zll_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "bin_extrapol");
   //  MT2Analysis<MT2Estimate>* purity_zll_err;
 
   //zinv->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
