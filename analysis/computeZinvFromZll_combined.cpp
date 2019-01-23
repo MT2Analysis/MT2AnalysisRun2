@@ -31,7 +31,7 @@ using namespace std;
 
   In case we want to keep the alpha, don't forget that there is one alpha per year ("alpha1", "alpha2", "alpha3")
 
-  Same goes for "ZinvEstimateFromZll1", "ZinvEstimateFromZll2", "ZinvEstimateFromZll3"
+  Same goes for "ZinvEstimateFromZll_hybrid1", "ZinvEstimateFromZll_hybrid2", "ZinvEstimateFromZll_hybrid3"
                 
 
 */
@@ -59,7 +59,7 @@ bool forMoriond2017 = false;
 
 
 
-MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2Analysis<MT2Estimate>* OF, const MT2Config& cfg, bool do_Runcert=0 );
+MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2Analysis<MT2Estimate>* OF, const MT2Config& cfg, bool doCombinedYears, bool do_Runcert=0 );
 
 void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool isMC=0 );
 
@@ -185,17 +185,18 @@ int main( int argc, char* argv[] ) {
  
   //second component to build the estimate: purity of Z->ll in the control sample (retrieved from SF and OF data samples)
   // we first compute the parity per year (since R(SF/OF) is not the same per year)
-  MT2Analysis<MT2EstimateSyst>* purity_forHybrid1 = computePurityOF(zllData_forHybrid1, zllData_of_forHybrid1, cfg1, 1); 
-  MT2Analysis<MT2EstimateSyst>* purity_forHybrid2 = computePurityOF(zllData_forHybrid2, zllData_of_forHybrid2, cfg2, 1); 
-  MT2Analysis<MT2EstimateSyst>* purity_forHybrid3 = computePurityOF(zllData_forHybrid3, zllData_of_forHybrid3, cfg3, 1); 
+  //MT2Analysis<MT2EstimateSyst>* purity_forHybrid1 = computePurityOF(zllData_forHybrid1, zllData_of_forHybrid1, cfg1, 0, 1); 
+  //MT2Analysis<MT2EstimateSyst>* purity_forHybrid2 = computePurityOF(zllData_forHybrid2, zllData_of_forHybrid2, cfg2, 0, 1); 
+  //MT2Analysis<MT2EstimateSyst>* purity_forHybrid3 = computePurityOF(zllData_forHybrid3, zllData_of_forHybrid3, cfg3, 0, 1); 
 
   //and then combine the year: same purity used for the estimate of each year
-  MT2Analysis<MT2EstimateSyst>* purity_forHybrid = new MT2Analysis<MT2EstimateSyst>(*(purity_forHybrid1));
-  purity_forHybrid->setName("purity_forHybrid");
-  (*purity_forHybrid) += (*(purity_forHybrid2));
-  (*purity_forHybrid) += (*(purity_forHybrid3));
+  //MT2Analysis<MT2EstimateSyst>* purity_forHybrid = new MT2Analysis<MT2EstimateSyst>(*(purity_forHybrid1));
+  //purity_forHybrid->setName("purity_forHybrid");
+  //(*purity_forHybrid) += (*(purity_forHybrid2));
+  //(*purity_forHybrid) += (*(purity_forHybrid3));
  
- 
+  //change of strategy: compute the purity directly on the combined years
+  MT2Analysis<MT2EstimateSyst>* purity_forHybrid = computePurityOF(zllData_forHybrid, zllData_of_forHybrid, cfg1, 1, 1); //put whatever config, will not play a role
 
   /////////////////////////////////////////////////////
   //      begin of hybrid shape implementation       //
@@ -459,7 +460,7 @@ int main( int argc, char* argv[] ) {
 
 
 
-MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2Analysis<MT2Estimate>* OF, const MT2Config& cfg, bool do_Runcert ) {
+MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2Analysis<MT2Estimate>* OF, const MT2Config& cfg, bool doCombinedYears, bool do_Runcert ) {
 
   std::string SFname = SF->getName();
   std::string OFname = OF->getName();
@@ -495,18 +496,27 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
       //R(SF/OF) ratio
       float R_sfof;
       float R_sfof_err; //the uncertainty on the ratio is now handled at the level of the datacard
-      if(cfg.year() == 2016){
-        R_sfof = 1.12;
+
+      //year separate:
+      if(!doCombinedYears){
+	if(cfg.year() == 2016){
+	  R_sfof = 1.12;
+	  R_sfof_err = 0.0;
+	}
+	else if(cfg.year() == 2017){
+	  R_sfof = 1.02;
+	  R_sfof_err = 0.0;
+	}
+	else if(cfg.year() == 2018){
+	  R_sfof = 1.04;
+	  R_sfof_err = 0.0;
+	}
+      }
+      else{ //ratio on the combined years
+	R_sfof = 1.06;
 	R_sfof_err = 0.0;
       }
-      else if(cfg.year() == 2017){
-	R_sfof = 1.02;
-	R_sfof_err = 0.0;
-      }
-      else if(cfg.year() == 2018){
-	R_sfof = 1.04;
-	R_sfof_err = 0.0;
-      }
+	
 	
       writeToFile << "R(SF/OF) = " << R_sfof << endl;
 
