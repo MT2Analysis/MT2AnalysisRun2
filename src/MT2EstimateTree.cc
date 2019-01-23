@@ -7,7 +7,7 @@
 
 #include "TCanvas.h"
 
-
+using namespace std;
 
 
 MT2EstimateTree::MT2EstimateTree( const std::string& aname, const MT2Region& aregion ) : MT2Estimate( aname, aregion ) {
@@ -25,10 +25,11 @@ MT2EstimateTree::MT2EstimateTree( const std::string& aname, const MT2Region& are
 
 
 MT2EstimateTree::MT2EstimateTree( const MT2EstimateTree& rhs ) : MT2Estimate( rhs ) {
-
+ 
   //TH1::AddDirectory(kFALSE);
 
   tree = rhs.tree->CloneTree(-1);
+
   tree->SetDirectory(0);
 
   this->initTree();

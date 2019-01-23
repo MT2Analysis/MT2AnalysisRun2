@@ -26,6 +26,19 @@
 using namespace std;
 
 /*
+
+  NOTE: in the current version of the createDataCards, the data in the CR are retrieved (l.157) directly from '/zllControlRegion/data_forZinvEst.root, "data"'. Now that there is combination, change to '"/zinvFromZll.root", "dataCR"'.
+
+  In case we want to keep the alpha, don't forget that there is one alpha per year ("alpha1", "alpha2", "alpha3")
+
+  Same goes for "ZinvEstimateFromZll1", "ZinvEstimateFromZll2", "ZinvEstimateFromZll3"
+                
+
+*/
+
+
+
+/*
   
   This script aims in combining the Z invisible estimates (computed from Z->ll decays) for the three years, using the following strategy: 
   One estimate per year, computed with merged year in data and MCsr, but seperate MCcr of the corresponding year
@@ -43,6 +56,7 @@ bool forMoriond2017 = false;
 
 
 //---------------------------------------------------------//
+
 
 
 MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2Analysis<MT2Estimate>* OF, const MT2Config& cfg, bool do_Runcert=0 );
@@ -63,50 +77,124 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
-  std::cout << "|           Running computeZinvFromZll               |" << std::endl;
+  std::cout << "|        Running computeZinvFromZll_combined         |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << std::endl << std::endl;
 
 
-  if( argc!=2 ) {
-    std::cout << "USAGE: ./computeZinvFromZll [configFileName]" << std::endl;
+  if( argc!=4 ) {
+    std::cout << "USAGE: ./computeZinvFromZll_combined [configFileName1] [configFileName2] [configFileName3]" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
 
  
-  std::string configFileName(argv[1]);
-  MT2Config cfg(configFileName);
+  std::string configFileName1(argv[1]);
+  MT2Config cfg1(configFileName1);
+
+  std::string configFileName2(argv[2]);
+  MT2Config cfg2(configFileName2);
+
+  std::string configFileName3(argv[3]);
+  MT2Config cfg3(configFileName3);
 
 
   TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
 
-  float lumi = cfg.lumi();
+  float lumi1 = cfg1.lumi();
+  float lumi2 = cfg2.lumi();
+  float lumi3 = cfg3.lumi();
 
-  std::string zllControlRegionDir = cfg.getEventYieldDir() + "/zllControlRegion"; 
+  std::string zllControlRegionDir1 = cfg1.getEventYieldDir() + "/zllControlRegion"; 
+  std::string zllControlRegionDir2 = cfg2.getEventYieldDir() + "/zllControlRegion"; 
+  std::string zllControlRegionDir3 = cfg3.getEventYieldDir() + "/zllControlRegion"; 
 
-  //we get the necessary data, MCcr and MCsr trees
-  MT2Analysis<MT2EstimateTree>* zllData_tree = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/data.root", "data");
-  MT2Analysis<MT2EstimateTree>* zllMC_tree = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir + "/mc.root", "zllCR");
-  MT2Analysis<MT2EstimateTree>* zinvMC_tree = MT2Analysis<MT2EstimateTree>::readFromFile(cfg.getEventYieldDir() + "/ZJetsInclusive.root", "ZJets"); 
+
+  //we get the necessary data, MCcr and MCsr trees, each year separate
+  MT2Analysis<MT2EstimateTree>* zllData_tree1 = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir1 + "/data.root", "data");
+  MT2Analysis<MT2EstimateTree>* zllData_tree2 = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir2 + "/data.root", "data");
+  MT2Analysis<MT2EstimateTree>* zllData_tree3 = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir3 + "/data.root", "data");
+
+  MT2Analysis<MT2EstimateTree>* zllMC_tree1 = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir1 + "/mc.root", "zllCR");
+  MT2Analysis<MT2EstimateTree>* zllMC_tree2 = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir2 + "/mc.root", "zllCR");
+  MT2Analysis<MT2EstimateTree>* zllMC_tree3 = MT2Analysis<MT2EstimateTree>::readFromFile(zllControlRegionDir3 + "/mc.root", "zllCR");
+
+  MT2Analysis<MT2EstimateTree>* zinvMC_tree1 = MT2Analysis<MT2EstimateTree>::readFromFile(cfg1.getEventYieldDir() + "/ZJetsInclusive.root", "ZJets");
+  MT2Analysis<MT2EstimateTree>* zinvMC_tree2 = MT2Analysis<MT2EstimateTree>::readFromFile(cfg2.getEventYieldDir() + "/ZJetsInclusive.root", "ZJets");
+  MT2Analysis<MT2EstimateTree>* zinvMC_tree3 = MT2Analysis<MT2EstimateTree>::readFromFile(cfg3.getEventYieldDir() + "/ZJetsInclusive.root", "ZJets");
  
 
-  //get the data files
-  MT2Analysis<MT2Estimate>* zllData_forHybrid_notIntegral;
-  MT2Analysis<MT2Estimate>* zllData_of_forHybrid_notIntegral;
-  zllData_forHybrid_notIntegral = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/data_forZinvEst.root", "data");
-  zllData_of_forHybrid_notIntegral = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/data_of_forZinvEst.root", "data_of");
+  //get the data files for each year (SF and OF)
+  MT2Analysis<MT2Estimate>* zllData_forHybrid_notIntegral1;
+  MT2Analysis<MT2Estimate>* zllData_forHybrid_notIntegral2;
+  MT2Analysis<MT2Estimate>* zllData_forHybrid_notIntegral3;
+
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid_notIntegral1;
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid_notIntegral2;
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid_notIntegral3;
+
+  zllData_forHybrid_notIntegral1 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir1 + "/data_forZinvEst.root", "data");
+  zllData_forHybrid_notIntegral1->setName("dataCR1");
+  zllData_forHybrid_notIntegral2 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir2 + "/data_forZinvEst.root", "data");
+  zllData_forHybrid_notIntegral2->setName("dataCR2");
+  zllData_forHybrid_notIntegral3 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir3 + "/data_forZinvEst.root", "data");
+  zllData_forHybrid_notIntegral3->setName("dataCR3");
+
+  zllData_of_forHybrid_notIntegral1 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir1 + "/data_of_forZinvEst.root", "data_of");
+  zllData_of_forHybrid_notIntegral1->setName("data_of_CR1");
+  zllData_of_forHybrid_notIntegral2 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir2 + "/data_of_forZinvEst.root", "data_of");
+  zllData_of_forHybrid_notIntegral2->setName("data_of_CR2");
+  zllData_of_forHybrid_notIntegral3 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir3 + "/data_of_forZinvEst.root", "data_of");
+  zllData_of_forHybrid_notIntegral3->setName("data_of_CR3");
+
+  //we combine them (SF and OF separated), since those quantities are needed in the data card (actually only SF, but let's do it for OF as well)
+  MT2Analysis<MT2Estimate>* dataCR = new MT2Analysis<MT2Estimate>(*(zllData_forHybrid_notIntegral1));
+  dataCR->setName("dataCR");
+  (*dataCR) += (*(zllData_forHybrid_notIntegral2));
+  (*dataCR) += (*(zllData_forHybrid_notIntegral3));
+
+  MT2Analysis<MT2Estimate>* data_of_CR = new MT2Analysis<MT2Estimate>(*(zllData_of_forHybrid_notIntegral1));
+  data_of_CR->setName("data_of_CR");
+  (*data_of_CR) += (*(zllData_of_forHybrid_notIntegral2));
+  (*data_of_CR) += (*(zllData_of_forHybrid_notIntegral3));
+  
     
   // first component for the computation of the estimate: Number of events in the data di-lepton control region
-  MT2Analysis<MT2Estimate>* zllData_of_forHybrid = MT2Estimate::makeIntegralAnalysisFromEstimate( "zllData_of_forHybrid", cfg.regionsSet(), zllData_of_forHybrid_notIntegral );
-  MT2Analysis<MT2Estimate>* zllData_forHybrid = MT2Estimate::makeIntegralAnalysisFromEstimate( "zllData_forHybrid", cfg.regionsSet(), zllData_forHybrid_notIntegral );
- 
-  
-  //second component to build the estimate: purity of Z->ll in the control sample (retrieved from SF and OF data samples)
-  MT2Analysis<MT2EstimateSyst>* purity_forHybrid = computePurityOF(zllData_forHybrid, zllData_of_forHybrid, cfg, 1);  
+  // we first build the object per year
+  MT2Analysis<MT2Estimate>* zllData_forHybrid1 = MT2Estimate::makeIntegralAnalysisFromEstimate("zllData_forHybrid1", cfg1.regionsSet(), zllData_forHybrid_notIntegral1);
+  MT2Analysis<MT2Estimate>* zllData_forHybrid2 = MT2Estimate::makeIntegralAnalysisFromEstimate("zllData_forHybrid2", cfg2.regionsSet(), zllData_forHybrid_notIntegral2);
+  MT2Analysis<MT2Estimate>* zllData_forHybrid3 = MT2Estimate::makeIntegralAnalysisFromEstimate("zllData_forHybrid3", cfg3.regionsSet(), zllData_forHybrid_notIntegral3);
 
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid1 = MT2Estimate::makeIntegralAnalysisFromEstimate("zllData_of_forHybrid1", cfg1.regionsSet(), zllData_of_forHybrid_notIntegral1);
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid2 = MT2Estimate::makeIntegralAnalysisFromEstimate("zllData_of_forHybrid2", cfg2.regionsSet(), zllData_of_forHybrid_notIntegral2);
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid3 = MT2Estimate::makeIntegralAnalysisFromEstimate("zllData_of_forHybrid3", cfg3.regionsSet(), zllData_of_forHybrid_notIntegral3);
+ 
+  //and then combine the years: the resulting object will be used for the final estimate for each year
+  MT2Analysis<MT2Estimate>* zllData_forHybrid = new MT2Analysis<MT2Estimate>(*(zllData_forHybrid1));
+  zllData_forHybrid->setName("zllData_forHybrid");
+  (*zllData_forHybrid) += (*(zllData_forHybrid2));
+  (*zllData_forHybrid) += (*(zllData_forHybrid3));
+
+  MT2Analysis<MT2Estimate>* zllData_of_forHybrid = new MT2Analysis<MT2Estimate>(*(zllData_of_forHybrid1));
+  zllData_of_forHybrid->setName("zllData_of_forHybrid");
+  (*zllData_of_forHybrid) += (*(zllData_of_forHybrid2));
+  (*zllData_of_forHybrid) += (*(zllData_of_forHybrid3));
+
+ 
+  //second component to build the estimate: purity of Z->ll in the control sample (retrieved from SF and OF data samples)
+  // we first compute the parity per year (since R(SF/OF) is not the same per year)
+  MT2Analysis<MT2EstimateSyst>* purity_forHybrid1 = computePurityOF(zllData_forHybrid1, zllData_of_forHybrid1, cfg1, 1); 
+  MT2Analysis<MT2EstimateSyst>* purity_forHybrid2 = computePurityOF(zllData_forHybrid2, zllData_of_forHybrid2, cfg2, 1); 
+  MT2Analysis<MT2EstimateSyst>* purity_forHybrid3 = computePurityOF(zllData_forHybrid3, zllData_of_forHybrid3, cfg3, 1); 
+
+  //and then combine the year: same purity used for the estimate of each year
+  MT2Analysis<MT2EstimateSyst>* purity_forHybrid = new MT2Analysis<MT2EstimateSyst>(*(purity_forHybrid1));
+  purity_forHybrid->setName("purity_forHybrid");
+  (*purity_forHybrid) += (*(purity_forHybrid2));
+  (*purity_forHybrid) += (*(purity_forHybrid3));
+ 
  
 
   /////////////////////////////////////////////////////
@@ -128,44 +216,113 @@ int main( int argc, char* argv[] ) {
 
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this 
  
-  //we fill the shapes in the integrated Nb regions (moriond2019_forExtrapol) 
-   MT2Analysis<MT2EstimateTree>* zllData_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "shape" , region_forExtrapol, zllData_tree,  "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
-  cout << "Shape 1/4 filled" << endl;
+  //we fill the shapes (data, MCsr, MCcr) in the integrated Nb regions (moriond2019_forExtrapol)
 
-  //for the MC shapes, we normalize them to luminosity
-  MT2Analysis<MT2EstimateTree>* zinvMC_forShape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zinv_forShape" , region_forExtrapol, zinvMC_tree,  "");
-  (*zinvMC_forShape) *= lumi; 
-  cout << "Shape 2/4 filled" << endl;
+  //for data, we compute the shape for each year, and then combine them
+  MT2Analysis<MT2EstimateTree>* zllData_shape1 = MT2EstimateTree::makeAnalysisFromInclusiveTree("zllData_shape1", region_forExtrapol, zllData_tree1, "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  zllData_shape1->setName("zllData_shape1");
+  delete zllData_tree1; //one has to delete the tree to avoid possible segmentation violation
 
- 
-  MT2Analysis<MT2EstimateTree>* zllMC_shape = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape" , region_forExtrapol, zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
-  (*zllMC_shape) *= lumi;
-  cout << "Shape 3/4 filled" << endl;
+  MT2Analysis<MT2EstimateTree>* zllData_shape2 = MT2EstimateTree::makeAnalysisFromInclusiveTree("zllData_shape2", region_forExtrapol, zllData_tree2, "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  zllData_shape2->setName("zllData_shape2");
+  delete zllData_tree2;
+
+  MT2Analysis<MT2EstimateTree>* zllData_shape3 = MT2EstimateTree::makeAnalysisFromInclusiveTree("zllData_shape3", region_forExtrapol, zllData_tree3, "((fabs(Z_mass-91.19)<=20.) && Z_pt>=200.)");
+  zllData_shape3->setName("zllData_shape3");
+  delete zllData_tree3;
   
-  //for extreme ht we use the shape per topological region, so not the integrated one
-  MT2Analysis<MT2EstimateTree>* zllMC_shape_forExtremeHT = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_forExtremeHT" , cfg.regionsSet(), zllMC_tree,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
-  (*zllMC_shape_forExtremeHT) *= lumi;
-  cout << "Shape 4/4 filled" << endl;
+  //trick to make sure that the cloning of the tree when we will combine the years actually works fine, by putting the directory on page. Couldn't find a more elegant solution
+  TFile* tmp = new TFile("tmp.root", "RECREATE");
 
+  
+  
+  MT2Analysis<MT2EstimateTree>* zllData_shape = new MT2Analysis<MT2EstimateTree>(*(zllData_shape1));
+  zllData_shape->setName("zllData_shape");
+  (*zllData_shape) += (*(zllData_shape2));
+  (*zllData_shape) += (*(zllData_shape3));
+
+  cout << "Data shape filled" << endl;
+  
+  //for MCsr, we will keep the year separate, and normalize them to their correponding luminosity
+  MT2Analysis<MT2EstimateTree>* zinvMC_forShape1 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zinv_forShape1" , region_forExtrapol, zinvMC_tree1,  "");
+  (*zinvMC_forShape1) *= lumi1; 
+
+  MT2Analysis<MT2EstimateTree>* zinvMC_forShape2 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zinv_forShape2" , region_forExtrapol, zinvMC_tree2,  "");
+  (*zinvMC_forShape2) *= lumi2; 
+
+  MT2Analysis<MT2EstimateTree>* zinvMC_forShape3 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zinv_forShape3" , region_forExtrapol, zinvMC_tree3,  "");
+  (*zinvMC_forShape3) *= lumi3; 
+
+  cout << "MCsr shape filled" << endl;
+
+  //for MCcr, we compute the shape for each year, and then combine them
+  MT2Analysis<MT2EstimateTree>* zllMC_shape1 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape1" , region_forExtrapol, zllMC_tree1,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  (*zllMC_shape1) *= lumi1;
+
+  MT2Analysis<MT2EstimateTree>* zllMC_shape2 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape2" , region_forExtrapol, zllMC_tree2,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  (*zllMC_shape2) *= lumi2;
+
+  MT2Analysis<MT2EstimateTree>* zllMC_shape3 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape3" , region_forExtrapol, zllMC_tree3,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  (*zllMC_shape3) *= lumi3;
+
+  MT2Analysis<MT2EstimateTree>* zllMC_shape = new MT2Analysis<MT2EstimateTree>(*(zllMC_shape1));
+  zllMC_shape->setName("zllMC_shape");
+  (*zllMC_shape) += (*(zllMC_shape2));
+  (*zllMC_shape) += (*(zllMC_shape3));
+
+  cout << "MCcr shape filled" << endl;
+  
+  //for MCcr at extreme HT, we do the same as for MCcr, except that we don't use the Nb-integrated regions set, but the normal one
+  MT2Analysis<MT2EstimateTree>* zllMC_shape_forExtremeHT1 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_forExtremeHT1" , cfg1.regionsSet(), zllMC_tree1,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  (*zllMC_shape_forExtremeHT1) *= lumi1;
+
+  MT2Analysis<MT2EstimateTree>* zllMC_shape_forExtremeHT2 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_forExtremeHT2" , cfg2.regionsSet(), zllMC_tree2,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  (*zllMC_shape_forExtremeHT2) *= lumi2;
+
+  MT2Analysis<MT2EstimateTree>* zllMC_shape_forExtremeHT3 = MT2EstimateTree::makeAnalysisFromInclusiveTree( "zllMC_shape_forExtremeHT3" , cfg3.regionsSet(), zllMC_tree3,  "(fabs(Z_mass-91.19)<=20.) && Z_pt>200.");
+  (*zllMC_shape_forExtremeHT3) *= lumi3;
+  
+  MT2Analysis<MT2EstimateTree>* zllMC_shape_forExtremeHT = new MT2Analysis<MT2EstimateTree>(*(zllMC_shape_forExtremeHT1));
+  zllMC_shape_forExtremeHT->setName("zllMC_shape_forExtremeHT");
+  (*zllMC_shape_forExtremeHT) += (*(zllMC_shape_forExtremeHT2));
+  (*zllMC_shape_forExtremeHT) += (*(zllMC_shape_forExtremeHT3));
+
+  cout << "MCcr shape at the extreme HT region filled" << endl;
  
   TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
   
   //declaring the elements entering in the buildHybrid function
-  MT2Analysis<MT2Estimate>* bin_extrapol  = new MT2Analysis<MT2Estimate>( "bin_extrapol", cfg.regionsSet() );
-  MT2Analysis<MT2Estimate>* zllData_shape_TR = new MT2Analysis<MT2Estimate>("zllData_shape_TR", cfg.regionsSet() ); 
-  MT2Analysis<MT2Estimate>* zllMC_shape_TR = new MT2Analysis<MT2Estimate>( "zllMC_shape_TR", cfg.regionsSet() );
-  MT2Analysis<MT2Estimate>* zllHybrid_shape_TR = new MT2Analysis<MT2Estimate>( "zllHybrid_shape_TR", cfg.regionsSet() ); //will be the equivalent of k_hybrid in the transfert function of Z invisible estimate
-  MT2Analysis<MT2Estimate>* zinvMC_forShape_TR = new MT2Analysis<MT2Estimate>( "zinvMC_forShape_TR", cfg.regionsSet() );
+
+  //one per each year: this quantity will contain MCsr/MCcr ratio
+  MT2Analysis<MT2Estimate>* zllHybrid_shape_TR1 = new MT2Analysis<MT2Estimate>( "zllHybrid_shape_TR", cfg1.regionsSet() ); 
+  MT2Analysis<MT2Estimate>* zllHybrid_shape_TR2 = new MT2Analysis<MT2Estimate>( "zllHybrid_shape_TR", cfg2.regionsSet() );
+  MT2Analysis<MT2Estimate>* zllHybrid_shape_TR3 = new MT2Analysis<MT2Estimate>( "zllHybrid_shape_TR", cfg3.regionsSet() );
+  //same for all years
+  MT2Analysis<MT2Estimate>* bin_extrapol  = new MT2Analysis<MT2Estimate>( "bin_extrapol", cfg1.regionsSet() ); //the regions set used for each year is the same
+  //same for all years, but not that the content of this quantity will be changed in the buildHybrid (its content will be the same as zllHybrid_shape_TR) 
+  MT2Analysis<MT2Estimate>* zllData_shape_TR = new MT2Analysis<MT2Estimate>( "zllData_shape_TR", cfg1.regionsSet() ); 
+  //same for all years
+  MT2Analysis<MT2Estimate>* zllMC_shape_TR = new MT2Analysis<MT2Estimate>( "zllMC_shape_TR", cfg1.regionsSet() );
+  //one per each year
+  MT2Analysis<MT2Estimate>* zinvMC_forShape_TR1 = new MT2Analysis<MT2Estimate>( "zinvMC_forShape_TR1", cfg1.regionsSet() );
+  MT2Analysis<MT2Estimate>* zinvMC_forShape_TR2 = new MT2Analysis<MT2Estimate>( "zinvMC_forShape_TR2", cfg2.regionsSet() );
+  MT2Analysis<MT2Estimate>* zinvMC_forShape_TR3 = new MT2Analysis<MT2Estimate>( "zinvMC_forShape_TR3", cfg3.regionsSet() );
   
-  //since the estimates were created in the Nb-integrated regions set (moriond2019_forExtrapol), we have to redistribute the yields in all the topological bins
+
+  //since the shapes were created in the Nb-integrated regions set (moriond2019_forExtrapol), we have to redistribute the yields in all the topological bins
   //e.g HT250to450_j2to3_b0toInf will fill (identically) HT250to450_j2to3_b0, HT250to450_j2to3_b1, HT250to450_j2to3_b2
+
   extrapolToTopoRegion( zllData_shape_TR, (MT2Analysis<MT2Estimate>*)zllData_shape );
   extrapolToTopoRegion( zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape, 1 ); //1 means it is mc
-  extrapolToTopoRegion( zinvMC_forShape_TR, (MT2Analysis<MT2Estimate>*)zinvMC_forShape, 1 );
+  extrapolToTopoRegion( zinvMC_forShape_TR1, (MT2Analysis<MT2Estimate>*)zinvMC_forShape1, 1 );
+  extrapolToTopoRegion( zinvMC_forShape_TR2, (MT2Analysis<MT2Estimate>*)zinvMC_forShape2, 1 );
+  extrapolToTopoRegion( zinvMC_forShape_TR3, (MT2Analysis<MT2Estimate>*)zinvMC_forShape3, 1 );
  
 
   //we build the hybrid shape with the above-created elements
-  buildHybrid( zllHybrid_shape_TR, zllData_shape_TR, zinvMC_forShape_TR, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol );
+  buildHybrid( zllHybrid_shape_TR1, zllData_shape_TR, zinvMC_forShape_TR1, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol );
+  buildHybrid( zllHybrid_shape_TR2, zllData_shape_TR, zinvMC_forShape_TR2, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol );
+  buildHybrid( zllHybrid_shape_TR3, zllData_shape_TR, zinvMC_forShape_TR3, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol );
   
 
   //TH1::AddDirectory(kFALSE); // stupid ROOT memory allocation needs this
@@ -178,52 +335,109 @@ int main( int argc, char* argv[] ) {
 
 
   //we create the ZinvZllRatio (4th component to build the estimate)
-  MT2Analysis<MT2Estimate>* Zinv_forHybrid_notIntegral = MT2Analysis<MT2Estimate>::readFromFile(cfg.getEventYieldDir() + "/analyses.root", "ZJets");
-  (* (MT2Analysis<MT2Estimate>*) Zinv_forHybrid_notIntegral) = (* (MT2Analysis<MT2Estimate>*)Zinv_forHybrid_notIntegral) * lumi;
-  MT2Analysis<MT2Estimate>* zllMC_forHybrid_notIntegral = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir + "/mc_forZinvEst.root", "zllCR");
-  (*zllMC_forHybrid_notIntegral) *= lumi;
+  
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid_notIntegral1 = MT2Analysis<MT2Estimate>::readFromFile(cfg1.getEventYieldDir() + "/analyses.root", "ZJets");
+  (* (MT2Analysis<MT2Estimate>*) Zinv_forHybrid_notIntegral1) = (* (MT2Analysis<MT2Estimate>*)Zinv_forHybrid_notIntegral1) * lumi1;
 
-  MT2Analysis<MT2Estimate>* zllMC_forHybrid = MT2Estimate::makeIntegralAnalysisFromEstimate( "zllMC_forHybrid", cfg.regionsSet(), zllMC_forHybrid_notIntegral );
-  MT2Analysis<MT2Estimate>* Zinv_forHybrid = MT2Estimate::makeIntegralAnalysisFromEstimate( "Zinv_forHybrid", cfg.regionsSet(), Zinv_forHybrid_notIntegral );
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid_notIntegral2 = MT2Analysis<MT2Estimate>::readFromFile(cfg2.getEventYieldDir() + "/analyses.root", "ZJets");
+  (* (MT2Analysis<MT2Estimate>*) Zinv_forHybrid_notIntegral2) = (* (MT2Analysis<MT2Estimate>*)Zinv_forHybrid_notIntegral2) * lumi2;
 
-  MT2Analysis<MT2Estimate>* ZinvZllRatioHybrid = new MT2Analysis<MT2Estimate>( "ZinvZllRatioHybrid", cfg.regionsSet() );
-  (*ZinvZllRatioHybrid) = ( *Zinv_forHybrid) / (*zllMC_forHybrid);
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid_notIntegral3 = MT2Analysis<MT2Estimate>::readFromFile(cfg3.getEventYieldDir() + "/analyses.root", "ZJets");
+  (* (MT2Analysis<MT2Estimate>*) Zinv_forHybrid_notIntegral3) = (* (MT2Analysis<MT2Estimate>*)Zinv_forHybrid_notIntegral3) * lumi3;
+
+
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid_notIntegral1 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir1 + "/mc_forZinvEst.root", "zllCR");
+  (*zllMC_forHybrid_notIntegral1) *= lumi1;
+
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid_notIntegral2 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir2 + "/mc_forZinvEst.root", "zllCR");
+  (*zllMC_forHybrid_notIntegral2) *= lumi2;
+
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid_notIntegral3 = MT2Analysis<MT2Estimate>::readFromFile(zllControlRegionDir3 + "/mc_forZinvEst.root", "zllCR");
+  (*zllMC_forHybrid_notIntegral3) *= lumi3;
+
+  
+  //for Zll, we combine the years
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid1 = MT2Estimate::makeIntegralAnalysisFromEstimate( "zllMC_forHybrid1", cfg1.regionsSet(), zllMC_forHybrid_notIntegral1 );
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid2 = MT2Estimate::makeIntegralAnalysisFromEstimate( "zllMC_forHybrid2", cfg2.regionsSet(), zllMC_forHybrid_notIntegral2 );
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid3 = MT2Estimate::makeIntegralAnalysisFromEstimate( "zllMC_forHybrid3", cfg3.regionsSet(), zllMC_forHybrid_notIntegral3 );
+
+  MT2Analysis<MT2Estimate>* zllMC_forHybrid = new MT2Analysis<MT2Estimate>(*(zllMC_forHybrid1));
+  zllMC_forHybrid->setName("zllMC_forHybrid");
+  (*zllMC_forHybrid) += (*(zllMC_forHybrid2));
+  (*zllMC_forHybrid) += (*(zllMC_forHybrid3));
+
+
+  //for Zinv we keep the years separate
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid1 = MT2Estimate::makeIntegralAnalysisFromEstimate( "Zinv_forHybrid1", cfg1.regionsSet(), Zinv_forHybrid_notIntegral1 );
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid2 = MT2Estimate::makeIntegralAnalysisFromEstimate( "Zinv_forHybrid2", cfg2.regionsSet(), Zinv_forHybrid_notIntegral2 );
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid3 = MT2Estimate::makeIntegralAnalysisFromEstimate( "Zinv_forHybrid3", cfg3.regionsSet(), Zinv_forHybrid_notIntegral3 );
+
+  //we will then have one ratio per year
+  MT2Analysis<MT2Estimate>* ZinvZllRatioHybrid1 = new MT2Analysis<MT2Estimate>( "ZinvZllRatioHybrid1", cfg1.regionsSet() );
+  MT2Analysis<MT2Estimate>* ZinvZllRatioHybrid2 = new MT2Analysis<MT2Estimate>( "ZinvZllRatioHybrid2", cfg2.regionsSet() );
+  MT2Analysis<MT2Estimate>* ZinvZllRatioHybrid3 = new MT2Analysis<MT2Estimate>( "ZinvZllRatioHybrid3", cfg3.regionsSet() );
+
+  (*ZinvZllRatioHybrid1) = ( *Zinv_forHybrid1) / (*zllMC_forHybrid);
+  (*ZinvZllRatioHybrid2) = ( *Zinv_forHybrid2) / (*zllMC_forHybrid);
+  (*ZinvZllRatioHybrid3) = ( *Zinv_forHybrid3) / (*zllMC_forHybrid);
    
+
   //TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this
 
   //we have now all the necessary components to build the estimate
 
-  //intermediate component to compute the final estimate (needed for the datacard)
-  MT2Analysis<MT2Estimate>* alpha = new MT2Analysis<MT2Estimate>( "alpha", cfg.regionsSet() );
-  (*alpha) =  (*zllHybrid_shape_TR) * (*ZinvZllRatioHybrid);
+  //intermediate component to compute the final estimate (needed for the datacard) - one per each year
+  MT2Analysis<MT2Estimate>* alpha1 = new MT2Analysis<MT2Estimate>( "alpha1", cfg1.regionsSet() );
+  MT2Analysis<MT2Estimate>* alpha2 = new MT2Analysis<MT2Estimate>( "alpha2", cfg2.regionsSet() );
+  MT2Analysis<MT2Estimate>* alpha3 = new MT2Analysis<MT2Estimate>( "alpha3", cfg3.regionsSet() );
+
+  (*alpha1) =  (*zllHybrid_shape_TR1) * (*ZinvZllRatioHybrid1);
+  (*alpha2) =  (*zllHybrid_shape_TR2) * (*ZinvZllRatioHybrid2);
+  (*alpha3) =  (*zllHybrid_shape_TR3) * (*ZinvZllRatioHybrid3);
  
  
-  //we write finally down the final estimate of the Z invisible background retrieved from Zll control sample
-  MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid = new MT2Analysis<MT2Estimate>( "ZinvEstimateFromZll_hybrid", cfg.regionsSet() );
-  (*ZinvEstimateFromZll_hybrid) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha) ;
+  //we write finally down the final estimate of the Z invisible background retrieved from Zll control sample - one per each year
+  MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid1 = new MT2Analysis<MT2Estimate>( "ZinvEstimateFromZll_hybrid1", cfg1.regionsSet() );
+  MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid2 = new MT2Analysis<MT2Estimate>( "ZinvEstimateFromZll_hybrid2", cfg2.regionsSet() );
+  MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid3 = new MT2Analysis<MT2Estimate>( "ZinvEstimateFromZll_hybrid3", cfg3.regionsSet() );
+
+  (*ZinvEstimateFromZll_hybrid1) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha1);
+  (*ZinvEstimateFromZll_hybrid2) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha2);
+  (*ZinvEstimateFromZll_hybrid3) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha3);
 
 
   //we save in the output file
-  std::string outFile = cfg.getEventYieldDir() + "/zinvFromZll.root";
+  std::string outFile = cfg1.getEventYieldDir() + "/zinvFromZll.root";
 
+  dataCR                      ->addToFile(outFile);
+  data_of_CR                  ->addToFile(outFile);
   zllData_shape	              ->addToFile(outFile);				  			     
   zllMC_shape	              ->addToFile(outFile);				     			      			
-  purity_forHybrid            ->setName("purity_forHybrid");
   purity_forHybrid            ->addToFile(outFile);	
   bin_extrapol                ->addToFile(outFile);  
-  ZinvZllRatioHybrid          ->addToFile(outFile); 
-  ZinvEstimateFromZll_hybrid  ->addToFile(outFile);
+  ZinvZllRatioHybrid1         ->addToFile(outFile);
+  ZinvZllRatioHybrid2         ->addToFile(outFile);
+  ZinvZllRatioHybrid3         ->addToFile(outFile);
+  ZinvEstimateFromZll_hybrid1 ->addToFile(outFile);
+  ZinvEstimateFromZll_hybrid2 ->addToFile(outFile);
+  ZinvEstimateFromZll_hybrid3 ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllData_shape_TR            ->addToFile(outFile);
-  zinvMC_forShape_TR          ->addToFile(outFile);
-  zllHybrid_shape_TR          ->addToFile(outFile);
-  alpha                       ->addToFile(outFile);
+  zinvMC_forShape_TR1         ->addToFile(outFile);
+  zinvMC_forShape_TR2         ->addToFile(outFile);
+  zinvMC_forShape_TR3         ->addToFile(outFile);
+  zllHybrid_shape_TR1         ->addToFile(outFile);
+  zllHybrid_shape_TR2         ->addToFile(outFile);
+  zllHybrid_shape_TR3         ->addToFile(outFile);
+  alpha1                      ->addToFile(outFile);
+  alpha2                      ->addToFile(outFile);
+  alpha3                      ->addToFile(outFile);
   zllData_of_forHybrid        ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllMC_shape_forExtremeHT    ->addToFile(outFile);
    
-  delete zllData_tree;
-  
+  delete tmp;
+
   return 0;
 
 }
@@ -280,14 +494,18 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
 
       //R(SF/OF) ratio
       float R_sfof;
-      float R_sfof_err;
-      if(cfg.year()==2016){
-        R_sfof = 1.12;//1.13; // old value for preapp = 1.12; // old value for freezing 1.13;//old value 1.12(used for ehm before freezing //old value 1.11 (used for dec 2016 results)
-        R_sfof_err = 0.0; // old err, now in create DC= 0.15;
+      float R_sfof_err; //the uncertainty on the ratio is now handled at the level of the datacard
+      if(cfg.year() == 2016){
+        R_sfof = 1.12;
+	R_sfof_err = 0.0;
       }
-      else if(cfg.year()==2017){
-	R_sfof = 1.06;
-	R_sfof_err = 0.0; // FIXME: adjust this value
+      else if(cfg.year() == 2017){
+	R_sfof = 1.02;
+	R_sfof_err = 0.0;
+      }
+      else if(cfg.year() == 2018){
+	R_sfof = 1.04;
+	R_sfof_err = 0.0;
       }
 	
       writeToFile << "R(SF/OF) = " << R_sfof << endl;
