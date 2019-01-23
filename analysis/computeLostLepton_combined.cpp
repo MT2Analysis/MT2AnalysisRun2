@@ -117,7 +117,7 @@ int main( int argc, char* argv[] ) {
   (*MCcr) += (*(MCcr17));
   (*MCcr) += (*(MCcr18));
 
-  // MC Signal Region - separate - needed for MC stat unceratinty
+  // MC Signal Region - year-by-year and combined
   MT2Analysis<MT2Estimate>* MCsr16 = MT2Analysis<MT2Estimate>::readFromFile(cfg16.getEventYieldDir() + "/analyses.root", "Top");
   MCsr16->setName( "MCsr16" );
   MT2Analysis<MT2Estimate>* WJets16 = MT2Analysis<MT2Estimate>::readFromFile(cfg16.getEventYieldDir() + "/analyses.root", "WJets");
@@ -136,6 +136,10 @@ int main( int argc, char* argv[] ) {
   (*MCsr18) += (*(WJets18));
   (*MCsr18) *= cfg18.lumi();
 
+  MT2Analysis<MT2Estimate>* MCsr = new MT2Analysis<MT2Estimate>( *(MCsr16) );
+  MCsr->setName("MCsr");
+  (*MCsr) += (*(MCsr17));
+  (*MCsr) += (*(MCsr18));
 
   // MC Control Region Integral - combined - needed for RatioMC
   MT2Analysis<MT2Estimate>* MCcr_ = new MT2Analysis<MT2Estimate>( *(MCcr) );
@@ -164,7 +168,7 @@ int main( int argc, char* argv[] ) {
   MCsr18_integral = MT2Estimate::makeIntegralAnalysisFromEstimate( "MCsr18_integral", cfg18.regionsSet(), MCsr18_ );
   MCsr18_integral->setName("MCsr18_integral");
 
-  // MC ratio SR/CR - year by year
+  // MC ratio SR/CR - year by year and combined
   MT2Analysis<MT2Estimate>* RatioMC16 = new MT2Analysis<MT2Estimate>( "RatioMC16", cfg16.regionsSet() );
   (*RatioMC16) = ( (*MCsr16_integral) / (*MCcr_integral) );
 
@@ -173,6 +177,11 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2Estimate>* RatioMC18 = new MT2Analysis<MT2Estimate>( "RatioMC18", cfg18.regionsSet() );
   (*RatioMC18) = ( (*MCsr18_integral) / (*MCcr_integral) );
+
+  MT2Analysis<MT2Estimate>* RatioMC = new MT2Analysis<MT2Estimate>( *(RatioMC16) );
+  RatioMC->setName("RatioMC");
+  (*RatioMC) += (*(RatioMC17));
+  (*RatioMC) += (*(RatioMC18));
 
   ////////////////////////////////////////////////////////////////
   // Prepare estimates for Hybrid shape calculation
@@ -256,7 +265,7 @@ int main( int argc, char* argv[] ) {
   // Final estimates and save to output
   ////////////////////////////////////////////////////////////////
 
-  // Lost lepton estimate
+  // Lost lepton estimates , year-by-year and combined
   MT2Analysis<MT2Estimate>* llepEstimate16 = new MT2Analysis<MT2Estimate>( "llepEstimate16", cfg16.regionsSet() );
   (*llepEstimate16) = (*hybrid_llepCR) * (*hybrid_shape16);
 
@@ -266,13 +275,19 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* llepEstimate18 = new MT2Analysis<MT2Estimate>( "llepEstimate18", cfg18.regionsSet() );
   (*llepEstimate18) = (*hybrid_llepCR) * (*hybrid_shape18);
 
+  MT2Analysis<MT2Estimate>* llepEstimate = new MT2Analysis<MT2Estimate>(*(llepEstimate16) );
+  llepEstimate->setName("llepEstimate");
+  (*llepEstimate) += (*llepEstimate17);
+  (*llepEstimate) += (*llepEstimate18);
+
+
   // save everything in the first directory ...
   std::string outFile = cfg16.getEventYieldDir() + "/llepEstimateCombined";
   outFile += ".root";
 
 
-
-  llepEstimate16->writeToFile( outFile, "recreate" );
+  llepEstimate->writeToFile( outFile, "recreate" );
+  llepEstimate16->addToFile( outFile );
   llepEstimate17->addToFile( outFile );
   llepEstimate18->addToFile( outFile );
 
@@ -281,17 +296,19 @@ int main( int argc, char* argv[] ) {
   hybrid_shape18->addToFile( outFile );
 
   hybrid_llepCR->addToFile( outFile );
-  extrapol_bin->addToFile( outFile ); 
+  extrapol_bin->addToFile( outFile );
 
   MCcr->addToFile(outFile);
   MCcr16->addToFile(outFile);
   MCcr17->addToFile(outFile);
   MCcr18->addToFile(outFile);
 
+  MCsr->addToFile(outFile);
   MCsr16->addToFile(outFile);
   MCsr17->addToFile(outFile);
   MCsr18->addToFile(outFile);
 
+  RatioMC->addToFile(outFile);
   RatioMC16->addToFile(outFile);
   RatioMC17->addToFile(outFile);
   RatioMC18->addToFile(outFile);
