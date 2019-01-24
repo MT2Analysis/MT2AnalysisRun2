@@ -35,8 +35,7 @@ bool copy2SE = false; // copy datacards to SE
 bool doGenAverage = true;
 bool addSigLepSF= true;
 
-bool doQCDEstimate = false;
-
+bool doQCDEstimate = true;
 
 int Round(float d) {
   return (int)(floor(d + 0.5));

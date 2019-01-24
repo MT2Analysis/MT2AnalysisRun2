@@ -91,12 +91,14 @@ void plotMoriond2017vsETH2018(string estimateName, bool checkRegion, bool plotRa
    
   //we select the files and estimates we want to compare together
   //file 1: ZinvEstimateFromZll_hybrid from Moriond 2017
-  string file1 = "/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
+  //string file1 = "/mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
+  string file1 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/zinvFromZll_beforeCleaning.root";
   MT2Analysis<MT2Estimate>* estimate1 = MT2Analysis<MT2Estimate>::readFromFile(file1, estimateName);
   
   //file 2: ZinvEstimateFromZll_hybrid from ETH framework 2018
   //string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis_2016compatible/analysis/EventYields_dataETH_SnTMC_35p9ifb/zinvFromZll.root";
-  string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_zurich2016_35p9ifb/zinvFromZll.root";
+  //string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_zurich2016_35p9ifb/zinvFromZll.root";
+  string file2 = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/zinvFromZll.root";
   MT2Analysis<MT2Estimate>* estimate2 = MT2Analysis<MT2Estimate>::readFromFile(file2, estimateName);
 
   float lumi1 = 35.9;
