@@ -218,7 +218,7 @@ int main(int argc, char* argv[]){
   std::string plotsDir = "combined_CRplots/zllControlRegion/SF";
   if( shapeNorm ) plotsDir += "_shape";
 
-  std::string plotsDir_of = "combined/CRplots/zllControlRegion/OF";
+  std::string plotsDir_of = "combined_CRplots/zllControlRegion/OF";
   if( shapeNorm ) plotsDir_of += "_shape";
 
 
@@ -281,7 +281,7 @@ int main(int argc, char* argv[]){
   
    
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. && ht<450 && nJets==1  && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20 )";
@@ -311,7 +311,7 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree("HT250to450_monojet_mll_el", "Z_mass", selection_mass_el, 50, 50., 150., "M_{e^{+}e^{-}}", "GeV", cutsLabel, "=1j, #geq0b");
   selection_mass_mu = "ht>250 && ht<450 && nJets==1 && met>200. && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && Z_lepId==13";
   dt.drawRegionYields_fromTree("HT250to450_monojet_mll_mu", "Z_mass", selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "=1j, #geq0b");
- 
+  
 
   htMin=450, htMax=575;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
@@ -387,7 +387,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-
+  */
    
 
   // +++++++++++++++++++++++++
@@ -530,7 +530,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-
+  */
   
 
   // +++++++++++++++++++++++++
@@ -567,7 +567,7 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree( "0b_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
 
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && nBJets==0 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -672,7 +672,7 @@ int main(int argc, char* argv[]){
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
 
-
+  */
 
 // +++++++++++++++++++++++++
   // +++     b enriched     +++
@@ -708,7 +708,7 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree( "2b_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
 
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && nBJets>1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -814,7 +814,7 @@ int main(int argc, char* argv[]){
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
 
-  
+  */
 
 
 
@@ -862,7 +862,7 @@ int main(int argc, char* argv[]){
   dt_of.drawRegionYields_fromTree( "incl_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
 
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -955,7 +955,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-
+  */
 
 // +++++++++++++++++++++++++
   // +++     b vetoed     +++
@@ -991,7 +991,7 @@ int main(int argc, char* argv[]){
   dt_of.drawRegionYields_fromTree( "0b_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
 
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && nBJets==0 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -1085,7 +1085,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-
+  */
 // +++++++++++++++++++++++++
   // +++     b enriched     +++
   // +++++++++++++++++++++++++
@@ -1120,7 +1120,7 @@ int main(int argc, char* argv[]){
   dt_of.drawRegionYields_fromTree( "2b_mll_mu"   , "Z_mass"   , selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "#geq1j, #geq0b");
 
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets>=1 && nBJets>1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";
@@ -1214,7 +1214,7 @@ int main(int argc, char* argv[]){
   //and set them back to the general values
   htMin=250, htMax=-1;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
-
+  */
  // +++++++++++++++++++++++++
   // +++      monojet   +++
   // +++++++++++++++++++++++++
@@ -1250,7 +1250,7 @@ int main(int argc, char* argv[]){
   dt_of.drawRegionYields_fromTree("monojet_mll_mu", "Z_mass", selection_mass_mu, 50, 50., 150., "M_{#mu^{+}#mu^{-}}", "GeV", cutsLabel, "=1j, #geq0b");
 
   //plots in 4 different ranges of Ht
-
+  /*
   htMin=250, htMax=450;
   cutsLabel = getCutLabel(htMin, htMax, "H_{T}", "GeV");
   selection = "(ht>250. &&nJets==1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20) && ht<450";

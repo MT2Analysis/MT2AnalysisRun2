@@ -27,6 +27,7 @@
 
 #include "RooHistError.h"
 
+using namespace std;
 
 struct BGTable {
 
@@ -54,7 +55,7 @@ struct BGTable {
 float lumi; //fb-1 
 
 BGTable getTable( const std::string& tableFileName );
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir );
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo = "moriond2019");
 
 
 int main( int argc, char* argv[] ) {
@@ -64,15 +65,15 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
-  std::cout << "|           Running computeLostLepton                |" << std::endl;
+  std::cout << "|            Running compareYield_all                |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << std::endl << std::endl;
   
-  
-  if( argc!=2 ) {
-    std::cout << "USAGE: ./computeLostLepton [configFileName]" << std::endl;
+  cout << argc << endl;
+  if( argc!=2 && argc!=3 ) {
+    std::cout << "USAGE: ./compareYield_all [configFileName] [moriond2017/moriond2019]" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
@@ -83,6 +84,22 @@ int main( int argc, char* argv[] ) {
 
   //  lumi = 18.1;
   lumi = cfg.lumi();
+
+  //switch between the different regions sets of Moriond2017 and Moriond2019
+  std::string whatToDo;
+  if(argc == 2){
+    whatToDo = "moriond2019";
+  }
+  else if(argc == 3){
+    whatToDo = argv[2];
+    if(whatToDo != "moriond2017"){
+      cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
+      cout << "Aborted" << endl;
+      exit(11);
+    }
+  }
+
+ 
   
   TH1::AddDirectory(kTRUE);
   
@@ -115,15 +132,21 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2Estimate>* data = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
   
-  drawYields( outputdir.c_str(), data, dir );
+  drawYields( outputdir.c_str(), data, dir, whatToDo );
 
   return 0;
 
 }
 
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir ) {
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo ) {
 
-  
+  bool doMoriond2017 = false;
+  bool doMoriond2019 = true;
+  if(whatToDo == "moriond2017"){
+    doMoriond2017 = true;
+    doMoriond2019 = false;
+  }
+
   MT2DrawTools::setStyle();
 
   system(Form("mkdir -p %s", outputdir.c_str()));
@@ -696,7 +719,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   //  yMin=0;
   yMax*=20.;
   
-  int thisBin=63;
+  int thisBin(1);
+  if(doMoriond2017){
+    thisBin = 63;
+  }
+  else if(doMoriond2019){
+    thisBin = 85;
+  }
   
   hestimate_all->GetXaxis()->SetRangeUser(0, thisBin);
   hdata->GetXaxis()->SetRangeUser(0, thisBin);
@@ -785,26 +814,62 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 //  htRegions.push_back("#it{H}_{T} [575,1000] GeV");
 //  htRegions.push_back("#it{H}_{T} [1000,1500] GeV");
 //  htRegions.push_back("#it{H}_{T} >1500 GeV");
-  htRegions.push_back("H_{T} [250,450]");
-  htRegions.push_back("H_{T} [450,575]");
-  htRegions.push_back("H_{T} [575,1000]");
-  htRegions.push_back("H_{T} [1000,1500]");
-  htRegions.push_back("H_{T} > 1500 GeV");
+
+  if(doMoriond2017){
+    htRegions.push_back("H_{T} [250,450]");
+    htRegions.push_back("H_{T} [450,575]");
+    htRegions.push_back("H_{T} [575,1000]");
+    htRegions.push_back("H_{T} [1000,1500]");
+    htRegions.push_back("H_{T} > 1500 GeV");
+  }
+  else if(doMoriond2019){
+    htRegions.push_back("H_{T} [250,450]");
+    htRegions.push_back("H_{T} [450,575]");
+    htRegions.push_back("H_{T} [575,1200]");
+    htRegions.push_back("H_{T} [1200,1500]");
+    htRegions.push_back("H_{T} > 1500 GeV");
+  }
+
   
   TPaveText* htBox[5];
-  for( int iHT = 0; iHT < nHTRegions; ++iHT){
+  if(doMoriond2017){
+    for( int iHT = 0; iHT < nHTRegions; ++iHT){
 
-    if (iHT==0) htBox[iHT] = new TPaveText(0.12+0.15*iHT, 0.9-0.06+0.02, 0.34+0.15*iHT, 0.85+0.02, "brNDC");
-    else if (iHT==1) htBox[iHT] = new TPaveText(0.30, 0.9-0.06+0.02, 0.39, 0.85+0.02, "brNDC");
-    else htBox[iHT] = new TPaveText(0.39+0.14*(iHT-2), 0.9-0.06+0.02, 0.39+0.14+0.14*(iHT-2), 0.85+0.02, "brNDC");
-    htBox[iHT]->AddText( htRegions[iHT].c_str() );
+      if (iHT==0) htBox[iHT] = new TPaveText(0.12+0.15*iHT, 0.9-0.06+0.02, 0.34+0.15*iHT, 0.85+0.02, "brNDC");
+      else if (iHT==1) htBox[iHT] = new TPaveText(0.3, 0.9-0.06+0.02, 0.39, 0.85+0.02, "brNDC");
+      else htBox[iHT] = new TPaveText(0.39+0.14*(iHT-2), 0.9-0.06+0.02, 0.39+0.14+0.14*(iHT-2), 0.85+0.02, "brNDC");
+      htBox[iHT]->AddText( htRegions[iHT].c_str() );
 
-    htBox[iHT]->SetBorderSize(0);
-    htBox[iHT]->SetFillColor(kWhite);
-    htBox[iHT]->SetTextSize(0.035);
-    htBox[iHT]->SetTextAlign(21); // align centered
-    htBox[iHT]->SetTextFont(62);
-    htBox[iHT]->Draw("same");
+      htBox[iHT]->SetBorderSize(0);
+      htBox[iHT]->SetFillColor(kWhite);
+      htBox[iHT]->SetTextSize(0.035);
+      htBox[iHT]->SetTextAlign(21); // align centered
+      htBox[iHT]->SetTextFont(62);
+      htBox[iHT]->Draw("same");
+
+    }
+  }
+  else if(doMoriond2019){
+    for( int iHT = 0; iHT < nHTRegions; ++iHT){
+
+      if (iHT==0) htBox[iHT] = new TPaveText(0.10+0.15*iHT, 0.9-0.06+0.02, 0.32+0.15*iHT, 0.85+0.02, "brNDC");
+      else if (iHT==1) htBox[iHT] = new TPaveText(0.27, 0.9-0.06+0.02, 0.36, 0.85+0.02, "brNDC");
+      else if (iHT==2) htBox[iHT] = new TPaveText(0.375, 0.9-0.06+0.02, 0.465, 0.85+0.02, "brNDC");
+      else if (iHT==3) htBox[iHT] = new TPaveText(0.48, 0.9-0.06+0.02, 0.62, 0.85+0.02, "brNDC");
+      else if (iHT==4) htBox[iHT] = new TPaveText(0.635, 0.9-0.06+0.02, 0.785, 0.85+0.02, "brNDC");
+      else if (iHT==5) htBox[iHT] = new TPaveText(0.8, 0.9-0.06+0.02, 0.94, 0.85+0.02, "brNDC");
+      //else htBox[iHT] = new TPaveText(0.375+0.14*(iHT-2), 0.9-0.06+0.02, 0.375+0.14+0.14*(iHT-2), 0.85+0.02, "brNDC");
+     
+      htBox[iHT]->AddText( htRegions[iHT].c_str() );
+
+      htBox[iHT]->SetBorderSize(0);
+      htBox[iHT]->SetFillColor(kWhite);
+      htBox[iHT]->SetTextSize(0.035);
+      htBox[iHT]->SetTextAlign(21); // align centered
+      htBox[iHT]->SetTextFont(62);
+      htBox[iHT]->Draw("same");
+
+    }
 
   }
 
@@ -852,20 +917,45 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   TLine* lHT[5];
-  for( int iHT=0; iHT < 5; iHT++ ){
-    if( iHT==0)
-      lHT[iHT-1] = new TLine(12+11*(iHT), 0.0, 12+11*(iHT), yMax );
-    else if (iHT!=1)
-      lHT[iHT-1] = new TLine(12-4+11*iHT, 0.0, 12-4+11*iHT, yMax );
-    else
-      lHT[iHT-1] = new TLine(12+7*iHT, 0.0, 12+7*iHT, yMax );
+  if(doMoriond2017){
+    for( int iHT=0; iHT < 5; iHT++ ){
+      if( iHT==0)
+	lHT[iHT-1] = new TLine(12+11*(iHT), 0.0, 12+11*(iHT), yMax );
+      else if (iHT!=1)
+	lHT[iHT-1] = new TLine(12-4+11*iHT, 0.0, 12-4+11*iHT, yMax );
+      else
+	lHT[iHT-1] = new TLine(12+7*iHT, 0.0, 12+7*iHT, yMax );
  
-    //  lHT[iHT-1] = new TLine(12+7*iHT, 0.0, 12+11*iHT, yMax );
-    lHT[iHT-1]->SetLineColor(kBlack);
-    lHT[iHT-1]->SetLineStyle(3);
-    lHT[iHT-1]->SetLineWidth(2);
+      //  lHT[iHT-1] = new TLine(12+7*iHT, 0.0, 12+11*iHT, yMax );
+      lHT[iHT-1]->SetLineColor(kBlack);
+      lHT[iHT-1]->SetLineStyle(3);
+      lHT[iHT-1]->SetLineWidth(2);
 
-    lHT[iHT-1]->Draw("same");
+      lHT[iHT-1]->Draw("same");
+    }
+  }
+  else if(doMoriond2019){
+    cout << endl << endl;
+    for( int iHT=0; iHT < 5; iHT++ ){
+      
+      cout << "iHT: " << iHT << endl;
+      if( iHT==0){
+	lHT[iHT-1] = new TLine(12+11*(iHT), 0.0, 12+11*(iHT), yMax );
+      }
+      else if(iHT!=1 && iHT!=2){
+	lHT[iHT-1] = new TLine(12-12+17*iHT, 0.0, 12-12+17*iHT, yMax );
+      }
+      else if(iHT==1 || iHT ==2){
+	lHT[iHT-1] = new TLine(12+11*iHT, 0.0, 12+11*iHT, yMax );
+      }
+      
+      
+      lHT[iHT-1]->SetLineColor(kBlack);
+      lHT[iHT-1]->SetLineStyle(3);
+      lHT[iHT-1]->SetLineWidth(2);
+      lHT[iHT-1]->Draw("same");
+    }
+
   }
 
   legend->Draw("same");

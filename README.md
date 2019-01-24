@@ -48,7 +48,7 @@ cmsenv
 make <name-of-file-you-want-to-compile>
 ```
 
-Note: everytime you change interface/mt2.h you have to:
+Note: everytime you change interface/mt2.h or interface/MT2Analysis.h you have to:
 
 ```
 make clean
