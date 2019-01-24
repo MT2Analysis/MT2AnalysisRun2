@@ -408,7 +408,7 @@ int main( int argc, char* argv[] ) {
 
 
   //we save in the output file
-  std::string outFile = cfg1.getEventYieldDir() + "/zinvFromZll.root";
+  std::string outFile = cfg1.getEventYieldDir() + "/zinvFromZll_combined.root";
 
   dataCR                      ->addToFile(outFile);
   data_of_CR                  ->addToFile(outFile);
