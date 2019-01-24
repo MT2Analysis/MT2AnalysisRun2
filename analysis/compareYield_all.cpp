@@ -52,10 +52,13 @@ struct BGTable {
 };
 
 
-float lumi; //fb-1 
 
 BGTable getTable( const std::string& tableFileName );
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo = "moriond2019");
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, bool doSanityCheck, std::string whatToDo = "moriond2019");
+
+float lumi; //fb-1 
+bool doSanityCheck = true; 
+//the sanity check consists in confronting the estimated background following the strategy of combined years to the 2016 data, and normalize by lumi_16/lumi_tot
 
 
 int main( int argc, char* argv[] ) {
@@ -74,6 +77,7 @@ int main( int argc, char* argv[] ) {
   cout << argc << endl;
   if( argc!=2 && argc!=3 ) {
     std::cout << "USAGE: ./compareYield_all [configFileName] [moriond2017/moriond2019]" << std::endl;
+    std::cout << "If no settings specified after config file: moriond2019 by default (i.e Moriond2019 regionsSet)" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
@@ -132,13 +136,13 @@ int main( int argc, char* argv[] ) {
 
   MT2Analysis<MT2Estimate>* data = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
   
-  drawYields( outputdir.c_str(), data, dir, whatToDo );
+  drawYields( outputdir.c_str(), data, dir, doSanityCheck, whatToDo );
 
   return 0;
 
 }
 
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo ) {
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, bool doSanityCheck, std::string whatToDo ) {
 
   bool doMoriond2017 = false;
   bool doMoriond2019 = true;
@@ -278,14 +282,27 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 	if( iMT2->htMin()==1500 && iMT2->nJetsMin()>1 && bins[iBin]==200 ) continue;
 
 	std::string tableName;
-	if(iMT2->nJetsMax()==1){
-	  tableName = std::string(Form("%s/datacard_templates/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
+	if(!doSanityCheck){
+	  if(iMT2->nJetsMax()==1){
+	    tableName = std::string(Form("%s/datacard_templates/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
+	  }
+	  else{
+	    if( iBin < nBins-1 )
+	      tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
+	    else
+	      tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	  }
 	}
 	else{
-	  if( iBin < nBins-1 )
-	    tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
-	  else
-	    tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	  if(iMT2->nJetsMax()==1){
+	    tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
+	  }
+	  else{
+	    if( iBin < nBins-1 )
+	      tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
+	    else
+	      tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	  }
 	}
 
 	std::cout << tableName << std::endl;
@@ -407,7 +424,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
         hdata->SetBinContent(iRegion, int_data);
         hdata->SetBinError(iRegion, err_data);
 
-	std::cout<<"Filled data  with: " << int_data << "err data  " << err_data<< std::endl;
+	std::cout<<"Filled data with: " << int_data << "err data  " << err_data<< std::endl;
 
 	if( iMT2->nJetsMax()==1 )
 	  hdata->GetXaxis()->SetBinLabel( iRegion, labelsMono[iRegion-1].c_str() );
@@ -420,12 +437,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
           double integral = h_second[b]->IntegralAndError(firstBin, nBins+1, err_int);
           hestimate[b]->SetBinContent(iRegion, integral);
           hestimate[b]->SetBinError(iRegion, err_int);
-
+	
 	  double err_int_forRatio;
 	  double integral_forRatio = h_second[b]->IntegralAndError(firstBin, nBins+1, err_int_forRatio);;
 	  hestimate_forRatio[b]->SetBinContent(iRegion, integral_forRatio);
 	  hestimate_forRatio[b]->SetBinError(iRegion, 0);
-	  
+	 	  
 	  std::cout<<"Filled estimate for background " << b << " with: " << integral << std::endl;
 
 	  std::string thisLabel=Form("%s", niceNames[1].c_str());
@@ -566,6 +583,10 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   for(unsigned int b=0; b<bgSize; ++b){
 
+    if(doSanityCheck){
+      hestimate[b]->Scale(35.9/137.4);
+    }
+
     hestimate[b]->SetLineWidth(0);
     bgStack.Add(hestimate[b]);
     //bgStack.Add(hestimate_forRatio[b]);
@@ -576,7 +597,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     if(b==0) hestimate_all_forRatio = (TH1D*) hestimate_forRatio[b]->Clone("hestimate_all_forRatio");
     else hestimate_all_forRatio->Add(hestimate_forRatio[b]);
 
+    
   }
+
+  if(doSanityCheck){
+    hestimate_all_forRatio->Scale(35.9/137.4);
+  }
+
+ 
 
   for(int iBin=1; iBin<=hestimate_all->GetNbinsX(); ++iBin){
     
@@ -1033,6 +1061,10 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
     h_band->SetBinError(iBin, error);
 
+    //if(doSanityCheck){
+    //  h_band->Scale(35.9/137.4);
+    //}
+
   }
 
 
@@ -1079,7 +1111,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.C", fullPath.c_str()) );
   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.png", fullPath.c_str()) );
   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.eps", fullPath.c_str()) );
-   c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.root", fullPath.c_str()) );
+  c2->SaveAs( Form("%s/mt2_ALL_fullEstimate.root", fullPath.c_str()) );
 
   
   bigHistoFile->cd();

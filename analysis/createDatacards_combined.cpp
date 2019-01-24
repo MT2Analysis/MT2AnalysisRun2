@@ -34,7 +34,7 @@ bool copy2SE = false; // copy datacards to SE
 bool doGenAverage = true;
 bool addSigLepSF= true;
 
-bool doQCDEstimate = false;
+bool doQCDEstimate = true;
 
 
 int Round(float d) {
@@ -200,7 +200,6 @@ int main( int argc, char* argv[] ) {
   // First create template datacards
   std::string path_templ = dir + "/datacard_templates_combined"; // writing in a different directory than before
   system(Form("mkdir -p %s", path_templ.c_str()));
-
 
   // Start loop over TOPOLOGICAL regions
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {

@@ -108,13 +108,15 @@ Data/Bkg plotting:
 
 In all topological regions
 ```
-./compareYield_all <cfg-file-name>
+./compareYield_all <cfg-file-name> <moriond2019/moriond2017>
 ```
+'moriond2019' is set by default. 'moriond2017' produces the plots with the 'zurich2016' regions set.
 
 In each HT region
 ```
-./compareYield_bins_all <cfg-file-name>
+./compareYield_bins_all <cfg-file-name> <moriond2019/moriond2017>
 ```
+'moriond2019' is set by default. 'moriond2017' produces the plots with the 'zurich2016' regions set.
 
 For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis2015/tree/MT2Analysis2015_RandD
 
