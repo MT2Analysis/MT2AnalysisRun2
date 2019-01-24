@@ -24,9 +24,8 @@
 
 using namespace std;
 
+bool doBlind=true; // if true will write sum of prediction instead of observed number of events in data
 bool use_hybrid = true;
-bool use_extrapolation = false;
-bool use_extrapolation_zinv = false;
 bool doSignalContamination = true;
 bool doSimultaneousFit = false;
 bool includeSignalUnc = true; // signal lep eff commented out till available
@@ -35,14 +34,16 @@ bool copy2SE = false; // copy datacards to SE
 bool doGenAverage = true;
 bool addSigLepSF= true;
 
-bool doQCDEstimate = true;
+bool doQCDEstimate = false;
+
 
 int Round(float d) {
   return (int)(floor(d + 0.5));
 }
 
 std::string getSimpleSignalName( const std::string& longName );
-std::string gammaConvention( float yieldSR, int yieldCR, int position, const std::string& corrName, const std::string& uncorrName="", float testAlpha=1. );
+//std::string gammaConvention( float yieldSR, int yieldCR, int position, const std::string& corrName, const std::string& uncorrName="", float testAlpha=1. );
+std::string gammaConventionCombined(float yieldSR16, float yieldSR17, float yieldSR18, int yieldCR, int position, const std::string& corrName, const std::string& uncorrName="", float testAlpha16=1., float testAlpha17=1., float testAlpha18=1. );
 
 
 int main( int argc, char* argv[] ) {
@@ -52,7 +53,7 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
-  std::cout << "|              Running createDatacards               |" << std::endl;
+  std::cout << "|         Running createDatacards_combined           |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "|                                                    |" << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
@@ -64,8 +65,6 @@ int main( int argc, char* argv[] ) {
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
-
-  cout << "WARNING: for the moment, qcd estimates are not taken into account. Uncomment the corresponding lines when we get the necessary ntuples";
 
   std::string configFileName(argv[1]);
   MT2Config cfg(configFileName);
@@ -125,8 +124,54 @@ int main( int argc, char* argv[] ) {
   float err_jec_zinv= 0.02; //special case for VL in line
 
   // Reading data analysis (in search region)
-  // MT2Analysis<MT2Estimate>* data  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "ZJets" );
-  MT2Analysis<MT2Estimate>* data  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
+  // FIXME: now reading data 16 three times
+  MT2Analysis<MT2Estimate>* data16  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
+  MT2Analysis<MT2Estimate>* data17  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
+  MT2Analysis<MT2Estimate>* data18  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
+  MT2Analysis<MT2Estimate>* data = new MT2Analysis<MT2Estimate>( *(data16) );
+  (*data) += (*(data17));
+  (*data) += (*(data18));
+
+  // Reading invisible Z estimate // FIXME: for the moment reading three times the same thing
+  MT2Analysis<MT2Estimate>* zinv_zll16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid1");
+  MT2Analysis<MT2Estimate>* zinv_zll17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid2");
+  MT2Analysis<MT2Estimate>* zinv_zll18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid3");
+  MT2Analysis<MT2Estimate>* zinv_zll = new MT2Analysis<MT2Estimate>( *(zinv_zll16) ); // also build the sum of the three
+  (*zinv_zll) += (*(zinv_zll17));
+  (*zinv_zll) += (*(zinv_zll18));
+
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha1");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha2");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha3");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha = new MT2Analysis<MT2Estimate>( *(zinv_zll_alpha16) );    // FIXME: add in computeZinvFromZll_combined
+  (*zinv_zll_alpha) += (*(zinv_zll_alpha17));
+  (*zinv_zll_alpha) += (*(zinv_zll_alpha18));
+
+  MT2Analysis<MT2Estimate>* zinvCR_zll = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "dataCR");
+  MT2Analysis<MT2Estimate>* purity_zll = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "purity_forHybrid");
+  MT2Analysis<MT2Estimate>* zinv_zll_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "bin_extrapol");
+  //  MT2Analysis<MT2Estimate>* purity_zll_err;
+
+  //zinv->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
+
+  // Reading lost lepton estimate
+  MT2Analysis<MT2Estimate>* llep16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate16" );
+  MT2Analysis<MT2Estimate>* llep17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate17" );
+  MT2Analysis<MT2Estimate>* llep18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate18" );
+  MT2Analysis<MT2Estimate>* llep = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate" );
+
+  MT2Analysis<MT2Estimate>* llepCR = MT2Analysis<MT2Estimate>::readFromFile( cfg.getEventYieldDir() + "/llepEstimateCombined.root", "hybrid_llepCR" );
+  MT2Analysis<MT2Estimate>* llep_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "extrapol_bin" );
+  MT2Analysis<MT2Estimate>* llep_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC" );
+  MT2Analysis<MT2Estimate>* llep_ratio16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC16" );
+  MT2Analysis<MT2Estimate>* llep_ratio17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC17" );
+  MT2Analysis<MT2Estimate>* llep_ratio18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC18" );
+
+  // also reading MC cr and MC sr
+  MT2Analysis<MT2Estimate>* llep_MCcr = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "MCcr");
+  MT2Analysis<MT2Estimate>* llep_MCsr = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "MCsr");
+
+  //llep->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
 
   // Reading QCD estimate
   MT2Analysis<MT2Estimate>* qcd_nominal;
@@ -137,57 +182,23 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* qcd_syst_sigmasoft;
 
   if(doQCDEstimate){
-      qcd_nominal = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "nominal" );
-      qcd_syst_jer = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_jer" );
-      qcd_syst_nbjetshape = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_nbjetshape" );
-      qcd_syst_njetshape = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_njetshape" );
-      qcd_syst_sigmasoft = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_sigmasoft" );
-      qcd_syst_tail = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_tail" );
+    qcd_nominal = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "nominal" );
+    qcd_syst_jer = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_jer" );
+    qcd_syst_nbjetshape = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_nbjetshape" );
+    qcd_syst_njetshape = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_njetshape" );
+    qcd_syst_sigmasoft = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_sigmasoft" );
+    qcd_syst_tail = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_tail" );
   }
-
-  // Reading invisible Z estimate
-  MT2Analysis<MT2Estimate>* zinv_zll;
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha;
-  MT2Analysis<MT2Estimate>* zinvCR_zll;
-  MT2Analysis<MT2Estimate>* purity_zll;
-  MT2Analysis<MT2Estimate>* zinv_zll_bin_extrapol;
-  //  MT2Analysis<MT2Estimate>* purity_zll_err;
-
-  zinvCR_zll      = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zllControlRegion/data_forZinvEst.root", "data");
-  zinv_zll_alpha  = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZll.root", "alpha");
-  purity_zll      = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZll.root", "purity_forHybrid");
-  zinv_zll        = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZll.root", "ZinvEstimateFromZll_hybrid");
-  zinv_zll_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZll.root", "bin_extrapol");
-
-  zinv_zll->setName("zinv");
-  //zinv->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
-
-  // Reading lost lepton estimate
-  MT2Analysis<MT2Estimate>* llep;
-  MT2Analysis<MT2Estimate>* llepCR;
-  MT2Analysis<MT2Estimate>* llep_ratio;
-  MT2Analysis<MT2Estimate>* llep_bin_extrapol;
-
-  llep = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimate.root", "llepEstimate" );
-  llep_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimate.root", "llepRatioMC" );
-  llepCR = MT2Analysis<MT2Estimate>::readFromFile( cfg.getEventYieldDir() + "/llepEstimate.root", "hybrid_llepCR" );
-  llep_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimate.root", "extrapol_bin" );
-
-  llep->setName( "llep" );
-  //llep->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
-
 
 
   std::cout << "Read in all the inputs" << std::endl;
 
   // Getting region set used (from data)
   std::set<MT2Region> regions = data->getRegions();
-
   std::cout << "Defined Regions " << std::endl;
 
-
   // First create template datacards
-  std::string path_templ = dir + "/datacard_templates";
+  std::string path_templ = dir + "/datacard_templates_combined"; // writing in a different directory than before
   system(Form("mkdir -p %s", path_templ.c_str()));
 
 
@@ -199,8 +210,59 @@ int main( int argc, char* argv[] ) {
     ///////////////////////////////////////////////////////
 
     // Getting data yield histogram
+    //TH1D* this_data16 = data16->get(*iR)->yield;
+    //TH1D* this_data17 = data17->get(*iR)->yield;
+    //TH1D* this_data18 = data18->get(*iR)->yield;
     TH1D* this_data = data->get(*iR)->yield;
+    int nBins = this_data->GetNbinsX(); // Getting total number of bins for this topological region
 
+    // Get histograms for invisible Z estimate
+    TH1D* this_zinv_zll16 = zinv_zll16->get(*iR)->yield;
+    TH1D* this_zinv_zll17 = zinv_zll17->get(*iR)->yield;
+    TH1D* this_zinv_zll18 = zinv_zll18->get(*iR)->yield;
+    TH1D* this_zinv_zll = zinv_zll->get(*iR)->yield;
+    TH1D* this_zinv_zll_alpha =  zinv_zll_alpha->get(*iR)->yield;
+    TH1D* this_zinv_zll_alpha16 =  zinv_zll_alpha16->get(*iR)->yield;
+    TH1D* this_zinv_zll_alpha17 =  zinv_zll_alpha17->get(*iR)->yield;
+    TH1D* this_zinv_zll_alpha18 =  zinv_zll_alpha18->get(*iR)->yield;
+    TH1D* this_zinvCR_zll  = zinvCR_zll->get(*iR)->yield;
+    TH1D* this_zinv_purity_zll = purity_zll->get(*iR)->yield;
+    TH1D* this_zinv_zll_bin_extrapol = zinv_zll_bin_extrapol->get(*iR)->yield;
+    int zinv_zll_hybridBin = this_zinv_zll_bin_extrapol->GetBinContent(1);
+
+    int Nzll=0; // Initialize variable for number of events in zll CR
+
+    // Get histograms for lost lepton estimate
+    TH1D* this_llep16 = llep16->get(*iR)->yield;
+    TH1D* this_llep17 = llep17->get(*iR)->yield;
+    TH1D* this_llep18 = llep18->get(*iR)->yield;
+    TH1D* this_llep = llep->get(*iR)->yield;
+    TH1D* this_llep_ratio = llep_ratio->get(*iR)->yield;
+    TH1D* this_llep_ratio16 = llep_ratio16->get(*iR)->yield;
+    TH1D* this_llep_ratio17 = llep_ratio17->get(*iR)->yield;
+    TH1D* this_llep_ratio18 = llep_ratio18->get(*iR)->yield;
+    TH1D* this_llepCR = llepCR->get(*iR)->yield;
+    TH1D* this_llep_bin_extrapol = llep_bin_extrapol->get(*iR)->yield;
+    TH1D* this_llep_MCcr = llep_MCcr->get(*iR)->yield;
+    TH1D* this_llep_MCsr = llep_MCsr->get(*iR)->yield;
+
+    int llep_hybridBin = this_llep_bin_extrapol->GetBinContent(1);
+
+    float N_llep_CR = this_llepCR->Integral();
+
+    // Regions with N(J)>=7 and N(B)>=1 share same control region (1-2 b jets)
+    std::string llepCR_name;
+    MT2Region* thisCR;
+    if(iR->nJetsMin()>=7 && iR->nBJetsMin()>=1){
+      thisCR = new MT2Region(iR->htMin(), iR->htMax(), iR->nJetsMin(), iR->nJetsMax(), 1, 2);
+      llepCR_name = thisCR->getName();
+    } else if (iR->nJetsMin()>=7 && iR->nBJetsMin()==0){
+      thisCR = new MT2Region(iR->htMin(), iR->htMax(), iR->nJetsMin(), iR->nJetsMax(), 0, 0);
+      llepCR_name = thisCR->getName();
+    } else
+      llepCR_name = iR->getName();
+
+    std::cout << "DEBUG: signal region name=" << iR->getName() << "  control region name="<< llepCR_name << std::endl;
 
     // Getting QCD yield histograms, plus uncertainties from QCD estimate
     TH1D* this_qcd;
@@ -219,47 +281,18 @@ int main( int argc, char* argv[] ) {
         this_qcd_syst_tail = qcd_syst_tail->get(*iR)->yield;
     }
 
-    // Get histograms for invisible Z estimate
-    TH1D* this_zinv_zll = zinv_zll->get(*iR)->yield;
-    TH1D* this_zinv_zll_alpha =  zinv_zll_alpha->get(*iR)->yield;
-    TH1D* this_zinvCR_zll  = zinvCR_zll->get(*iR)->yield;
-    TH1D* this_zinv_purity_zll = purity_zll->get(*iR)->yield;
-    TH1D* this_zinv_zll_bin_extrapol = zinv_zll_bin_extrapol->get(*iR)->yield;
-    int zinv_zll_hybridBin = this_zinv_zll_bin_extrapol->GetBinContent(1);
-
-    int Nzll=0; // Initialize variable for number of events in zll CR
-
-     // Get histograms for lost lepton estimate
-    TH1D* this_llep = llep->get(*iR)->yield;
-    TH1D* this_llep_ratio = llep_ratio->get(*iR)->yield;
-    TH1D* this_llepCR = llepCR->get(*iR)->yield;
-    TH1D* this_llep_bin_extrapol = llep_bin_extrapol->get(*iR)->yield;
-    int llep_hybridBin = this_llep_bin_extrapol->GetBinContent(1);
-
-    float N_llep_CR = this_llepCR->Integral();
-    // Regions with N(J)>=7 and N(B)>=1 share same control region (1-2 b jets)
-    std::string llepCR_name;
-    if(iR->nJetsMin()>=7 && iR->nBJetsMin()>=1){
-      MT2Region* thisCR = new MT2Region(iR->htMin(), iR->htMax(), iR->nJetsMin(), iR->nJetsMax(), 1, 2);
-      llepCR_name = thisCR->getName();
-      std::cout << llepCR_name << std::endl;
-    }
-    else llepCR_name = iR->getName();
-
-    int nBins = this_data->GetNbinsX(); // Getting total number of bins for this topological region
-
-    // some specific systematics
+    // some specific systematics depending on ht
     if( iR->htMin()==250 && iR->htMax()==450 )
       err_jec_zinv = 0.05;
     else
       err_jec_zinv = 0.02;
-
 
     ///////////////////////////////////////////////////////
     // Calculation of uncertainty on hybrid shape
     ///////////////////////////////////////////////////////
 
     // Calculating shape uncertainty for invisible Z (default: linear extrapolation)
+    // for the moment will assume same uncertainty for all three years (fully correlated)
     float shapeErr_zinv=0.;
     for( int iBin=1; iBin<this_data->GetNbinsX()+1; ++iBin ) {
       float relativeErr = 0.0;
@@ -267,7 +300,7 @@ int main( int argc, char* argv[] ) {
 
       if( extrapol_bin >= nBins ) continue;
 
-      if( fabs(this_zinv_zll->GetBinContent(iBin))>0 )
+      if( fabs(this_zinv_zll->GetBinContent(iBin))>0 ) // use the total count here
         if(  iBin >=  extrapol_bin ) //nec for hybrid
           relativeErr = err_zinv_shape / (nBins - extrapol_bin) * (iBin - extrapol_bin);
 
@@ -276,6 +309,7 @@ int main( int argc, char* argv[] ) {
     }
 
     // Calculating shape uncertainty for lost lepton (default: linear extrapolation)
+    // for the moment will assume same uncertainty for all three years (fully correlated)
     float shapeErr_llep=0.;
     for( int iBin=1; iBin<this_data->GetNbinsX()+1; ++iBin ) {
       float relativeErr = 0.0;
@@ -284,13 +318,19 @@ int main( int argc, char* argv[] ) {
 
       if( this_llep->GetBinContent(iBin)>0 )
         if(  iBin >=  extrapol_bin  )
-	        relativeErr = err_llep_shape / (nBins-extrapol_bin) * (iBin-extrapol_bin);
+          relativeErr = err_llep_shape / (nBins-extrapol_bin) * (iBin-extrapol_bin);
 
       shapeErr_llep+=relativeErr*this_llep->GetBinContent(iBin);
     }
 
     float lastR_zinvZll; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+    float lastR_zinvZll16; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+    float lastR_zinvZll17; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+    float lastR_zinvZll18; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
     float lastR_llep; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+    float lastR_llep16; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+    float lastR_llep17; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+    float lastR_llep18; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
 
     ///////////////////////////////////////////////////////
     // Start loop over MT2 bins
@@ -314,16 +354,20 @@ int main( int argc, char* argv[] ) {
       if( mt2Max>=0. ) binName = std::string( Form("%s_m%.0fto%.0f", iR->getName().c_str(), mt2Min, mt2Max) );
       else binName = std::string( Form("%s_m%.0ftoInf", iR->getName().c_str(), mt2Min) );
 
-
+      // Getting bin name for special cases of >=7 jets
       std::string binName_7j;
       if(iR->nJetsMin()>=7 && iR->nBJetsMin()>=1){
         MT2Region* thisCR = new MT2Region(iR->htMin(), iR->htMax(), iR->nJetsMin(), iR->nJetsMax(), 1, 2);
         if( mt2Max>=0. ) binName_7j = std::string( Form("%s_m%.0fto%.0f", thisCR->getName().c_str(), mt2Min, mt2Max) );
         else binName_7j = std::string( Form("%s_m%.0ftoInf", thisCR->getName().c_str(), mt2Min) );
-        std::cout << binName_7j << std::endl;
+      }else if (iR->nJetsMin()>=7 && iR->nBJetsMin()==0){
+        MT2Region* thisCR = new MT2Region(iR->htMin(), iR->htMax(), iR->nJetsMin(), iR->nJetsMax(), 0, 0);
+        if( mt2Max>=0. ) binName_7j = std::string( Form("%s_m%.0fto%.0f", thisCR->getName().c_str(), mt2Min, mt2Max) );
+        else binName_7j = std::string( Form("%s_m%.0ftoInf", thisCR->getName().c_str(), mt2Min) );
       }else {
-	       binName_7j = binName;
+         binName_7j = binName;
       }
+      std::cout << "DEBUG binName=" << binName << "  binName7j=" << binName_7j << std::endl;
 
       // Getting HT region name
       std::string htName;
@@ -348,7 +392,6 @@ int main( int argc, char* argv[] ) {
 
       if( thisDatacard.good() ) continue; // If template already exists, move on
 
-
       if(iR->htMin()==1500 && iR->nJetsMin()>1 && mt2Min==200 ) continue; //don't even write the first bin for extreme HT
 
       std::ofstream datacard( datacardName.c_str() );
@@ -359,11 +402,20 @@ int main( int argc, char* argv[] ) {
       table << std::setprecision(3);
 
       // Set name for 1L CR (needed for simultaneous fit)
-      std::string binName1L( Form("%s_1L", binName.c_str()) );
+      //std::string binName1L( Form("%s_1L", binName.c_str()) );
 
       // Start writing template card
       // Read background estimates values
-      float yield_llep = fabs(this_llep->GetBinContent(iBin));
+      float yield_zinv_zll16 = fabs(this_zinv_zll16->GetBinContent(iBin));
+      float yield_zinv_zll17 = fabs(this_zinv_zll17->GetBinContent(iBin));
+      float yield_zinv_zll18 = fabs(this_zinv_zll18->GetBinContent(iBin));
+      float yield_zinv_zll = yield_zinv_zll16 + yield_zinv_zll17 + yield_zinv_zll18;
+
+      float yield_llep16 = fabs(this_llep16->GetBinContent(iBin));
+      float yield_llep17 = fabs(this_llep17->GetBinContent(iBin));
+      float yield_llep18 = fabs(this_llep18->GetBinContent(iBin));
+      float yield_llep = yield_llep16 + yield_llep17 + yield_llep18;
+
       float yield_qcd(0.);
       float yield_qcd_syst_jer(0.);
       float yield_qcd_syst_nbjetshape(0.);
@@ -371,10 +423,16 @@ int main( int argc, char* argv[] ) {
       float yield_qcd_syst_sigmasoft(0.);
       float yield_qcd_syst_tail(0.);
 
+      // Read observed data value
+      int nData;
+      if (!doBlind) nData = Round(this_data->GetBinContent(iBin));
+      else nData = Round(yield_zinv_zll+yield_llep+yield_qcd);
+
+
       if(doQCDEstimate){
         yield_qcd = this_qcd ->GetBinContent(iBin);
-        std::cout << " region " << iR->getName() << std::endl;
-        std::cout << " debug qcd " << yield_qcd << std::endl;
+        //std::cout << " region " << iR->getName() << std::endl;
+        //std::cout << " debug qcd " << yield_qcd << std::endl;
         yield_qcd_syst_jer = this_qcd_syst_jer->GetBinContent(iBin);
         yield_qcd_syst_nbjetshape = this_qcd_syst_nbjetshape->GetBinContent(iBin);
         yield_qcd_syst_njetshape = this_qcd_syst_njetshape->GetBinContent(iBin);
@@ -382,78 +440,69 @@ int main( int argc, char* argv[] ) {
         yield_qcd_syst_sigmasoft = this_qcd_syst_sigmasoft->GetBinContent(iBin);
       }
 
-
-      float yield_zinv = 0;
-
-      float yield_zinv_zll = fabs(this_zinv_zll->GetBinContent(iBin));
-
       //float N_obs = yield_llep + yield_qcd + yield_zinv_zll;
 
-
       datacard << "imax 1" << std::endl; //Number of bins
-      datacard << "jmax 3" << std::endl; //Number of backgrounds
+      datacard << "jmax 7" << std::endl; //Number of backgrounds 3 years  x 2 bkgs + 1 qcd
       datacard << "kmax *" << std::endl; //Number of nuisances
       datacard << "-------------" << std::endl;
       datacard << std::endl << std::endl;
 
-
       datacard << std::fixed;
       datacard << std::setprecision(3) << std::endl << std::endl;
       datacard << "bin  " << binName << std::endl;
-      datacard << "observation  " << this_data->GetBinContent(iBin) << std::endl;
+      datacard << "observation  " << nData << std::endl;
       datacard << "-------------" << std::endl;
       datacard << std::endl << std::endl;
 
       // sig qcd zinv llep
-      datacard << "bin \t" << binName << "\t" << binName << "\t" << binName << "\t" << binName << std::endl;
-      datacard << "process \t sig \t zinv \t llep \t qcd" << std::endl;
-      datacard << "process \t 0 \t 1 \t 2 \t 3" << std::endl;
+      datacard << "bin \t" << binName << "\t" << binName << "\t" << binName << "\t" << binName << "\t" << binName << "\t" << binName << "\t" << binName << "\t" << binName << std::endl;
+      datacard << "process \t sig \t zinv16 \t zinv17 \t zinv18 \t llep16 \t llep17 \t llep18 \t qcd" << std::endl;
+      datacard << "process \t 0 \t 1 \t 2 \t 3 \t 4 \t 5 \t 6 \t 7" << std::endl;
       datacard << "rate \t XXX";
       //      datacard << "rate \t 0.01";
-      datacard << " \t " << yield_zinv_zll << " \t " << yield_llep << " \t " << yield_qcd << std::endl;
+      datacard << " \t " << yield_zinv_zll16 << " \t " << yield_zinv_zll17 << " \t " << yield_zinv_zll18 << " \t " << yield_llep16 << " \t " << yield_llep17 << " \t " <<yield_llep18 << " \t " << yield_qcd << std::endl;
       datacard << "-------------" << std::endl;
 
-      datacard << "lumi_syst    lnN    " << 1.+err_lumi_corr << " - - -" << std::endl;
-      datacard << "PU_syst    lnN    " << 1.+err_sig_PU << " - - -" << std::endl;
+      datacard << "lumi_syst    lnN    " << 1.+err_lumi_corr << " - - - - - - -" << std::endl;
+      datacard << "PU_syst    lnN    " << 1.+err_sig_PU << " - - - - - - -" << std::endl;
 
-      datacard << "lep_eff    lnN    - " << 1. + err_lep_eff << " " << 1. + err_lep_eff << "  - "  << std::endl;
-      datacard << "jec    lnN    - " << 1.+ err_jec_zinv  << " " << 1.+ err_jec_llep << "  - "  << std::endl;
-      datacard << "renorm    lnN    - " << 1. + err_llep_renorm << " " << 1. + err_llep_renorm << "  - "  << std::endl;
+      datacard << "lep_eff    lnN    - " << 1. + err_lep_eff << " " << 1. + err_lep_eff << " " << 1. + err_lep_eff << " " << 1. + err_lep_eff << " " << 1. + err_lep_eff << " " << 1. + err_lep_eff << "  - "  << std::endl;
+      datacard << "jec    lnN    - "    << 1.+ err_jec_zinv  << " " << 1.+ err_jec_llep << " " << 1.+ err_jec_llep << " " << 1.+ err_jec_llep << " " << 1.+ err_jec_llep << " " << 1.+ err_jec_llep << "  - "  << std::endl;
+      datacard << "renorm    lnN    - " << 1. + err_llep_renorm << " " << 1. + err_llep_renorm << " " << 1. + err_llep_renorm << " " << 1. + err_llep_renorm << " " << 1. + err_llep_renorm << " " << 1. + err_llep_renorm << "  - "  << std::endl;
 
       if(!includeSignalUnc)
-        datacard << "sig_syst_" << binName << " lnN 1.2 - - -" << std::endl;
+        datacard << "sig_syst_" << binName << " lnN 1.2 - - - - - - -" << std::endl;
       else{
-        datacard << "sig_MCstat_" << binName << " lnN UUU - - -" << std::endl;
+        datacard << "sig_MCstat_" << binName << " lnN UUU - - - - - - -" << std::endl;
         if (doGenAverage)
-          datacard << "sig_gensyst lnU SSS - - -" << std::endl;
+          datacard << "sig_gensyst lnU SSS - - - - - - -" << std::endl;
 
-        datacard << "sig_isrSyst lnN III - - -" << std::endl;
-        datacard << "sig_bTagHeavySyst lnN HHH - - -" << std::endl;
-        datacard << "sig_bTagLightSyst lnN LLL - - -" << std::endl;
+        datacard << "sig_isrSyst lnN III - - - - - - -" << std::endl;
+        datacard << "sig_bTagHeavySyst lnN HHH - - - - - - -" << std::endl;
+        datacard << "sig_bTagLightSyst lnN LLL - - - - - - -" << std::endl;
         if( addSigLepSF && ((model=="T2tt" || model=="T1tttt" || model == "T2bt" || model == "T2bW")) )
-          datacard << "sig_lepEffSyst lnN EEE - - -" << std::endl; // Include lepton eff. uncertainty only for T2tt and T1tttt
+          datacard << "sig_lepEffSyst lnN EEE - - - - - - -" << std::endl; // Include lepton eff. uncertainty only for T2tt and T1tttt
       }
-
 
       // Initialize variables for tables
       float zinvZll_statUp = 0.;
       float zinvZll_statDn = 0.;
       float zinvZll_systUp = 0.;
       float zinvZll_systDn = 0.;
-
-      float qcd_statUp = 0.; // for the moment zero
-      float qcd_statDn = 0.; // for the moment zero
-      float qcd_systUp = 0.; // total syst
-      float qcd_systDn = 0.; // total syst
+      int zinv_zll_nCR = 0;
 
       float llep_statUp = 0.;
       float llep_statDn = 0.;
       float llep_systUp = 0.;
       float llep_systDn = 0.;
-
-      int zinv_zll_nCR = 0;
-      int qcd_nCR  = 0;
       int llep_nCR = 0;
+
+      float qcd_statUp = 0.; // for the moment zero
+      float qcd_statDn = 0.; // for the moment zero
+      float qcd_systUp = 0.; // total syst
+      float qcd_systDn = 0.; // total syst
+      int qcd_nCR  = 0; // should not be used in any case
 
       float summedErr = err_jec_zinv* err_jec_zinv +  err_jec_llep*err_jec_llep + err_llep_renorm*err_llep_renorm;
       zinvZll_systUp += summedErr;
@@ -462,91 +511,101 @@ int main( int argc, char* argv[] ) {
       llep_systDn    += summedErr;
 
       std::string zinvCR_name;
-      zinvCR_name = iR->getName();
+      zinvCR_name = iR->getName(); // not taking >=7bjets merging into account ??
 
       //////////////////////////////////////
       // Z INVISIBLE SYSTEMATICS
       //////////////////////////////////////
-      if( yield_zinv>=0.  || yield_zinv_zll>=0. ) { // par0
+      if( yield_zinv_zll>=0. ) { // par0
 
-	      Nzll = Round(this_zinvCR_zll->Integral());
+        Nzll = Round(this_zinvCR_zll->Integral());
+        float p_zll = this_zinv_purity_zll->GetBinContent( iBin );
+        float err_zinvZll_purity = (this_zinv_purity_zll->GetBinError(iBin));
 
-	      float p_zll = this_zinv_purity_zll->GetBinContent( iBin );
-	      float err_zinvZll_purity = (this_zinv_purity_zll->GetBinError(iBin));
+        datacard << "zinvDY_Rsfof  lnN  - " << 1.+ 0.15*(1.-p_zll) << " " << 1.+ 0.15*(1.-p_zll) << " " <<  1.+ 0.15*(1.-p_zll) << " - - - -" << std::endl; // FIXME:
+        zinvZll_systUp += (0.15*(1.-p_zll))*(0.15*(1.-p_zll));
+        zinvZll_systDn += (0.15*(1.-p_zll))*(0.15*(1.-p_zll));
 
-	      datacard << "zinvDY_Rsfof  lnN  - " << 1.+ 0.15*(1.-p_zll)  << " - -" << std::endl;
-	      zinvZll_systUp += (0.15*(1.-p_zll))*(0.15*(1.-p_zll));
-	      zinvZll_systDn += (0.15*(1.-p_zll))*(0.15*(1.-p_zll));
+        //Syst uncerainty on purity
+        if( Nzll>0 ){ // par4
+          if( p_zll > 0. ){
+            float p_zllUp = err_zinvZll_purity / p_zll ;
+            float p_zllDn = err_zinvZll_purity / p_zll ;
+            if( ( p_zllUp )>=1. ){
+              p_zllUp = 1.0;
+              p_zllDn = 1.0;
+            }
+            std::cout << p_zll << "  " << p_zllUp << "  " << p_zllDn << std::endl;
+            datacard << "zinvDY_purity_" << zinvCR_name << " lnN  - " << 1.+ p_zllUp << " " <<  1.+ p_zllUp << " " << 1.+ p_zllUp << " - - - -" << std::endl; // FIXME
+            zinvZll_systUp += p_zllUp*p_zllUp;
+            zinvZll_systDn += p_zllDn*p_zllDn;
 
-	      //Syst uncerainty on purity
-	      if( Nzll>0 ){ // par4
-	        if( p_zll > 0. ){
-	          float p_zllUp = err_zinvZll_purity / p_zll ;
-	          float p_zllDn = err_zinvZll_purity / p_zll ;
-	          if( ( p_zllUp )>=1. ){
-	            p_zllUp = 1.0;
-	            p_zllDn = 1.0;
-	         }
-	          std::cout << p_zll << "  " << p_zllUp << "  " << p_zllDn << std::endl;
-	          datacard << "zinvDY_purity_" << zinvCR_name << " lnN  - " << 1.+ p_zllUp  << " - -" << std::endl;
-	          zinvZll_systUp += p_zllUp*p_zllUp;
-	          zinvZll_systDn += p_zllDn*p_zllDn;
+          }else{ //purity = 0 //this happens at 36ifb still for a few regions
+            datacard << "zinvDY_purity_" << zinvCR_name << " lnN  - 1.0/0.01 - - - -" << std::endl; // FIXME !
+            zinvZll_systUp += 1.0;
+            zinvZll_systDn += 1.0;
+          }
+        }//End of zll purity stuff // end par4
 
-	        }else{ //purity = 0 //this happens at 36ifb still for a few regions
-	          datacard << "zinvDY_purity_" << zinvCR_name << " lnN  - 1.0/0.01 - - - -" << std::endl;
-	          zinvZll_systUp += 1.0;
-	          zinvZll_systDn += 1.0;
-	        }
-	      }//End of zll purity stuff // end par4
+        // Get Z/Zll ratio
+        float R_zll = fabs(this_zinv_zll_alpha->GetBinContent(iBin));
+        float R_zll16 = fabs(this_zinv_zll_alpha16->GetBinContent(iBin));
+        float R_zll17 = fabs(this_zinv_zll_alpha17->GetBinContent(iBin));
+        float R_zll18 = fabs(this_zinv_zll_alpha18->GetBinContent(iBin));
 
-	      // Get Z/Zll ratio
-	      float R_zll = fabs(this_zinv_zll_alpha->GetBinContent(iBin));
-	      float relativeErr_zll = fabs(this_zinv_zll_alpha->GetBinError(iBin));
+        float relativeErr_zll = fabs(this_zinv_zll_alpha->GetBinError(iBin));
 
-	      // Keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
-	      if (R_zll>0) lastR_zinvZll = R_zll;
+        // Keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
+        if (R_zll>0)   lastR_zinvZll = R_zll;
+        if (R_zll16>0) lastR_zinvZll16 = R_zll16;
+        if (R_zll17>0) lastR_zinvZll17 = R_zll17;
+        if (R_zll18>0) lastR_zinvZll18 = R_zll18;
 
-	      int extrapol_bin = ( use_hybrid ) ?  zinv_zll_hybridBin : 1;
-	      if( fabs(this_zinv_zll->GetBinContent(iBin))>0 && iBin >= zinv_zll_hybridBin )
-	        relativeErr_zll = err_zinv_shape / (nBins-extrapol_bin) * (iBin-extrapol_bin);
-	      else
-	        relativeErr_zll = 0.0;
+        int extrapol_bin = ( use_hybrid ) ?  zinv_zll_hybridBin : 1;
+        if( fabs(this_zinv_zll->GetBinContent(iBin))>0 && iBin >= zinv_zll_hybridBin )
+          relativeErr_zll = err_zinv_shape / (nBins-extrapol_bin) * (iBin-extrapol_bin);
+        else
+          relativeErr_zll = 0.0;
 
+        float testAlphaZll = (R_zll>0) ? R_zll : lastR_zinvZll;
+        float testAlphaZll16 = (R_zll16>0) ? R_zll : lastR_zinvZll16;
+        float testAlphaZll17 = (R_zll17>0) ? R_zll : lastR_zinvZll17;
+        float testAlphaZll18 = (R_zll18>0) ? R_zll : lastR_zinvZll18;
+        //datacard << "zinvDY_CRstat_" << std::setprecision(3) << gammaConvention( yield_zinv_zll, Nzll, 1, zinvCR_name, binName, (R_zll>0) ? R_zll : lastR_zinvZll ) << std::setprecision(3) << std::endl;
+        datacard << "zinvDY_CRstat_" << std::setprecision(3) << gammaConventionCombined( yield_zinv_zll16, yield_zinv_zll17, yield_zinv_zll18, Nzll, 1, zinvCR_name, binName, testAlphaZll16, testAlphaZll17, testAlphaZll18 ) << std::setprecision(3) << std::endl;
 
-	      datacard << "zinvDY_CRstat_" << std::setprecision(3) << gammaConvention( yield_zinv_zll, Nzll, 1, zinvCR_name, binName, (R_zll>0) ? R_zll : lastR_zinvZll ) << std::setprecision(3) << std::endl;
+        if( nBins>1 ){
+          if( iBin==extrapol_bin && fabs(yield_zinv_zll)>0 ){ //For shape uncertainty on 1st extrapolated MT2 bin, take 1-tot. unc. form other bins (PIVOT at second bin)
+            datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " - - - - " << std::endl;
+            zinvZll_systUp += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
+            zinvZll_systDn += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
+          }else{
+            if( iBin > extrapol_bin ){ //for hybrid (made such that is works also for pure extrapolation
+              datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " " << 1.+relativeErr_zll << " "  << 1.+relativeErr_zll  << " - - - - " << std::endl;
+              zinvZll_systUp += relativeErr_zll*relativeErr_zll;
+              zinvZll_systDn += relativeErr_zll*relativeErr_zll;
+            }
+          }
+        }
 
-	      if( nBins>1 ){
-	        if( iBin==extrapol_bin && fabs(yield_zinv_zll)>0 ){ //For shape uncertainty on 1st extrapolated MT2 bin, take 1-tot. unc. form other bins (PIVOT at second bin)
-	          datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " - - " << std::endl;
-	          zinvZll_systUp += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
-	          zinvZll_systDn += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
-	        }else{
-	          if( iBin > extrapol_bin ){ //for hybrid (made such that is works also for pure extrapolation
-	            datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " - - " << std::endl;
-	            zinvZll_systUp += relativeErr_zll*relativeErr_zll;
-	            zinvZll_systDn += relativeErr_zll*relativeErr_zll;
-	          }
-	        }
-	      }
+        double yield_zinv_zll_up, yield_zinv_zll_dn;
+        RooHistError::instance().getPoissonInterval(Nzll,yield_zinv_zll_dn,yield_zinv_zll_up,1.);
+        yield_zinv_zll_up *= (Nzll>0) ? yield_zinv_zll/Nzll : testAlphaZll;
+        yield_zinv_zll_dn *= (Nzll>0) ? yield_zinv_zll/Nzll : testAlphaZll;
 
-	      double yield_zinv_zll_up, yield_zinv_zll_dn;
-	      RooHistError::instance().getPoissonInterval(Nzll,yield_zinv_zll_dn,yield_zinv_zll_up,1.);
-	      yield_zinv_zll_up *= (Nzll>0) ? yield_zinv_zll/Nzll : (R_zll>0) ?  R_zll : lastR_zinvZll;
-	      yield_zinv_zll_dn *= (Nzll>0) ? yield_zinv_zll/Nzll : (R_zll>0) ?  R_zll : lastR_zinvZll;
+        zinvZll_statUp = yield_zinv_zll_up - yield_zinv_zll;
+        zinvZll_statDn = yield_zinv_zll    - yield_zinv_zll_dn;
 
-	      zinvZll_statUp = yield_zinv_zll_up - yield_zinv_zll;
-	      zinvZll_statDn = yield_zinv_zll    - yield_zinv_zll_dn;
+        // Uncertainty on transfer factor - I don't know what this contains
+        float alphaErr_zll;
+        if ( R_zll>0 ) alphaErr_zll= this_zinv_zll_alpha->GetBinError(iBin)/R_zll;
+        else alphaErr_zll=1.0;
+        datacard << "zinvDY_alphaErr_" << binName << " lnN  - " << 1.+alphaErr_zll  << " " <<  1.+alphaErr_zll << " " << 1.+alphaErr_zll << " - - - -" << std::endl; // FIXME
 
-	        // Uncertainty on transfer factor
-	      float alphaErr_zll;
-	      if ( R_zll>0 ) alphaErr_zll= this_zinv_zll_alpha->GetBinError(iBin)/R_zll;
-	      else alphaErr_zll=1.0;
-	      datacard << "zinvDY_alphaErr_" << binName << " lnN  - " << 1.+alphaErr_zll << " - -" << std::endl;
+        zinvZll_systUp += alphaErr_zll*alphaErr_zll;
+        zinvZll_systDn += alphaErr_zll*alphaErr_zll;
 
-	      zinvZll_systUp += alphaErr_zll*alphaErr_zll;
-	      zinvZll_systDn += alphaErr_zll*alphaErr_zll;
-
-	      zinv_zll_nCR = Nzll; // Just for table
+        zinv_zll_nCR = Nzll; // Just for table
 
       } // if zinv end par0
 
@@ -555,11 +614,17 @@ int main( int argc, char* argv[] ) {
       //////////////////////////////////////
       if( yield_llep>=0. ) { // yield_llep>=0.
 
-	      //The bin content of the data is already integrated in the extrapolation region
+        //The bin content of the data is already integrated in the extrapolation region
         N_llep_CR = this_llepCR->GetBinContent(iBin);
         // Get TF for lost-lepton
         float Rllep = this_llep_ratio->GetBinContent(iBin);
         if( Rllep > 0 ) lastR_llep = Rllep; // Keep track of last non-zero TF. Will use it for 'next' bin if TF will be zero.
+        float Rllep16 = this_llep_ratio16->GetBinContent(iBin);
+        if( Rllep16 > 0 ) lastR_llep16 = Rllep16;
+        float Rllep17 = this_llep_ratio17->GetBinContent(iBin);
+        if( Rllep17 > 0 ) lastR_llep17 = Rllep17;
+        float Rllep18 = this_llep_ratio18->GetBinContent(iBin);
+        if( Rllep18 > 0 ) lastR_llep18 = Rllep18;
 
         int extrapol_bin_llep = ( use_hybrid ) ?  llep_hybridBin : 1;
         float relativeErr_llep;
@@ -569,75 +634,87 @@ int main( int argc, char* argv[] ) {
           relativeErr_llep = 0.0;
 
         // mt cut syst
-	      datacard << "llep_mtcut lnN  - - " << 1.+err_llep_mtcut << " -" << std::endl;
+        datacard << "llep_mtcut lnN  - - - - " << 1.+err_llep_mtcut << " " << 1.+err_llep_mtcut << " " << 1.+err_llep_mtcut << " -" << std::endl;
         llep_systUp += err_llep_mtcut*err_llep_mtcut;
         llep_systDn += err_llep_mtcut*err_llep_mtcut;
 
         // tau eff syst
-	      datacard << "llep_taueff lnN  - - " << 1.+err_llep_tauEff << " -" << std::endl;
+        datacard << "llep_taueff lnN  - - - - " << 1.+err_llep_tauEff << " " << 1.+err_llep_tauEff << " " << 1.+err_llep_tauEff << " -" << std::endl;
         llep_systUp += err_llep_tauEff*err_llep_tauEff;
         llep_systDn += err_llep_tauEff*err_llep_tauEff;
 
-	      // btag syst
+        // btag syst
         if( iR->nJetsMin()>=7 &&  iR->nBJetsMin()>= 1 ){
           float uncert_heavy = err_llep_btagEff_heavy_7j1b;
           if(  iR->nBJetsMin()==2 )      uncert_heavy =err_llep_btagEff_heavy_7j2b;
           else if( iR->nBJetsMin()==3 )  uncert_heavy = err_llep_btagEff_heavy_7j3b;
 
-          datacard << "btageff_heavy lnN  - " << 1.+uncert_heavy << " " << 1.+uncert_heavy  << " -" << std::endl;
+          // same for zinv and llep
+          datacard << "btageff_heavy lnN  - " << 1.+uncert_heavy << " " << 1.+uncert_heavy << 1.+uncert_heavy << " " << 1.+uncert_heavy << 1.+uncert_heavy << " " << 1.+uncert_heavy << " -" << std::endl;
           llep_systUp += uncert_heavy*uncert_heavy;
           llep_systDn += uncert_heavy*uncert_heavy;
 
+          // same for zinv and llep
           if( iR->nBJetsMin()==3 ) {//only 1 uncert for light for >=3b
-            datacard << "btageff_light lnN  - " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " -" << std::endl;
+            datacard << "btageff_light lnN  - " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " -" << std::endl;
             llep_systUp += err_llep_btagEff_light_7j3b*err_llep_btagEff_light_7j3b;
             llep_systDn += err_llep_btagEff_light_7j3b*err_llep_btagEff_light_7j3b;
-	        }
-	      } // end btag syst
-        // missing theory uncertainties
+          }
+        } // end btag syst
 
-         // Gamma function, or lnU for simultaneous fit
-	      if( iBin < extrapol_bin_llep ) //BIN BY BIN!
-	        datacard << "llep_CRstat_" << gammaConvention( yield_llep, Round(N_llep_CR), 2,  binName_7j, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
+         // Gamma function
+        float testAlphaLlep16=(Rllep16>0) ? ( (Rllep16>3) ? 2 : Rllep16 ) : lastR_llep16;
+        float testAlphaLlep17=(Rllep17>0) ? ( (Rllep17>3) ? 2 : Rllep17 ) : lastR_llep17;
+        float testAlphaLlep18=(Rllep18>0) ? ( (Rllep18>3) ? 2 : Rllep18 ) : lastR_llep18;
+        float testAlphaLlep=(Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
+
+        if( iBin < extrapol_bin_llep ) //BIN BY BIN!
+          datacard << "llep_CRstat_" << gammaConventionCombined( yield_llep16, yield_llep17, yield_llep18, Round(N_llep_CR), 4,  binName_7j, binName, testAlphaLlep16, testAlphaLlep17, testAlphaLlep18  ) << std::endl;
         else //Extrapolation, so just 1 name
-          datacard << "llep_CRstat_" << gammaConvention( yield_llep, Round(N_llep_CR), 2,  llepCR_name, binName, (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep ) << std::endl;
+          datacard << "llep_CRstat_" << gammaConventionCombined( yield_llep16, yield_llep17, yield_llep18, Round(N_llep_CR), 4,  llepCR_name, binName, testAlphaLlep16, testAlphaLlep17, testAlphaLlep18 ) << std::endl;
 
         // Get Poisson uncertainty for table
         double yield_llep_up, yield_llep_dn;
         RooHistError::instance().getPoissonInterval(Round(N_llep_CR),yield_llep_dn,yield_llep_up,1.);
-        yield_llep_up *= (Round(N_llep_CR)>0) ? yield_llep/Round(N_llep_CR) : (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
-        yield_llep_dn *= (Round(N_llep_CR)>0) ? yield_llep/Round(N_llep_CR) : (Rllep>0) ? ( (Rllep>3) ? 2 : Rllep ) : lastR_llep;
+        yield_llep_up *= (Round(N_llep_CR)>0) ? yield_llep/Round(N_llep_CR) : testAlphaLlep;
+        yield_llep_dn *= (Round(N_llep_CR)>0) ? yield_llep/Round(N_llep_CR) : testAlphaLlep;
         llep_statUp = yield_llep_up-yield_llep;
         llep_statDn = yield_llep-yield_llep_dn;
 
-        //if( yield_llep>=0. ) { // but we are already in this condition
+        // MC stat. uncertainty, two independent contributions CR, SR
+        //float err_llep_mcstat;
+        float err_llep_mcstat_cr;
+        float err_llep_mcstat_sr;
 
-        // MC stat. uncertainty
-        float err_llep_mcstat;
-        if(yield_llep>0) err_llep_mcstat = this_llep->GetBinError(iBin)/this_llep->GetBinContent(iBin);
-        else err_llep_mcstat = 1.0;
+        if (this_llep_MCcr->GetBinContent(iBin)>0) err_llep_mcstat_cr = this_llep_MCcr->GetBinError(iBin)/this_llep_MCcr->GetBinContent(iBin);
+        else err_llep_mcstat_cr = 1.0;
+        if (this_llep_MCsr->GetBinContent(iBin)>0) err_llep_mcstat_sr = this_llep_MCsr->GetBinError(iBin)/this_llep_MCsr->GetBinContent(iBin);
+        else err_llep_mcstat_sr = 1.0;
 
-        datacard << "llep_MCstat_" << binName << " lnN  - - " << 1.+err_llep_mcstat << " -" << std::endl;
-        llep_systUp += err_llep_mcstat*err_llep_mcstat;
-        llep_systDn += err_llep_mcstat*err_llep_mcstat;
+        datacard << "llep_MCstat_cr_" << binName << " lnN  - - - - " << 1.+err_llep_mcstat_cr << " " << 1.+err_llep_mcstat_cr << " " << 1.+err_llep_mcstat_cr << " -" << std::endl;
+        llep_systUp += err_llep_mcstat_cr*err_llep_mcstat_cr;
+        llep_systDn += err_llep_mcstat_cr*err_llep_mcstat_cr;
+
+        datacard << "llep_MCstat_sr_" << binName << " lnN  - - - - " << 1.+err_llep_mcstat_sr << " " << 1.+err_llep_mcstat_sr << " " << 1.+err_llep_mcstat_sr << " -" << std::endl;
+        llep_systUp += err_llep_mcstat_sr*err_llep_mcstat_sr;
+        llep_systDn += err_llep_mcstat_sr*err_llep_mcstat_sr;
 
         // Shape uncertainty
         if( nBins > 1 ){
           if( iBin==extrapol_bin_llep && yield_llep>0 ){
-            datacard << "llep_shape_" << llepCR_name << " lnN - - " << 1.-shapeErr_llep/yield_llep << " - " << std::endl;
+            datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.-shapeErr_llep/yield_llep << " " << 1.-shapeErr_llep/yield_llep << " " << 1.-shapeErr_llep/yield_llep << " - " << std::endl;
             llep_systUp += (shapeErr_llep/yield_llep)*(shapeErr_llep/yield_llep);
             llep_systDn += (shapeErr_llep/yield_llep)*(shapeErr_llep/yield_llep);
           }
           else{
             if( iBin > extrapol_bin_llep ){ //for hybrid (made such that is works also for pure extrapolation
-              datacard << "llep_shape_" << llepCR_name << " lnN - - " << 1+relativeErr_llep << " - " << std::endl;
+              datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1+relativeErr_llep << " " << 1+relativeErr_llep << " " << 1+relativeErr_llep << " - " << std::endl;
               llep_systUp += relativeErr_llep*relativeErr_llep;
               llep_systDn += relativeErr_llep*relativeErr_llep;
             }
           }
         } // end shape uncertainty
 
-         //} // yield llep > 0
         llep_nCR = N_llep_CR; // Just for table (CR counts)
 
       } // yield_llep>=0.
@@ -648,7 +725,7 @@ int main( int argc, char* argv[] ) {
       if(doQCDEstimate){
 
         if( yield_qcd>=0. ) {
-	        datacard << "qcd_syst_jer" << binName << " lnN - - - " <<  yield_qcd_syst_jer/yield_qcd  << std::endl;
+          datacard << "qcd_syst_jer" << binName << " lnN - - - " <<  yield_qcd_syst_jer/yield_qcd  << std::endl;
           float this_var = yield_qcd_syst_jer/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
@@ -668,7 +745,7 @@ int main( int argc, char* argv[] ) {
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
 
-	        datacard << "qcd_syst_tail" << binName << " lnN - - - " <<  yield_qcd_syst_tail/yield_qcd  << std::endl;
+          datacard << "qcd_syst_tail" << binName << " lnN - - - " <<  yield_qcd_syst_tail/yield_qcd  << std::endl;
           this_var = yield_qcd_syst_tail/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
@@ -684,6 +761,8 @@ int main( int argc, char* argv[] ) {
       // Final configurations to write table
       //////////////////////////////////////
 
+      // FIXME: currently only dealing with all years summed up together
+
       // Make absolute uncertainties for table
       zinvZll_systUp = yield_zinv_zll*sqrt(zinvZll_systUp);
       zinvZll_systDn = yield_zinv_zll*sqrt(zinvZll_systDn);
@@ -696,7 +775,6 @@ int main( int argc, char* argv[] ) {
         qcd_systDn = yield_qcd*sqrt(qcd_systDn);
       }
 
-      int nData = Round(this_data->GetBinContent(iBin));
 
       // Print the table:
       table << "### bg_name yield statUp statDown systUp systDown" << std::endl;
@@ -1395,45 +1473,49 @@ std::string getSimpleSignalName( const std::string& longName ) {
 }
 
 
-std::string gammaConvention( float yieldSR, int yieldCR, int position, const std::string& corrName, const std::string& uncorrName, float testAlpha ) {
+std::string gammaConventionCombined(float yieldSR16, float yieldSR17, float yieldSR18, int yieldCR, int position, const std::string& corrName, const std::string& uncorrName, float testAlpha16, float testAlpha17, float testAlpha18 ){
 
   std::string use_uncorrName(uncorrName);
   if( uncorrName=="" )
     use_uncorrName = corrName;
 
-  std::stringstream line;
+  int precision = 3;
+
+  float yieldsSR[3]   = {yieldSR16, yieldSR17, yieldSR18};
+  float testAlphas[3] = {testAlpha16, testAlpha17, testAlpha18};
+
+  float alphas[3]; // this needs to be filled with calculated alpha per year
+  std::stringstream line; // this needs to be filled with cr yield data , only one
   line << std::fixed;
   line << std::setprecision(3);
 
-  int precision = 3;
-  float syst = -1.;
-  if( yieldCR==0 && yieldSR==0. ) {
-    line << corrName << "  gmN " << yieldCR << "   ";
-    syst = testAlpha;
-  } else if( yieldCR==0 && yieldSR>0. ) {
-    line << use_uncorrName << "  lnN  ";
-    syst = 2.;
-  } else if( yieldCR>0 && yieldSR==0. ) {
-    line << use_uncorrName << "  gmN 0  ";
-    syst = testAlpha;
-  } else {
-    float alpha = yieldSR/((float)yieldCR);
-    line << corrName << "  gmN " << yieldCR << "   ";
-    syst = alpha;
-    // precision = 10;
-    precision = 5;
+  for (int i=0; i<3; i++){
+    if( yieldCR==0 && yieldsSR[i]==0.){
+      if(i==0) line << corrName << "  gmN 0  ";
+      alphas[i]=testAlphas[i];
+    } else if (yieldCR>0 && yieldsSR[i]==0.){
+      if(i==0) line << use_uncorrName << "  gmN 0  ";
+      alphas[i] = testAlphas[i];
+    } else {
+      if(i==0) line << corrName << "  gmN " << yieldCR << "   ";
+      alphas[i]=yieldsSR[i]/((float)yieldCR);
+      precision = 5;
+    }
   }
+
   line << std::setprecision(precision);
 
   for( int i=0; i<position; ++i )
     line << " - ";
 
-  line << syst;
+  line << alphas[0] << " " << alphas[1] << " " << alphas[2];
 
-  for( int i=position+1; i<4; ++i )
+  for( int i=position+1; i<6; ++i )
     line << " - ";
 
   std::string line_str = line.str();
   return line_str;
 
-}
+
+
+} // end gammaConventionCombined
