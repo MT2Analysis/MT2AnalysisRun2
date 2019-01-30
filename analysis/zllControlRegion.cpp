@@ -677,8 +677,16 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     }
     else{
       if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
-      else weight = myTree.evt_scale1fb * myTree.weight_lepsf * myTree.weight_btagsf;
-    }
+      else {
+        weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
+        // xsec times k factor and filter eff from file
+        weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
+        //std::cout << " sample id " << sample.id << " year " << cfg.year() << std::endl;
+        //std::cout << " weight which should be 1000 " << myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.evt_nEvts << std::endl
+        //          << " weight xsec original " << (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) << std::endl
+        //          << " weight xsec new      " << myTree.getXSecCorrWeight(sample.id, cfg.year()) << std::endl << std::endl;
+      }
+    } 
 
     if(ID >999)
       weight = 1000.*myTree.evt_xsec / nentries;

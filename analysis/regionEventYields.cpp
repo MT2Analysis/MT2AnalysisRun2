@@ -454,11 +454,15 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
     else{
       if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
-      else weight = myTree.evt_scale1fb * myTree.weight_lepsf * myTree.weight_btagsf;
-    }
+      else {
+        weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
+        // xsec times k factor and filter eff from file
+        weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
+      }
+    } 
 
 
-     //b-tagging scale factor
+    //b-tagging scale factor
     if(!isData and isETH){
 
       // declaration of the b-tagged weight

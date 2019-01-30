@@ -83,7 +83,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       exit(1101);
     }
     TFile* file = TFile::Open(s.file.c_str());
-
+    //std::cout << "debug working on file" << s.file.c_str() << std::endl;
     TString treeName = isETH ? "Events" : "mt2";
     TTree* tree = (TTree*)file->Get(treeName);
     
@@ -99,8 +99,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     
     tree->GetEntry(0);
     s.id       = evt_id;
-    if(s.id<=0){
-
+//    if(s.id<=0){
       if( rootFileName.Contains("JetHT") )               s.id = 1;
       else if( rootFileName.Contains("HTMHT") )          s.id = 2;
       else if( rootFileName.Contains("MET") )            s.id = 3;
@@ -111,18 +110,42 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       else if( rootFileName.Contains("SingleMuon") )     s.id = 8;
       else if( rootFileName.Contains("SingleElectron") ) s.id = 9;
       // else if( rootFileName.Contains("T1bbbb") )         s.id = 1020;
-      else if( rootFileName.Contains("singletop") )	 s.id = 403;
-      else if( rootFileName.Contains("mg_lo") )	         s.id =330 ;
+      //else if( rootFileName.Contains("singletop") )	 s.id = 403;
+      //else if( rootFileName.Contains("mg_lo") )	         s.id =330 ;
+      //else if( rootFileName.Contains("wjets") )	         s.id = 504;
+      //else if( rootFileName.Contains("dyjetsll") )	 s.id = 705;
+      //else if( rootFileName.Contains("T2bW") )	         s.id = 1490;
+      // declaring numbering convention from SnT ntuples
+      if (sampleFilePath_tstr.Contains("wjets_ht100to200"))                s.id=502;
+      else if (sampleFilePath_tstr.Contains("wjets_ht200to400"))                s.id=503;
+      else if (sampleFilePath_tstr.Contains("wjets_ht400to600"))                s.id=504;
+      else if (sampleFilePath_tstr.Contains("wjets_ht600to800"))                s.id=505;
+      else if (sampleFilePath_tstr.Contains("wjets_ht800to1200"))                s.id=506;
+      else if (sampleFilePath_tstr.Contains("wjets_ht1200to2500"))                s.id=507;
+      else if (sampleFilePath_tstr.Contains("wjets_ht2500toInf"))                s.id=508;
+
+      else if (sampleFilePath_tstr.Contains("zinv_ht100to200"))                s.id=602;
+      else if (sampleFilePath_tstr.Contains("zinv_ht200to400"))                s.id=603;
+      else if (sampleFilePath_tstr.Contains("zinv_ht400to600"))                s.id=604;
+      else if (sampleFilePath_tstr.Contains("zinv_ht600to800"))                s.id=605;
+      else if (sampleFilePath_tstr.Contains("zinv_ht800to1200"))                s.id=606;
+      else if (sampleFilePath_tstr.Contains("zinv_ht1200to2500"))                s.id=607;
+      else if (sampleFilePath_tstr.Contains("zinv_ht2500toInf"))                s.id=608;
       
-      else if( rootFileName.Contains("wjets") )	         s.id = 504;
-      else if( rootFileName.Contains("dyjetsll") )	 s.id = 705;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht100to200"))                s.id=702;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht200to400"))                s.id=703;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht400to600"))                s.id=704;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht600to800"))                s.id=705;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht800to1200"))                s.id=706;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht1200to2500"))                s.id=707;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht2500toInf"))                s.id=708;
 
-      else if( rootFileName.Contains("T2bW") )	         s.id = 1490;
+      else if (sampleFilePath_tstr.Contains("ttdl_mg"))                s.id=303;
+      else if (sampleFilePath_tstr.Contains("ttsl_top_mg"))                s.id=301;
+      else if (sampleFilePath_tstr.Contains("ttsl_tbar_mg"))                s.id=302;
 
-    }
+//    }
 
-//    std::cout << "s.id  = " << s.id << std::endl;
-//    std::cout << "evtid = " << evt_id << std::endl;
     
 //    s.nevents  = evt_nEvts;
     s.xsection = evt_xsec;

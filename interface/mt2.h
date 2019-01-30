@@ -860,6 +860,7 @@ public :
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
    virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
    virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true) const;
+   virtual Double_t getXSecCorrWeight(int sampleId, int year=2016);
 };
 
 #endif
@@ -1529,6 +1530,81 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
 
   return !hasHEMFailJet;
 
+}
+
+Double_t MT2Tree::getXSecCorrWeight(int sampleId, int year){
+
+  double xSecCorr=1.;
+  if (year==2016){
+    if(sampleId==302)      xSecCorr=182.6724;
+    else if(sampleId==303) xSecCorr=87.315375;
+    else if(sampleId==301) xSecCorr=182.6724;
+
+    else if(sampleId==502) xSecCorr=1620.9402;
+    else if(sampleId==503) xSecCorr=441.765555;
+    else if(sampleId==504) xSecCorr=59.0627378;
+    else if(sampleId==505) xSecCorr=14.172246;
+    else if(sampleId==506) xSecCorr=5.97062037;
+    else if(sampleId==507) xSecCorr=1.447281;
+    else if(sampleId==508) xSecCorr=0.033854832;
+
+    else if(sampleId==602) xSecCorr=360.3478725;
+    else if(sampleId==603) xSecCorr=99.4509981;
+    else if(sampleId==604) xSecCorr=13.5542433;
+    else if(sampleId==605) xSecCorr=3.23747685;
+    else if(sampleId==606) xSecCorr=1.42786026;
+    else if(sampleId==607) xSecCorr=0.331654125;
+    else if(sampleId==608) xSecCorr=0.00781733511;
+
+    else if(sampleId==702) xSecCorr=182.027208;
+    else if(sampleId==703) xSecCorr=48.7034982;
+    else if(sampleId==704) xSecCorr=6.8442612;
+    else if(sampleId==705) xSecCorr=1.6477818;
+    else if(sampleId==706) xSecCorr=0.72111456;
+    else if(sampleId==707) xSecCorr=0.1675998;
+    else if(sampleId==708) xSecCorr=0.003946455;
+    else xSecCorr=evt_xsec * evt_filter * evt_kfactor;
+    //else if(sampleId==405) xSecCorr=19.559215;
+    //else if(sampleId==406) xSecCorr=19.559215;
+    //else if(sampleId==452) xSecCorr=0.7826;
+
+
+  } else if (year==2017 || year==2018){
+
+    if(sampleId==303)      xSecCorr=91.04433;
+    else if(sampleId==302) xSecCorr=182.9607;
+    else if(sampleId==301) xSecCorr=182.9607;
+
+    else if(sampleId==502) xSecCorr=1676.93295;
+    else if(sampleId==503) xSecCorr=494.429232;
+    else if(sampleId==504) xSecCorr=70.1887846;
+    else if(sampleId==505) xSecCorr=17.438278;
+    else if(sampleId==506) xSecCorr=7.80773433;
+    else if(sampleId==507) xSecCorr=1.73191293;
+    else if(sampleId==508) xSecCorr=0.0406257984;
+
+    else if(sampleId==602) xSecCorr=370.0031265;
+    else if(sampleId==603) xSecCorr=111.6793629;
+    else if(sampleId==604) xSecCorr=15.83748;
+    else if(sampleId==605) xSecCorr=3.90430044;
+    else if(sampleId==606) xSecCorr=1.67836206;
+    else if(sampleId==607) xSecCorr=0.37001844;
+    else if(sampleId==608) xSecCorr=0.00807982695;
+
+    else if(sampleId==702) xSecCorr=186.890964;
+    else if(sampleId==703) xSecCorr=56.3957548;
+    else if(sampleId==704) xSecCorr=7.996721;
+    else if(sampleId==705) xSecCorr=1.97211252;
+    else if(sampleId==706) xSecCorr=0.8474844;
+    else if(sampleId==707) xSecCorr=0.186783432;
+    else if(sampleId==708) xSecCorr=0.00407892656;
+
+    else xSecCorr=evt_xsec * evt_filter * evt_kfactor;
+    //else if(sampleId==406) xSecCorr=20.2478;
+
+  }
+
+  return xSecCorr;
 }
 
 
