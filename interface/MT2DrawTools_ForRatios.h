@@ -39,15 +39,15 @@ class MT2DrawTools_ForRatios {
 
  public:
 
-  MT2DrawTools_ForRatios( const std::string& outputdir="plots_tmp", float lumi=0. );
+  MT2DrawTools_ForRatios( const std::string& outputdir="plots_tmp", std::vector<float> lumi={0.} );
   //MT2DrawTools_ForRatios( const MT2Config& cfg );
 
   void set_outDir( const std::string& outdir );
-  void set_data( MT2Analysis<MT2EstimateTree>* data );
+  void set_data( std::vector< MT2Analysis<MT2EstimateTree>* >* data );
   void set_mc( std::vector< MT2Analysis<MT2EstimateTree>* >* mc );
-  void set_lumi( float lumi );
+  void set_lumi( std::vector<float> lumi );
   void set_lumiErr( float lumiErr );
-  void set_year(int year);
+  void set_year(std::vector<int> year);
   void set_shapeNorm( bool shapeNorm );
   void set_mcSF( float mcsf );
   void set_addOverflow( bool addOver );
@@ -75,14 +75,14 @@ class MT2DrawTools_ForRatios {
   static float getDataMCSF( TCanvas* c1 );
   static float graphIntegral( TGraphAsymmErrors* graph, float xMin = -99999., float xMax=999999. );
   static TList* getCorrectList( TCanvas* c1 );
-  
+
   static TPad* getCanvasMainPad( bool logY=false );
   static TPad* getCanvasRatioPad( bool logY=false );
   static TH2D* getRatioAxes( float xMin, float xMax, float yMin=0., float yMax=2. );
-  
+
   static TPaveText*  getRatioText( double integral_data, double integral_mc, double error_datamc );
   static TPaveText*  getFitText( TF1* f );
-  
+
   static double getSFError(double integral_data, double error_data, double integral_mc, double error_mc);
   static TLine* getSFLine(double integral_data, double integral_mc, float xMin, float xMax);
   static TGraphErrors* getSFBand(double integral_data, double error_data, double integral_mc, double error_mc, float xMin, float xMax);
@@ -99,7 +99,7 @@ class MT2DrawTools_ForRatios {
   static void addOverflowSingleHisto( TH3D* yield3d );
 
   static TH1D* getBand(TF1* f, const std::string& name ); // the TH1D then needs to be draw with the option "C E3"
-  static TH1D* getBand(TF1 *f, TMatrixD const& m, std::string name, bool getRelativeBand=false, int npx=100); 
+  static TH1D* getBand(TF1 *f, TMatrixD const& m, std::string name, bool getRelativeBand=false, int npx=100);
 
 
   std::vector<TCanvas*> drawRegionYields_fromTree( const std::string& saveName, const std::string& varName, const std::string& selection1, const std::string& selection2, int nBins, float xMin, float xMax, std::string axisName="", const std::string& units="", const std::string& kinCuts="", const std::string& topoCuts="", float yMinR=0.0, float yMax=2.0, const std::string sampleName="MC");
@@ -108,7 +108,8 @@ class MT2DrawTools_ForRatios {
  private:
 
   std::string outdir_;
-  float lumi_;
+  std::vector<float> lumi_;
+  float lumiTot_;
   float lumiErr_;
   int year_;
   bool shapeNorm_;
@@ -116,10 +117,10 @@ class MT2DrawTools_ForRatios {
   bool displaySF_;
   bool doPaperPlots_;
 
-  MT2Analysis<MT2EstimateTree>* data_;
+  std::vector< MT2Analysis<MT2EstimateTree>* >* data_;
   std::vector< MT2Analysis<MT2EstimateTree>* >* mc_;
   float mcSF_;
-  
+
 
 };
 
