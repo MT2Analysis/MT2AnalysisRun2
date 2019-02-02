@@ -202,7 +202,7 @@ int main(int argc, char* argv[]) {
     addVariables(mcTree_of);
    
     //MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
-    
+    /*
     for( unsigned i=0; i<fSamples.size(); ++i ){
       MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
       computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, bTagSF, false);
@@ -215,7 +215,7 @@ int main(int argc, char* argv[]) {
 
     mcTree->writeToFile(outputdir+"/mc.root");
     mcTree_of->writeToFile(outputdir+"/mc_of.root");
-
+    */
     
     
     
@@ -252,7 +252,7 @@ int main(int argc, char* argv[]) {
     
     
     if(do_bg==true){
-       //MC
+      /*  //MC
       MT2Analysis<MT2EstimateTree>* mc_top = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       MT2Analysis<MT2EstimateTree>* mc_top_of = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       addVariables(mc_top);      addVariables(mc_top_of);
@@ -318,7 +318,7 @@ int main(int argc, char* argv[]) {
 	mc_top_of_forZinvEst->writeToFile(outputdir+"/mc_Top_of_forZinvEst.root");
       }
 
-      } //End do background trees
+      */} //End do background trees
 
   } //if only MC
    

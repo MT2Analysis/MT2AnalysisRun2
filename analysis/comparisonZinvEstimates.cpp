@@ -43,14 +43,14 @@ void plotMoriond2017vsETH2018(string, bool, bool);
 void studyHybridShape(string);
 void studyHybridShape_comparisonToReference(string);
 void plotEstimateVSNb();
-
+void plotEstimateVSNb_combined(); //does the same as the above function but with the three years combined 
 
 
 int main( int argc, char* argv[] ) {
   // enter the name of the estimate you wish to study:
   string estimateName = "ZinvEstimateFromZll_hybrid"; //"ZinvZllRatio_TR_int"; // "zllHybrid_shape_TR"; //"purity_forHybrid"; //"alpha"; //"zllData_forHybrid"; //"bin_extrapol"; 
   
-  bool doComparison = true;
+  bool doComparison = false;
   bool checkRegion = false;
   bool plotRatio = false;
 
@@ -76,6 +76,12 @@ int main( int argc, char* argv[] ) {
   if(MT2vsNb){
   //in order to check if MT2 shape depends on Nb in each region
     plotEstimateVSNb();
+  }
+
+  bool MT2vsNb_combined = true;
+  if(MT2vsNb_combined){
+  //in order to check if MT2 shape depends on Nb in each region with the three years combined
+    plotEstimateVSNb_combined();
   }
 
   return 0;
@@ -234,7 +240,7 @@ void plotMoriond2017vsETH2018(string estimateName, bool checkRegion, bool plotRa
 
    
 
-    TLine* line = new TLine(0.1, 1, 5., 1);
+    //TLine* line = new TLine(0.1, 1, 5., 1);
 
     // lower plot will be in pad
     c->cd();          // Go back to the main canvas before defining pad2
@@ -745,3 +751,308 @@ void plotEstimateVSNb(){
   }//end of for on regions
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+void plotEstimateVSNb_combined(){
+
+  TH1::AddDirectory(kFALSE);
+
+  bool doZll = false;
+  bool doZinv = true;
+
+  TFile* file1;
+  TFile* file2;
+  TFile* file3;
+
+  TString directoryToSave = "EventYields_moriond2019_35p9ifb/plotsZllEstimates/MT2vsNb/";
+
+  //we get the files for the three years
+  //Zll:
+  if(doZll){
+    file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/zllControlRegion/mc_forZinvEst.root");
+    file2 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_41p9ifb_2017/zllControlRegion/mc_forZinvEst.root");
+    file3 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_59p9ifb_2018/zllControlRegion/mc_forZinvEst.root");
+  }
+
+  //Zinv:
+  if(doZinv){
+    file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/analyses.root");
+    file2 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_41p9ifb_2017/analyses.root");
+    file3 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_59p9ifb_2018/analyses.root");
+  }
+  
+  //only needed to get the regions
+  string fileR = "/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/zllControlRegion/mc_forZinvEst.root";
+  
+  MT2Analysis<MT2Estimate>* estimate = MT2Analysis<MT2Estimate>::readFromFile(fileR, "zllCR");
+  
+  set<MT2Region> regions = estimate->getRegions();
+ 
+  int p(1);
+  int color(1);
+  int legIndex(1);
+  double i(0.15);
+  int fileIndex(1);
+  vector<TLegend*> tableLeg(5);
+  TH1D* hist1 = 0;
+  TH1D* hist2 = 0;
+  TH1D* hist3 = 0;
+  TH1D* hist = 0; //will contain the three years combined
+  //TTree* myTree;
+  TCanvas *c = new TCanvas;
+  c->SetLogy(); 
+  int htMin_precedingRegion(250);
+  int htMax_precedingRegion(450);
+  int NjMin_precedingRegion(2);
+  int NjMax_precedingRegion(3);
+
+
+  for(std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR){
+   
+    MT2Region* thisRegion = new MT2Region(*iR);
+  
+    //all the three years have the same regions set 
+    vector<string> regionName = thisRegion->getNiceNames();
+                              
+    int htMinInt = floor(thisRegion->htMin());
+    string htMin = to_string(htMinInt);
+    
+    int htMaxInt = floor(thisRegion->htMax());
+    string htMax = to_string(htMaxInt);
+    
+    int NjMinInt = floor(thisRegion->nJetsMin());
+    string NjMin = to_string(NjMinInt);
+    
+    int NjMaxInt = floor(thisRegion->nJetsMax());
+    string NjMax = to_string(NjMaxInt);
+    
+    int NbMinInt = floor(thisRegion->nBJetsMin());
+    string NbMin = to_string(NbMinInt);
+
+    int NbMaxInt = floor(thisRegion->nBJetsMax());
+    string NbMax = to_string(NbMaxInt);
+    string regionFile;
+
+    string name;
+    if(doZll){
+      name = "zllCR";
+    }
+    else if(doZinv){
+      name = "ZJets";
+    }
+  
+    if(NjMinInt == 2){
+	if(NjMaxInt == 6) continue; //we don't do the study on j3to6 since there is only one bin in Nb
+      } 
+
+   
+    //if((NjMinInt != NjMaxInt)){
+    if((htMinInt == 1500) && (htMaxInt == -1) && (NjMinInt == 7) && (NjMaxInt == 9)){
+      if(htMax != "-1"){
+	if(NjMax != "-1"){
+	  if(NbMin==NbMax){
+	    regionFile = name + "/HT" + htMin + "to" + htMax + "_j" + NjMin + "to" + NjMax + "_b" + NbMin + "/yield_" + name + "_HT" + htMin + "to" + htMax + "_j" + NjMin + "to" + NjMax + "_b" + NbMin;
+	  }
+	  else if(NbMax == "-1"){
+	    regionFile = name + "/HT" + htMin + "to" + htMax + "_j" + NjMin + "to" + NjMax + "_b" + NbMin + "toInf"  + "/yield_" + name + "_HT" + htMin + "to" + htMax + "_j" + NjMin + "to" + NjMax + "_b" + NbMin + "toInf";
+	  }
+	}
+	else if(NjMax == "-1"){
+	  if(NbMin==NbMax){
+	    regionFile = name + "/HT" + htMin + "to" + htMax + "_j" + NjMin + "toInf_b" + NbMin + "/yield_" + name + "_HT" + htMin + "to" + htMax + "_j" + NjMin + "toInf_b" + NbMin;
+	  }
+	  else if(NbMax == "-1"){
+	    regionFile = name + "/HT" + htMin + "to" + htMax + "_j" + NjMin + "toInf_b" + NbMin + "toInf"  + "/yield_" + name + "_HT" + htMin + "to" + htMax + "_j" + NjMin + "toInf_b" + NbMin + "toInf";
+	  }
+	}
+      }
+      else if (htMax == "-1"){
+	if(NjMax != "-1"){
+	  if(NbMin==NbMax){
+	    regionFile = name + "/HT" + htMin + "toInf_j" + NjMin + "to" + NjMax + "_b" + NbMin + "/yield_" + name + "_HT" + htMin + "toInf_j" + NjMin + "to" + NjMax + "_b" + NbMin;
+	  }
+	  else if(NbMax == "-1"){
+	    regionFile = name + "/HT" + htMin + "toInf_j" + NjMin + "to" + NjMax + "_b" + NbMin + "toInf"  + "/yield_" + name + "_HT" + htMin + "toInf_j" + NjMin + "to" + NjMax + "_b" + NbMin + "toInf";
+	  }
+	}
+	else if(NjMax == "-1"){
+	  if(NbMin==NbMax){
+	    regionFile = name + "/HT" + htMin + "toInf_j" + NjMin + "toInf_b" + NbMin + "/yield_" + name + "_HT" + htMin + "toInf_j" + NjMin + "toInf_b" + NbMin;
+	  }
+	  else if(NbMax == "-1"){
+	    regionFile = name + "/HT" + htMin + "toInf_j" + NjMin + "toInf_b" + NbMin + "toInf"  + "/yield_" + name + "_HT" + htMin + "toInf_j" + NjMin + "toInf_b" + NbMin + "toInf";
+	  }
+	}
+      }
+            
+      cout << p << " : " << regionFile << endl;
+      
+      hist1 = (TH1D*) file1->Get(regionFile.c_str())->Clone("hist1");
+      hist2 = (TH1D*) file2->Get(regionFile.c_str())->Clone("hist2");
+      hist3 = (TH1D*) file3->Get(regionFile.c_str())->Clone("hist3");
+       
+      hist = (TH1D*) hist1->Clone("hist");
+      hist->Add(hist2);
+      hist->Add(hist3);
+
+     
+      //check if final histogram is the sum of the three years
+      //for(unsigned int iBin(0); iBin<hist->GetSize(); ++iBin){
+      //cout << "hist1: " << hist1->GetBinContent(iBin) << endl;
+      //cout << "hist2: " << hist2->GetBinContent(iBin) << endl;
+      //cout << "hist3: " << hist3->GetBinContent(iBin) << endl;
+      //cout << "histTot: " << hist->GetBinContent(iBin) << endl;
+      //cout << "check bin " << iBin << ": "  << hist->GetBinContent(iBin) - (hist1->GetBinContent(iBin)+hist2->GetBinContent(iBin)+hist3->GetBinContent(iBin)) << endl;
+      //}
+
+      
+      
+      //we normalize the histogram
+      double integral_hist = hist->Integral(1,-1);
+      hist->Scale(1/integral_hist);
+      
+      TString hi = to_string(htMinInt);
+      TString ha = to_string(htMaxInt);
+      TString ji = to_string(NjMinInt);
+      TString ja = to_string(NjMaxInt);
+      hist->SetTitle("HT" + hi + "to" + ha + "_j" + ji + "to" + ja);
+      hist->SetLineWidth(3);
+
+      TAxis *Xaxis = hist->GetXaxis();
+      TAxis *Yaxis = hist->GetYaxis();
+      Xaxis->SetTitle("M_{T2} shape");
+      Xaxis->SetTitleSize(0.045);
+      Xaxis->SetLabelSize(0.045);
+      Xaxis->SetTitleOffset(1.1);
+
+      Yaxis->SetTitleSize(0.045);
+      Yaxis->SetLabelSize(0.045);
+      Yaxis->SetTitleOffset(1.26);
+
+      gStyle->SetOptStat(0);
+      
+      TString n=to_string(p);
+      TString n_previous=to_string(p-1);
+      TString nb = to_string(NbMinInt);
+      
+      
+      
+      if(p==1){
+	tableLeg[legIndex-1] = new TLegend(0.8, 0.7, 0.85, 0.9);
+        if(NbMaxInt == -1){
+	  tableLeg[legIndex-1] -> AddEntry(hist, "b" + nb + "toInf");
+        }
+	else{
+	  tableLeg[legIndex-1] -> AddEntry(hist, "b" + nb);
+        }
+	tableLeg[legIndex-1] -> SetTextSize(0.04);
+	tableLeg[legIndex-1] -> SetLineColor(0);
+	tableLeg[legIndex-1] -> SetFillColorAlpha(0, 0);
+	tableLeg[legIndex-1] -> SetBorderSize(0);
+	       
+	hist->Draw();
+	tableLeg[legIndex-1]->Draw();
+	//c->SaveAs(directoryToSave + n + ".pdf");
+	++legIndex;
+	++color;
+      }
+      
+      if(p>1){
+	//cout << "htMin: " << htMin << " htMin_preceding: " << htMin_precedingRegion << endl;
+	//cout << "htMax: " << htMax << " htMax_preceding: " << htMax_precedingRegion << endl;
+	//cout << "NjMin: " << NjMin << " NjMin_preceding: " << NjMin_precedingRegion << endl;
+	//cout << "NjMax: " << NjMax << " NjMax_preceding: " << NjMax_precedingRegion << endl;
+	fileIndex = legIndex;
+	if(((htMinInt == htMin_precedingRegion) && (htMaxInt == htMax_precedingRegion) && (NjMinInt == NjMin_precedingRegion) && (NjMaxInt == NjMax_precedingRegion))){
+	  tableLeg[legIndex-1] = new TLegend(0.8, 0.7-i, 0.85, 0.9-i);
+	  if(NbMaxInt == -1){
+	    tableLeg[legIndex-1] -> AddEntry(hist, "b" + nb + "toInf");
+	  }
+	  else{
+	    tableLeg[legIndex-1] -> AddEntry(hist, "b" + nb);
+	  }
+	  tableLeg[legIndex-1] -> SetTextSize(0.04);
+	  tableLeg[legIndex-1] -> SetLineColor(0);
+	  tableLeg[legIndex-1] -> SetFillColorAlpha(0, 0);
+	  hist->SetLineColor(color);
+	  hist->Draw("same");
+
+	  for(int k(0); k<legIndex; ++k){
+	    tableLeg[k]->Draw("same");
+	  }
+
+	  i += 0.15;
+	  ++legIndex;
+	  //++color;
+	  color = color + 2;
+	}
+       	else{
+	  color = 2;
+	  legIndex = 1;
+	  tableLeg[legIndex-1] = new TLegend(0.8, 0.7, 0.85, 0.9);
+	  if(NbMaxInt == -1){
+	    tableLeg[legIndex-1] -> AddEntry(hist, "b" + nb + "toInf");
+	  }
+	  else{
+	    tableLeg[legIndex-1] -> AddEntry(hist, "b" + nb);
+	  }
+	  tableLeg[legIndex-1] -> SetTextSize(0.04);
+	  tableLeg[legIndex-1] -> SetLineColor(0);
+	  tableLeg[legIndex-1] -> SetFillColorAlpha(0, 0);
+	  tableLeg[legIndex-1] -> SetBorderSize(0);
+	  hist->SetLineColor(color);
+	  hist->Draw();
+	  tableLeg[legIndex-1]->Draw();
+	  i=0.2;
+	  ++legIndex;
+	  //++color;
+	  color = color + 2;
+	  }
+
+
+	TString thisName = thisRegion->getName();
+	c->SaveAs(directoryToSave + n + "_Enormalized.pdf");
+	//c->SaveAs(directoryToSave + n + "_normalized.root");
+	if(legIndex>fileIndex){
+	  remove(directoryToSave + n_previous + "_Enormalized.pdf"); 
+	  //remove(directoryToSave + n_previous + "_normalized.root"); 
+	}
+	
+      }
+      
+      htMin_precedingRegion = htMinInt;
+      htMax_precedingRegion = htMaxInt;
+      NjMin_precedingRegion = NjMinInt;
+      NjMax_precedingRegion = NjMaxInt;
+      
+      ++p; //we increment the index of the region 
+
+       
+    }//end of valid region
+  
+    delete thisRegion;
+    
+       
+  }//end of for on regions
+
+  // delete myTree;
+  
+  delete c;
+  delete hist1;
+  delete hist2;
+  delete hist3;
+  delete hist;
+}
+
+

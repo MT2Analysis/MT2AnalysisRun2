@@ -58,6 +58,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 float lumi; //fb-1 
 bool doSanityCheck = false; 
 //the sanity check consists in confronting the estimated background following the strategy of combined years to the 2016 data, and normalize by lumi_16/lumi_tot
+bool doCombination; 
+//creates the plots for the full Run2
 
 int main( int argc, char* argv[] ) {
   
@@ -72,23 +74,60 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << std::endl << std::endl;
   
-  
-  if( argc!=2  && argc!=3  ) {
-    std::cout << "USAGE: ./compareYield_bins_all [configFileName] [moriond2019/moriond2017]" << std::endl;
-    std::cout << "Exiting." << std::endl;
+
+cout << argc << endl;
+  if( argc!=2 && argc!=3 && argc!=4 && argc!=5 ) {
+    std::cout << "USAGE: ./compareYield_bins__all [configFileName1] [configFileName2] [configFileName3] [moriond2017/moriond2019]" << std::endl;
+    std::cout << "Note: if only one configFileName is entered, the plots wil be create only with this particular year" << std::endl;
+    std::cout << "Also, if no settings specified after config files: moriond2019 by default (i.e Moriond2019 regionsSet)" << std::endl;
+    std::cout << "In other words  ./compareYield_all [configFileName1] moriond2017                         creates plots for config1 and Moriond2017 regions set" << std::endl;
+    std::cout << "                ./compareYield_all [configFileName1]                                     creates plots for config1 and Moriond2019 regions set" << std::endl;
+    std::cout << "                ./compareYield_all [configFileName1] [configFileName2] [configFileName3] creates plots for full Run2  and Moriond2019 regions set" << std::endl;    std::cout << "Exiting." << std::endl;
     exit(11);
   }
   
   
-  std::string configFileName(argv[1]);
-  MT2Config cfg(configFileName);
+  std::string configFileName1(argv[1]);
+  MT2Config cfg(configFileName1);
 
-  // lumi = 18.1;
-  lumi = cfg.lumi();
+  std::string configFileName2;
+  std::string configFileName3;
+
+  if(argc == 4 || argc == 5){
+    configFileName2 = argv[2];
+    configFileName3 = argv[3];
+    doCombination = true;
+    doSanityCheck = false;
+  }
+  else{
+    configFileName2 = argv[1];
+    configFileName3 = argv[1];
+    doCombination = false;
+  }    
+    
+ 
+  
+  MT2Config cfg2(configFileName2);
+  MT2Config cfg3(configFileName3);
+
+  if(!doCombination){
+    lumi = cfg.lumi();
+  }
+  else if(doCombination){
+    lumi = cfg.lumi() + cfg2.lumi() + cfg3.lumi();
+  }
+
+
+  if(doCombination){
+    cout << "I will plot with the combined years" << endl;
+  }
+  else{
+    cout << "I will plot a single year" << endl;
+  }
 
   //switch between the different regions sets of Moriond2017 and Moriond2019
   std::string whatToDo;
-  if(argc == 2){
+  if(argc == 2 || argc == 4){
     whatToDo = "moriond2019";
   }
   else if(argc == 3){
@@ -99,11 +138,43 @@ int main( int argc, char* argv[] ) {
       exit(11);
     }
   }
+  else if(argc == 5){
+    whatToDo = argv[4];
+    if(whatToDo != "moriond2017"){
+      cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
+      cout << "Aborted" << endl;
+      exit(11);
+    }
+  }
+
+  if(whatToDo == "moriond2019"){
+    cout << "Using regionsSet 'Moriond2019'" << endl;
+  }
+  else if(whatToDo == "moriond2017"){
+    cout << "Using regionsSet 'zurich2016'" << endl;
+  }
+
+  
   
   TH1::AddDirectory(kTRUE);
   
   std::string dir = cfg.getEventYieldDir();
-  std::string outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned";
+  std::string dir2;
+  std::string dir3;
+  
+  if(doCombination){
+    dir2 = cfg2.getEventYieldDir();
+    dir3 = cfg3.getEventYieldDir();
+  }
+
+  std::string outputdir;
+
+  if(!doCombination){
+    outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned";
+  }
+  else{
+    outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned_combined";
+  }
  
  
   MT2Analysis<MT2Estimate>* analysis = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" ); // any one is good, just need to know the regions                                                                    
@@ -129,12 +200,30 @@ int main( int argc, char* argv[] ) {
 
   std::set<MT2Region> regions = analysis->getRegions();
 
-  MT2Analysis<MT2Estimate>* data = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
+  MT2Analysis<MT2Estimate>* data1 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
+  MT2Analysis<MT2Estimate>* data2;
+  MT2Analysis<MT2Estimate>* data3;
   
+  if(doCombination){
+    data2 = MT2Analysis<MT2Estimate>::readFromFile( dir2 + "/analyses.root", "data" );
+    data3 = MT2Analysis<MT2Estimate>::readFromFile( dir3 + "/analyses.root", "data" );
+  }
+
+  MT2Analysis<MT2Estimate>* data = new MT2Analysis<MT2Estimate>(*(data1));
+  data->setName("data");
+  if(doCombination && (argc == 4 || argc == 5)){
+    (*data) += (*(data2));
+    (*data) += (*(data3));
+  }
+
+  //check if combination of years is sucessful
+  //string outFile = outputdir + "/check.root";
+  //data->addToFile(outFile);
+   
   drawYields( outputdir.c_str(), data, dir, doSanityCheck, whatToDo );
 
   return 0;
-
+  
 }
 
 void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, bool doSanityCheck, std::string whatToDo ) {
@@ -285,7 +374,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 	std::string tableName;
 
-	if(!doSanityCheck){
+	if(!doSanityCheck && !doCombination){
+	  cout << endl << endl << endl << "I use single datacard" << endl << endl << endl;
 	  if(iMT2->nJetsMax()==1){
 	    tableName = std::string(Form("%s/datacard_templates/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
 	  }
@@ -300,7 +390,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 	  //	else
 	  //	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
 	}
-	else{
+	else if(doCombination || doSanityCheck){
+	  cout << endl << endl << endl << "I use combined datacards" << endl << endl << endl;
 	  if(iMT2->nJetsMax()==1){
 	    tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
 	  }
@@ -553,8 +644,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   for(unsigned int b=0; b<bgSize; ++b){
-
-    if(doSanityCheck){
+    
+    if(doSanityCheck && !doCombination){
       hestimate[b]->Scale(35.9/137.4);
     }
 
@@ -570,7 +661,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   }
   
-  if(doSanityCheck){
+  if(doSanityCheck && !doCombination){
     hestimate_all_forRatio->Scale(35.9/137.4);
   }
 
