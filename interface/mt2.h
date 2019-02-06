@@ -298,8 +298,8 @@ public :
    Float_t         lep_phi[5];   //[nLep]
    Float_t         lep_mass[5];   //[nLep]
    Float_t         lep_charge[5];   //[nLep]
-   Float_t         lep_pdgId[5];   //[nLep]  
-   Int_t         lep_pdgId_INT[5];   //[nLep]  
+   Float_t         lep_pdgId[5];   //[nLep]
+   Int_t         lep_pdgId_INT[5];   //[nLep]
    Float_t         lep_dxy[5];   //[nLep]
    Float_t         lep_dz[5];   //[nLep]
    Float_t         lep_miniRelIso[5];   //[nLep]
@@ -346,8 +346,8 @@ public :
    Bool_t          HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL;
    Bool_t          HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
    // Bool_t          HLT_Mu33_Ele33_CaloIdL_GsfTrkIdVL;
-   
-   // SnT branches for MC 
+
+   // SnT branches for MC
    Float_t         evt_scale1fb;
    ULong64_t       evt_nEvts;
    Float_t         genWeight;
@@ -426,9 +426,10 @@ public :
    Float_t         weight_toppt;
    Int_t           njet;
    Int_t           nlep;
+   Float_t         mt2_genmet;
 
-   // 
-   
+   //
+
 
 
    // List of branches
@@ -679,7 +680,7 @@ public :
    TBranch        *b_nPFLep5LowMTclean;   //!
    TBranch        *b_nPFHad10LowMT;   //!
    TBranch        *b_nLepLowMT;   //!
-   TBranch        *b_nLepHighMT; 
+   TBranch        *b_nLepHighMT;
    TBranch        *b_nRecoLepLowMT;   //!
    TBranch        *b_ht;   //!
    TBranch        *b_mht_pt;   //!
@@ -754,7 +755,7 @@ public :
    TBranch        *b_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
    // TBranch        *b_HLT_Mu33_Ele33_CaloIdL_GsfTrkIdVL;
 
-   // SnT branches for MC 
+   // SnT branches for MC
    TBranch         *b_evt_scale1fb;     //!
    TBranch         *b_evt_nEvts;     //!
    TBranch         *b_genWeight;     //!
@@ -833,6 +834,7 @@ public :
    TBranch         *b_weight_toppt;     //!
    TBranch        *b_njet;   //!
    TBranch        *b_nlep;   //!
+   TBranch         *b_mt2_genmet; //!
    //
 
    MT2Tree(TTree *tree=0, bool isETH=true);
@@ -866,7 +868,7 @@ public :
 #endif
 
 #ifdef mt2_cxx
-MT2Tree::MT2Tree(TTree *tree, bool isETH) : fChain(0) 
+MT2Tree::MT2Tree(TTree *tree, bool isETH) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -1242,7 +1244,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, &b_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ);
    // fChain->SetBranchAddress("HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, &b_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ);
 
-   // SnT branches for MC 
+   // SnT branches for MC
    fChain->SetBranchAddress("evt_scale1fb", &evt_scale1fb, &b_evt_scale1fb);
    fChain->SetBranchAddress("evt_nEvts", &evt_nEvts, &b_evt_nEvts);
    fChain->SetBranchAddress("genWeight", &genWeight, &b_genWeight);
@@ -1318,9 +1320,10 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("weight_scales_DN", &weight_scales_DN, &b_weight_scales_DN);
    fChain->SetBranchAddress("weight_pdfs_UP", &weight_pdfs_UP, &b_weight_pdfs_UP);
    fChain->SetBranchAddress("weight_pdfs_DN", &weight_pdfs_DN, &b_weight_pdfs_DN);
-   fChain->SetBranchAddress("weight_toppt", &weight_toppt, &b_weight_toppt);   
+   fChain->SetBranchAddress("weight_toppt", &weight_toppt, &b_weight_toppt);
    fChain->SetBranchAddress("njet", &njet, &b_njet);
    fChain->SetBranchAddress("nlep", &nlep, &b_nlep);
+   fChain->SetBranchAddress("mt2_genmet", &mt2_genmet, &b_mt2_genmet);
    Notify();
 }
 
@@ -1434,7 +1437,7 @@ Bool_t MT2Tree::passMonoJetId( int j ) const {
 
 Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 {
-     
+
     float cutOnHT=1200;
 
     if (sel=="zll"){
@@ -1476,7 +1479,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
       //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
       //    return nVert > 0;
 
-  } 
+  }
 
   return kFALSE;
 }
@@ -1500,11 +1503,11 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
       return HLT_PFHT900 || HLT_PFJet450 || HLT_PFHT300_PFMET110 || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight;
     }
     else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || HLT_Mu30_TkMu11 || HLT_Mu40_TkMu11 ||  HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10; 
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || HLT_Mu30_TkMu11 || HLT_Mu40_TkMu11 ||  HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10;
     }
     else if(sel == "zllOF"){
       return HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10 ;
-    } 
+    }
   }
 }
 
@@ -1519,10 +1522,10 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
   bool hasHEMFailJet = false;
 
   for (int i=0; i<jetSize; i++){
-    if (jet_pt[i] > 30 && 
-        jet_eta[i] > -4.7 && jet_eta[i] < -1.4 && 
+    if (jet_pt[i] > 30 &&
+        jet_eta[i] > -4.7 && jet_eta[i] < -1.4 &&
         jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
-    
+
           hasHEMFailJet=true;
           break; // exit from the loop as soon as you find a jet in the hem fail region
     }
