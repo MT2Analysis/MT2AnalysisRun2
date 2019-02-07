@@ -327,7 +327,10 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 	h_first = new TH1D("h_first", "", nBins-1, binsExtreme);
 	
 	for( int iBin=0; iBin<nBins; ++iBin )
-	  h_first->SetBinContent( iBin, h_first_forExtreme->GetBinContent(iBin+1) );
+	  //h_first->SetBinContent( iBin, h_first_forExtreme->GetBinContent(iBin+1) );
+	h_first->SetBinContent( iBin, h_first_forExtreme->GetBinContent(iBin+1) );
+	
+	//h_first = (TH1D*)h_first_forExtreme->Clone("h_first");
 
       }else 
 	h_first = (TH1D*)h_first_forExtreme->Clone("h_first");
@@ -375,7 +378,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 	std::string tableName;
 
 	if(!doSanityCheck && !doCombination){
-	  cout << endl << endl << endl << "I use single datacard" << endl << endl << endl;
+	  //cout << endl << endl << endl << "I use single datacard" << endl << endl << endl;
 	  if(iMT2->nJetsMax()==1){
 	    tableName = std::string(Form("%s/datacard_templates/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
 	  }
@@ -391,7 +394,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 	  //	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
 	}
 	else if(doCombination || doSanityCheck){
-	  cout << endl << endl << endl << "I use combined datacards" << endl << endl << endl;
+	  //cout << endl << endl << endl << "I use combined datacards" << endl << endl << endl;
 	  if(iMT2->nJetsMax()==1){
 	    tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
 	  }
@@ -665,6 +668,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     hestimate_all_forRatio->Scale(35.9/137.4);
   }
 
+  cout << "b: " << b << endl;
   TGraphAsymmErrors* g_Ratio = MT2DrawTools::getRatioGraph(hdata, hestimate_all_forRatio, "binWidth");  
   g_Ratio->SetMarkerStyle(20);
   g_Ratio->SetMarkerSize(1.6);
@@ -1850,6 +1854,10 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2_4->SaveAs( Form("%s/mt2_highHT_fullEstimate.eps", fullPath.c_str()) );
 
 
+  cout << endl << endl << endl << endl;
+  cout << "-----------------------------------------" << endl;
+  cout << "Begin extreme region plot creation" << endl;
+  cout << endl << endl << endl << endl;
 
   TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
   c2_5->cd();
@@ -1878,6 +1886,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  //g_Ratio->GetXaxis()->SetRangeUser(oldBin-10, thisBin+10);
   hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
   hestimate_all->GetXaxis()->LabelsOption("v");
   hestimate_all->GetXaxis()->SetLabelSize(0.042);
@@ -1900,7 +1909,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   right = pad1_5->GetRightMargin();
   bot = pad1_5->GetBottomMargin();
   top = pad1_5->GetTopMargin();
-  binWidth = (1.0-right-left)/(thisBin-oldBin);
+  binWidth = (1.0-right-left)/(thisBin+1-oldBin);
 
   text->SetTextAlign(13);
   text->SetTextFont(42);
@@ -1986,10 +1995,10 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   TH2D* h2_axes_ratio_5;
   if(doLogRatio){
     gPad->SetLogy();
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0.1, 10.0 );
   }
   else
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0., 5.0 );
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0., 5.0 );
   //h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, 0., 2.0 );
 
 
@@ -2031,6 +2040,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   c2_5->cd();
   c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.root", fullPath.c_str()) );
   c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
   c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
 

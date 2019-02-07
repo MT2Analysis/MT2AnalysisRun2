@@ -135,7 +135,7 @@ Run the data card creation also for the signal, e.g.
 Be sure that the you created some data cards for the signal, not only the template data card
 
 ### Limit tests
-For limit calculation you need software Combine
+For limit calculation you need software Combine. To set up the necessary framework, see [here](https://twiki.cern.ch/twiki/bin/viewauth/SusyMECCA/SusyMT2cernETHLegacy#Setting_up_Combine).
 
 Combine the data cards
 
@@ -143,27 +143,69 @@ Combine the data cards
 combineCards.py -S <input-card-1> <input-card-2> ...  >  <combined-card>
 ```
 
-Submit a limit
+Submit a limit (for a single point, as a check)
 
 ```
-combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
+combine -M AsymptoticLimits <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
 ```
 
 ### Limits, full production and plotting 
-Submit data card creation to the batch (copySE=true)
+Submit data card creation to the batch (copySE=true, so that files are stored in your storage element)
 ```
 python launchCreateDatacards_2016.py <model-name> <label> 
 ```
+Please don't forget the label because it is needed for the next steps.
 TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
+
+From now on the scripts are found in HiggsAnalysis-CombinedLimit/MT2Scripts/ 
 
 Sumbit data card combination to the batch
 ```
 python combineCards_scan.py <path> <model>
 ```
-Sumbit limit calculation to the batch
+Note that <path> is your path to the Storage Element.
+
+Submit limit calculation to the batch
 ```
 python submitLimits_scan.py <path> <model>
 ```
+Once you have the limits for each masses, copy them in your scratch area:
+```
+sh copyLimits.sh <model> <label> <path>
+```
+
+Then, create a txt file with your full limits:
+```
+sh readAsymptoticLimits_Scan.sh <model> <label> 
+```
+
+Note that the .txt file will be created where you launched the command.
+
+Finally run interpolation and smoothing:
+```
+python drawSMsLimit.py <txt-file-you-just-created> 
+```
+
+### Significance
+You might want to compute the significance as well. For that, once all the createDatacard jobs are finished, follow the same procedure as with limits, with the following commands:
+```
+python submitSignificance_scan.py <pathSE> <pathSE> 
+```
+Note: the two path can be the same (to the storage element)
+
+```
+sh copySignificance.sh <model> <label> <pathSE> 
+```
+
+```
+sh readPLSignificance_Scan.sh <model> <label>  
+```
+
+```
+python drawSMSsignificance.py <txt-file-just-created>
+```
+
+
 
 For more info, Please follow [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
 
