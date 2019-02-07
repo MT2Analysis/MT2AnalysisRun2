@@ -155,6 +155,7 @@ Submit data card creation to the batch (copySE=true, so that files are stored in
 python launchCreateDatacards_2016.py <model-name> <label> 
 ```
 Please don't forget the label because it is needed for the next steps.
+
 TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
 From now on the scripts are found in HiggsAnalysis-CombinedLimit/MT2Scripts/ 
@@ -163,7 +164,7 @@ Sumbit data card combination to the batch
 ```
 python combineCards_scan.py <path> <model>
 ```
-Note that <path> is your path to the Storage Element.
+Note that the path is the one to your Storage Element.
 
 Submit limit calculation to the batch
 ```
@@ -181,10 +182,22 @@ sh readAsymptoticLimits_Scan.sh <model> <label>
 
 Note that the .txt file will be created where you launched the command.
 
-Finally run interpolation and smoothing:
+Finally run interpolation and smoothing and create root file:
 ```
-python drawSMsLimit.py <txt-file-you-just-created> 
+python drawSMSLimit.py <txt-file-you-just-created> 
 ```
+
+###Contour plots
+Setup the environment as described under this [link](https://twiki.cern.ch/twiki/bin/viewauth/SusyMECCA/SusyMT2cernETH#Preparing_PlotsSMS_code).
+
+Once in the correct folder, create a config file, in the same way as [here](https://github.com/MT2Analysis/PlotsSMS/blob/master/config/SUS16015/T1tttt_2016_7p7ifb.cfg). Change the name of the directory and move the root file created in the previous step accordingly.
+
+You are ready to create the plot:
+
+```
+python python/makeSMSplots.py config/<config-file> <name>  
+```
+
 
 ### Significance
 You might want to compute the significance as well. For that, once all the createDatacard jobs are finished, follow the same procedure as with limits, with the following commands:
