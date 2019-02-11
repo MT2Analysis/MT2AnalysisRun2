@@ -399,6 +399,11 @@ TGraphAsymmErrors* MT2DrawTools::getRatioGraph( TH1D* histo_data, TH1D* histo_mc
   
   //  TGraphAsymmErrors* graph_data = MT2DrawTools::getPoissonGraph(histo_data, false);
   TGraphAsymmErrors* graph_data = MT2DrawTools::getPoissonGraph(histo_data, true);
+
+  TGraphAsymmErrors* graph_tmp = MT2DrawTools::getPoissonGraph(histo_mc, true);
+
+  cout << "Ndata: " << graph_data->GetN() << endl;
+  cout << "Nmc: " << graph_tmp->GetN() << endl;
   
   for( int i=0; i < graph_data->GetN(); ++i){
     

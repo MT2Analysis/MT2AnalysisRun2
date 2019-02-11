@@ -187,7 +187,7 @@ Finally run interpolation and smoothing and create root file:
 python drawSMSLimit.py <txt-file-you-just-created> 
 ```
 
-###Contour plots
+### Contour plots
 Setup the environment as described under this [link](https://twiki.cern.ch/twiki/bin/viewauth/SusyMECCA/SusyMT2cernETH#Preparing_PlotsSMS_code).
 
 Once in the correct folder, create a config file, in the same way as [here](https://github.com/MT2Analysis/PlotsSMS/blob/master/config/SUS16015/T1tttt_2016_7p7ifb.cfg). Change the name of the directory and move the root file created in the previous step accordingly.
