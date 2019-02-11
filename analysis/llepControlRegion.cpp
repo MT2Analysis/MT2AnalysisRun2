@@ -330,6 +330,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
         // xsec times k factor and filter eff from file
         weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
+        weight *= myTree.weight_L1prefire;
       }
     } 
     

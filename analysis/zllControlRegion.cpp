@@ -681,6 +681,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
         weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
         // xsec times k factor and filter eff from file
         weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
+        weight *= myTree.weight_L1prefire;
         //std::cout << " sample id " << sample.id << " year " << cfg.year() << std::endl;
         //std::cout << " weight which should be 1000 " << myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.evt_nEvts << std::endl
         //          << " weight xsec original " << (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) << std::endl

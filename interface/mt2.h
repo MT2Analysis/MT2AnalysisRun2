@@ -427,7 +427,6 @@ public :
    Int_t           njet;
    Int_t           nlep;
    Float_t         mt2_genmet;
-
    //
 
 
@@ -832,8 +831,8 @@ public :
    TBranch         *b_weight_pdfs_UP;     //!
    TBranch         *b_weight_pdfs_DN;     //!
    TBranch         *b_weight_toppt;     //!
-   TBranch        *b_njet;   //!
-   TBranch        *b_nlep;   //!
+   TBranch         *b_njet;   //!
+   TBranch         *b_nlep;   //!
    TBranch         *b_mt2_genmet; //!
    //
 
