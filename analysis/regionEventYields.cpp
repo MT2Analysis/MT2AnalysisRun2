@@ -585,8 +585,8 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   std::cout << "-> Setting up MT2Analysis with name: " << sample.sname << std::endl;
   MT2Analysis<T>* analysis = new MT2Analysis<T>( sample.sname, regionsSet, sample.id );
 
-  int nentries= 10000; //= tree->GetEntries();
-  //int nentries = tree->GetEntries();
+  //int nentries= 10000; //= tree->GetEntries();
+  int nentries = tree->GetEntries();
 
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
@@ -698,9 +698,9 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
         int thisBinX = sigXS->FindBin( GenSusyMScan1 );
         sig_xs = sigXS->GetBinContent(thisBinX);
         // std::cout << " sig_xs " << sig_xs << std::endl;
-        weight *= sig_xs; // * 1000 FIXME ??????
+        weight *= sig_xs; // * 1000 FIXME 
       } else{
-        weight *= myTree.evt_xsec*myTree.evt_filter*1000*40;  // factor 40 needed...
+        weight *= myTree.evt_xsec*myTree.evt_filter*1000;  // NOTE: normalized to 1/fb
       }
 
     } else  std::cout << "THIS SHOULD NOT HAPPEN, PLEASE CHECK" << std::endl;
