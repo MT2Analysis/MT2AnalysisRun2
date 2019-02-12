@@ -120,7 +120,7 @@ int main( int argc, char* argv[] ) {
 
   if( argc > 3){
     std::string model = signalName;
-    std::string filename = Form("/scratch/mratti/WeightsForMoriond17Signals/nsig_weights_%s.root", model.c_str() );
+    std::string filename = Form("/scratch/mratti/WeightsForMoriond17Signals/nsig_weights_%s.root", model.c_str() ); // these come from SnT repo
     TFile* f_avWeights = new TFile(filename.c_str() );
 
     h_nsig                       = (TH2D*) f_avWeights->Get("h_nsig");
@@ -238,24 +238,28 @@ int main( int argc, char* argv[] ) {
     std::cout << "     signal name " << signalName << std::endl;
 
     //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, signalName); // only signal (id>=1000)
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc()); // only signal (id>=1000)
+    //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc()); // only signal (id>=1000)
+    // only load samples related to the chosen signal scan
+    std::vector<MT2Sample> fSamplesSig;
+    if       (signalName=="T1qqqq")   fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1000, 1100, cfg.useETHmc());
+    else if  (signalName=="T1bbbb")   fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1100, 1200, cfg.useETHmc());
+    else if  (signalName=="T1tttt")   fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1200, 1300, cfg.useETHmc());
+    else if  (signalName=="T2qq")     fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1300, 1400, cfg.useETHmc());
+    else if  (signalName=="T2bb")     fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1400, 1500, cfg.useETHmc());
+    else if  (signalName=="T2tt")     fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1500, 1600, cfg.useETHmc());
 
-    if( fSamples.size()==0 ) {
-
+    if( fSamplesSig.size()==0 ) {
       std::cout << "No signal samples found, skipping." << std::endl;
-
     } else {
-
-      for( unsigned i=0; i<fSamples.size(); ++i ){
+      for( unsigned i=0; i<fSamplesSig.size(); ++i ){
         //continue;
-        signals.push_back( computeSigYield<MT2EstimateAllSigSyst>( fSamples[i], cfg ) );
+        signals.push_back( computeSigYield<MT2EstimateAllSigSyst>( fSamplesSig[i], cfg ) );
       }
     } // if samples != 0
 
     std::cout << "Merging signals" << std::endl;
 
-    merged_signal   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), signalName, 1000, 2000, "T1bbbb" ); //old t1bbbb 1200, 1249
-    std::cout << " I MERGeD the yields" << std::endl;
+    merged_signal   = mergeYields<MT2EstimateAllSigSyst>( signals, cfg.regionsSet(), signalName, 1000, 2000, signalName );
 
   } // if signal samples
 
@@ -305,15 +309,8 @@ int main( int argc, char* argv[] ) {
       EventYields_toWrite[i]->writeToFile(outputdir + "/analyses.root");
     }
   } else if( signals.size()>0 ){
-    //signals[0]->writeToFile(outputdir + "/analyses.root");
-    continue
-    for( unsigned i=1; i<signals.size(); ++i ) {
-      //signals[i]->writeToFile(outputdir + "/analyses.root");
-      continue;
-    }
+    merged_signal->writeToFile(outputdir + "/analyses.root");
   }
-
-  merged_signal->writeToFile(outputdir + "/analyses.root");
 
   cfg.saveAs(outputdir + "/config.txt");
 
@@ -460,6 +457,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
         // xsec times k factor and filter eff from file
         weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
+        weight *= myTree.weight_L1prefire;
       }
     }
 
@@ -588,11 +586,18 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   MT2Analysis<T>* analysis = new MT2Analysis<T>( sample.sname, regionsSet, sample.id );
 
   int nentries= 10000; //= tree->GetEntries();
+  //int nentries = tree->GetEntries();
 
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     myTree.GetEntry(iEntry);
+
+    if (isETH) {
+      if(myTree.PV_npvs <= 0) continue;
+    } else {
+      if(myTree.nVert <= 0) continue;
+    }
 
     bool passGenMET=false;
     if(dogenmet) passGenMET =true;
@@ -658,8 +663,9 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb*cfg.lumi()*myTree.puWeight;
 
     // get the avg weights from the histograms
-    int binx = h_avg_weight_isr->GetXaxis()->FindBin( GenSusyMScan1 );
-    int biny = h_avg_weight_isr->GetYaxis()->FindBin( GenSusyMScan2 );
+    int binx = h_nsig->GetXaxis()->FindBin( GenSusyMScan1 );
+    int biny = h_nsig->GetYaxis()->FindBin( GenSusyMScan2 );
+    float nevts                        = h_nsig->GetBinContent( binx, biny );
     float weight_avg_isr               = h_avg_weight_isr->GetBinContent( binx, biny );
     float weight_avg_isr_UP            = h_avg_weight_isr_UP->GetBinContent( binx, biny );
     float weight_avg_isr_DN            = h_avg_weight_isr_DN->GetBinContent( binx, biny );
@@ -670,19 +676,32 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     float weight_avg_btagsf_heavy_DN   = h_avg_weight_btagsf_heavy_DN->GetBinContent( binx, biny );
 
     //float weight_avg_btagsf = h_avg_weight_btagsf->GetBinContent( binx, biny );
-    float nevts = h_nsig->GetBinContent( binx, biny );
 
     // now  calculate  nominal weight
     Double_t weight = 1.;
     weight = weight_btagsf * weight_lepsf * weight_isr / (nevts*weight_avg_isr*weight_avg_btagsf) ; // from histogram / number of events
 
+    //std::cout << "debug masses mParent=" << GenSusyMScan1 << " mLSP=" << GenSusyMScan2 << std::endl;
+    //std::cout << "debug nevts=" << nevts << std::endl
+    //                                     << " weight_avg_isr="    << weight_avg_isr      << " UP=" << weight_avg_isr_UP            << " DN=" << weight_avg_isr_DN         << std::endl
+    //                                     << " weight_avg_btagsf=" << weight_avg_btagsf << " L_UP=" << weight_avg_btagsf_light_UP << " L_DN=" << weight_avg_btagsf_light_DN
+    //                                                                                   << " H_UP=" << weight_avg_btagsf_heavy_UP << " H_DN=" << weight_avg_btagsf_heavy_DN << std::endl
+    //                                     << " weight_isr=" << weight_isr         << " UP=" << weight_isr_UP << " DN=" << weight_isr_DN << std::endl
+    //                                     << " weight_btagsf=" << weight_avg_btagsf << " L_UP=" << weight_btagsf_light_UP << " L_DN=" << weight_btagsf_light_DN
+    //                                                                               << " H_UP=" << weight_btagsf_heavy_UP << " H_DN=" << weight_btagsf_heavy_DN << std::endl;
+
     // multiply by cross-sections
     float sig_xs=0.;
     if( myTree.evt_id >= 1000  && myTree.evt_id < 2000){
-      int thisBinX = sigXS->FindBin( GenSusyMScan1 );
-      sig_xs = sigXS->GetBinContent(thisBinX);
-      // std::cout << " sig_xs " << sig_xs << std::endl;
-      weight *= sig_xs; // * 1000 FIXME ??????
+
+      if (isETH){
+        int thisBinX = sigXS->FindBin( GenSusyMScan1 );
+        sig_xs = sigXS->GetBinContent(thisBinX);
+        // std::cout << " sig_xs " << sig_xs << std::endl;
+        weight *= sig_xs; // * 1000 FIXME ??????
+      } else{
+        weight *= myTree.evt_xsec*myTree.evt_filter*1000*40;  // factor 40 needed...
+      }
 
     } else  std::cout << "THIS SHOULD NOT HAPPEN, PLEASE CHECK" << std::endl;
 
@@ -704,7 +723,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
       thisEstimate->yield3d_btag_light_UP->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight/weight_btagsf*weight_avg_btagsf*weight_btagsf_light_UP/weight_avg_btagsf_light_UP );
       thisEstimate->yield3d_btag_light_DN->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight/weight_btagsf*weight_avg_btagsf*weight_btagsf_light_DN/weight_avg_btagsf_light_DN );
-   }
+    }
 
     if(dogenmet && passGenMET){
       thisEstimate->yield3d_genmet->Fill( mt2_genmet, GenSusyMScan1, GenSusyMScan2, weight );
@@ -730,22 +749,17 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
 template <class T>
 MT2Analysis<T>* mergeYields( std::vector<MT2Analysis<T> *> EventYield, const std::string& regionsSet, const std::string& name, int id_min, int id_max, const std::string& legendName ) {
-  std::cout << "I am in mergeYields" << endl;
   if( id_max<0 ) id_max=id_min;
 
   MT2Analysis<T>* return_EventYield = new MT2Analysis<T>(name, regionsSet, id_min, legendName);
 
   for( unsigned i=0; i<EventYield.size(); ++i ) {
-    std::cout << "i=" << i << std::endl;
 
     if( EventYield[i]->getId() >= id_min && EventYield[i]->getId() <= id_max ) {
-       std::cout << "before sum" << std::endl;
        *(return_EventYield) += *(EventYield[i]);
-       std::cout << "after sum" << std::endl;
     }
   } // for EventYield
 
-  std::cout << "Am I out of the loop" << endl;
   return return_EventYield;
 
 }

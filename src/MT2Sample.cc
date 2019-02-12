@@ -144,6 +144,13 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       else if (sampleFilePath_tstr.Contains("ttsl_top_mg"))                s.id=301;
       else if (sampleFilePath_tstr.Contains("ttsl_tbar_mg"))                s.id=302;
 
+
+      else if (sampleFilePath_tstr.Contains("T1qqqq")) s.id = 1001;
+      else if (sampleFilePath_tstr.Contains("T1bbbb")) s.id = 1101;
+      else if (sampleFilePath_tstr.Contains("T1tttt")) s.id = 1201;
+      else if (sampleFilePath_tstr.Contains("T2qq"))   s.id = 1301;
+      else if (sampleFilePath_tstr.Contains("T2bb"))   s.id = 1401;
+      else if (sampleFilePath_tstr.Contains("T2tt"))   s.id = 1501;
 //    }
 
     
