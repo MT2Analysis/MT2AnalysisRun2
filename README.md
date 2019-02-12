@@ -98,11 +98,13 @@ Compile as usual and run:
 ./drawRSFOF
 ```
 
-Create the template data card. For the general syntax of data card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
-Edit the script to allow QCD estimate or not, currently supported only for Moriond19 
+Create the template data-cards. For the general syntax of data-card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
+Edit the script:
+* doQCDEstimate, currently supported only for Moriond19 
 ```
 ./createDatacards <cfg-file-name> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
 ```
+Run with m1=m2 and M1=M2 to skip signal part of data-card creation.
 
 Data/Bkg plotting:
 
@@ -120,17 +122,21 @@ For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis201
 
 ### Signals
 
-Run regionEventYields on the signal, for the moment just use those already run before
+Run regionEventYields on the desired signal scan, supported scans are:
+T1qqqq, T1bbbb, T1tttt, T2qq, T2bb, T2tt.
+Signal contamination removal not currently supported - so T1tttt, T2tt yields are not reliable
 
 ```
-/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/*root
+./regionEventYields moriond2019_zurich2016_35p9ifb signal T1qqqq
 ```
 
-Run the data card creation also for the signal, e.g.
+Edit ```createDatacards.cpp``` 
+* copy2SE, copy signal data-cards to storage element; if set to true, make sure you have set a valid proxy
+Run the data-card creation for the signals, e.g.:
 ```
-./createDatacards_general_zllZinvEst dataETH_SnTMC_35p9ifb T2qq 300 305 200 205 pippo  # -> mass point or mass range
+./createDatacards moriond2019_zurich2016_35p9ifb T2qq 300 305 200 205 pippo  # for single mass point
+./createDatacards moriond2019_zurich2016_35p9ifb T2qq 1000 1105 200 255      # for mass scan
 ```
-Be sure that the you created some data cards for the signal, not only the template data card
 
 ### Limit tests
 For limit calculation you need software Combine

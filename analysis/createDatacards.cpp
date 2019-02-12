@@ -25,15 +25,17 @@
 
 using namespace std;
 
+// All options below should not be changed
 bool use_hybrid = true;
 bool doSignalContamination = false; // MG now set to false, because not supported in llepControlRegion
 bool doSimultaneousFit = false;
 bool includeSignalUnc = true; // signal lep eff commented out till available
-bool copy2SE = false; // copy datacards to SE
-bool doGenAverage = false; // MG also off, since it's completely unclear what it is
+bool doGenAverage = false; // MG also off,  it's what this syst takes into account in absence of signal contamination
 bool addSigLepSF= true;
 
+// Edit these options
 bool doQCDEstimate = false;
+bool copy2SE = true; // copy datacards to SE
 
 int Round(float d) {
   return (int)(floor(d + 0.5));
@@ -722,9 +724,13 @@ int main( int argc, char* argv[] ) {
   ///////////////////////////////////////////////////
   // Signals
   ///////////////////////////////////////////////////
+  // Do not do the signal part if the masses are equal
+  if(m1==m2 && m11==m22) {
+    std::cout << "-> Not going to produce any signal data card! " << std::endl;
+    return 0;
+  }
 
-  std::vector<MT2Analysis<MT2EstimateSigContSyst>*> signals; // signal contamination removal currently not supported
-  //std::vector<MT2Analysis<MT2EstimateSigSyst>*> signals;
+  std::vector<MT2Analysis<MT2EstimateSigContSyst>*> signals;
   std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_isr;
   std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_bTagHeavy;
   std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_bTagLight;
@@ -879,9 +885,9 @@ int main( int argc, char* argv[] ) {
 
           }
 
-          for( int iBin=1; iBin<this_signal->GetNbinsX()+1; ++iBin ) {
-            std::cout << "debug iBin=" << iBin << " iBinY=" << iBinY << " iBinZ=" << iBinZ << " sigYield="<< this_signal->GetBinContent(iBin) << std::endl;
-          }
+          //for( int iBin=1; iBin<this_signal->GetNbinsX()+1; ++iBin ) {
+            //std::cout << "debug iBin=" << iBin << " iBinY=" << iBinY << " iBinZ=" << iBinZ << " sigYield="<< this_signal->GetBinContent(iBin) << std::endl;
+          //}
 
 
           if( this_signal->Integral() <=0 ) continue;
