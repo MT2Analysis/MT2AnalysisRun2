@@ -34,8 +34,8 @@ bool doGenAverage = false; // MG also off,  it's what this syst takes into accou
 bool addSigLepSF= true;
 
 // Edit these options
-bool doQCDEstimate = false;
-bool copy2SE = true; // copy datacards to SE
+bool doQCDEstimate = false; // add QCD background to datacards and tables
+bool copy2SE = true; // copy signal datacards to Storage Element
 
 int Round(float d) {
   return (int)(floor(d + 0.5));
@@ -1114,6 +1114,9 @@ int main( int argc, char* argv[] ) {
                   sig_syst = 1/sig_syst; // to account for negative variation
                   //std::cout << "debug sig_syst" << sig_syst << std::endl;
               }
+
+              // only at the end multiply by lumi the yield
+              sig *= cfg.lumi();
 
               std::string mvCommand( Form("mv %s %s", newDatacard.c_str(), helpDatacard.c_str()) );
               std::string rmCommand( Form("rm -f %s", helpDatacard.c_str()) );
