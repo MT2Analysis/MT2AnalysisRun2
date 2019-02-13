@@ -373,8 +373,6 @@ int main( int argc, char* argv[] ) {
 
       if(doQCDEstimate){
         yield_qcd = this_qcd ->GetBinContent(iBin);
-        std::cout << " region " << iR->getName() << std::endl;
-        std::cout << " debug qcd " << yield_qcd << std::endl;
         yield_qcd_syst_jer = this_qcd_syst_jer->GetBinContent(iBin);
         yield_qcd_syst_nbjetshape = this_qcd_syst_nbjetshape->GetBinContent(iBin);
         yield_qcd_syst_njetshape = this_qcd_syst_njetshape->GetBinContent(iBin);
