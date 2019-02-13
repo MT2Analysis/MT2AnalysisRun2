@@ -99,10 +99,9 @@ Compile as usual and run:
 ```
 
 Create the template data-cards. For the general syntax of data-card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
-Edit the script:
-* doQCDEstimate, currently supported only for Moriond19 
+Edit the options at the beginning of the script
 ```
-./createDatacards <cfg-file-name> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
+./createDatacards_combined <cfg-file-name1> <cfg-file-name2> <cfg-file-name3> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
 ```
 Run with m1=m2 and M1=M2 to skip signal part of data-card creation.
 
@@ -130,12 +129,11 @@ Signal contamination removal not currently supported - so T1tttt, T2tt yields ar
 ./regionEventYields moriond2019_zurich2016_35p9ifb signal T1qqqq
 ```
 
-Edit ```createDatacards.cpp``` 
-* copy2SE, copy signal data-cards to storage element; if set to true, make sure you have set a valid proxy
+Edit desired options in ```createDatacards_combined.cpp``` 
 Run the data-card creation for the signals, e.g.:
 ```
-./createDatacards moriond2019_zurich2016_35p9ifb T2qq 300 305 200 205 pippo  # for single mass point
-./createDatacards moriond2019_zurich2016_35p9ifb T2qq 1000 1105 200 255      # for mass scan
+./createDatacards_combined moriond2019_zurich2016_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 300 305 200 205 pippo  # for single mass point
+./createDatacards_combined moriond2019_zurich2016_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 1000 1105 200 255      # for mass scan
 ```
 
 ### Limit tests
