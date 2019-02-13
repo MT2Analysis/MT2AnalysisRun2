@@ -135,7 +135,7 @@ int main( int argc, char* argv[] ) {
   }
   else if(argc == 3){
     whatToDo = argv[2];
-    if(whatToDo != "moriond2017"){
+    if(whatToDo != "moriond2017" && whatToDo != "moriond2019"){
       cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
       cout << "Aborted" << endl;
       exit(11);
@@ -143,7 +143,7 @@ int main( int argc, char* argv[] ) {
   }
   else if(argc == 5){
     whatToDo = argv[4];
-    if(whatToDo != "moriond2017"){
+    if(whatToDo != "moriond2017" && whatToDo != "moriond2019"){
       cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
       cout << "Aborted" << endl;
       exit(11);

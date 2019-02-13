@@ -204,7 +204,7 @@ int main( int argc, char* argv[] ) {
     }
     
     cout << "Now ZJets samples" << endl;
-    /*
+    
     //Now create ZJets estimate in the inclusive region (needed to compute Zinv Estimates)
     vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc());
     MT2Analysis<MT2EstimateTree>* myEstimate = new MT2Analysis<MT2EstimateTree>("ZJets", "13TeV_2016_inclusive");
@@ -219,7 +219,7 @@ int main( int argc, char* argv[] ) {
     }
 
     myEstimate->writeToFile(outputdir + "/ZJetsInclusive.root");
-    */
+    
 
 
   } // if bkg MC samples
