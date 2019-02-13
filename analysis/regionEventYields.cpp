@@ -489,22 +489,29 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
   bool dogenmet = true;
 
-  // Old cross-sections from file
+  // NNLO+NLL cross-sections from file
   TString sigSampleName(sample.name);
-  TFile* sigXSFile;
-  if(sigSampleName.Contains("T1qqqq") || sigSampleName.Contains("T1bbbb") || sigSampleName.Contains("T1tttt"))
-    sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/SUSYCrossSections13TeVgluglu.root");
-  else if(sigSampleName.Contains("T2bb") || sigSampleName.Contains("T2tt") || sigSampleName.Contains("T2cc")
-       || sigSampleName.Contains("T2bW") || sigSampleName.Contains("T2bt"))
-    sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/SUSYCrossSections13TeVstopstop.root");
-  else
-    sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/SUSYCrossSections13TeVsquarkantisquark.root");
 
-  TH1F* sigXS = (TH1F*) sigXSFile->Get("xs");
+  TFile* sigXSFile;
+  TString fileName;
+  TString histoName;
+  if(sigSampleName.Contains("T1qqqq") || sigSampleName.Contains("T1bbbb") || sigSampleName.Contains("T1tttt")){
+    fileName = "gluino.root";
+    histoName = "gluglu";
+  }
+  else if (sigSampleName.Contains("T2bb") || sigSampleName.Contains("T2tt") || sigSampleName.Contains("T2cc")|| sigSampleName.Contains("T2bW") || sigSampleName.Contains("T2bt")) {
+    fileName = "stop.root";
+    histoName = "thirdGen";
+  }else{
+    fileName = "squark.root";
+    histoName = "sqsq";
+  }
+  sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/NNLO_approx_NNLL_80X_compatible/" + fileName);
+  TH1F* sigXS = (TH1F*) sigXSFile->Get(histoName);
+
 
   if(sigSampleName.Contains("T2qq"))
     sigXS->Scale(8./10);
-  ////// FIXME: update to NLO and apply coherently
 
   std::string regionsSet = cfg.regionsSet();
 
@@ -642,13 +649,16 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     float sig_xs=0.;
     if( myTree.evt_id >= 1000  && myTree.evt_id < 2000){
 
+      int thisBinX = sigXS->FindBin( GenSusyMScan1 );
+      sig_xs = sigXS->GetBinContent(thisBinX);
+
       if (isETH){
-        int thisBinX = sigXS->FindBin( GenSusyMScan1 );
-        sig_xs = sigXS->GetBinContent(thisBinX);
         // std::cout << " sig_xs " << sig_xs << std::endl;
         weight *= sig_xs; // * 1000 ?
-      } else{
-        weight *= myTree.evt_xsec*myTree.evt_filter*1000;  // NOTE: normalized to 1/fb
+      }else{
+        //weight *= myTree.evt_xsec*myTree.evt_filter*1000;  // NOTE: normalized to 1/fb
+        weight *= sig_xs*myTree.evt_filter*1000; // NOTE: normalized to 1/fb
+
         if (cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
       }
 
