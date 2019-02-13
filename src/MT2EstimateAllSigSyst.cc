@@ -33,7 +33,7 @@ MT2EstimateAllSigSyst::MT2EstimateAllSigSyst( const std::string& aname, const MT
     binsVert[b]=b*binWidthVert;
 
 
-  int nBinsM=93;
+  int nBinsM=140; // up to 3500 GeV
   double binWidthM=25.;
   double binsM[nBinsM+1];
   for (int b=0; b<=nBinsM; ++b)

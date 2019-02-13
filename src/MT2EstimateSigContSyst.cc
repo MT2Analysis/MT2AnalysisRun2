@@ -26,7 +26,7 @@ MT2EstimateSigContSyst::MT2EstimateSigContSyst( const std::string& aname, const 
 //  for (int b=0; b<=nBinsM; ++b)
 //    binsM[b]=b*binWidthM;
 
-  int nBinsM=93;
+  int nBinsM=140;
   double binWidthM=25.;
   double binsM[nBinsM+1];
   for (int b=0; b<=nBinsM; ++b)
@@ -187,7 +187,7 @@ void MT2EstimateSigContSyst::print( std::ofstream& ofs_file, Float_t m1, Float_t
 //  for (int b=0; b<=nBinsM; ++b)
 //    binsM[b]=b*binWidthM;
 
-  int nBinsM=93;
+  int nBinsM=140;
   double binWidthM=25.;
   double binsM[nBinsM+1];
   for (int b=0; b<=nBinsM; ++b)
