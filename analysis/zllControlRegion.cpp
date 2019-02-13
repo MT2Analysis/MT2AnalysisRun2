@@ -629,7 +629,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     //
 
     // apply HEM veto
-    if (!myTree.passHEMFailVeto(cfg.year(), isETH)) continue;
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
            
     // Kinematic selections common to both SF and OF
     int nLep_to_be_used = isETH ? myTree.nLep : myTree.nlep;
@@ -644,9 +644,6 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     
     if((lep0_pdgId_to_use*lep1_pdgId_to_use)>0 )   continue;
     
-    //FIXME!! removed next selection criteria for 2017 since jet_id defined differently
-    //if(myTree.nJet30==1 && !(myTree.jet_id[0]>=4)) continue;
-
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
     float ht   = myTree.zll_ht;
@@ -655,20 +652,12 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     float minMTBmet = -999;// myTree.minMTBMet;
     int ID = myTree.evt_id;
 
-    //Recompute Z vec  FIXME: use the variables already stored in the babytrees
     TLorentzVector *LVec = new TLorentzVector[3];
     for(int i=0; i< 2; i++){
       LVec[i].SetPtEtaPhiM(myTree.lep_pt[i], myTree.lep_eta[i],myTree.lep_phi[i], myTree.lep_mass[i]);
     }
     TLorentzVector Zvec = LVec[0] + LVec[1]; //leptons invariant mass
 
-
-    // Common Selection is over, now apply the weights !
-    
-    // Double_t weight = (isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
-    //Double_t weight = (isData) ? 1. : myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
-    //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb*cfg.lumi();
-    
     Double_t weight(1.);
      
     //weight on cross section
@@ -679,13 +668,9 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
       else {
         weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
-        // xsec times k factor and filter eff from file
         weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
-        weight *= myTree.weight_L1prefire;
-        //std::cout << " sample id " << sample.id << " year " << cfg.year() << std::endl;
-        //std::cout << " weight which should be 1000 " << myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.evt_nEvts << std::endl
-        //          << " weight xsec original " << (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) << std::endl
-        //          << " weight xsec new      " << myTree.getXSecCorrWeight(sample.id, cfg.year()) << std::endl << std::endl;
+        if (cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
+        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); // nominal
       }
     } 
 

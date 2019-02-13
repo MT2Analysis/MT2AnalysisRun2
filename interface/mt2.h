@@ -860,8 +860,10 @@ public :
    virtual Bool_t   passMonoJetId( int j ) const;
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
    virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
-   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true) const;
+   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true, bool myIsData) const;
+   //virtual Bool_t   passHEMFailElectronVeto(int year=2018, bool isETH=true, bool myIsData) const;
    virtual Double_t getXSecCorrWeight(int sampleId, int year=2016);
+   virtual Float_t  getAverageISRWeight(int sampleId, int year=2016, int var=0);
 };
 
 #endif
@@ -1511,7 +1513,11 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 }
 
 // hem fail veto
-Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
+Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH, bool myIsData) const{
+
+  // from Bennett
+  int HEM_startRun = 319077; // affects 38.58 out of 58.83 fb-1 in 2018
+  uint HEM_fracNum = 1286, HEM_fracDen = 1961; // 38.58/58.82 ~= 1286/1961. Used for figuring out if we should veto MC events
 
   if (year!=2018) return true; // only apply for 2018
 
@@ -1520,19 +1526,25 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
 
   bool hasHEMFailJet = false;
 
-  for (int i=0; i<jetSize; i++){
-    if (jet_pt[i] > 30 &&
-        jet_eta[i] > -4.7 && jet_eta[i] < -1.4 &&
-        jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
+  if((myIsData && run >= HEM_startRun) || (!myIsData && evt % HEM_fracDen < HEM_fracNum)){
 
-          hasHEMFailJet=true;
-          break; // exit from the loop as soon as you find a jet in the hem fail region
-    }
-  }
+    for (int i=0; i<jetSize; i++){
+      if (jet_pt[i] > 30 &&
+          jet_eta[i] > -4.7 && jet_eta[i] < -1.4 &&
+          jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
+
+            hasHEMFailJet=true;
+            break; // exit from the loop as soon as you find a jet in the hem fail region
+      }
+    } // for jets
+  } // if HEM affected
 
   return !hasHEMFailJet;
 
 }
+
+
+
 
 Double_t MT2Tree::getXSecCorrWeight(int sampleId, int year){
 
@@ -1607,6 +1619,32 @@ Double_t MT2Tree::getXSecCorrWeight(int sampleId, int year){
   }
 
   return xSecCorr;
+}
+
+
+
+
+
+Float_t MT2Tree::getAverageISRWeight(int sampleId, int year, int var) {
+
+  if(year==2017 || year==2018) return 1.; // no isr weights available for 17/18 yet
+
+  // madgraph ttsl, from RunIISummer16MiniAODv2
+  if (sampleId == 301 || sampleId == 302) {
+    if (var == 0) return 0.909; // nominal
+    else if (var == 1) return 0.954; // UP
+    else if (var == -1) return 0.863; // DN
+  }
+  // madgraph ttdl, from RunIISummer16MiniAODv2
+  else if (evt_id == 303) {
+    if (var == 0) return 0.895; // nominal
+    else if (var == 1) return 0.948; // UP
+    else if (var == -1) return 0.843; // DN
+  }
+
+  std::cout << "WARNING: MT2Looper::getAverageISRWeight: didn't recognize either evt_id: " << evt_id
+            << " or variation: " << var << std::endl;
+  return 1.;
 }
 
 

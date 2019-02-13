@@ -427,7 +427,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
 
     // apply HEM veto
-    if (!myTree.passHEMFailVeto(cfg.year(), isETH)) continue;
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
 
     //cut on HEM fail for 2018 data
     //if(cfg.year() == 2018){
@@ -455,9 +455,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
       else {
         weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
-        // xsec times k factor and filter eff from file
         weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
-        weight *= myTree.weight_L1prefire;
+        if (cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
+        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); // nominal
       }
     }
 
@@ -701,6 +701,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
         weight *= sig_xs; // * 1000 FIXME 
       } else{
         weight *= myTree.evt_xsec*myTree.evt_filter*1000;  // NOTE: normalized to 1/fb
+        if (cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
       }
 
     } else  std::cout << "THIS SHOULD NOT HAPPEN, PLEASE CHECK" << std::endl;
