@@ -345,8 +345,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   TTree* tree = (TTree*)file->Get(treeName);
 
   MT2Tree myTree(tree, isETH);
-  //MT2Tree myTree;
-  //myTree.Init(tree);
 
   // number of gen events
   double nGen=-9999; double nGenWeighted=-9999;
@@ -354,18 +352,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
-
-  // json business here
-//  const char* unblindedjson_file;
-//  if (cfg.year()==2017) unblindedjson_file="../jsons/goodruns_2017_unblinded.txt";
-//  else if (cfg.year()==2018) unblindedjson_file="../jsons/goodruns_2018_unblinded.txt";
-
-//  GoodRun unblinded;
-
-//  if (cfg.applyJSONforSR() and isData) {
-//    std::cout << "Loading unblinded json file: " << unblindedjson_file << std::endl;
-//    unblinded.set_goodrun_file(unblindedjson_file);
-//  }
 
   int nentries = tree->GetEntries();
 
@@ -411,15 +397,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       continue;
     }
 
-    // only look at unblinded data through json
-//    bool isUnblinded;
-//    if (cfg.applyJSONforSR() && isData && !unblinded.goodrun(myTree.run, myTree.luminosityBlock)){
-//      isUnblinded = false;
-//    } else {
-//      isUnblinded = true;
-//    }
-//    if(!isUnblinded) continue;
-
     //check if is there is a nan
     if( isnan(myTree.ht) || isnan(myTree.met_pt) ||  isinf(myTree.ht) || isinf(myTree.met_pt)  ){
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
@@ -428,11 +405,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // apply HEM veto
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
-
-    //cut on HEM fail for 2018 data
-    //if(cfg.year() == 2018){
-    //  if(myTree.nJet30HEMFail != 0) continue;
-    //}
 
     // kinematic selections, including lepton veto
     if( !myTree.passSelection("", cfg.year(), isETH )) continue;
@@ -483,24 +455,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       weight *= weight_btagsf;
     }
 
-
-    // if(!isData){
-    // weight *= myTree.weight_btagsf;
-    // weight *= myTree.weight_lepsf;
-
-    //// // ETH has a branch witht he average weight stored:
-    //// // Also we have a different numbering scheme...
-    //// if (myTree.evt_id == 302 || myTree.evt_id == 303 || myTree.evt_id == 304) //singleLep T/Tbar, Dilep
-    //// 	weight *= myTree.weight_isr / myTree.weight_isr_norm;
-
-    /////AMERICAN WAY
-    //if (myTree.evt_id == 301 || myTree.evt_id == 302)
-    //	weight *= myTree.weight_isr/0.909; // nominal
-    //else if (myTree.evt_id == 303)
-    //	weight *= myTree.weight_isr/0.895;
-
-    //}
-
     // Now that you have done the pre-selection
     // you can actually make the estimates
     // define here the variables that will enter the region categorization
@@ -510,12 +464,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     int nbjets = myTree.nBJet20;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
 
-    //int GenSusyMScan1=0;
-    //int GenSusyMScan2=0;
-    //if(  myTree.evt_id > 999){
-    //  GenSusyMScan1 = myTree.GenSusyMGluino;
-    // GenSusyMScan2 = myTree.GenSusyMNeutralino;
-    // }
     MT2EstimateTree *thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
     if( thisEstimate==0 ) continue;
     if( sample.id < 1000 ){
@@ -524,8 +472,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
 
     thisEstimate->yield->Fill( mt2, weight );
-    // once we have the GenSusyMScan variables, we can add the 3D EventYields_toWrite
-    //thisEstimate->yield3d->Fill( mt2, GenSusyMScan1, GenSusyMScan2, weight );
 
   } // for entries
 
@@ -543,6 +489,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
   bool dogenmet = true;
 
+  // Old cross-sections from file
   TString sigSampleName(sample.name);
   TFile* sigXSFile;
   if(sigSampleName.Contains("T1qqqq") || sigSampleName.Contains("T1bbbb") || sigSampleName.Contains("T1tttt"))
@@ -553,12 +500,11 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   else
     sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/SUSYCrossSections13TeVsquarkantisquark.root");
 
-  // FIXME: update to NLO cross-sections
-
   TH1F* sigXS = (TH1F*) sigXSFile->Get("xs");
 
   if(sigSampleName.Contains("T2qq"))
     sigXS->Scale(8./10);
+  ////// FIXME: update to NLO and apply coherently
 
   std::string regionsSet = cfg.regionsSet();
 
@@ -599,6 +545,23 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
       if(myTree.nVert <= 0) continue;
     }
 
+    //crazy events! To be piped into a separate txt file
+
+    if(myTree.jet_pt[0] > 13000){
+      std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
+      continue;
+    }
+
+    //check if is there is a nan
+    if( isnan(myTree.ht) || isnan(myTree.met_pt) ||  isinf(myTree.ht) || isinf(myTree.met_pt)  ){
+      std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
+      continue;
+    }
+
+    // apply HEM veto
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
+
+    // Gen MET cut
     bool passGenMET=false;
     if(dogenmet) passGenMET =true;
 
@@ -610,7 +573,6 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
         if( !myTree.passSelection("genmet") ) passGenMET=false;
       if (!passGenMET && !passRecoMET) continue;
     }
-
 
     if( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
 
@@ -659,9 +621,6 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
     // how it should be in the end
 
-
-    //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb*cfg.lumi()*myTree.puWeight;
-
     // get the avg weights from the histograms
     int binx = h_nsig->GetXaxis()->FindBin( GenSusyMScan1 );
     int biny = h_nsig->GetYaxis()->FindBin( GenSusyMScan2 );
@@ -675,20 +634,9 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     float weight_avg_btagsf_heavy_UP   = h_avg_weight_btagsf_heavy_UP->GetBinContent( binx, biny );
     float weight_avg_btagsf_heavy_DN   = h_avg_weight_btagsf_heavy_DN->GetBinContent( binx, biny );
 
-    //float weight_avg_btagsf = h_avg_weight_btagsf->GetBinContent( binx, biny );
-
     // now  calculate  nominal weight
     Double_t weight = 1.;
     weight = weight_btagsf * weight_lepsf * weight_isr / (nevts*weight_avg_isr*weight_avg_btagsf) ; // from histogram / number of events
-
-    //std::cout << "debug masses mParent=" << GenSusyMScan1 << " mLSP=" << GenSusyMScan2 << std::endl;
-    //std::cout << "debug nevts=" << nevts << std::endl
-    //                                     << " weight_avg_isr="    << weight_avg_isr      << " UP=" << weight_avg_isr_UP            << " DN=" << weight_avg_isr_DN         << std::endl
-    //                                     << " weight_avg_btagsf=" << weight_avg_btagsf << " L_UP=" << weight_avg_btagsf_light_UP << " L_DN=" << weight_avg_btagsf_light_DN
-    //                                                                                   << " H_UP=" << weight_avg_btagsf_heavy_UP << " H_DN=" << weight_avg_btagsf_heavy_DN << std::endl
-    //                                     << " weight_isr=" << weight_isr         << " UP=" << weight_isr_UP << " DN=" << weight_isr_DN << std::endl
-    //                                     << " weight_btagsf=" << weight_avg_btagsf << " L_UP=" << weight_btagsf_light_UP << " L_DN=" << weight_btagsf_light_DN
-    //                                                                               << " H_UP=" << weight_btagsf_heavy_UP << " H_DN=" << weight_btagsf_heavy_DN << std::endl;
 
     // multiply by cross-sections
     float sig_xs=0.;
@@ -698,7 +646,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
         int thisBinX = sigXS->FindBin( GenSusyMScan1 );
         sig_xs = sigXS->GetBinContent(thisBinX);
         // std::cout << " sig_xs " << sig_xs << std::endl;
-        weight *= sig_xs; // * 1000 FIXME 
+        weight *= sig_xs; // * 1000 ?
       } else{
         weight *= myTree.evt_xsec*myTree.evt_filter*1000;  // NOTE: normalized to 1/fb
         if (cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
