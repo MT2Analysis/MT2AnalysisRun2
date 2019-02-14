@@ -408,11 +408,18 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float mt2  = (njets>1) ? myTree.mt2 : ht;
     float minMTBmet = -999;  //myTree.minMTBMet;
     //we add lepton kinematics parameters on the tree
+
+
+    ofstream outFile("check_mergedCR_llep.txt",  fstream::app);
+    
+    outFile << "ht: " << ht << endl;
+    outFile << "njets: " << njets << endl;
+    outFile << "nbjets: " << nbjets << endl;
     
    
     MT2EstimateTree* thisEstimate;
 
-    if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond2019"){ // To avoid signal contamination in 7j 2b and 7j 3b
+    if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016"){ // To avoid signal contamination in 7j 2b and 7j 3b
       if( ht>450. && njets>=7 && nbjets>2 ) continue;
       else if( ht<450 || njets<7 || nbjets<1 ) {
 	thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
@@ -424,7 +431,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
       else {
 	thisEstimate = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
-	//cout << "[Ht] " << ht << endl;
 	if( thisEstimate==0 ) continue;
 	thisEstimate->assignTree( myTree, weight );
 	thisEstimate->tree->Fill();
@@ -443,13 +449,183 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 	thisEstimate->yield->Fill(mt2, weight );
       }
     }
-    else {
+
+
+    else if(regionsSet == "Moriond2019"){
+      //if( ht>450. && njets>=7 && nbjets>2 ) continue;
+      if( njets<7 ) { //this is the normal case, where we don't merge the CR
+	outFile << "[merged] no" << endl << endl;
 	thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
 	if( thisEstimate==0 ) continue;
 
 	thisEstimate->assignTree( myTree, weight );
 	thisEstimate->tree->Fill();
 	thisEstimate->yield->Fill(mt2, weight );
+      }
+      else if( ht<=575 && njets>=7 && nbjets==0 ) { //for the VL and L regions, we keep >=7j 0b separate
+	outFile << "[merged] CR A-1" << endl << endl;
+	thisEstimate = anaTree->get( ht, njets, 0, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+      }
+      else if( ht<=575 && njets>=7 && nbjets!=0 ) { //for the VL and L regions, we merge >=7j 1,2,3b together
+	outFile << "[merged] CR B-1" << endl << endl;
+	thisEstimate = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, njets, 2, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, njets, 3, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+      }
+      else if( ht>575 && njets>=7 && nbjets==0 ) { //for the M to UH regions, we merge >=7j 0b together
+	outFile << "[merged] CR A-2" << endl << endl;
+	thisEstimate = anaTree->get( ht, 7, 0, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 8, 0, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 9, 0, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 10, 0, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+      }
+      else if( ht>575 && njets>=7 && nbjets!=0 ) { //for the M to UH regions, we merge >=7j 1,2,3,4b together
+	outFile << "[merged] CR B-2" << endl << endl;
+	thisEstimate = anaTree->get( ht, 7, 1, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 7, 2, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 7, 3, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 7, 4, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 8, 1, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 8, 2, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 8, 3, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 8, 4, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 9, 1, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 9, 2, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 9, 3, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 9, 4, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 10, 1, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+	
+	thisEstimate = anaTree->get( ht, 10, 2, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 10, 3, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+
+	thisEstimate = anaTree->get( ht, 10, 4, minMTBmet, mt2 );
+	if( thisEstimate==0 ) continue;
+	thisEstimate->assignTree( myTree, weight );
+	thisEstimate->tree->Fill();
+	thisEstimate->yield->Fill(mt2, weight );
+      }
+      else {
+	outFile << "I filled no region" << endl;
+      }
+    }
+    else {
+      thisEstimate = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
+      if( thisEstimate==0 ) continue;
+
+      thisEstimate->assignTree( myTree, weight );
+      thisEstimate->tree->Fill();
+      thisEstimate->yield->Fill(mt2, weight );
     }
 
 
