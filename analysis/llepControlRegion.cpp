@@ -1,4 +1,4 @@
-  
+
 // Script to perform the estimates of the lostlepton control region
 
 #include <iostream>
@@ -54,7 +54,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
 
 int main( int argc, char* argv[] ) {
- 
+
 
   std::cout << std::endl << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
@@ -80,7 +80,7 @@ int main( int argc, char* argv[] ) {
   std::cout << "-> Reading era/year from config: " << cfg.year() << std::endl;
   if(cfg.year()==0) {
     std::cout << "There must be an error: era/year is empty in config" << std::endl;
-    exit(120);  
+    exit(120);
   }
 
   bool onlyData = false;
@@ -121,7 +121,7 @@ int main( int argc, char* argv[] ) {
       exit(1209);
     }
 
-   
+
     MT2Analysis<MT2EstimateTree>* mcCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet ); // name given here is the name of the parent directory in the output file
     for( unsigned i=0; i < fSamples.size(); ++i ){
       MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
@@ -201,7 +201,7 @@ int main( int argc, char* argv[] ) {
     dataCR->writeToFile( outputdir + "/data.root" );
 
   } // end analysis on data
-    
+
 
   return 0;
 
@@ -242,8 +242,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   if(!isData and isETH){
     nGen = getNgen(sample.file, "genEventCount");
     nGenWeighted = getNgen(sample.file, "genEventSumw");
-  } 
- 
+  }
+
   int nentries = tree->GetEntries();
 
   //for( int iEntry=0; iEntry<50000; ++iEntry ) {
@@ -251,38 +251,38 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     if(iEntry % 50000 == 0){
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     }
- 
+
     if(iEntry == nentries){
       cout << "finish loop on entries for this sample" << endl;
     }
-    
-    myTree.GetEntry(iEntry);  
+
+    myTree.GetEntry(iEntry);
 
     // Do the selection here: please try to keep a consistent order
     // between this script and similar scripts
 
     // if( myTree.isData && !myTree.isGolden ) continue;
-   
+
     // apply the filters
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     }  //else {
 //      if(!myTree.passFiltersMC(cfg.year())) continue;
-//    } 
-     
+//    }
+
     // apply the triggers
     if(isData and isETH) {
       if (!myTree.passTriggerSelection("llep", cfg.year())) continue;
     }
 
-    // apply good vertex cut once for all 
+    // apply good vertex cut once for all
     if (isETH) {
       if(myTree.PV_npvs <= 0) continue;
     } else {
       if(myTree.nVert <= 0) continue;
     }
-    
+
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
@@ -300,27 +300,95 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year(), isETH)) continue;
     //std::cout << "debug 1" << std::endl;
-    
+
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     //std::cout << "debug 2" << std::endl;
-    
+
     // apply HEM veto
-    if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue; 
+    if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
     //std::cout << "debug 3" << std::endl;
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
-    if( myTree.nLepLowMT!=1 ) continue; 
+    if( myTree.nLepLowMT!=1 ) continue;
     //std::cout << "debug 4" << std::endl;
 
     //new cut: we ask specifically the number of leptons with high MT to be zero
     if(myTree.nLepHighMT != 0) continue;
     //std::cout << "debug 5" << std::endl;
-    
+
+    // identify unique lepton a' la SnT
+    //   -> needed due to the pointless definitions of lepton_* isoTrack_* collections and nPF* nLep* counters
+    //   -> set candLep_* and foundlep
+	  bool foundlep = false;
+	  int candLep_pdgId = 0;
+    float candLep_pt = 0;
+    float candLep_eta = 0;
+    float candLep_phi = 0;
+
+	  // if reco leps, check those
+    int nlep_to_use = isETH ? myTree.nLep : myTree.nlep;
+	  if (nlep_to_use > 0) {
+      for (int ilep = 0; ilep < nlep_to_use; ++ilep) {
+        float mt = sqrt( 2 * myTree.met_pt * myTree.lep_pt[ilep] * ( 1 - cos( myTree.met_phi - myTree.lep_phi[ilep]) ) );
+        if (mt > 100.) continue;
+        // good candidate: save
+	      candLep_pt = myTree.lep_pt[ilep];
+	      candLep_eta = myTree.lep_eta[ilep];
+	      candLep_phi = myTree.lep_phi[ilep];
+	      //mt_ = mt;
+	      candLep_pdgId = isETH ? myTree.lep_pdgId[ilep]: myTree.lep_pdgId_INT[ilep];
+	      foundlep = true;
+	      break;
+	    }
+	  } // nlep>0
+    // otherwise check PF leps that don't overlap with a reco lepton
+    int nIsoTrack_to_use = isETH ? myTree.nIsoTrack : myTree.nisoTrack;
+    if (!foundlep && myTree.nPFLep5LowMT > 0) {
+      for (int itrk = 0; itrk < nIsoTrack_to_use; ++itrk) {
+        float pt = myTree.isoTrack_pt[itrk];
+        float eta = myTree.isoTrack_eta[itrk];
+        float phi = myTree.isoTrack_phi[itrk];
+        if (pt < 5.) continue;
+        int pdgId = isETH ? myTree.isoTrack_pdgId[itrk]: myTree.isoTrack_pdgId_INT[itrk];
+        if ((abs(pdgId) != 11) && (abs(pdgId) != 13)) continue;
+        if (myTree.isoTrack_absIso[itrk]/pt > 0.2) continue;
+        float mt = sqrt( 2 * myTree.met_pt * pt * ( 1 - cos( myTree.met_phi - myTree.isoTrack_phi[itrk]) ) );
+        if (mt > 100.) continue;
+
+        // check overlap with reco leptons
+        bool overlap = false;
+        for(int ilep = 0; ilep < nlep_to_use; ilep++){
+          float thisDR = sqrt(
+                           (myTree.isoTrack_eta[itrk]-myTree.lep_eta[ilep])*(myTree.isoTrack_eta[itrk]-myTree.lep_eta[ilep]) +
+                           TVector2::Phi_mpi_pi(myTree.isoTrack_phi[itrk]-myTree.lep_phi[ilep])*TVector2::Phi_mpi_pi(myTree.isoTrack_phi[itrk]-myTree.lep_phi[ilep])
+                         );
+          if (thisDR < 0.01) {
+            overlap = true;
+            break;
+          }
+       } // loop over reco leps
+       if (overlap) continue;
+
+        // good candidate: save
+	      candLep_pt = pt;
+	      candLep_eta = eta;
+	      candLep_phi = phi;
+	      candLep_pdgId = pdgId;
+	      foundlep = true;
+	      break;
+	    } // loop on isotracks
+	  }
+
+    if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
+
+    // HEM electron veto, can do it only after identifying candidate lepton
+    if (foundlep && !myTree.passHEMFailElectronVeto(cfg.year(), isETH, isData, candLep_eta, candLep_phi, candLep_pdgId)) continue;
+
     // Selection is over, now apply the weights !
     Double_t weight(1.);
-  
-    //weight on the cross section  
+
+    //weight on the cross section
     //Double_t weight = (myTree.isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
     if(isData){
       weight = 1.;
@@ -333,8 +401,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         if (cfg.year()==2017) weight *= myTree.weight_L1prefire; // FIXME apply also to 2016 when weights are avaialble
         if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); // nominal
       }
-    } 
-    
+    }
+
     //lepton scale factor (only on !data and isETH)
     if(!isData and isETH){
       //MT2LeptonSFTool leptonSF;
@@ -354,7 +422,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 	}
       }
     }
-    
+
     //b-tagging scale factor
     if(!isData and isETH){
 
@@ -363,10 +431,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       //declaration of the b-tagged weight uncertainty for heavy flavor (b or c)
       float weight_btagsf_heavy_UP = 1.;
       float weight_btagsf_heavy_DN = 1.;
-      //declaration of the b-tagged weight uncertainty for light flavor 
+      //declaration of the b-tagged weight uncertainty for light flavor
       float weight_btagsf_light_UP = 1.;
       float weight_btagsf_light_DN = 1.;
-      
+
       bool isFastSim = false;
 
       bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
@@ -375,7 +443,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
       weight *= weight_btagsf;
     }
-    
+
     // ISR weights , ETH does not have
     //if(!isData and !isETH){
     //  weight *= myTree.b_weight_isr;
@@ -412,8 +480,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float mt2  = (njets>1) ? myTree.mt2 : ht;
     float minMTBmet = -999;  //myTree.minMTBMet;
     //we add lepton kinematics parameters on the tree
-    
-   
+
+
     MT2EstimateTree* thisEstimate;
 
     if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond2019"){ // To avoid signal contamination in 7j 2b and 7j 3b
@@ -461,7 +529,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
 
   //bTagSF.~MT2BTagSFHelper();
- 
+
   anaTree->finalize();
 
   delete tree;
@@ -544,7 +612,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
     float mt2  = (njets>1) ? myTree.mt2 : ht;
-   
+
 
     float mt2_genmet;
     if(dogenmet)

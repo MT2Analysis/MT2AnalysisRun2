@@ -293,18 +293,18 @@ public :
    Float_t         zll_met_pt;
    Float_t         zll_met_phi;
    UInt_t          nLep;
-   Float_t         lep_pt[5];   //[nLep]
-   Float_t         lep_eta[5];   //[nLep]
-   Float_t         lep_phi[5];   //[nLep]
-   Float_t         lep_mass[5];   //[nLep]
-   Float_t         lep_charge[5];   //[nLep]
-   Float_t         lep_pdgId[5];   //[nLep]
-   Int_t         lep_pdgId_INT[5];   //[nLep]
-   Float_t         lep_dxy[5];   //[nLep]
-   Float_t         lep_dz[5];   //[nLep]
-   Float_t         lep_miniRelIso[5];   //[nLep]
-   Int_t           lep_id[5];   //[nLep]
-   Float_t         lep_mtw[5];   //[nLep]
+   Float_t         lep_pt[10];   //[nLep]
+   Float_t         lep_eta[10];   //[nLep]
+   Float_t         lep_phi[10];   //[nLep]
+   Float_t         lep_mass[10];   //[nLep]
+   Float_t         lep_charge[10];   //[nLep]
+   Float_t         lep_pdgId[10];   //[nLep]
+   Int_t           lep_pdgId_INT[10];   //[nLep]
+   Float_t         lep_dxy[10];   //[nLep]
+   Float_t         lep_dz[10];   //[nLep]
+   Float_t         lep_miniRelIso[10];   //[nLep]
+   Int_t           lep_id[10];   //[nLep]
+   Float_t         lep_mtw[10];   //[nLep]
    Float_t         jet_pt[88];   //[nJet]
    Float_t         jet_eta[88];   //[nJet]
    Float_t         jet_phi[88];   //[nJet]
@@ -328,7 +328,8 @@ public :
    Float_t         isoTrack_mass[10];
    Float_t         isoTrack_dz[10];
    Float_t         isoTrack_dxy[10];
-   Float_t         isoTrack_pdgId[10];
+   Float_t         isoTrack_pdgId[10];   //[nLep]
+   Int_t           isoTrack_pdgId_INT[10];   //[nLep]
    Float_t         isoTrack_absIso[10];
    Float_t         isoTrack_miniPFRelIso_chg[10];
    Float_t         isoTrack_mtw[10];
@@ -427,6 +428,7 @@ public :
    Int_t           njet;
    Int_t           nlep;
    Float_t         mt2_genmet;
+   Int_t           nisoTrack;
    //
 
 
@@ -735,7 +737,8 @@ public :
    TBranch        *b_isoTrack_mass;
    TBranch        *b_isoTrack_dz;
    TBranch        *b_isoTrack_dxy;
-   TBranch        *b_isoTrack_pdgId;
+   TBranch        *b_isoTrack_pdgId;   //!
+   TBranch        *b_isoTrack_pdgId_INT;   //!
    TBranch        *b_isoTrack_absIso;
    TBranch        *b_isoTrack_miniPFRelIso_chg;
    TBranch        *b_isoTrack_mtw;
@@ -834,6 +837,8 @@ public :
    TBranch         *b_njet;   //!
    TBranch         *b_nlep;   //!
    TBranch         *b_mt2_genmet; //!
+   TBranch         *b_nisoTrack; //!
+
    //
 
    MT2Tree(TTree *tree=0, bool isETH=true);
@@ -861,7 +866,7 @@ public :
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
    virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
    virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true, bool myIsData=true) const;
-   //virtual Bool_t   passHEMFailElectronVeto(int year=2018, bool isETH=true, bool myIsData) const;
+   virtual Bool_t   passHEMFailElectronVeto(int year=2018, bool isETH=true, bool myIsData=true, float candLep_eta=1., float candLep_phi=1., int candLep_pdgId=13) const;
    virtual Double_t getXSecCorrWeight(int sampleId, int year=2016);
    virtual Float_t  getAverageISRWeight(int sampleId, int year=2016, int var=0);
 };
@@ -1210,7 +1215,8 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("isoTrack_mass", isoTrack_mass, &b_isoTrack_mass);
    fChain->SetBranchAddress("isoTrack_dz", isoTrack_dz, &b_isoTrack_dz);
    fChain->SetBranchAddress("isoTrack_dxy", isoTrack_dxy, &b_isoTrack_dxy);
-   fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
+   if (isETH) fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
+   else       fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId_INT, &b_isoTrack_pdgId_INT);
    fChain->SetBranchAddress("isoTrack_absIso", isoTrack_absIso, &b_isoTrack_absIso);
    fChain->SetBranchAddress("isoTrack_miniPFRelIso_chg", isoTrack_miniPFRelIso_chg, &b_isoTrack_miniPFRelIso_chg);
    fChain->SetBranchAddress("isoTrack_mtw", isoTrack_mtw, &b_isoTrack_mtw);
@@ -1325,6 +1331,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("njet", &njet, &b_njet);
    fChain->SetBranchAddress("nlep", &nlep, &b_nlep);
    fChain->SetBranchAddress("mt2_genmet", &mt2_genmet, &b_mt2_genmet);
+   fChain->SetBranchAddress("nisoTrack", &nisoTrack, &b_nisoTrack);
    Notify();
 }
 
@@ -1543,7 +1550,21 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH, bool myIsData) const{
 
 }
 
+Bool_t MT2Tree::passHEMFailElectronVeto(int year, bool isETH, bool myIsData, float candLep_eta, float candLep_phi, int candLep_pdgId) const{
 
+  int HEM_startRun = 319077; // affects 38.58 out of 58.83 fb-1 in 2018
+  uint HEM_fracNum = 1286, HEM_fracDen = 1961; // 38.58/58.82 ~= 1286/1961. Used for figuring out if we should veto MC events
+  if (year!=2018) return true; // only apply for 2018
+
+  if((myIsData && run >= HEM_startRun) || (!myIsData && evt % HEM_fracDen < HEM_fracNum)){
+    if (candLep_eta > -4.7 && candLep_eta < -1.4 &&
+        candLep_phi > -1.6 && candLep_phi < -0.8 &&
+        abs(candLep_pdgId) == 11){
+      return false;
+    }
+  }
+  return true;
+}
 
 
 Double_t MT2Tree::getXSecCorrWeight(int sampleId, int year){
