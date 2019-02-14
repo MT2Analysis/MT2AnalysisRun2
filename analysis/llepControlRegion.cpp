@@ -296,26 +296,20 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
-    //std::cout << "debug 0" << std::endl;
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year(), isETH)) continue;
-    //std::cout << "debug 1" << std::endl;
 
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
-    //std::cout << "debug 2" << std::endl;
 
     // apply HEM veto
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
-    //std::cout << "debug 3" << std::endl;
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue;
-    //std::cout << "debug 4" << std::endl;
 
     //new cut: we ask specifically the number of leptons with high MT to be zero
     if(myTree.nLepHighMT != 0) continue;
-    //std::cout << "debug 5" << std::endl;
 
     // identify unique lepton a' la SnT
     //   -> needed due to the pointless definitions of lepton_* isoTrack_* collections and nPF* nLep* counters
@@ -444,35 +438,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       weight *= weight_btagsf;
     }
 
-    // ISR weights , ETH does not have
-    //if(!isData and !isETH){
-    //  weight *= myTree.b_weight_isr;
-    //}
-
-
-   /* if( !myTree.isData ){
-      weight *= myTree.weight_btagsf;
-      weight *= myTree.weight_lepsf;
-      //      weight *= myTree.weight_lepsf;
-
-      // // ETH has a branch witht he average weight stored:
-      // // Also we have a different numbering scheme...
-      // if (myTree.evt_id == 302 || myTree.evt_id == 303 || myTree.evt_id == 304) //singleLep T/Tbar, Dilep
-      // 	weight *= myTree.weight_isr / myTree.weight_isr_norm;
-
-      ///AMERICAN WAY
-      if (myTree.evt_id == 301 || myTree.evt_id == 302)
-      	weight *= myTree.weight_isr/0.909; // nominal
-      else if (myTree.evt_id == 303)
-      	weight *= myTree.weight_isr/0.895;
-
-    }*/
-
-    // Now that you have done the pre-selection
-    // you can actually make the estimates
-    // define here the variables that will enter the region categorization
-
-    //std::cout << "debug weight=" << weight << std::endl;
 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
