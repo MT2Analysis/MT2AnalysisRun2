@@ -16,10 +16,9 @@ MT2LeptonSFTool::MT2LeptonSFTool(){
 void MT2LeptonSFTool::test(){
   std::cout << "je suis dans lepton scale factor et je fais un test" << std::endl;
 }
-
 bool MT2LeptonSFTool::setElHist(TString sel){
 
-  // get the files 
+  // get the files
   TString fname_ID = "../data/ElectronScaleFactors_Run2017.root";
   //pT > 20GeV
   TString fname_RECO = "../data/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root";
@@ -32,11 +31,11 @@ bool MT2LeptonSFTool::setElHist(TString sel){
 
   TFile* f_ID = new TFile(fname_ID);
   TFile* f_RECO = new TFile(fname_RECO);
-  TFile* f_RECO_LOWPT = new TFile(fname_RECO_LOWPT); 
+  TFile* f_RECO_LOWPT = new TFile(fname_RECO_LOWPT);
 
   if (!f_ID->IsOpen() || !f_RECO->IsOpen() || !f_RECO_LOWPT->IsOpen())
     std::cout << " ERROR: Could not find scale factor file for ELECTRONS " << std::endl;
-  
+
   // get the histograms from the file
   TH2D* h_ID_noIso = 0;
   if(sel == "SR" || sel == "llep" || sel == ""){
@@ -50,20 +49,20 @@ bool MT2LeptonSFTool::setElHist(TString sel){
   TH2D* h_ID_Iso = (TH2D*) f_ID->Get("Run2017_MVAVLooseTightIP2DMini");
   TH2D* h_RECO = (TH2D*) f_RECO->Get("EGamma_SF2D");
   TH2D* h_RECO_LOWPT = (TH2D*) f_RECO_LOWPT->Get("EGamma_SF2D");
- 
+
   if (!h_ID_noIso || !h_ID_Iso || !h_RECO || !h_RECO_LOWPT){
     std::cout << std::endl << std::endl << "ERROR: Could not find at least one of the scale factor histograms"<< std::endl << std::endl;
   }
-  
+
   //  cout << "Number of bins of No iso: " << h_ID_noIso -> GetSize() << endl;
   //cout << "Number of bins of iso: " << h_ID_Iso -> GetSize() << endl;
-  
+
   // set the member histograms
 
   h_EL_ID = (TH2D*) h_ID_noIso->Clone("h_EL_ID");
   h_EL_ID->SetDirectory(0); // the histogram doesn't belong to any directory anymore
   h_EL_ID->Multiply(h_ID_Iso); // we multiply the scale factors with and without isolation
-  
+
   // we cannot multiply with the reco scale factors, since it will depend on the particular electron pt
   h_EL_RECO = (TH2D*) h_RECO->Clone("h_RECO");
   h_EL_RECO->SetDirectory(0);
@@ -84,14 +83,14 @@ bool MT2LeptonSFTool::setElHist(TString sel){
 
 
 bool MT2LeptonSFTool::setMuHist(){
- 
+
   // get the files
   TString filenameID = "../data/RunBCDEF_SF_ID.root";
   TString filenameISO = "../data/SF.root";
 
   //old files
   // filenameID =   "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
-  // filenameISO =  "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root"; 
+  // filenameISO =  "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root";
   // filenamedxyz = "/mnt/t3nfs01/data01/shome/mmasciov/lepSF/TnP_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
 
   TFile * f1 = new TFile(filenameID);
@@ -111,7 +110,7 @@ bool MT2LeptonSFTool::setMuHist(){
   //cout << "Number of bins 2: " << h_iso_mu->GetSize() << endl;
 
   if (!h_id_mu || !h_iso_mu) { std::cout<<"ERROR: Could not find scale factor histogram"<<std::endl; return 0;}
-  
+
 
   h_muSF_ID = (TH2D*) h_id_mu->Clone("h_muSF_ID");
   h_muSF_ID->SetDirectory(0);
@@ -134,6 +133,84 @@ bool MT2LeptonSFTool::setMuHist(){
 // TODO: add version for fast sim
 
 
+bool MT2LeptonSFTool::setDiLepTriggerHist(int year){
+
+  TString filename="";
+  if(year==2016) filename="../data/trigeff_dilep_2016fullYear.root";
+  if(year==2017) filename="../data/trigeff_dilep_2017fullYear.root";
+  if(year==2018) filename="../data/trigeff_dilep_2018fullYear.root";
+
+  // implementation and numbers from Bennett
+
+  TFile *f = new TFile(filename);
+  if (!f->IsOpen()) { std::cout<<" ERROR: Could not find trigger scale factors file "<<filename<<std::endl; return 0;}
+
+  TH2D* h_ee_num = (TH2D*)f->Get("h_ee_pt_2d_num_ht");
+  TH2D* h_ee_den = (TH2D*)f->Get("h_ee_pt_2d_denom_ht");
+  TH2D* h_mm_num = (TH2D*)f->Get("h_mm_pt_2d_num_ht");
+  TH2D* h_mm_den = (TH2D*)f->Get("h_mm_pt_2d_denom_ht");
+  TH2D* h_em_num = (TH2D*)f->Get("h_em_pt_2d_num_ht");
+  TH2D* h_em_den = (TH2D*)f->Get("h_em_pt_2d_denom_ht");
+
+  // if less than 20 entries in the denominator,
+  // integrate numerator and denominator over full range of sublepton pt
+  for(int i=1; i<=h_ee_den->GetNbinsX(); i++){
+    int j;
+    for(j=1; h_ee_den->GetBinContent(i,j)>20; j++);
+    for(int k=j; k <= h_ee_den->GetNbinsY(); k++){
+      h_ee_num->SetBinContent(i,k, h_ee_num->Integral(i, i, j-1, -1));
+      h_ee_den->SetBinContent(i,k, h_ee_den->Integral(i, i, j-1, -1));
+    }
+    for(j=1; h_mm_den->GetBinContent(i,j)>20; j++);
+    for(int k=j; k <= h_mm_den->GetNbinsY(); k++){
+      h_mm_num->SetBinContent(i,k, h_mm_num->Integral(i, i, j-1, -1));
+      h_mm_den->SetBinContent(i,k, h_mm_den->Integral(i, i, j-1, -1));
+    }
+    for(j=1; h_em_den->GetBinContent(i,j)>20; j++);
+    for(int k=j; k <= h_em_den->GetNbinsY(); k++){
+      h_em_num->SetBinContent(i,k, h_em_num->Integral(i, i, j-1, -1));
+      h_em_den->SetBinContent(i,k, h_em_den->Integral(i, i, j-1, -1));
+    }
+  }
+
+  h_dilep_trigeff_ee = (TH2D*)h_ee_num->Clone("h_dilep_trigeff_ee");
+  h_dilep_trigeff_ee->SetDirectory(0);
+  h_dilep_trigeff_mm = (TH2D*)h_mm_num->Clone("h_dilep_trigeff_mm");
+  h_dilep_trigeff_mm->SetDirectory(0);
+  h_dilep_trigeff_em = (TH2D*)h_em_num->Clone("h_dilep_trigeff_em");
+  h_dilep_trigeff_em->SetDirectory(0);
+
+  // calculate efficiencies
+  for(int i=1; i<=h_dilep_trigeff_ee->GetNbinsX(); i++){
+    for(int j=1; j<=h_dilep_trigeff_ee->GetNbinsY(); j++){
+      float level = 0.6826;
+      float num, den, err;
+
+      num = h_ee_num->GetBinContent(i,j);
+      den = h_ee_den->GetBinContent(i,j);
+      err = TEfficiency::ClopperPearson(den, num, level, false);
+      h_dilep_trigeff_ee->SetBinContent(i, j, num/den);
+      h_dilep_trigeff_ee->SetBinError(i, j, num/den-err);
+
+      num = h_mm_num->GetBinContent(i,j);
+      den = h_mm_den->GetBinContent(i,j);
+      err = TEfficiency::ClopperPearson(den, num, level, false);
+      h_dilep_trigeff_mm->SetBinContent(i, j, num/den);
+      h_dilep_trigeff_mm->SetBinError(i, j, num/den-err);
+
+      num = h_em_num->GetBinContent(i,j);
+      den = h_em_den->GetBinContent(i,j);
+      err = TEfficiency::ClopperPearson(den, num, level, false);
+      h_dilep_trigeff_em->SetBinContent(i, j, num/den);
+      h_dilep_trigeff_em->SetBinError(i, j, num/den-err);
+
+    }
+  }
+  f->Close();
+  delete f;
+  return true;
+
+}
 
 
 lepSF MT2LeptonSFTool::getElSF(float pt, float eta){
@@ -197,7 +274,7 @@ lepSF MT2LeptonSFTool::getElSF(float pt, float eta){
 
 
 
-lepSF MT2LeptonSFTool::getMuSF(float pt, float eta){ 
+lepSF MT2LeptonSFTool::getMuSF(float pt, float eta){
   lepSF weight;
 
   if(!h_muSF_ID && !h_muSF_ISO){
@@ -215,8 +292,8 @@ lepSF MT2LeptonSFTool::getMuSF(float pt, float eta){
   Int_t binx_ISO = -9999;
   Int_t biny_ISO = -9999;
 
-  pt_cutoff = std::max(20., std::min(119., double(pt))); 
-   
+  pt_cutoff = std::max(20., std::min(119., double(pt)));
+
   binx_ID = h_muSF_ID->GetXaxis()->FindBin(pt_cutoff);
   biny_ID = h_muSF_ID->GetYaxis()->FindBin(fabs(eta));
 
@@ -259,8 +336,41 @@ lepSF MT2LeptonSFTool::getMuSF(float pt, float eta){
 }
 
 
+lepSF MT2LeptonSFTool::getDiLepTriggerSF(float pt1, int pdgId1, float pt2, int pdgId2){
 
+  lepSF weight;
+  float central=1;
+  float err=0;
 
+  pt1 = std::max(30.f, std::min(299.f, pt1));
+  pt2 = std::max(30.f, std::min(299.f, pt2));
+
+  if(abs(pdgId1)==11 && abs(pdgId2)==11){
+    int binx = h_dilep_trigeff_ee->GetXaxis()->FindBin(pt1);
+    int biny = h_dilep_trigeff_ee->GetYaxis()->FindBin(pt2);
+    central = h_dilep_trigeff_ee->GetBinContent(binx, biny);
+    err = h_dilep_trigeff_ee->GetBinError(binx, biny);
+  }
+  else if(abs(pdgId1)==13 && abs(pdgId2)==13){
+    int binx = h_dilep_trigeff_mm->GetXaxis()->FindBin(pt1);
+    int biny = h_dilep_trigeff_mm->GetYaxis()->FindBin(pt2);
+    central = h_dilep_trigeff_mm->GetBinContent(binx, biny);
+    err = h_dilep_trigeff_mm->GetBinError(binx, biny);
+  }
+  else {
+    int binx = h_dilep_trigeff_em->GetXaxis()->FindBin(pt1);
+    int biny = h_dilep_trigeff_em->GetYaxis()->FindBin(pt2);
+    central = h_dilep_trigeff_em->GetBinContent(binx, biny);
+    err = h_dilep_trigeff_em->GetBinError(binx, biny);
+  }
+
+  weight.sf = central;
+  weight.up = central + err;
+  weight.dn = central - err;
+
+  return weight;
+
+}
 
 
 

@@ -50,7 +50,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      bool do_ZinvEst,  bool invertedZcuts = false );
 void addVariables(MT2Analysis<MT2EstimateTree>* anaTree);
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
-float getHLTweight( int lep1_pdgId, int lep2_pdgId, float lep1_pt, float lep2_pt, int variation);
+//float getHLTweight( int lep1_pdgId, int lep2_pdgId, float lep1_pt, float lep2_pt, int variation);
 
 
 int main(int argc, char* argv[]) {
@@ -520,8 +520,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   //initialization of scale factor tools
   //MT2BTagSFHelper* bTagSF =  new MT2BTagSFHelper();
   MT2LeptonSFTool leptonSF;
+  bool electronHist = leptonSF.setElHist("zll"); //checks if all the electron sf files can be loaded
+  bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
+  bool diLepTrigEffHist = leptonSF.setDiLepTriggerHist(cfg.year());
  
-
   std::string regionsSet = cfg.crRegionsSet();
   if( do_ZinvEst || invertedZcuts ) regionsSet = cfg.regionsSet();
  
@@ -574,18 +576,6 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       lep1_pdgId_to_use = myTree.lep_pdgId_INT[1];
     }
 
-
-    //std::cout << "lep0_pdgId_to_use=" << lep0_pdgId_to_use 
-    //          << "lep1_pdgId_to_use=" << lep0_pdgId_to_use << std::endl;
-
-    //std::cout << "isETH=" << isETH << " myTree.nVert=" << myTree.nVert << " myTree.jet_pt[0]=" << myTree.jet_pt[0] 
-    //<< " myTree.ht=" << myTree.ht << " myTree.met_pt=" << myTree.met_pt << " myTree.nJet30=" << myTree.nJet30
-    //<< " !myTree.passMonoJetId(0)=" << !myTree.passMonoJetId(0) << " cfg.year()=" << cfg.year() << " myTree.nlep=" << myTree.nlep
-    //<< " myTree.lep_pt[0]=" << myTree.lep_pt[0] << " myTree.lep_pt[1]=" << " passSel=" << myTree.passSelection("zll", cfg.year(), isETH) 
-    //<< " pdgidprod" << myTree.lep_pdgId[0]*myTree.lep_pdgId[1] 
-    //<< " myTree.nJet30=" << myTree.nJet30 << " myTree.nBJet20=" << myTree.nBJet20 << " myTree.zll_ht=" << myTree.zll_ht << " mt2=" <<  myTree.zll_mt2
-    //<< std::endl;
-
     // if( myTree.isData && !myTree.isGolden ) continue;
     
     //we apply the filters
@@ -618,15 +608,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       continue;
     }
 
-    //cut on HEM fail for 2018 data
-    //if(cfg.year() == 2018){
-    //  if(myTree.nJet30HEMFail != 0) continue;
-    //} 
-
-
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
-    //
 
     // apply HEM veto
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
@@ -660,7 +643,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
     Double_t weight(1.);
      
-    //weight on cross section
+    //weights weights weights!
     if(isData){
       weight = 1.;
     }
@@ -679,20 +662,17 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 
     //lepton scale factors
-    
     //we apply the same scale factor on same and opposite CR    
     if(!isData and isETH){
       //we apply the same weight for both leptons
       for(int i(0); i<2; ++i){
 	if(abs(myTree.lep_pdgId[i])<12){ //electrons (lep_pdgID = +- 11)
-	  bool electronHist = leptonSF.setElHist("zll"); //checks if all the electron sf files can be loaded
 	  if(electronHist){
 	    lepSF elSFandError = leptonSF.getElSF(myTree.lep_pt[i], myTree.lep_eta[i]);
 	    float elSF = elSFandError.sf;
 	    weight *= elSF;
 	  }
 	}else if(abs(myTree.lep_pdgId[i])>12){//muons (lep_pdgID = +- 13)
-	  bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
 	  if(muonHist){
 	    lepSF muSFandError = leptonSF.getMuSF(myTree.lep_pt[i], myTree.lep_eta[i]);
 	    float muSF = muSFandError.sf;
@@ -701,8 +681,17 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	}
       }
     }
-    
-    
+    // trigger scale factors
+    float HLT_weight=1.;
+    if (!isData && diLepTrigEffHist) {
+      lepSF diLepTrigEffSF = leptonSF.getDiLepTriggerSF(myTree.lep_pt[0],lep0_pdgId_to_use,myTree.lep_pt[1],lep0_pdgId_to_use); 
+      HLT_weight = diLepTrigEffSF.sf;
+      weight *= HLT_weight;
+    }
+    //float HLT_weight = getHLTweight( lep0_pdgId_to_use, lep1_pdgId_to_use, myTree.lep_pt[0], myTree.lep_pt[1], 0 );
+    // variation -1 and +1 are for the weight up and down
+
+
     //b-tagging scale factor
     if(!isData and isETH){
 
@@ -723,56 +712,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       weight *= weight_btagsf;
     }
-    
-    
-
-    /*
-    if(!isData){
-
-      // // ETH has a branch witht he average weight stored:
-      // // Also we have a different numbering scheme...
-      // if (myTree.evt_id == 302 || myTree.evt_id == 303 || myTree.evt_id == 304) //singleLep T/Tbar, Dilep
-      // 	weight *= myTree.weight_isr / myTree.weight_isr_norm;
-
-      ///AMERICAN WAY
-      if (myTree.evt_id == 301 || myTree.evt_id == 302)
-      	weight *= myTree.weight_isr/0.909; // nominal
-      //	weight *= myTree.weight_isr/0.910; // nominal
-      else if (myTree.evt_id == 303)
-      	weight *= myTree.weight_isr/0.895;
-      //	weight *= myTree.weight_isr/0.897;
-
-    }
-    */
-
-    /*
-    if( isData ){
-
-      // compute lepton scale factors and related uncertainties for the leptons
-      // removed this part - please look for weight_lepsf in a previous version of the code to know more
-      Float_t central = 1;
-      Float_t err = 0;
-      Float_t uncert_UP = 0; //	Float_t uncert_DN = 0;
-
-      Float_t weight_lepsf = 1.;
-      Float_t weight_lepsf_UP = 1.;
-
-      for(int o=0; o < 2; ++o){
-	      weight_lepsf    *= central;
-	      weight_lepsf_UP *= uncert_UP;
-	      //  weight_lepsf_DN *= uncert_DN;
-
-	      //Backwards compatible, don't make me think now, it's too warm
-	      weight_lep0 = central;
-	      weight_lep_err = uncert_UP;
-	      weight_lep1 = 1.;
-      }//end of loop over objects
-    }//end of applying SF
-    */
-
-    float HLT_weight = getHLTweight( lep0_pdgId_to_use, lep1_pdgId_to_use, myTree.lep_pt[0], myTree.lep_pt[1], 0 );
-    // variation -1 and +1 are for the weight up and down
-
+     
     int nJetHF30_ = 0;
     int nJet_to_use = (isETH) ? myTree.nJet : myTree.njet;
     for(int j=0; j<nJet_to_use; ++j){

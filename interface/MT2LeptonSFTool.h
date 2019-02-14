@@ -12,6 +12,7 @@
 #include "TFile.h"
 #include "TString.h"
 #include "TH2.h"
+#include "TEfficiency.h"
 
 
 
@@ -30,15 +31,17 @@ class MT2LeptonSFTool {
   public:
 
     MT2LeptonSFTool(); // constructor
-   
+
     // configuration methods
     bool setElHist(TString); //the TString is needed since the electron is not selected following the same POG working point (Veto for SR and llep, Loose for zll)
     bool setMuHist();
+    bool setDiLepTriggerHist(int year=2016);
     //bool setVetoEffHistos( std::string filename);
 
     // get SF methods
     lepSF getElSF(float pt, float eta);
     lepSF getMuSF(float pt, float eta);
+    lepSF getDiLepTriggerSF(float pt1, int pdgId1, float pt2, int pdgId2);
 
     void test();
     //lepSF getLepSF( float pt, float eta, int pdgId);
@@ -62,7 +65,10 @@ class MT2LeptonSFTool {
     TH2D* h_fast_elSF   = 0;
     TH2D* h_fast_muSF   = 0;
 
-  
+    TH2D* h_dilep_trigeff_ee = 0;
+    TH2D* h_dilep_trigeff_mm = 0;
+    TH2D* h_dilep_trigeff_em = 0;
+
  // nothing really matters
 
 };
