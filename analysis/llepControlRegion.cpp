@@ -215,6 +215,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   //initialization of the lepton scale factor tool
   MT2LeptonSFTool leptonSF;
+  bool electronHist = leptonSF.setElHist("llep"); //checks if all the electron sf files can be loaded
+  bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
 
   // determine if it's data or mc here
   bool  isData = (sample.id >= -1 && sample.id < 100 );
@@ -294,28 +296,27 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
       continue;
     }
-    
+    //std::cout << "debug 0" << std::endl;
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year(), isETH)) continue;
+    //std::cout << "debug 1" << std::endl;
     
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    //std::cout << "debug 2" << std::endl;
     
     // apply HEM veto
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue; 
-
-    //cut on HEM fail for 2018 data <= this needs to be reworked
-    //if(cfg.year() == 2018){
-      //if(myTree.nJet30HEMFail != 0) continue;
-    //} 
+    //std::cout << "debug 3" << std::endl;
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue; 
+    //std::cout << "debug 4" << std::endl;
 
     //new cut: we ask specifically the number of leptons with high MT to be zero
     if(myTree.nLepHighMT != 0) continue;
+    //std::cout << "debug 5" << std::endl;
     
-
     // Selection is over, now apply the weights !
     Double_t weight(1.);
   
@@ -338,7 +339,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     if(!isData and isETH){
       //MT2LeptonSFTool leptonSF;
       if(abs(myTree.lep_pdgId[0])<12){ //electrons (lep_pdgID = +- 11)
-	bool electronHist = leptonSF.setElHist("llep"); //checks if all the electron sf files can be loaded
 	if(electronHist){
 	  lepSF elSFandError = leptonSF.getElSF(myTree.lep_pt[0], myTree.lep_eta[0]);
 	  float elSF = elSFandError.sf;
@@ -346,7 +346,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 	  //cout << "je suis un electron" << endl;
 	}
       }else if(abs(myTree.lep_pdgId[0])>12){//muons (lep_pdgID = +- 13)
-	bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
 	if(muonHist){
 	  lepSF muSFandError = leptonSF.getMuSF(myTree.lep_pt[0], myTree.lep_eta[0]);
 	  float muSF = muSFandError.sf;
@@ -405,7 +404,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // you can actually make the estimates
     // define here the variables that will enter the region categorization
 
-    
+    //std::cout << "debug weight=" << weight << std::endl;
 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
