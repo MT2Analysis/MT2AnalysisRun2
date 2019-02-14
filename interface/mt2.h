@@ -860,7 +860,7 @@ public :
    virtual Bool_t   passMonoJetId( int j ) const;
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
    virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
-   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true, bool myIsData) const;
+   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true, bool myIsData=true) const;
    //virtual Bool_t   passHEMFailElectronVeto(int year=2018, bool isETH=true, bool myIsData) const;
    virtual Double_t getXSecCorrWeight(int sampleId, int year=2016);
    virtual Float_t  getAverageISRWeight(int sampleId, int year=2016, int var=0);
