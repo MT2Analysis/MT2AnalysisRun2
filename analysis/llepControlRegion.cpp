@@ -282,7 +282,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     } else {
       if(myTree.nVert <= 0) continue;
     }
-
     // some additional cleanings
     //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
     //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue;
@@ -307,35 +306,34 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue;
-
     //new cut: we ask specifically the number of leptons with high MT to be zero
-    if(myTree.nLepHighMT != 0) continue;
+    if(cfg.year()!=2016 && myTree.nLepHighMT!=0) continue; // FIXME: also apply on 2016 as soon as this quantity is available
 
     // identify unique lepton a' la SnT
     //   -> needed due to the pointless definitions of lepton_* isoTrack_* collections and nPF* nLep* counters
     //   -> set candLep_* and foundlep
-	  bool foundlep = false;
-	  int candLep_pdgId = 0;
+    bool foundlep = false;
+    int candLep_pdgId = 0;
     float candLep_pt = 0;
     float candLep_eta = 0;
     float candLep_phi = 0;
 
-	  // if reco leps, check those
+    // if reco leps, check those
     int nlep_to_use = isETH ? myTree.nLep : myTree.nlep;
-	  if (nlep_to_use > 0) {
+    if (nlep_to_use > 0) {
       for (int ilep = 0; ilep < nlep_to_use; ++ilep) {
         float mt = sqrt( 2 * myTree.met_pt * myTree.lep_pt[ilep] * ( 1 - cos( myTree.met_phi - myTree.lep_phi[ilep]) ) );
         if (mt > 100.) continue;
         // good candidate: save
-	      candLep_pt = myTree.lep_pt[ilep];
-	      candLep_eta = myTree.lep_eta[ilep];
-	      candLep_phi = myTree.lep_phi[ilep];
-	      //mt_ = mt;
-	      candLep_pdgId = isETH ? myTree.lep_pdgId[ilep]: myTree.lep_pdgId_INT[ilep];
-	      foundlep = true;
-	      break;
-	    }
-	  } // nlep>0
+        candLep_pt = myTree.lep_pt[ilep];
+        candLep_eta = myTree.lep_eta[ilep];
+        candLep_phi = myTree.lep_phi[ilep];
+        //mt_ = mt;
+        candLep_pdgId = isETH ? myTree.lep_pdgId[ilep]: myTree.lep_pdgId_INT[ilep];
+        foundlep = true;
+        break;
+      }
+    } // nlep>0
     // otherwise check PF leps that don't overlap with a reco lepton
     int nIsoTrack_to_use = isETH ? myTree.nIsoTrack : myTree.nisoTrack;
     if (!foundlep && myTree.nPFLep5LowMT > 0) {
@@ -361,18 +359,18 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
             overlap = true;
             break;
           }
-       } // loop over reco leps
-       if (overlap) continue;
+        } // loop over reco leps
+        if (overlap) continue;
 
         // good candidate: save
-	      candLep_pt = pt;
-	      candLep_eta = eta;
-	      candLep_phi = phi;
-	      candLep_pdgId = pdgId;
-	      foundlep = true;
-	      break;
-	    } // loop on isotracks
-	  }
+        candLep_pt = pt;
+        candLep_eta = eta;
+        candLep_phi = phi;
+        candLep_pdgId = pdgId;
+        foundlep = true;
+        break;
+      } // loop on isotracks
+    }
 
     if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
 
