@@ -35,8 +35,8 @@ bool addSigLepSF= true;
 
 // Edit these options
 bool doQCDEstimate = true; // add QCD background to datacards and tables
-bool copy2SE = true; // copy signal datacards to Storage Element
-bool doBlind=false; // if true will write sum of prediction instead of observed number of events in data
+bool copy2SE = false; // copy signal datacards to Storage Element
+bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
 
 int Round(float d) {
   return (int)(floor(d + 0.5));
@@ -104,6 +104,7 @@ int main( int argc, char* argv[] ) {
   std::string mc_fileName = dir + "/analyses.root";
   std::string data_fileName = dir + "/analyses.root";
   float lumiComb = cfg16.lumi() + cfg17.lumi() + cfg18.lumi();
+  std::cout << "Will normalize signals by combined luminosity " << lumiComb << std::endl;
 
   //  float err_qcd_uncorr  = 1.0; // 100% of QCD MC yield, if use MC for QCD
 
@@ -654,13 +655,13 @@ int main( int argc, char* argv[] ) {
           else if( iR->nBJetsMin()==3 )  uncert_heavy = err_llep_btagEff_heavy_7j3b;
 
           // same for zinv and llep
-          datacard << "btageff_heavy lnN  - " << 1.+uncert_heavy << " " << 1.+uncert_heavy << 1.+uncert_heavy << " " << 1.+uncert_heavy << 1.+uncert_heavy << " " << 1.+uncert_heavy << " -" << std::endl;
+          datacard << "btageff_heavy lnN  - " << 1.+uncert_heavy << " " << 1.+uncert_heavy << " " << 1.+uncert_heavy << " " << 1.+uncert_heavy << " " << 1.+uncert_heavy << " " << 1.+uncert_heavy << " -" << std::endl;
           llep_systUp += uncert_heavy*uncert_heavy;
           llep_systDn += uncert_heavy*uncert_heavy;
 
           // same for zinv and llep
           if( iR->nBJetsMin()==3 ) {//only 1 uncert for light for >=3b
-            datacard << "btageff_light lnN  - " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " -" << std::endl;
+            datacard << "btageff_light lnN  - " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " " << 1.+err_llep_btagEff_light_7j3b << " -" << std::endl;
             llep_systUp += err_llep_btagEff_light_7j3b*err_llep_btagEff_light_7j3b;
             llep_systDn += err_llep_btagEff_light_7j3b*err_llep_btagEff_light_7j3b;
           }
@@ -728,28 +729,28 @@ int main( int argc, char* argv[] ) {
       //////////////////////////////////////
       if(doQCDEstimate){
 
-        if( yield_qcd>=0. ) {
-          datacard << "qcd_syst_jer" << binName << " lnN - - - " <<  yield_qcd_syst_jer/yield_qcd  << std::endl;
+        if( yield_qcd>0. ) {
+          datacard << "qcd_syst_jer" << binName << " lnN - - - - - - - " <<  yield_qcd_syst_jer/yield_qcd  << std::endl;
           float this_var = yield_qcd_syst_jer/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
 
-          datacard << "qcd_syst_nbjetshape" << binName << " lnN - - - " <<  yield_qcd_syst_nbjetshape/yield_qcd  << std::endl;
+          datacard << "qcd_syst_nbjetshape" << binName << " lnN - - - - - - - " <<  yield_qcd_syst_nbjetshape/yield_qcd  << std::endl;
           this_var = yield_qcd_syst_nbjetshape/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
 
-          datacard << "qcd_syst_njetshape" << binName << " lnN - - - " <<  yield_qcd_syst_njetshape/yield_qcd  << std::endl;
+          datacard << "qcd_syst_njetshape" << binName << " lnN - - - - - - - " <<  yield_qcd_syst_njetshape/yield_qcd  << std::endl;
           this_var = yield_qcd_syst_njetshape/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
 
-          datacard << "qcd_syst_sigmasoft" << binName << " lnN - - - " <<  yield_qcd_syst_sigmasoft/yield_qcd  << std::endl;
+          datacard << "qcd_syst_sigmasoft" << binName << " lnN - - - - - - - " <<  yield_qcd_syst_sigmasoft/yield_qcd  << std::endl;
           this_var = yield_qcd_syst_sigmasoft/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
 
-          datacard << "qcd_syst_tail" << binName << " lnN - - - " <<  yield_qcd_syst_tail/yield_qcd  << std::endl;
+          datacard << "qcd_syst_tail" << binName << " lnN - - - - - - - " <<  yield_qcd_syst_tail/yield_qcd  << std::endl;
           this_var = yield_qcd_syst_tail/yield_qcd-1.;
           qcd_systUp += this_var*this_var;
           qcd_systDn += this_var*this_var;
