@@ -499,18 +499,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 	thisEstimate->tree->Fill();
 	thisEstimate->yield->Fill(mt2, weight );
 	
-	thisEstimate = anaTree->get( ht, 8, 0, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
-	thisEstimate = anaTree->get( ht, 9, 0, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
 	thisEstimate = anaTree->get( ht, 10, 0, minMTBmet, mt2 );
 	if( thisEstimate==0 ) continue;
 	thisEstimate->assignTree( myTree, weight );
@@ -543,54 +531,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 	thisEstimate->tree->Fill();
 	thisEstimate->yield->Fill(mt2, weight );
 	
-	thisEstimate = anaTree->get( ht, 8, 1, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-	
-	thisEstimate = anaTree->get( ht, 8, 2, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
-	thisEstimate = anaTree->get( ht, 8, 3, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
-	thisEstimate = anaTree->get( ht, 8, 4, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-	
-	thisEstimate = anaTree->get( ht, 9, 1, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-	
-	thisEstimate = anaTree->get( ht, 9, 2, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
-	thisEstimate = anaTree->get( ht, 9, 3, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
-	thisEstimate = anaTree->get( ht, 9, 4, minMTBmet, mt2 );
-	if( thisEstimate==0 ) continue;
-	thisEstimate->assignTree( myTree, weight );
-	thisEstimate->tree->Fill();
-	thisEstimate->yield->Fill(mt2, weight );
-
 	thisEstimate = anaTree->get( ht, 10, 1, minMTBmet, mt2 );
 	if( thisEstimate==0 ) continue;
 	thisEstimate->assignTree( myTree, weight );
