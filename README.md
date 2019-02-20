@@ -155,11 +155,11 @@ combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${
 #### data-card creation
 From ```MT2AnalysisRun2/analysis``` submit data-card creation to the batch. 
 Created data-cards will be saved to the storage element. 
-0) make sure that ```/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards``` exists
-1) make sure that the data-card templates were already created
-2) edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
-3) make sure that stepSize and ranges are set to desired values in ```launchCreateDatacards.py```
-4) edit ```INDIR``` in createDatacards_batch.sh
+1. make sure that ```/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards``` exists
+2. make sure that the data-card templates were already created
+3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
+4. make sure that stepSize and ranges are set to desired values in ```launchCreateDatacards.py```
+5. edit ```INDIR``` in createDatacards_batch.sh
 ```
 python launchCreateDatacards.py <model-name> <label> 
 ```
