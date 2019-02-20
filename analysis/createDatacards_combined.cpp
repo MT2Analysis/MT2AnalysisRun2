@@ -29,14 +29,15 @@ using namespace std;
 bool use_hybrid = true;
 bool doSignalContamination = false; // MG now set to false, because not supported in llepControlRegion
 bool doSimultaneousFit = false;
-bool includeSignalUnc = true; // signal lep eff commented out till available
 bool doGenAverage = false; // MG also off,  it's what this syst takes into account in absence of signal contamination
 bool addSigLepSF= true;
+bool doQCDEstimate = true; // add QCD background to datacards and tables, default is true
+bool copy2SE = false; // copy signal datacards to Storage Element, default is false
 
 // Edit these options
-bool doQCDEstimate = true; // add QCD background to datacards and tables
-bool copy2SE = false; // copy signal datacards to Storage Element
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
+bool doOnlySig = true; // set to true for signal scans on the batch, default false
+bool includeSignalUnc = false; // signal lep eff commented out till available, currently set to false because requires too much memory
 
 int Round(float d) {
   return (int)(floor(d + 0.5));
@@ -100,9 +101,12 @@ int main( int argc, char* argv[] ) {
 
   std::cout << "Will produce datacards for parent mass between " << m1 << " and " << m2 << ", and LSP mass between " << m11 <<  " and " << m22 << std::endl;
 
-  std::string dir = cfg16.getEventYieldDir();
-  std::string mc_fileName = dir + "/analyses.root";
-  std::string data_fileName = dir + "/analyses.root";
+  std::string dir16 = cfg16.getEventYieldDir();
+  std::string dir17 = cfg17.getEventYieldDir();
+  std::string dir18 = cfg18.getEventYieldDir();
+
+  std::string mc_fileName = dir16 + "/analyses.root";
+  //std::string data_fileName = dir16 + "/analyses.root";
   float lumiComb = cfg16.lumi() + cfg17.lumi() + cfg18.lumi();
   std::cout << "Will normalize signals by combined luminosity " << lumiComb << std::endl;
 
@@ -130,53 +134,60 @@ int main( int argc, char* argv[] ) {
   float err_jec_llep = 0.02;
   float err_jec_zinv= 0.02; //special case for VL in line
 
+  // First create template datacards
+  std::string path_templ = dir16 + "/datacard_templates_combined"; // writing in a different directory than before
+  system(Form("mkdir -p %s", path_templ.c_str()));
+
+
+  if (!doOnlySig){ // MG
+
+
   // Reading data analysis (in search region)
-  // FIXME: now reading data 16 three times
-  MT2Analysis<MT2Estimate>* data16  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
-  MT2Analysis<MT2Estimate>* data17  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
-  MT2Analysis<MT2Estimate>* data18  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
+  MT2Analysis<MT2Estimate>* data16  = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/analyses.root", "data" );
+  MT2Analysis<MT2Estimate>* data17  = MT2Analysis<MT2Estimate>::readFromFile( dir17 + "/analyses.root", "data" );
+  MT2Analysis<MT2Estimate>* data18  = MT2Analysis<MT2Estimate>::readFromFile( dir18 + "/analyses.root", "data" );
   MT2Analysis<MT2Estimate>* data = new MT2Analysis<MT2Estimate>( *(data16) );
   (*data) += (*(data17));
   (*data) += (*(data18));
 
   // Reading invisible Z estimate // FIXME: for the moment reading three times the same thing
-  MT2Analysis<MT2Estimate>* zinv_zll16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid1");
-  MT2Analysis<MT2Estimate>* zinv_zll17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid2");
-  MT2Analysis<MT2Estimate>* zinv_zll18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid3");
+  MT2Analysis<MT2Estimate>* zinv_zll16 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid1");
+  MT2Analysis<MT2Estimate>* zinv_zll17 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid2");
+  MT2Analysis<MT2Estimate>* zinv_zll18 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "ZinvEstimateFromZll_hybrid3");
   MT2Analysis<MT2Estimate>* zinv_zll = new MT2Analysis<MT2Estimate>( *(zinv_zll16) ); // also build the sum of the three
   (*zinv_zll) += (*(zinv_zll17));
   (*zinv_zll) += (*(zinv_zll18));
 
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha1");
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha2");
-  MT2Analysis<MT2Estimate>* zinv_zll_alpha18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "alpha3");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha16 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "alpha1");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha17 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "alpha2");
+  MT2Analysis<MT2Estimate>* zinv_zll_alpha18 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "alpha3");
   MT2Analysis<MT2Estimate>* zinv_zll_alpha = new MT2Analysis<MT2Estimate>( *(zinv_zll_alpha16) );    // FIXME: add in computeZinvFromZll_combined
   (*zinv_zll_alpha) += (*(zinv_zll_alpha17));
   (*zinv_zll_alpha) += (*(zinv_zll_alpha18));
 
-  MT2Analysis<MT2Estimate>* zinvCR_zll = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "dataCR");
-  MT2Analysis<MT2Estimate>* purity_zll = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "purity_forHybrid");
-  MT2Analysis<MT2Estimate>* zinv_zll_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/zinvFromZllCombined.root", "bin_extrapol");
+  MT2Analysis<MT2Estimate>* zinvCR_zll = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "dataCR");
+  MT2Analysis<MT2Estimate>* purity_zll = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "purity_forHybrid");
+  MT2Analysis<MT2Estimate>* zinv_zll_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/zinvFromZllCombined.root", "bin_extrapol");
   //  MT2Analysis<MT2Estimate>* purity_zll_err;
 
   //zinv->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
 
   // Reading lost lepton estimate
-  MT2Analysis<MT2Estimate>* llep16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate16" );
-  MT2Analysis<MT2Estimate>* llep17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate17" );
-  MT2Analysis<MT2Estimate>* llep18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate18" );
-  MT2Analysis<MT2Estimate>* llep = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "llepEstimate" );
+  MT2Analysis<MT2Estimate>* llep16 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "llepEstimate16" );
+  MT2Analysis<MT2Estimate>* llep17 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "llepEstimate17" );
+  MT2Analysis<MT2Estimate>* llep18 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "llepEstimate18" );
+  MT2Analysis<MT2Estimate>* llep = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "llepEstimate" );
 
-  MT2Analysis<MT2Estimate>* llepCR = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "hybrid_llepCR" );
-  MT2Analysis<MT2Estimate>* llep_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "extrapol_bin" );
-  MT2Analysis<MT2Estimate>* llep_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC" );
-  MT2Analysis<MT2Estimate>* llep_ratio16 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC16" );
-  MT2Analysis<MT2Estimate>* llep_ratio17 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC17" );
-  MT2Analysis<MT2Estimate>* llep_ratio18 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "RatioMC18" );
+  MT2Analysis<MT2Estimate>* llepCR = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "hybrid_llepCR" );
+  MT2Analysis<MT2Estimate>* llep_bin_extrapol = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "extrapol_bin" );
+  MT2Analysis<MT2Estimate>* llep_ratio = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "RatioMC" );
+  MT2Analysis<MT2Estimate>* llep_ratio16 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "RatioMC16" );
+  MT2Analysis<MT2Estimate>* llep_ratio17 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "RatioMC17" );
+  MT2Analysis<MT2Estimate>* llep_ratio18 = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "RatioMC18" );
 
   // also reading MC cr and MC sr
-  MT2Analysis<MT2Estimate>* llep_MCcr = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "MCcr");
-  MT2Analysis<MT2Estimate>* llep_MCsr = MT2Analysis<MT2Estimate>::readFromFile( dir + "/llepEstimateCombined.root", "MCsr");
+  MT2Analysis<MT2Estimate>* llep_MCcr = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "MCcr");
+  MT2Analysis<MT2Estimate>* llep_MCsr = MT2Analysis<MT2Estimate>::readFromFile( dir16 + "/llepEstimateCombined.root", "MCsr");
 
   //llep->addToFile( mc_fileName, true ); // Optionally, to add estimate used for invisible Z estimate to analyses.root
 
@@ -204,10 +215,6 @@ int main( int argc, char* argv[] ) {
   std::set<MT2Region> regions = data->getRegions();
   std::cout << "Defined Regions " << std::endl;
 
-  // First create template datacards
-  std::string path_templ = dir + "/datacard_templates_combined"; // writing in a different directory than before
-  system(Form("mkdir -p %s", path_templ.c_str()));
-
 
   // Start loop over TOPOLOGICAL regions
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
@@ -215,7 +222,9 @@ int main( int argc, char* argv[] ) {
     ///////////////////////////////////////////////////////
     // Get histograms from all input estimates
     ///////////////////////////////////////////////////////
-
+//    std::cout << "debug region before" << iR->getName() << std::endl;
+//    if(iR->getName()!="HT1500toInf_j7to9_b4toInf" && iR->getName()!="HT1500toInf_j7to9_b3") continue;
+    //std::cout << "debug region " << iR->getName() << std::endl;
     // Getting data yield histogram
     //TH1D* this_data16 = data16->get(*iR)->yield;
     //TH1D* this_data17 = data17->get(*iR)->yield;
@@ -374,7 +383,7 @@ int main( int argc, char* argv[] ) {
       }else {
          binName_7j = binName;
       }
-      //std::cout << "DEBUG binName=" << binName << "  binName7j=" << binName_7j << std::endl;
+      //std::cout << "debug binName=" << binName << "  binName7j=" << binName_7j << std::endl;
 
       // Getting HT region name
       std::string htName;
@@ -766,7 +775,7 @@ int main( int argc, char* argv[] ) {
       // Final configurations to write table
       //////////////////////////////////////
 
-      // FIXME: currently only dealing with all years summed up together
+      // currently only dealing with all years summed up together TODO
 
       // Make absolute uncertainties for table
       zinvZll_systUp = yield_zinv_zll*sqrt(zinvZll_systUp);
@@ -804,6 +813,7 @@ int main( int argc, char* argv[] ) {
     } // end for MT2 bins
 
   } // for topological regions
+} // if doOnlySig
 
   ///////////////////////////////////////////////////
   // Signals
@@ -823,7 +833,7 @@ int main( int argc, char* argv[] ) {
   std::string modelName = model;
 
   //signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "isr" );
-  signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( dir + "/analyses.root", modelName, "isr" ); // the last string is just a nickname I assign to the analysis
+  signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "isr" ); // the last string is just a nickname I assign to the analysis
 
   if (signals.size()==0) std::cout << "WARNING: Signal analysis is empty!" << std::endl;
 
@@ -831,15 +841,22 @@ int main( int argc, char* argv[] ) {
     //signals_isr       = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "isr" );
     //signals_bTagHeavy = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "btagsf_heavy" );
     //signals_bTagLight = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "btagsf_light" );
-    signals_isr       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir + "/analyses.root", modelName, "isr" );
-    signals_bTagHeavy = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir + "/analyses.root", modelName, "btagsf_heavy" );
-    signals_bTagLight = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir + "/analyses.root", modelName, "btagsf_light" );
+    signals_isr       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "isr" );
+    signals_bTagHeavy = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "btagsf_heavy" );
+    signals_bTagLight = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "btagsf_light" );
+
 
     if( addSigLepSF && (( model == "T2tt" || model == "T1tttt" || model == "T2bt" || model == "T2bW" )) ){
       //signals_lepEff = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "lepeff" );
-      signals_lepEff = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir + "/analyses.root", modelName, "lepeff" );
+      signals_lepEff = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "lepeff" );
     }
   }
+
+  // Getting region set again from data - apparently not possible with MT2EstimateSigContSyst
+  //MT2Analysis<MT2Estimate>* data16  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
+
+  std::set<MT2Region> regions = signals[0]->getRegions();
+  std::cout << "Defined Regions " << std::endl;
 
   for( unsigned  isig=0; isig<signals.size(); ++isig ) { // loops over all signals present in the file
 
@@ -856,15 +873,15 @@ int main( int argc, char* argv[] ) {
 
 
     // Local path for datacards
-    std::string path = dir + "/datacards_" + sigName;
+    std::string path = dir16 + "/datacards_" + sigName;
     system(Form("mkdir -p %s", path.c_str()));
 
     // SE path for datacards
     std::string pathSE = "";
     if (label=="")
-      pathSE = dir + "/datacards_" + sigName;
+      pathSE = dir16 + "/datacards_" + sigName;
     else
-      pathSE = dir + "/datacards_" + sigName + "_" + label;
+      pathSE = dir16 + "/datacards_" + sigName + "_" + label;
 
     std::string path_mass = path;
 
@@ -881,11 +898,11 @@ int main( int argc, char* argv[] ) {
 
       MT2Region* thisRegion = new MT2Region(*iR);
       //cout << "Region: " << thisRegion->getName() << endl;
-
-      //For signal contamination
-      TH1D* this_llep_bin_extrapol = llep_bin_extrapol->get(*iR)->yield;
-      int llep_hybridBin = this_llep_bin_extrapol->GetBinContent(1);
-      int extrapol_bin_llep = ( use_hybrid ) ?  llep_hybridBin : 1;
+      //For signal contamination - currently disabled
+      //TH1D* this_llep_bin_extrapol = llep_bin_extrapol->get(*iR)->yield;
+      //int llep_hybridBin = this_llep_bin_extrapol->GetBinContent(1);
+      //int extrapol_bin_llep = ( use_hybrid ) ?  llep_hybridBin : 1;
+      int extrapol_bin_llep = 1;
 
       TH3D* this_signal3d_central;
       TH1D* this_signalParent;
@@ -1322,7 +1339,7 @@ std::string gammaConventionCombined(float yieldSR16, float yieldSR17, float yiel
   std::stringstream line; // this needs to be filled with cr yield data , only one
   line << std::fixed;
   line << std::setprecision(3);
-
+  //std::cout << "debug yieldSR16=" << yieldSR16 << " yieldSR17=" << yieldSR17 << " yieldSR18=" << yieldSR18 << " yieldCR="<< yieldCR << "  corrName=" <<corrName << " uncorrName=" << uncorrName << " testAlpha16=" << testAlpha16 << " testAlpha17=" << testAlpha17 << " testAlpha18=" << testAlpha18 << std::endl;
   for (int i=0; i<3; i++){
     if( yieldCR==0 && yieldsSR[i]==0.){
       if(i==0) line << corrName << "  gmN 0  ";
@@ -1348,6 +1365,7 @@ std::string gammaConventionCombined(float yieldSR16, float yieldSR17, float yiel
     line << " - ";
 
   std::string line_str = line.str();
+  std::cout << "debug " << line_str << std::endl;
   return line_str;
 
 
