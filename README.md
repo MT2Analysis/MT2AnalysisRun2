@@ -121,23 +121,23 @@ For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis201
 
 ### Signals
 
-Run regionEventYields on the desired signal scan, supported scans are:
+Run regionEventYields on the desired signal scan, supported scans are (only for 2016):
 T1qqqq, T1bbbb, T1tttt, T2qq, T2bb, T2tt.
 Signal contamination removal not currently supported - so T1tttt, T2tt yields are not reliable
 
 ```
-./regionEventYields moriond2019_zurich2016_35p9ifb signal T1qqqq
+./regionEventYields <cfg-file-name16> signal <model>
 ```
 
 Edit desired options in ```createDatacards_combined.cpp``` 
 Run the data-card creation for the signals, e.g.:
 ```
-./createDatacards_combined moriond2019_zurich2016_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 300 305 200 205 pippo  # for single mass point
-./createDatacards_combined moriond2019_zurich2016_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 1000 1105 200 255      # for mass scan
+./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 300 305 200 205 pippo  # for single mass point
+./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 1000 1105 200 255      # for mass scan
 ```
 
 ### Limit tests
-For limit calculation you need software Combine
+For limit calculation you need software Combine. From inside the ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory:
 
 Combine the data cards
 
@@ -145,28 +145,37 @@ Combine the data cards
 combineCards.py -S <input-card-1> <input-card-2> ...  >  <combined-card>
 ```
 
-Submit a limit
+Run a limit
 
 ```
 combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
 ```
 
 ### Limits, full production and plotting 
-Submit data card creation to the batch (copySE=true)
+#### data-card creation
+From ```MT2AnalysisRun2/analysis``` submit data-card creation to the batch. 
+Created data-cards will be saved to the storage element. 
+0) make sure that ```/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards``` exists
+1) make sure that the data-card templates were already created
+2) edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
+3) make sure that stepSize and ranges are set to desired values in ```launchCreateDatacards.py```
+4) edit ```INDIR``` in createDatacards_batch.sh
 ```
-python launchCreateDatacards_2016.py <model-name> <label> 
+python launchCreateDatacards.py <model-name> <label> 
 ```
 TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
-Sumbit data card combination to the batch
+#### data-card combination
+From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch
 ```
 python combineCards_scan.py <path> <model>
 ```
-Sumbit limit calculation to the batch
+#### limit calculation
+From the same directory, Sumbit limit calculation to the batch
 ```
 python submitLimits_scan.py <path> <model>
 ```
+#### plotting
+For the next steps (interpolation and contour extraction), please follow from step 4 of [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
 
-For more info, Please follow [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
-
-For plotting in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
+For plotting the contours in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
