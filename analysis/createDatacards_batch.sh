@@ -54,10 +54,10 @@ echo "Copying all needed stuff..."
 
 mkdir -p $JOBDIR/analysis/ # makes parents directories if needed
 mkdir $JOBDIR/analysis/EventYields_$CFG
-# copy all necessary stuff in the jobdir
+# copy only necessary stuff in the jobdir
 cp    $INDIR/EventYields_$CFG/analyses.root                $JOBDIR/analysis/EventYields_$CFG/.
-cp    $INDIR/EventYields_$CFG/llepEstimateCombined.root    $JOBDIR/analysis/EventYields_$CFG/.
-cp    $INDIR/EventYields_$CFG/zinvFromZllCombined.root     $JOBDIR/analysis/EventYields_$CFG/.
+#cp    $INDIR/EventYields_$CFG/llepEstimateCombined.root    $JOBDIR/analysis/EventYields_$CFG/.
+#cp    $INDIR/EventYields_$CFG/zinvFromZllCombined.root     $JOBDIR/analysis/EventYields_$CFG/.
 cp -r $INDIR/EventYields_$CFG/datacard_templates_combined/ $JOBDIR/analysis/EventYields_$CFG/.
 cp -r $INDIR/cfgs $JOBDIR/analysis/
 cp -r $INDIR/../samples $JOBDIR
@@ -73,30 +73,31 @@ ls -al $JOBDIR/analysis/
 ls -al $JOBDIR/analysis/EventYields_$CFG
 
 echo "Starting to create datacards..."
-# ./createDatacards_general_zllZinvEst $CFG $MODEL $M1 $M2 $M12 $M22 $LABEL
+
 ./createDatacards_combined $1 moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 $2 $3 $4 $5 $6 $7
-echo "Finished creating datacards , at least in principle"
-#mkdir /mnt/t3nfs01/data01/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/testCopy/
+
+echo "Finished creating datacards , at least in principle, content of local datacards directory:"
 
 ls $JOBDIR/analysis/EventYields_$CFG/datacards_$MODEL
 #ls $JOBDIR/analysis/
 #ls $JOBDIR/
 
 #if no datacards produced, don't copy anything (to be tested)
-echo "Before copying command"
+echo "About to issue copy"
 cd $JOBDIR/analysis/EventYields_$CFG/ #datacards_$MODEL
 ls -d $JOBDIR/analysis/EventYields_$CFG/datacards_$MODEL
-echo "before tar"
-echo "name of arcive" tared_${M1}_${M11}.tar.gz
+echo "About to tar the data-cards"
+echo "Name of archive" tared_${M1}_${M11}.tar.gz
 tar -czvf tared_${M1}_${M11}.tar.gz datacards_$MODEL #datacard*txt
-echo "after tar"
+echo "After tar"
 ls -al
 echo ""
 du -sh
+
 xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR
-echo "creating output dir" $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
+echo "Creating output dir" $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
 xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
-echo "now copying tar to output dir"
+echo "Now copying tar to output dir"
 xrdcp -v tared_${M1}_${M11}.tar.gz root://t3dcachedb.psi.ch:1094/$OUTPUTDIR/datacards_${MODEL}_${LABEL}/.
 echo "After copying command"
 
