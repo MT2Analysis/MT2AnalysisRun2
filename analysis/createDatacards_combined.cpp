@@ -1344,9 +1344,9 @@ std::string gammaConventionCombined(float yieldSR16, float yieldSR17, float yiel
     if( yieldCR==0 && yieldsSR[i]==0.){
       if(i==0) line << corrName << "  gmN 0  ";
       alphas[i]=testAlphas[i];
-    } else if (yieldCR>0 && yieldsSR[i]==0.){
-      if(i==0) line << use_uncorrName << "  gmN 0  ";
-      alphas[i] = testAlphas[i];
+    //} else if (yieldCR>0 && yieldsSR[i]==0.){
+    //  if(i==0) line << use_uncorrName << "  gmN 0  ";
+    //  alphas[i] = testAlphas[i];
     } else {
       if(i==0) line << corrName << "  gmN " << yieldCR << "   ";
       alphas[i]=yieldsSR[i]/((float)yieldCR);
@@ -1360,12 +1360,12 @@ std::string gammaConventionCombined(float yieldSR16, float yieldSR17, float yiel
     line << " - ";
 
   line << alphas[0] << " " << alphas[1] << " " << alphas[2];
-
+  //std::cout << "debug alphas=" << alphas[0] << " " << alphas[1] << " " << alphas[2] << std::endl;
   for( int i=position+1; i<6; ++i )
     line << " - ";
 
   std::string line_str = line.str();
-  std::cout << "debug " << line_str << std::endl;
+  //std::cout << "debug " << line_str << std::endl;
   return line_str;
 
 
