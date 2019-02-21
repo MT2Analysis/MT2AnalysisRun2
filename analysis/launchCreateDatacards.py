@@ -24,7 +24,7 @@ stepSize = 5 if "T2cc" in model else 50 # 25 is previous step used
 # previous ranges abobe
 M = range(700 if "T1" in model else 200 if "T2tt"==model else 200 if "T2cc"==model else 400, 2401 if "T1" in model else 1901 if "T2qq"==model else 600,stepSize)
 
-logsDir="jobs_{}_{}".format(model,cfg)
+logsDir="jobs_{}_{}_{}".format(model,cfg,label)
 os.system("mkdir {}".format(logsDir))
 
 for i,m in enumerate(M):
