@@ -36,7 +36,7 @@ bool copy2SE = false; // copy signal datacards to Storage Element, default is fa
 
 // Edit these options
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
-bool doOnlySig = true; // set to true for signal scans on the batch, default false
+bool doOnlySig = false; // set to true for signal scans on the batch, default false
 bool includeSignalUnc = false; // signal lep eff commented out till available, currently set to false because requires too much memory
 
 int Round(float d) {
@@ -992,7 +992,7 @@ int main( int argc, char* argv[] ) {
             //std::cout << "debug iBin=" << iBin << " iBinY=" << iBinY << " iBinZ=" << iBinZ << " sigYield="<< this_signal->GetBinContent(iBin) << std::endl;
           //}
 
-
+          std::cout << "debug mParent=" << mParent << " mLSP=" << mLSP << " topoReg="<< thisRegion->getName()<< " signal integral=" << this_signal->Integral() << std::endl;
           if( this_signal->Integral() <=0 ) continue;
 
 
