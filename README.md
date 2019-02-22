@@ -148,30 +148,32 @@ combineCards.py -S <input-card-1> <input-card-2> ...  >  <combined-card>
 Run a limit
 
 ```
-combine -M Asymptotic <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
+combine -M AsymptoticLimits <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
 ```
 
 ### Limits, full production and plotting 
 #### data-card creation
 From ```MT2AnalysisRun2/analysis``` submit data-card creation to the batch. 
-Created data-cards will be saved to the storage element. 
+Created data-cards will be saved to the storage element in the form of a tar file. 
 1. make sure that ```/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards``` exists
 2. make sure that the data-card templates were already created
 3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
-4. make sure that stepSize and ranges are set to desired values in ```launchCreateDatacards.py```
-5. edit ```INDIR``` in createDatacards_batch.sh
+4. make sure that ```stepSize``` and ranges are set to desired values in ```launchCreateDatacards.py```
+5. edit ```INDIR``` in ```createDatacards_batch.sh```
 ```
 python launchCreateDatacards.py <model-name> <label> 
 ```
 TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
 #### data-card combination
-From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch
+From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch.
+The combined cards will be copied to the same storage element location as the tar files
 ```
 python combineCards_scan.py <path> <model>
 ```
 #### limit calculation
-From the same directory, Sumbit limit calculation to the batch
+From the same directory, sumbit limit calculation to the batch. 
+The limits will be copied in a ```limits``` subdir from the original SE path
 ```
 python submitLimits_scan.py <path> <model>
 ```
