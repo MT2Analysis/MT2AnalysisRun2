@@ -17,23 +17,27 @@ else:
     label = ""
 
 
-cfg = "moriond2019_35p9ifb" #"data_2016_SnT_36p8_FixedWJets"  #data_2016_SnTMC_362ifb_18ifbUB_Signal" #"data_Run2016_7p7ifb"
-stepSize = 5 if "T2cc" in model else 50 # 25 is previous step used
+cfg = "moriond2019_35p9ifb_test" #"data_2016_SnT_36p8_FixedWJets"  #data_2016_SnTMC_362ifb_18ifbUB_Signal" #"data_Run2016_7p7ifb"
+stepSize = 5 if "T2cc" in model else 100 if model=="T1qqqq" else 50 # 25 is previous step used
 
 #M = range(600 if "T1" in model else 100 if "T2tt"==model else 100 if "T2cc"==model else 300, 2301 if "T1" in model else 1801 if "T2qq"==model else 500,stepSize) 
 # previous ranges abobe
-M = range(700 if "T1" in model else 200 if "T2tt"==model else 200 if "T2cc"==model else 400, 2401 if "T1" in model else 1901 if "T2qq"==model else 600,stepSize)
+#M = range(700 if "T1" in model else 200 if "T2tt"==model else 200 if "T2cc"==model else 400, 2401 if "T1" in model else 1901 if "T2qq"==model else 600,stepSize)
+# NOTE: range is only for T1qqqq -> need to be adjusted
+Ms = range(700, 2301)
+ms = range(500, 1601)
+
+print M
 
 logsDir="jobs_{}_{}_{}".format(model,cfg,label)
 os.system("mkdir {}".format(logsDir))
 
-for i,m in enumerate(M):
-  m1 = m
-  m2 = m1+stepSize
-  Y = range(0,m1+1,stepSize)
-  for j,y in enumerate(Y):
-    m11=y
-    m22=Y[j+1] if j+1 < len(Y) else y+stepSize
+for M in Ms:
+  for m in ms:
+    m1=M
+    m2=M+stepSize
+    m11=m
+    m22=m+stepSize
     if m11 >= m2: continue
 
     job_name = "{}_{}_{}_{}".format(m1, m2, m11, m22)
