@@ -36,8 +36,8 @@ bool copy2SE = false; // copy signal datacards to Storage Element, default is fa
 
 // Edit these options
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
-bool doOnlySig = false; // set to true for signal scans on the batch, default false
-bool includeSignalUnc = false; // signal lep eff commented out till available, currently set to false because requires too much memory
+bool doOnlySig = true; // set to true for signal scans on the batch, default false
+bool includeSignalUnc = true; // signal lep eff commented out till available, currently set to false because requires too much memory
 
 int Round(float d) {
   return (int)(floor(d + 0.5));
@@ -824,36 +824,14 @@ int main( int argc, char* argv[] ) {
     return 0;
   }
 
-  std::vector<MT2Analysis<MT2EstimateSigContSyst>*> signals;
-  std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_isr;
-  std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_bTagHeavy;
-  std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_bTagLight;
-  std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals_lepEff;
+  std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals;
 
   std::string modelName = model;
 
   //signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "isr" );
-  signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "isr" ); // the last string is just a nickname I assign to the analysis
+  signals       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "nominal" ); // the last string is just a nickname I assign to the analysis
 
   if (signals.size()==0) std::cout << "WARNING: Signal analysis is empty!" << std::endl;
-
-  if( includeSignalUnc ){
-    //signals_isr       = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "isr" );
-    //signals_bTagHeavy = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "btagsf_heavy" );
-    //signals_bTagLight = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "btagsf_light" );
-    signals_isr       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "isr" );
-    signals_bTagHeavy = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "btagsf_heavy" );
-    signals_bTagLight = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "btagsf_light" );
-
-
-    if( addSigLepSF && (( model == "T2tt" || model == "T1tttt" || model == "T2bt" || model == "T2bW" )) ){
-      //signals_lepEff = MT2Analysis<MT2EstimateSigSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "lepeff" );
-      signals_lepEff = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "lepeff" );
-    }
-  }
-
-  // Getting region set again from data - apparently not possible with MT2EstimateSigContSyst
-  //MT2Analysis<MT2Estimate>* data16  = MT2Analysis<MT2Estimate>::readFromFile( data_fileName, "data" );
 
   std::set<MT2Region> regions = signals[0]->getRegions();
   std::cout << "Defined Regions " << std::endl;
@@ -897,23 +875,16 @@ int main( int argc, char* argv[] ) {
     for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
 
       MT2Region* thisRegion = new MT2Region(*iR);
-      //cout << "Region: " << thisRegion->getName() << endl;
-      //For signal contamination - currently disabled
-      //TH1D* this_llep_bin_extrapol = llep_bin_extrapol->get(*iR)->yield;
-      //int llep_hybridBin = this_llep_bin_extrapol->GetBinContent(1);
-      //int extrapol_bin_llep = ( use_hybrid ) ?  llep_hybridBin : 1;
       int extrapol_bin_llep = 1;
 
       TH3D* this_signal3d_central;
       TH1D* this_signalParent;
 
       // Read signal analysis, and take 3D histogram if it exists for this region
-      MT2EstimateSigContSyst* thisSigSystCentral = signals[isig]->get(*iR);
-
-      //MT2Estimate* thisSigSystCentral = signalVeto[isig]->get(*iR);
-
+      MT2EstimateAllSigSyst* thisSigSystCentral = signals[isig]->get(*iR);
+      //std::cout << "debug thisSigSystCentral->yield3d" <<  thisSigSystCentral->yield3d << std::endl;
       if( thisSigSystCentral->yield3d!=0 ){
-        this_signal3d_central        = signals[isig]->get(*iR)->yield3d;
+        this_signal3d_central = signals[isig]->get(*iR)->yield3d;
       }
 
       // Project SUSY parent mass on 1D histogram (to be used to loop over scan masses)
@@ -927,17 +898,17 @@ int main( int argc, char* argv[] ) {
 
       if( includeSignalUnc ){
 
-        this_signal3d_isr_Up = (TH3D*) signals_isr[isig]->get(*iR)->yield3d_isr_UP->Clone();
+        this_signal3d_isr_Up = (TH3D*) signals[isig]->get(*iR)->yield3d_isr_UP->Clone();
         //std::cout << "debug integral isr=" << this_signal3d_isr_Up->Integral() << std::endl;
 
-        this_signal3d_bTagHeavy_Up       = (TH3D*) signals_bTagHeavy[isig]->get(*iR)->yield3d_btag_heavy_UP->Clone();
+        this_signal3d_bTagHeavy_Up       = (TH3D*) signals[isig]->get(*iR)->yield3d_btag_heavy_UP->Clone();
         //std::cout << "debug integral btagsf_heavy=" << this_signal3d_bTagHeavy_Up->Integral() << std::endl;
 
-        this_signal3d_bTagLight_Up = (TH3D*) signals_bTagLight[isig]->get(*iR)->yield3d_btag_light_UP->Clone();
+        this_signal3d_bTagLight_Up = (TH3D*) signals[isig]->get(*iR)->yield3d_btag_light_UP->Clone();
         //std::cout << "debug integral btagsf_light=" << this_signal3d_bTagLight_Up->Integral() << std::endl;
 
         if( addSigLepSF && (( model == "T2tt" || model == "T1tttt" || model == "T2bt" || model == "T2bW"))){
-          this_signal3d_lepEff_Up = (TH3D*) signals_lepEff[isig]->get(*iR)->yield3d_lepsf_UP->Clone();
+          this_signal3d_lepEff_Up = (TH3D*) signals[isig]->get(*iR)->yield3d_lepsf_UP->Clone();
         }
 
       } // includeSignalUnc
@@ -969,113 +940,10 @@ int main( int argc, char* argv[] ) {
 
           // Get MT2 yield histogram for this mass point
           TH1D* this_signal      = this_signal3d_central->ProjectionX("mt2"     , iBinY, iBinY, iBinZ, iBinZ);
-          TH1D* this_signal_syst = this_signal3d_central->ProjectionX("mt2_syst", iBinY, iBinY, iBinZ, iBinZ);
           TH1D* this_signal_reco = this_signal3d_central->ProjectionX("mt2_reco", iBinY, iBinY, iBinZ, iBinZ);
-
-          //std::cout << "got integrated signal yield of " << this_signal_reco->Integral() << std::endl;
-
-          if (doGenAverage && signals[isig]->get(*iR)->yield3d_genmet!=0) {
-            TH3D* this_signal3d_central_genmet = signals[isig]->get(*iR)->yield3d_genmet;
-            TH1D* this_signal_genmet = this_signal3d_central_genmet->ProjectionX("mt2_genmet", iBinY, iBinY, iBinZ, iBinZ);
-
-            std::string SignalRegionName = iR->getName();
-
-            this_signal->Add(this_signal_genmet);
-            this_signal->Scale(0.5);
-
-            this_signal_syst->Add(this_signal_genmet, -1.0);
-            this_signal_syst->Scale(0.5); // half difference between gen and reco
-
-          }
-
-          //for( int iBin=1; iBin<this_signal->GetNbinsX()+1; ++iBin ) {
-            //std::cout << "debug iBin=" << iBin << " iBinY=" << iBinY << " iBinZ=" << iBinZ << " sigYield="<< this_signal->GetBinContent(iBin) << std::endl;
-          //}
 
           std::cout << "debug mParent=" << mParent << " mLSP=" << mLSP << " topoReg="<< thisRegion->getName()<< " signal integral=" << this_signal->Integral() << std::endl;
           if( this_signal->Integral() <=0 ) continue;
-
-
-          ////// Signal contamination
-          TH1D* this_signalContamination;
-          TH1D* this_signalContamination_syst;
-
-          TH3D* this_signal3d_crsl;
-          TH1D* this_signal_crsl;
-          TH1D* this_signal_crsl_syst;
-          TH1D* this_signal_alpha;
-
-          // MG: leaving this part but switchiing off doSignalContamination
-          if( (model == "T2tt" || model == "T1tttt" || model == "T2bt" || model == "T2bW" ) && doSignalContamination ){
-            this_signal3d_crsl        = (TH3D*) signals[isig]->get(*iR)->yield3d_crsl       ->Clone();
-            //this_signal3d_crsl = (TH3D*) signalVeto_1lCR[isig]->get(*iR)->yield3d->Clone();
-            this_signal_crsl        = this_signal3d_crsl       ->ProjectionX("mt2_crsl", iBinY, iBinY, iBinZ, iBinZ);
-            this_signal_alpha  = (TH1D*) signals[isig]->get(*iR)->yield_alpha->Clone();
-
-            if (doGenAverage && signals[isig]->get(*iR)->yield3d_crsl_genmet!=0){
-              TH3D *this_signal3d_crsl_genmet = (TH3D*) signals[isig]->get(*iR)->yield3d_crsl_genmet->Clone();
-              TH1D *this_signal_crsl_genmet = this_signal3d_crsl_genmet->ProjectionX("mt2_crsl", iBinY, iBinY, iBinZ, iBinZ);
-
-              std::string SignalRegionName = iR->getName();
-              std::cout << "Averaging SC in region " << SignalRegionName << std::endl;
-              std::cout << this_signal_crsl->GetBinContent(1) << std::endl;
-              std::cout << this_signal_crsl_genmet->GetBinContent(1) << std::endl;
-
-              this_signal_crsl->Add(this_signal_crsl_genmet);
-              this_signal_crsl->Scale(0.5);
-
-              this_signal_crsl_syst= this_signal3d_crsl->ProjectionX("mt2_crsl_syst", iBinY, iBinY, iBinZ, iBinZ);
-              this_signal_crsl_syst->Add(this_signal_crsl_genmet,-1.0);
-              this_signal_crsl_syst->Scale(0.5);
-
-
-            }else{
-              std::string SignalRegionName = iR->getName();
-               std::cout << "Not averaging SC in region " << SignalRegionName << std::endl;
-              std::cout << this_signal_crsl->GetBinContent(1) << std::endl;
-
-            }
-            //	  //If want to replace yield in 1l CR for signal contamination
-            //	  TH1D* this_signal_veto_1lCR = (TH1D*) signalVeto_1lCR[isig]->get(*iR)->yield->Clone();
-            //	  // Then, below replace this_signal_crsl with this histogram;
-
-            if( doSimultaneousFit )
-              this_signalContamination = (TH1D*) this_signal_crsl->Clone();
-            else{
-              std::string SignalRegionName = iR->getName();
-              std::cout << "scaling by alpha in region " << SignalRegionName << std::endl;
-
-              this_signalContamination = (TH1D*) this_signal_alpha->Clone();
-              if(doGenAverage)
-                this_signalContamination_syst = (TH1D*) this_signal_alpha->Clone("mt2_cont_syst");
-
-              TH1D* alpha_copy = (TH1D*) this_signal_alpha->Clone();
-
-              //Hybrid method for llep also for signal contamination
-              for( int iBin=1; iBin<this_signal->GetNbinsX()+1; ++iBin ) {
-
-                if(iBin < extrapol_bin_llep){ // BIN BY BIN CASE
-                  this_signalContamination->SetBinContent( iBin, this_signalContamination->GetBinContent(iBin) * this_signal_crsl->GetBinContent(iBin) );
-                  if(doGenAverage){
-                    this_signalContamination_syst->SetBinContent( iBin, this_signalContamination_syst->GetBinContent(iBin) * this_signal_crsl_syst->GetBinContent(iBin)  );
-                  }
-                }else{ //EXTRAPOLATION CASE
-                  this_signalContamination->SetBinContent( iBin, alpha_copy->GetBinContent(iBin) * alpha_copy->GetBinContent(iBin)/alpha_copy->Integral(extrapol_bin_llep, -1) * this_signal_crsl->Integral(extrapol_bin_llep, -1) );
-                  if(doGenAverage){
-                    this_signalContamination_syst->SetBinContent( iBin, alpha_copy->GetBinContent(iBin) * alpha_copy->GetBinContent(iBin)/alpha_copy->Integral(extrapol_bin_llep, -1) * this_signal_crsl_syst->Integral(extrapol_bin_llep, -1) );
-                  }
-                }
-              } // hybrid method for llep also for signal contamination
-            } // else doSimultaneousFit
-          } // model with signal contamination
-          else{  // MG: case of interest !
-            this_signalContamination = (TH1D*) this_signal->Clone();
-            this_signalContamination->Scale(0.);
-            if(doGenAverage){
-              this_signalContamination_syst = (TH1D*) this_signal_syst->Clone("mt2_cont_syst");
-              this_signalContamination_syst->Scale(0.);
-            }
-          }
 
           //Start loop over MT2 bins
           for( int iBin=1; iBin<this_signal->GetNbinsX()+1; ++iBin ) {
@@ -1118,17 +986,12 @@ int main( int argc, char* argv[] ) {
                 rmOnSE = Form("gfal-rm gsiftp://t3se01.psi.ch/%s", fullPathSE.c_str()) ;
 
                 if( checkFileSE==0 && (size)==0 ){
-
                   std::cout << "Removing. File " << fullPathSE << " exists and has zero size " << (size) << ". Removing." << std::endl;
                   system( rmOnSE.c_str() );
-
                 }
                 else if ( checkFileSE==0 && (size)>0 ){
-
                   std::cout << "Skipping. File " << fullPathSE << " exists and has non-zero size  " << (size) << ". Skipping." << std::endl;
-
                   continue;
-
                 }
               } // end if copy2SE
 
@@ -1152,18 +1015,6 @@ int main( int argc, char* argv[] ) {
               sig*=xs_norm; // To eventually rescale xsec.
               //Scaling to lumi (so one doesn't have to reloop to change lumi), for ETH, not for SnT histograms
               //sig *= cfg.lumi(;)
-
-              // Siganl Contamination
-              double sigContErr = 0.0;
-              double sigCont = 0.0;
-              if(doSignalContamination && doSimultaneousFit){
-                sigCont = this_signalContamination->IntegralAndError(1, -1, sigContErr);
-              }else if(doSignalContamination && !doSimultaneousFit){
-                sigCont = this_signalContamination->GetBinContent(iBin);
-                sigContErr = this_signalContamination->GetBinError(iBin);
-              }
-              sigContErr = (sigCont > 0) ? fabs(sigContErr)/sigCont : 0.0;
-              //
 
               float isrErr;
               float bTagErr_heavy;
@@ -1199,24 +1050,9 @@ int main( int argc, char* argv[] ) {
               } // end if includeSignalUnc
 
               float totUncorrErr = 1.+sqrt(sigErr*sigErr+0.05*0.05+0.05*0.05); // MC stat + scales (5%) + JEC (5%)
-              float totUncorrErrCont = 1.+sqrt(sigContErr*sigContErr+0.05*0.05+0.05*0.05); // MC stat + scales (5%) + JEC (5%)
+              //float totUncorrErrCont = 1.+sqrt(sigContErr*sigContErr+0.05*0.05+0.05*0.05); // MC stat + scales (5%) + JEC (5%)
 
-              //float totUncorrErr = 1.+sqrt(sigErr*sigErr+0.05*0.05+0.1*0.1); // MC stat + scales (5%) + JEC (10%)
-              //float totUncorrErrCont = 1.+sqrt(sigContErr*sigContErr+0.05*0.05+0.1*0.1); // MC stat + scales (5%) + JEC (10%)
-
-              if(doSignalContamination && !doSimultaneousFit) sig=sig-sigCont;
-              else if(!doSignalContamination) {
-                sigCont=0.;
-                totUncorrErrCont=0.;
-              }
               if(sig<0.) sig=0.;
-
-              if(doGenAverage){
-                sig_syst = 1 + fabs((this_signal_syst->GetBinContent(iBin)-this_signalContamination_syst->GetBinContent(iBin))/(sig !=0 ? sig : 1.0)); // cont_syst=0 if no doSignalCont
-                if ( (this_signal_syst->GetBinContent(iBin)-this_signalContamination_syst->GetBinContent(iBin))*sig < 0 )
-                  sig_syst = 1/sig_syst; // to account for negative variation
-                  //std::cout << "debug sig_syst" << sig_syst << std::endl;
-              }
 
               // only at the end multiply by lumi the yield
               sig *= lumiComb;
@@ -1227,16 +1063,8 @@ int main( int argc, char* argv[] ) {
               std::string sedCommand( Form("sed 's/XXX/%.3f/' %s > %s", sig, templateDatacard.c_str(), newDatacard.c_str()) );
               system( sedCommand.c_str() );
 
-              std::string sedCommand_sigCont( Form("sed -i 's/YYY/%.3f/' %s", sigCont, newDatacard.c_str()) );
-              if(doSimultaneousFit && includeCR)
-                system( sedCommand_sigCont.c_str() );
-
               std::string sedCommand_uncErr( Form("sed -i 's/UUU/%.3f/' %s", totUncorrErr, newDatacard.c_str()) );
               system( sedCommand_uncErr.c_str() );
-
-              std::string sedCommand_uncErrCR( Form("sed -i 's/VVV/%.3f/' %s", totUncorrErrCont, newDatacard.c_str()) );
-              if(doSimultaneousFit && includeCR)
-                system( sedCommand_uncErrCR.c_str() );
 
               std::string sedCommand_isrErr( Form("sed -i 's/III/%.3f/' %s", isrErr, newDatacard.c_str()) );
               std::string sedCommand_bTagHErr( Form("sed -i 's/HHH/%.3f/' %s", bTagErr_heavy, newDatacard.c_str()) );
@@ -1244,8 +1072,6 @@ int main( int argc, char* argv[] ) {
               std::string sedCommand_lepEffErr( Form("sed -i 's/EEE/%.3f/' %s", lepEffErr, newDatacard.c_str()) );
 
               std::string sedCommand_genErr( Form("sed -i 's/SSS/%.3f/' %s", sig_syst, newDatacard.c_str()) );
-
-              if (doGenAverage) system( sedCommand_genErr.c_str() );
 
               if( includeSignalUnc ){
                 system( sedCommand_isrErr.c_str() );
