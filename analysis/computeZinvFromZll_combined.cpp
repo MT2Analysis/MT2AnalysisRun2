@@ -197,6 +197,8 @@ int main( int argc, char* argv[] ) {
  
   //change of strategy: compute the purity directly on the combined years
   MT2Analysis<MT2EstimateSyst>* purity_forHybrid = computePurityOF(zllData_forHybrid, zllData_of_forHybrid, cfg1, 1, 1); //put whatever config, will not play a role
+  purity_forHybrid->setName("purity_forHybrid");
+
 
   /////////////////////////////////////////////////////
   //      begin of hybrid shape implementation       //
@@ -406,9 +408,15 @@ int main( int argc, char* argv[] ) {
   (*ZinvEstimateFromZll_hybrid2) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha2);
   (*ZinvEstimateFromZll_hybrid3) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha3);
 
+  MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid = new MT2Analysis<MT2Estimate>((*ZinvEstimateFromZll_hybrid1));
+  ZinvEstimateFromZll_hybrid->setName("ZinvEstimateFromZll_hybrid");
+  (*ZinvEstimateFromZll_hybrid) += (*ZinvEstimateFromZll_hybrid2);
+  (*ZinvEstimateFromZll_hybrid) += (*ZinvEstimateFromZll_hybrid3);
+
+
 
   //we save in the output file
-  std::string outFile = cfg1.getEventYieldDir() + "/zinvFromZll_combined.root";
+  std::string outFile = cfg1.getEventYieldDir() + "/zinvFromZllCombined.root";
 
   dataCR                      ->addToFile(outFile);
   data_of_CR                  ->addToFile(outFile);
@@ -422,6 +430,7 @@ int main( int argc, char* argv[] ) {
   ZinvEstimateFromZll_hybrid1 ->addToFile(outFile);
   ZinvEstimateFromZll_hybrid2 ->addToFile(outFile);
   ZinvEstimateFromZll_hybrid3 ->addToFile(outFile);
+  ZinvEstimateFromZll_hybrid  ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllData_shape_TR            ->addToFile(outFile);
   zinvMC_forShape_TR1         ->addToFile(outFile);

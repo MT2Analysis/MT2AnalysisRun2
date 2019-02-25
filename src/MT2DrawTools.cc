@@ -399,6 +399,11 @@ TGraphAsymmErrors* MT2DrawTools::getRatioGraph( TH1D* histo_data, TH1D* histo_mc
   
   //  TGraphAsymmErrors* graph_data = MT2DrawTools::getPoissonGraph(histo_data, false);
   TGraphAsymmErrors* graph_data = MT2DrawTools::getPoissonGraph(histo_data, true);
+
+  //for debugging
+  //TGraphAsymmErrors* graph_tmp = MT2DrawTools::getPoissonGraph(histo_mc, true);
+  //cout << "Ndata: " << graph_data->GetN() << endl;
+  //cout << "Nmc: " << graph_tmp->GetN() << endl;
   
   for( int i=0; i < graph_data->GetN(); ++i){
     
@@ -412,11 +417,12 @@ TGraphAsymmErrors* MT2DrawTools::getRatioGraph( TH1D* histo_data, TH1D* histo_mc
     float mc = histo_mc->GetBinContent(iBin);
     float mc_err = histo_mc->GetBinError(iBin);
 
-
+    
     float ratio = data/mc;
     float ratio_errUp = sqrt( data_errUp*data_errUp/(mc*mc) + mc_err*mc_err*data*data/(mc*mc*mc*mc) );
     float ratio_errDn = sqrt( data_errDn*data_errDn/(mc*mc) + mc_err*mc_err*data*data/(mc*mc*mc*mc) );
 
+   
     double xerr;
     
     if( xerrType=="0" )

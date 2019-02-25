@@ -12,7 +12,7 @@
 #include "../interface/MT2Sample.h"
 #include "../interface/MT2DrawTools.h"
 #include "../interface/MT2Config.h"
-
+ 
 #define mt2_cxx
 #include "../interface/mt2.h"
 #include "../interface/Utils.h"
@@ -100,79 +100,13 @@ int main(int argc, char* argv[]) {
   std::string outputdir = cfg.getEventYieldDir() + "/zllControlRegion";
   system(Form("mkdir -p %s", outputdir.c_str()));
 
-  std::string regionsSet;// = "13TeV_inclusive";
+  std::string regionsSet;
   regionsSet=cfg.crRegionsSet();
-  // regionsSet=cfg.zllRegions();
-  // std::string regionsSet = cfg.zllRegions();
-
+ 
   std::cout << "-> Using regions: " << regionsSet << std::endl;
   
 
-  //previous method to get the scale factors: we don't need this anymore!
-  /*
-  //Getting the scale factor histogram/////////////////
-  //Electrons//
 
-  ////////////////////////////////////////////
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // WARNING !!!!
-  // THE SCALE FACTOR HISTOGRAMS HAVE BEEN UPDATED: COULDNT FIND GfsElectronToVeto ANYMORE
-  // USED THE OLD scaleFactor.root FILE
-  // TO BE FIXED!!
-
-  std::string filename = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/old2016/scaleFactors_old.root";
-  TFile * f_ele = new TFile(filename.c_str() );
-  if (!f_ele->IsOpen()) std::cout << " ERROR: Could not find scale factor file " << filename << std::endl;
-  //Uncomment for loose Id
-  //TH2D* h_id = (TH2D*) f_ele->Get("CutBasedLoose");
-  //(TH2D*) f_ele->Get("CutBasedVeto");
-  TH2D* h_id = (TH2D*) f_ele->Get("GsfElectronToVeto");
-  TH2D* h_iso = (TH2D*) f_ele->Get("MVAVLooseElectronToMini");
-  if (!h_id || !h_iso) std::cout << "ERROR: Could not find scale factor histogram"<< std::endl;
-  TH2D* h_elSF = (TH2D*) h_id->Clone("h_elSF");
-  h_elSF->SetDirectory(0);
-  h_elSF->Multiply(h_iso);
-
-  std::string filenameElTrk = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/egammaEffi_SF2D.root";
-  TFile * f_eleTrk = new TFile(filenameElTrk.c_str() );
-  if (!f_eleTrk->IsOpen()) std::cout << " ERROR: Could not find scale factor file " << filenameElTrk << std::endl;
-  h_elTrk = (TH2D*) f_eleTrk->Get("EGamma_SF2D");
-  h_elTrk->SetDirectory(0);
-  f_eleTrk->Close(); delete f_eleTrk;
-
-
-  //Muons//
-  std::string filenameID = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/2016/TnP_MuonID_NUM_LooseID_DENOM_generalTracks_VAR_map_pt_eta.root";
-  std::string filenameISO = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/2016/TnP_MuonID_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root";
-  std::string filenamedxyz = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/2016/TnP_MuonID_NUM_MediumIP2D_DENOM_LooseID_VAR_map_pt_eta.root";
-  TFile * f1 = new TFile(filenameID.c_str() );
-  TFile * f2 = new TFile(filenameISO.c_str() );
-  TFile * f3 = new TFile(filenamedxyz.c_str() );
-  if (!f1->IsOpen()) { std::cout<<" ERROR: Could not find ID scale factor file "<<filenameID<<std::endl; return 0;}
-  if (!f2->IsOpen()) { std::cout<<"ERROR: Could not find ISO scale factor file "<<filenameISO<<std::endl; return 0;}
-  if (!f3->IsOpen()) { std::cout<<"ERROR: Could not find dxy dz scale factor file "<<filenamedxyz<<std::endl; return 0;}
-  TH2D* h_id_mu = (TH2D*) f1->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0");
-  TH2D* h_iso_mu = (TH2D*) f2->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0_&_PF_pass");
-  TH2D* h_dxyz_mu = (TH2D*) f3->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0_&_PF_pass");
-  if (!h_id_mu || !h_iso_mu  || !h_dxyz_mu) { std::cout<<"ERROR: Could not find scale factor histogram"<<std::endl; return 0;}
-  TH2D* h_muSF = (TH2D*) h_id_mu->Clone("h_muSF");
-  h_muSF->SetDirectory(0);
-  h_muSF->Multiply(h_iso_mu);
-  h_muSF->Multiply(h_dxyz_mu);
-
-
-
-  TH1D* h_trk_mu_hi = 0;
-
-  std::string filenameTrk = "/mnt/t3nfs01/data01/shome/mschoene/lepSF/general_tracks_and_early_general_tracks_corr_ratio.root";
-  TFile * fTrk = new TFile(filenameTrk.c_str() );
-  if (!fTrk->IsOpen()) { std::cout<<" ERROR: Could not find track ineff scale factor file "<<filenameTrk<<std::endl; return 0;}
-  h_trk_mu_hi = (TH1D*) fTrk->Get("mutrksfptg10");
-  if (!h_trk_mu_hi) { std::cout<<"ERROR: Could not find trk sf histogram"<<std::endl; return 0;}
-  h_muTrk_hi = (TH1D*) h_trk_mu_hi->Clone("h_muTrk_hi");
-  h_muTrk_hi->SetDirectory(0);
-  // fTrk->Close(); delete fTrk;
-  */
 
   if( onlySignal ){
     onlyData=true;
@@ -215,7 +149,7 @@ int main(int argc, char* argv[]) {
 
     mcTree->writeToFile(outputdir+"/mc.root");
     mcTree_of->writeToFile(outputdir+"/mc_of.root");
-
+    
     
     
     
@@ -252,7 +186,7 @@ int main(int argc, char* argv[]) {
     
     
     if(do_bg==true){
-       //MC
+      //MC
       MT2Analysis<MT2EstimateTree>* mc_top = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       MT2Analysis<MT2EstimateTree>* mc_top_of = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       addVariables(mc_top);      addVariables(mc_top_of);
@@ -318,7 +252,7 @@ int main(int argc, char* argv[]) {
 	mc_top_of_forZinvEst->writeToFile(outputdir+"/mc_Top_of_forZinvEst.root");
       }
 
-      } //End do background trees
+    } //End do background trees
 
   } //if only MC
    
@@ -363,7 +297,7 @@ int main(int argc, char* argv[]) {
     dataTree->addToFile(outputdir+"/data.root");
     dataTree_of->writeToFile(outputdir+"/data_of.root");
     
-    
+    /* 
     //we create here the estimates in the ttbar enriched CR (inverted cuts on Zmass and ZpT) that are needed to compute R(SF/OF) later on
     MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
     MT2Analysis<MT2EstimateTree>* dataTree_of_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_of_invertedZcuts", cfg.regionsSet() );
@@ -377,7 +311,7 @@ int main(int argc, char* argv[]) {
 
     dataTree_invertedZcuts->addToFile(outputdir+"/data_invertedZcuts.root");
     dataTree_of_invertedZcuts->addToFile(outputdir+"/data_of_invertedZcuts.root");
-    
+    */
 
     if(doZinvEst){
       MT2Analysis<MT2EstimateTree>* dataTree_forZinvEst = new MT2Analysis<MT2EstimateTree>( "data", cfg.regionsSet() );
@@ -799,9 +733,9 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       if(isData && isETH && !myTree.passTriggerSelection("zllSF", cfg.year()))continue;
       
       if(do_ZinvEst){
-	      //SF part
-	      if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
-	      if( myTree.zll_pt <= 200. ) continue;
+	//SF part
+	if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
+	if( myTree.zll_pt <= 200. ) continue;
       }
       if(invertedZcuts){
 	if(fabs(myTree.zll_mass-91.19)<20) continue;
@@ -814,180 +748,661 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       //if( abs(myTree.lep_pdgId[1])==11 && myTree.lep_tightId[1]< 0.5 ) continue;
 
       
+
+      //for debugging of the shared CR
+      //ofstream outFileSF("check_mergedCR_zinvSF.txt",  fstream::app);
+      //outFileSF << "ht: " << ht << endl;
+      //outFileSF << "njets: " << njets << endl;
+      //outFileSF << "nbjets: " << nbjets << endl;
+
+      
       MT2EstimateTree* thisTree;
-      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond2019" ){ //
-	      if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
+      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016"){ //
+	if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
 
-	        thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
+	  thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
 		
-	        if( thisTree==0 ) continue;
+	  if( thisTree==0 ) continue;
 
-	        thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("ID", ID );
 
-	        thisTree->assignVar("Z_pt", myTree.zll_pt );
-	        thisTree->assignVar("Z_phi", Zvec.Phi() );
-	        thisTree->assignVar("Z_eta", Zvec.Eta() );
-		thisTree->assignVar("Z_mass", myTree.zll_mass );
-		thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
-		thisTree->assignVar("nLep", nLep_to_be_used );
-		thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-		thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
-		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
-		thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
-		thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
-		thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
-		thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
-		thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
-		thisTree->assignVar("raw_mt2", myTree.mt2 );
-		thisTree->assignVar("raw_met", myTree.met_pt );
-		//thisTree->assignVar("weight_lep0", weight_lep0);
-		//thisTree->assignVar("weight_lep1", weight_lep1);
-		//thisTree->assignVar("weight_lep_err", weight_lep_err);
-		thisTree->assignVar("HLT_weight", HLT_weight );
-		thisTree->assignVar("nJetHF30", nJetHF30_ );
-		thisTree->assignVar("jet1_pt", myTree.jet1_pt );
-		// thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-		//thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  //thisTree->assignVar("weight_lep0", weight_lep0);
+	  //thisTree->assignVar("weight_lep1", weight_lep1);
+	  //thisTree->assignVar("weight_lep_err", weight_lep_err);
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );
+	  // thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 	  
-		thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-		thisTree->fillTree_zll(myTree, weight );
-		thisTree->yield->Fill( mt2, weight );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
 		
 
-	      }else{
+	}else{
 
-	        thisTree = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
-	        if( thisTree==0 ) continue;
+	  thisTree = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
 
-	        thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("ID", ID );
 
-		thisTree->assignVar("Z_pt", myTree.zll_pt );
-		thisTree->assignVar("Z_phi", Zvec.Phi() );
-		thisTree->assignVar("Z_eta", Zvec.Eta() );
-		thisTree->assignVar("Z_mass", myTree.zll_mass );
-		thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-		thisTree->assignVar("nLep", nLep_to_be_used );
-		thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use);
-		thisTree->assignVar("lep_pdgId1",lep1_pdgId_to_use );
-		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
-		thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
-		thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
-		thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
-		thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
-		thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
-		thisTree->assignVar("raw_mt2", myTree.mt2 );
-		thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use);
+	  thisTree->assignVar("lep_pdgId1",lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
 
-		// thisTree->assignVar("weight_lep0", weight_lep0);
-		//thisTree->assignVar("weight_lep1", weight_lep1);
-		//thisTree->assignVar("weight_lep_err", weight_lep_err);
-		thisTree->assignVar("HLT_weight", HLT_weight );
+	  // thisTree->assignVar("weight_lep0", weight_lep0);
+	  //thisTree->assignVar("weight_lep1", weight_lep1);
+	  //thisTree->assignVar("weight_lep_err", weight_lep_err);
+	  thisTree->assignVar("HLT_weight", HLT_weight );
 
-		thisTree->assignVar("nJetHF30", nJetHF30_ );
-		thisTree->assignVar("jet1_pt", myTree.jet1_pt );
-		//thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-		//thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );
+	  //thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-		thisTree->fillTree_zll(myTree, weight );
-		thisTree->yield->Fill( mt2, weight );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
 
-		thisTree = anaTree->get( ht, njets, 2, minMTBmet, mt2 );
-		if( thisTree==0 ) continue;
+	  thisTree = anaTree->get( ht, njets, 2, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
 
-		thisTree->assignVar("Z_pt", myTree.zll_pt );
-		thisTree->assignVar("Z_phi", Zvec.Phi() );
-		thisTree->assignVar("Z_eta", Zvec.Eta() );
-		thisTree->assignVar("Z_mass", myTree.zll_mass );
-		thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-		thisTree->assignVar("nLep", nLep_to_be_used );
-		thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-		thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
-		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
-		thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
-		thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
-		thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
-		thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
-		thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
-		thisTree->assignVar("raw_mt2", myTree.mt2 );
-		thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
 
-		//thisTree->assignVar("weight_lep0", weight_lep0);
-		//thisTree->assignVar("weight_lep1", weight_lep1);
-		//thisTree->assignVar("weight_lep_err", weight_lep_err);
-		thisTree->assignVar("HLT_weight", HLT_weight );
+	  //thisTree->assignVar("weight_lep0", weight_lep0);
+	  //thisTree->assignVar("weight_lep1", weight_lep1);
+	  //thisTree->assignVar("weight_lep_err", weight_lep_err);
+	  thisTree->assignVar("HLT_weight", HLT_weight );
 
-		thisTree->assignVar("nJetHF30", nJetHF30_ );
-		thisTree->assignVar("jet1_pt", myTree.jet1_pt );
-		// thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-		//thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );
+	  // thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-		thisTree->fillTree_zll(myTree, weight );
-		thisTree->yield->Fill( mt2, weight );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
 
-		thisTree = anaTree->get( ht, njets, 3, minMTBmet, mt2 );
-		if( thisTree==0 ) continue;
+	  thisTree = anaTree->get( ht, njets, 3, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
 
-		thisTree->assignVar("Z_pt", myTree.zll_pt );
-		thisTree->assignVar("Z_phi", Zvec.Phi() );
-		thisTree->assignVar("Z_eta", Zvec.Eta() );
-		thisTree->assignVar("Z_mass", myTree.zll_mass );
-		thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-		thisTree->assignVar("nLep", nLep_to_be_used );
-		thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use);
-		thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
-		thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
-		thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
-		thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
-		thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
-		thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
-		thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
-		thisTree->assignVar("raw_mt2", myTree.mt2 );
-		thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use);
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
 
-		//thisTree->assignVar("weight_lep0", weight_lep0);
-		//thisTree->assignVar("weight_lep1", weight_lep1);
-		//thisTree->assignVar("weight_lep_err", weight_lep_err);
-		thisTree->assignVar("HLT_weight", HLT_weight );
+	  //thisTree->assignVar("weight_lep0", weight_lep0);
+	  //thisTree->assignVar("weight_lep1", weight_lep1);
+	  //thisTree->assignVar("weight_lep_err", weight_lep_err);
+	  thisTree->assignVar("HLT_weight", HLT_weight );
 
-		thisTree->assignVar("nJetHF30", nJetHF30_ );
-		thisTree->assignVar("jet1_pt", myTree.jet1_pt );
-		//thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-		//thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );
+	  //thisTree->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-		thisTree->fillTree_zll(myTree, weight );
-		thisTree->yield->Fill( mt2, weight );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
 
-	      } // end kinematic condition
-      } else { // region condition
+	} // end kinematic condition
+      }
+
+      else if(regionsSet == "Moriond2019"){
+	if( njets<7 ) {//Fill it the normal way
+	  //outFileSF << "[merged] no" << endl << endl;
+	   
+	  thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
+		
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	}
+	else if( ht<=575 && njets>=7 && nbjets==0 ) { //for the VL and L regions, we keep >=7j 0b separate
+	  //outFileSF << "[merged] CR A-1" << endl << endl;
+	   
+	  thisTree = anaTree->get( ht, njets, 0, minMTBmet, mt2 );
+
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	}
+	else if( ht<=575 && njets>=7 && nbjets!=0 ) { //for the VL and L regions, we merge >=7j 1,2,3b together
+	  //outFileSF << "[merged] CR B-1" << endl << endl;
+
+	  thisTree = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	   
+	
+	  thisTree = anaTree->get( ht, njets, 2, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+	  thisTree = anaTree->get( ht, njets, 3, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+	}
+	else if( ht>575 && njets>=7 && nbjets==0 ) { //for the M to UH regions, we merge >=7j 0b together
+	  //outFileSF << "[merged] CR A-2" << endl << endl;
+
+	  thisTree = anaTree->get( ht, 7, 0, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+	
+	  thisTree = anaTree->get( ht, 10, 0, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	}
+	else if( ht>575 && njets>=7 && nbjets!=0 ) { //for the M to UH regions, we merge >=7j 1,2,3,4b together
+	  //outFileSF << "[merged] CR B-2" << endl << endl;
+
+	  thisTree = anaTree->get( ht, 7, 1, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+	
+	  thisTree = anaTree->get( ht, 7, 2, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	   
+
+	  thisTree = anaTree->get( ht, 7, 3, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	 
+
+	  thisTree = anaTree->get( ht, 7, 4, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );	  
+
+      
+	  thisTree = anaTree->get( ht, 10, 1, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+	
+	  thisTree = anaTree->get( ht, 10, 2, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+
+	  thisTree = anaTree->get( ht, 10, 3, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	  
+
+	  thisTree = anaTree->get( ht, 10, 4, minMTBmet, mt2 );
+	  if( thisTree==0 ) continue;
+	  thisTree->assignVar("ID", ID );
+	  thisTree->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree->assignVar("nLep", nLep_to_be_used );
+	  thisTree->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree->assignVar("raw_met", myTree.met_pt );
+	  thisTree->assignVar("HLT_weight", HLT_weight );
+	  thisTree->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree->fillTree_zll(myTree, weight );
+	  thisTree->yield->Fill( mt2, weight );
+	   
+	}
+	else {
+	  //outFileSF << "I filled no region" << endl;
+	}
+      }
+
+      else { // region condition
 
         thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 );
         if( thisTree==0 ) continue;
 
         thisTree->assignVar("ID", ID );
 
-       //      thisTree->assignVar("Z_pt", z.Perp() );
+	//      thisTree->assignVar("Z_pt", z.Perp() );
         thisTree->assignVar("Z_pt", myTree.zll_pt );
         thisTree->assignVar("Z_phi", Zvec.Phi() );
         thisTree->assignVar("Z_eta", Zvec.Eta() );
@@ -1047,218 +1462,702 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       //	      weight *= myTree.weight_btagsf * myTree.weight_lepsf * HLT_weight;
       //}
 
+
+      //for debugging of the shared CR
+      //ofstream outFileOF("check_mergedCR_zinvOF.txt",  fstream::app);
+      //outFileOF << "ht: " << ht << endl;
+      //outFileOF << "njets: " << njets << endl;
+      //outFileOF << "nbjets: " << nbjets << endl;
+    
+
       MT2EstimateTree* thisTree_of;
-      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016" || regionsSet=="Moriond19" ){ //
-	      if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
+      if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016"){ //
+	if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
 
-	        thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
-	        if( thisTree_of==0 ) continue;
+	  thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
 
-	        thisTree_of->assignVar("ID", sample.id );
+	  thisTree_of->assignVar("ID", sample.id );
 
-	        thisTree_of->assignVar("Z_pt", myTree.zll_pt );
-	        thisTree_of->assignVar("Z_phi", Zvec.Phi() );
-	        thisTree_of->assignVar("Z_eta", Zvec.Eta() );
-	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
-	        thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-	        thisTree_of->assignVar("nLep", nLep_to_be_used );
-	        thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
-	        thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
-	        thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
-	        thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
-	        thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
-	        thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
-	        thisTree_of->assignVar("raw_mt2", myTree.mt2 );
-	        thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
 
-		// thisTree_of->assignVar("weight_lep0", weight_lep0);
-	        //thisTree_of->assignVar("weight_lep1", weight_lep1);
-	        //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
+	  // thisTree_of->assignVar("weight_lep0", weight_lep0);
+	  //thisTree_of->assignVar("weight_lep1", weight_lep1);
+	  //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
 
-	        thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
-	        thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
+	  thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
 
-	        //thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-	        //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  //thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-	        thisTree_of->fillTree_zll(myTree, weight );
-	        thisTree_of->yield->Fill( mt2, weight );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
 
-	      }else{
+	}else{
 
-	        thisTree_of = anaTree_of->get( ht, njets, 1, minMTBmet, mt2 );
-	        if( thisTree_of==0 ) continue;
+	  thisTree_of = anaTree_of->get( ht, njets, 1, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
 
-	        thisTree_of->assignVar("ID", sample.id );
+	  thisTree_of->assignVar("ID", sample.id );
 
-	        thisTree_of->assignVar("Z_pt", myTree.zll_pt );
-	        thisTree_of->assignVar("Z_phi", Zvec.Phi() );
-	        thisTree_of->assignVar("Z_eta", Zvec.Eta() );
-	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
-	        thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-	        thisTree_of->assignVar("nLep", nLep_to_be_used );
-	        thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
-	        thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
-	        thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
-	        thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
-	        thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
-	        thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
-	        thisTree_of->assignVar("raw_mt2", myTree.mt2 );
-	        thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
 
-		// thisTree_of->assignVar("weight_lep0", weight_lep0);
-	        //thisTree_of->assignVar("weight_lep1", weight_lep1);
-	        //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
+	  // thisTree_of->assignVar("weight_lep0", weight_lep0);
+	  //thisTree_of->assignVar("weight_lep1", weight_lep1);
+	  //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
 
-	        thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
-	        thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
+	  thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
 
-		// thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-	        //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  // thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-	        thisTree_of->fillTree_zll(myTree, weight );
-	        thisTree_of->yield->Fill( mt2, weight );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
 
-	        thisTree_of = anaTree_of->get( ht, njets, 2, minMTBmet, mt2 );
-	        if( thisTree_of==0 ) continue;
-	        thisTree_of->assignVar("ID", sample.id );
+	  thisTree_of = anaTree_of->get( ht, njets, 2, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", sample.id );
 
-	        thisTree_of->assignVar("Z_pt", myTree.zll_pt );
-	        thisTree_of->assignVar("Z_phi", Zvec.Phi() );
-	        thisTree_of->assignVar("Z_eta", Zvec.Eta() );
-	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
-	        thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-	        thisTree_of->assignVar("nLep", nLep_to_be_used );
-	        thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use);
-	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
-	        thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
-	        thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
-	        thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
-	        thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
-	        thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
-	        thisTree_of->assignVar("raw_mt2", myTree.mt2 );
-	        thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use);
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
 
-		// thisTree_of->assignVar("weight_lep0", weight_lep0);
-	        //thisTree_of->assignVar("weight_lep1", weight_lep1);
-	        //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
+	  // thisTree_of->assignVar("weight_lep0", weight_lep0);
+	  //thisTree_of->assignVar("weight_lep1", weight_lep1);
+	  //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
 
-	        thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
-	        thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
+	  thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
 
-		//  thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-	        //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  //  thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
-		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-	        thisTree_of->fillTree_zll(myTree, weight );
-	        thisTree_of->yield->Fill( mt2, weight );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
 
-	        thisTree_of = anaTree_of->get( ht, njets, 3, minMTBmet, mt2 );
-	        if( thisTree_of==0 ) continue;
+	  thisTree_of = anaTree_of->get( ht, njets, 3, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
 
-	        thisTree_of->assignVar("ID", sample.id );
+	  thisTree_of->assignVar("ID", sample.id );
 
-	        thisTree_of->assignVar("Z_pt", myTree.zll_pt );
-	        thisTree_of->assignVar("Z_phi", Zvec.Phi() );
-	        thisTree_of->assignVar("Z_eta", Zvec.Eta() );
-	        thisTree_of->assignVar("Z_mass", myTree.zll_mass );
-	        thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
 
-	        thisTree_of->assignVar("nLep", nLep_to_be_used );
-	        thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
-	        thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
-	        thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
-	        thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
-	        thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
-	        thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
-	        thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
-	        thisTree_of->assignVar("raw_mt2", myTree.mt2 );
-	        thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
 
-		thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
-		// thisTree_of->assignVar("weight_lep0", weight_lep0);
-	        //thisTree_of->assignVar("weight_lep1", weight_lep1);
-	        //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  // thisTree_of->assignVar("weight_lep0", weight_lep0);
+	  //thisTree_of->assignVar("weight_lep1", weight_lep1);
+	  //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
 
-	        thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
-	        thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
+	  thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
 
-	        //thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-	        //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  //thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	  //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
 
-		thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
-		thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-		thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-	        thisTree_of->fillTree_zll(myTree, weight );
-	        thisTree_of->yield->Fill( mt2, weight );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
 
-	      }
-      } else {
+	}
+      } 
 
-	      thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
-	      if( thisTree_of==0 ) continue;
+      else if(regionsSet == "Moriond2019"){
+	if( njets<7 ) {//Fill it the normal way
+	  //outFileOF << "[merged] no" << endl << endl;
+	   
+	  thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
+		
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-	      thisTree_of->assignVar("ID", sample.id );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	}
+	else if( ht<=575 && njets>=7 && nbjets==0 ) { //for the VL and L regions, we keep >=7j 0b separate
+	  //outFileOF << "[merged] CR A-1" << endl << endl;
+	   
+	  thisTree_of = anaTree_of->get( ht, njets, 0, minMTBmet, mt2 );
 
-	      thisTree_of->assignVar("Z_pt", myTree.zll_pt );
-	      thisTree_of->assignVar("Z_phi", Zvec.Phi() );
-	      thisTree_of->assignVar("Z_eta", Zvec.Eta() );
-	      thisTree_of->assignVar("Z_mass", myTree.zll_mass );
-	      thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
 
-	      thisTree_of->assignVar("nLep", nLep_to_be_used );
-	      thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
-	      thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use);
-	      thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
-	      thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
-	      thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
-	      thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
-	      thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
-	      thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
-	      thisTree_of->assignVar("raw_mt2", myTree.mt2 );
-	      thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	}
+	else if( ht<=575 && njets>=7 && nbjets!=0 ) { //for the VL and L regions, we merge >=7j 1,2,3b together
+	  //outFileOF << "[merged] CR B-1" << endl << endl;
 
-	      //thisTree_of->assignVar("weight_lep0", weight_lep0);
-	      //thisTree_of->assignVar("weight_lep1", weight_lep1);
-	      //thisTree_of->assignVar("weight_lep_err", weight_lep_err);
+	  thisTree_of = anaTree_of->get( ht, njets, 1, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	   
+	
+	  thisTree_of = anaTree_of->get( ht, njets, 2, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+	  thisTree_of = anaTree_of->get( ht, njets, 3, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+	}
+	else if( ht>575 && njets>=7 && nbjets==0 ) { //for the M to UH regions, we merge >=7j 1,2,3,4b together
+	  //outFileOF << "[merged] CR A-2" << endl << endl;
 
-	      thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
-	      thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
+	  thisTree_of = anaTree_of->get( ht, 7, 0, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+	
+	  thisTree_of = anaTree_of->get( ht, 10, 0, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	   
+	}
+	else if( ht>575 && njets>=7 && nbjets!=0 ) { //for the M to UH regions, we merge >=7j 1,2,3,4b together
+	  //outFileOF << "[merged] CR B-2" << endl << endl;
 
-	      // thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
-	      //thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+	  thisTree_of = anaTree_of->get( ht, 7, 1, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+	
+	  thisTree_of = anaTree_of->get( ht, 7, 2, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	   
 
-	      thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
-	      thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
-	      thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
-	      thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of = anaTree_of->get( ht, 7, 3, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	 
 
-	      thisTree_of->fillTree_zll(myTree, weight );
-	      thisTree_of->yield->Fill( mt2, weight );
+	  thisTree_of = anaTree_of->get( ht, 7, 4, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+
+	  thisTree_of = anaTree_of->get( ht, 10, 1, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+	
+	  thisTree_of = anaTree_of->get( ht, 10, 2, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+
+	  thisTree_of = anaTree_of->get( ht, 10, 3, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	  
+
+	  thisTree_of = anaTree_of->get( ht, 10, 4, minMTBmet, mt2 );
+	  if( thisTree_of==0 ) continue;
+	  thisTree_of->assignVar("ID", ID );
+	  thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	  thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	  thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	  thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	  thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+	  thisTree_of->assignVar("nLep", nLep_to_be_used );
+	  thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use );
+	  thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	  thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	  thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	  thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	  thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	  thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	  thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	  thisTree_of->assignVar("raw_met", myTree.met_pt );
+	  thisTree_of->assignVar("HLT_weight", HLT_weight );
+	  thisTree_of->assignVar("nJetHF30", nJetHF30_ );
+	  thisTree_of->assignVar("jet1_pt", myTree.jet1_pt );  
+	  thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	  thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	  thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	  thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+	  thisTree_of->fillTree_zll(myTree, weight );
+	  thisTree_of->yield->Fill( mt2, weight );
+	   
+	}
+	else {
+	  //outFileOF << "I filled no region" << endl;
+	}
+      }
+
+
+
+      else {
+
+	thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
+	if( thisTree_of==0 ) continue;
+
+	thisTree_of->assignVar("ID", sample.id );
+
+	thisTree_of->assignVar("Z_pt", myTree.zll_pt );
+	thisTree_of->assignVar("Z_phi", Zvec.Phi() );
+	thisTree_of->assignVar("Z_eta", Zvec.Eta() );
+	thisTree_of->assignVar("Z_mass", myTree.zll_mass );
+	thisTree_of->assignVar("Z_lepId", abs(lep0_pdgId_to_use) );
+
+	thisTree_of->assignVar("nLep", nLep_to_be_used );
+	thisTree_of->assignVar("lep_pdgId0", lep0_pdgId_to_use );
+	thisTree_of->assignVar("lep_pdgId1", lep1_pdgId_to_use);
+	thisTree_of->assignVar("lep_pt0", myTree.lep_pt[0] );
+	thisTree_of->assignVar("lep_pt1", myTree.lep_pt[1] );
+	thisTree_of->assignVar("lep_eta0", myTree.lep_eta[0] );
+	thisTree_of->assignVar("lep_eta1", myTree.lep_eta[1] );
+	thisTree_of->assignVar("lep_phi0", myTree.lep_phi[0] );
+	thisTree_of->assignVar("lep_phi1", myTree.lep_phi[1] );
+	thisTree_of->assignVar("raw_mt2", myTree.mt2 );
+	thisTree_of->assignVar("raw_met", myTree.met_pt );
+
+	//thisTree_of->assignVar("weight_lep0", weight_lep0);
+	//thisTree_of->assignVar("weight_lep1", weight_lep1);
+	//thisTree_of->assignVar("weight_lep_err", weight_lep_err);
+
+	thisTree_of->assignVar( "nJetHF30", nJetHF30_ );
+	thisTree_of->assignVar( "jet1_pt", myTree.jet1_pt );
+
+	// thisTree_of->assignVar("lep_tightId0", myTree.lep_tightId[0] );
+	//thisTree_of->assignVar("lep_tightId1", myTree.lep_tightId[1] );
+
+	thisTree_of->assignVar("zll_met_pt", myTree.zll_met_pt );
+	thisTree_of->assignVar("zll_met_phi", myTree.zll_met_phi );
+	thisTree_of->assignVar("zll_mht_pt", myTree.zll_mht_pt );
+	thisTree_of->assignVar("zll_mht_phi", myTree.zll_mht_phi );
+
+	thisTree_of->fillTree_zll(myTree, weight );
+	thisTree_of->yield->Fill( mt2, weight );
 
       }
     } else continue;

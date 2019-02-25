@@ -27,8 +27,7 @@ using namespace std;
 
 /*
   
-  This script aims in combining the Z invisible estimates (computed from Z->ll decays) for the three years, using the following strategy: 
-  One estimate per year, computed with merged year in data and MCsr, but seperate MCcr of the corresponding year
+  This script aims in computing the Z invisible estimate (computed from Z->ll decays) for a given year.
 
 */
 
