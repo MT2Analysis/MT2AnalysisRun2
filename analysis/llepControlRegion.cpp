@@ -372,7 +372,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       } // loop on isotracks
     }
 
-    if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
+//FIXME    if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
 
     // HEM electron veto, can do it only after identifying candidate lepton
     if (foundlep && !myTree.passHEMFailElectronVeto(cfg.year(), isETH, isData, candLep_eta, candLep_phi, candLep_pdgId)) continue;
@@ -476,6 +476,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 	thisEstimate->assignTree( myTree, weight );
 	thisEstimate->tree->Fill();
 	thisEstimate->yield->Fill(mt2, weight );
+
       }
     }
     else {
