@@ -38,7 +38,8 @@ int main( int argc, char* argv[] ) {
 
   // a plot to look overall at the differences
   TH1D* hDiff = new TH1D("hDiff", "hDiff", 50,-100., 100.);
-
+  TH1D* hAvDiff = new TH1D("hAvDiff", "hAvDiff", 50,-100., 100.);
+  double sum_yield = 0.;
   // loop over topological regions
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
 
@@ -57,9 +58,11 @@ int main( int argc, char* argv[] ) {
       else if(this_old_yield ==0 && this_new_yield!=0) diff=999.99;
       else diff=this_new_yield/this_old_yield - 1;
       hDiff->Fill(diff*100);
+      hAvDiff->Fill(diff*100*this_new_yield); // higher weight if yield is higher
+      sum_yield += this_new_yield;
       //if( isnan(this_old_yield) || isnan(this_new_yield)) std::cout << "WARNING, found nan " << std::endl;
 
-      //if (abs(diff) >= thr){
+      if (abs(diff) >= thr){
       //  std::cout << "Found difference in iBin=["  << this_new_TopoYield->GetBinLowEdge(iBin) << ","
       //                                             << this_new_TopoYield->GetBinLowEdge(iBin+1) << "]" << std::endl;
 
@@ -72,7 +75,12 @@ int main( int argc, char* argv[] ) {
         
                   << "  New="  << this_new_yield << " Old="  << this_old_yield 
                   << "  Diff=" << diff*100 << "%" << std::endl;
+      } else {
 
+        std::cout << "  iBin=["  << this_new_TopoYield->GetBinLowEdge(iBin) << ","
+                               << this_new_TopoYield->GetBinLowEdge(iBin+1) << "]"  << std::endl;
+
+      }
 
     }
     std::cout << std::endl;
@@ -81,6 +89,10 @@ int main( int argc, char* argv[] ) {
   TCanvas *c = new TCanvas("c","c");
   hDiff->Draw("hist");
   c->SaveAs("diff.pdf");
+  TCanvas *c1 = new TCanvas("c1","c1");
+  hAvDiff->Scale(1./sum_yield);
+  hAvDiff->Draw("hist");
+  c1->SaveAs("Avdiff.pdf");
 
   return 0;
 

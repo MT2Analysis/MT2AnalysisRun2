@@ -133,11 +133,11 @@ scalesVariation_pdfEnvelope_signal: scalesVariation_pdfEnvelope_signal.cpp MT2Re
 scalesVariation_pdfEnvelope_TF: scalesVariation_pdfEnvelope_TF.cpp MT2Region.o MT2Sample.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o scalesVariation_pdfEnvelope_TF scalesVariation_pdfEnvelope_TF.cpp MT2Region.o MT2Sample.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
-createDatacards: createDatacards.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o
-	$(CC) -Wall $(INCLUDES) -o createDatacards createDatacards.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+createDatacards: createDatacards.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2EstimateAllSigSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -o createDatacards createDatacards.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2EstimateAllSigSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
-createDatacards_combined: createDatacards_combined.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o
-	$(CC) -Wall $(INCLUDES) -o createDatacards_combined createDatacards_combined.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+createDatacards_combined: createDatacards_combined.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2EstimateAllSigSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -o createDatacards_combined createDatacards_combined.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2EstimateAllSigSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 createDatacards_T1tttt_2016: createDatacards_T1tttt_2016.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o createDatacards_T1tttt_2016 createDatacards_T1tttt_2016.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2EstimateSigSyst.o MT2EstimateSigContSyst.o MT2Estimate.o  MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -281,6 +281,12 @@ drawZllControlRegionDataMC_combined: drawZllControlRegionDataMC_combined.cpp MT2
 
 drawLostLeptonControlRegionDataMC: drawLostLeptonControlRegionDataMC.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o drawLostLeptonControlRegionDataMC drawLostLeptonControlRegionDataMC.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
+
+drawMCRatios: drawMCRatios.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools_ForRatios.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -o drawMCRatios drawMCRatios.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools_ForRatios.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
+
+drawMCRatios_combined: drawMCRatios_combined.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools_ForRatios.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -o drawMCRatios_combined drawMCRatios_combined.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools_ForRatios.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
 drawLostLeptonControlRegionDataMC_EAs: drawLostLeptonControlRegionDataMC_EAs.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o drawLostLeptonControlRegionDataMC_EAs drawLostLeptonControlRegionDataMC_EAs.cpp MT2Region.o MT2Estimate.o MT2EstimateTree.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
@@ -447,6 +453,9 @@ MT2EstimateTree.o: ../src/MT2EstimateTree.cc MT2Region.o MT2Estimate.o
 
 MT2DrawTools.o: ../src/MT2DrawTools.cc MT2Region.o MT2EstimateTree.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -c ../src/MT2DrawTools.cc MT2Region.o MT2EstimateTree.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
+
+MT2DrawTools_ForRatios.o: ../src/MT2DrawTools_ForRatios.cc MT2Region.o MT2EstimateTree.o MT2Config.o
+	$(CC) -Wall $(INCLUDES) -c ../src/MT2DrawTools_ForRatios.cc MT2Region.o MT2EstimateTree.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
 MT2LeptonSFTool.o: ../src/MT2LeptonSFTool.cc
 	$(CC) -Wall $(INCLUDES) -c ../src/MT2LeptonSFTool.cc $(ROOTFLAG) $(EXTRALIBS)
