@@ -573,8 +573,11 @@ MT2Analysis<T>::MT2Analysis( const std::string& aname, const std::string& region
 
     regions_ = multiplyHTandSignal(htRegions, signalRegions);
     
+    //merged CR regions with Nj>=7
     regions_.insert(MT2Region(250., 450., 7, -1, 0, -1));
     regions_.insert(MT2Region(450., 575., 7, -1, 0, -1));
+    //regions_.insert(MT2Region(575., 1200., 7, -1, 0, -1));
+    //regions_.insert(MT2Region(1200., 1500., 7, -1, 0, -1));
     regions_.insert(MT2Region(575., 1200., 7, 9, 0, -1));
     regions_.insert(MT2Region(575., 1200., 10, -1, 0, -1));
     regions_.insert(MT2Region(1200., 1500., 7, 9, 0, -1));

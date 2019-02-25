@@ -39,6 +39,7 @@ bool doBlind = false; // if true will write sum of prediction instead of observe
 bool doOnlySig = true; // set to true for signal scans on the batch, default false
 bool includeSignalUnc = true; // signal lep eff commented out till available, currently set to false because requires too much memory
 
+
 int Round(float d) {
   return (int)(floor(d + 0.5));
 }
@@ -214,7 +215,6 @@ int main( int argc, char* argv[] ) {
   // Getting region set used (from data)
   std::set<MT2Region> regions = data->getRegions();
   std::cout << "Defined Regions " << std::endl;
-
 
   // Start loop over TOPOLOGICAL regions
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {

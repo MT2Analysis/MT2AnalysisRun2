@@ -109,13 +109,15 @@ Data/Bkg plotting:
 
 In all topological regions
 ```
-./compareYield_all <cfg-file-name>
+./compareYield_all <cfg-file-name> <moriond2019/moriond2017>
 ```
+'moriond2019' is set by default. 'moriond2017' produces the plots with the 'zurich2016' regions set.
 
 In each HT region
 ```
-./compareYield_bins_all <cfg-file-name>
+./compareYield_bins_all <cfg-file-name> <moriond2019/moriond2017>
 ```
+'moriond2019' is set by default. 'moriond2017' produces the plots with the 'zurich2016' regions set.
 
 For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis2015/tree/MT2Analysis2015_RandD
 
@@ -137,7 +139,8 @@ Run the data-card creation for the signals, e.g.:
 ```
 
 ### Limit tests
-For limit calculation you need software Combine. From inside the ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory:
+For limit calculation you need software Combine. To set up the necessary framework, see [here](https://twiki.cern.ch/twiki/bin/viewauth/SusyMECCA/SusyMT2cernETHLegacy#Setting_up_Combine).
+From inside the ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory:
 
 Combine the data cards
 
@@ -145,7 +148,7 @@ Combine the data cards
 combineCards.py -S <input-card-1> <input-card-2> ...  >  <combined-card>
 ```
 
-Run a limit
+Submit a limit (for a single point, as a check)
 
 ```
 combine -M AsymptoticLimits <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
@@ -160,9 +163,12 @@ Created data-cards will be saved to the storage element in the form of a tar fil
 3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
 4. make sure that ```stepSize``` and ranges are set to desired values in ```launchCreateDatacards.py```
 5. edit ```INDIR``` in ```createDatacards_batch.sh```
+6. finally submit data card creation to the batch
 ```
 python launchCreateDatacards.py <model-name> <label> 
 ```
+Please don't forget the label because it is needed for the next steps.
+
 TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
 #### data-card combination
@@ -178,6 +184,53 @@ The limits will be copied in a ```limits``` subdir from the original SE path
 python submitLimits_scan.py <path> <model>
 ```
 #### plotting
-For the next steps (interpolation and contour extraction), please follow from step 4 of [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
+Once you have the limits for each masses, copy them in your scratch area:
+```
+sh copyLimits.sh <model> <label> <path>
+```
+
+Then, create a txt file with your full limits:
+```
+sh readAsymptoticLimits_Scan.sh <model> <label> 
+```
+
+Note that the .txt file will be created where you launched the command.
+
+Finally run interpolation and smoothing and create root file:
+```
+python drawSMSLimit.py <txt-file-you-just-created> 
+```
+
+### Contour plots
+Setup the environment as described under this [link](https://twiki.cern.ch/twiki/bin/viewauth/SusyMECCA/SusyMT2cernETH#Preparing_PlotsSMS_code).
+
+Once in the correct folder, create a config file, in the same way as [here](https://github.com/MT2Analysis/PlotsSMS/blob/master/config/SUS16015/T1tttt_2016_7p7ifb.cfg). Change the name of the directory and move the root file created in the previous step accordingly.
+
+You are ready to create the plot:
+
+```
+python python/makeSMSplots.py config/<config-file> <name>  
+```
+
+
+### Significance
+You might want to compute the significance as well. For that, once all the createDatacard jobs are finished, follow the same procedure as with limits, with the following commands:
+```
+python submitSignificance_scan.py <pathSE> <pathSE> 
+```
+Note: the two path can be the same (to the storage element)
+
+```
+sh copySignificance.sh <model> <label> <pathSE> 
+```
+
+```
+sh readPLSignificance_Scan.sh <model> <label>  
+```
+
+```
+python drawSMSsignificance.py <txt-file-just-created>
+```
+
 
 For plotting the contours in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)

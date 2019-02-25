@@ -1229,6 +1229,11 @@ void MT2Region::getBins( int &nBins, double*& bins) const {
       bins = new double[nBins_tmp+1]{200., 300., 500., 2400.};
       nBins = nBins_tmp;
     }
+    /*else if( regionName == "HT575to1200_j7toInf_b0toInf" ){     
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 300., 500., 2400.};
+      nBins = nBins_tmp;
+      }*/
     else if( regionName == "HT1200to1500_j2_b0toInf" ){     
       const int nBins_tmp                        = 6;
       bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
@@ -1244,7 +1249,7 @@ void MT2Region::getBins( int &nBins, double*& bins) const {
       bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 2400.};
       nBins = nBins_tmp;
     }
-    else if( regionName == "HT1200to1500_j7to9_b0toInf" ){     
+   else if( regionName == "HT1200to1500_j7to9_b0toInf" ){     
       const int nBins_tmp                        = 5;
       bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 2400.};
       nBins = nBins_tmp;
@@ -1254,6 +1259,11 @@ void MT2Region::getBins( int &nBins, double*& bins) const {
       bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
       nBins = nBins_tmp;
     }
+    /*else if( regionName == "HT1200to1500_j7toInf_b0toInf" ){     
+      const int nBins_tmp                        = 3;
+      bins = new double[nBins_tmp+1]{200., 400., 600., 2400.};
+      nBins = nBins_tmp;
+    }*/
     else if( regionName == "HT1500toInf_j2toInf_b0toInf" ){     
       const int nBins_tmp                        = 8;
       bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1400., 1800., 2400.};

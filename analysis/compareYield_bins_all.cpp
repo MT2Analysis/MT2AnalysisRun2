@@ -1,4 +1,4 @@
-#include "interface/MT2Analysis.h"
+#include "interface/MT2Analysis.h"  
 #include "interface/MT2EstimateSyst.h"
 #include "interface/MT2EstimateTree.h"
 #include "interface/MT2Estimate.h"
@@ -50,11 +50,16 @@ struct BGTable {
 };
 
 
-float lumi; //fb-1 
+
 
 BGTable getTable( const std::string& tableFileName );
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo = "moriond2019" );
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, bool doSanityCheck, std::string whatToDo = "moriond2019" );
 
+float lumi; //fb-1 
+bool doSanityCheck = false; 
+//the sanity check consists in confronting the estimated background following the strategy of combined years to the 2016 data, and normalize by lumi_16/lumi_tot
+bool doCombination; 
+//creates the plots for the full Run2
 
 int main( int argc, char* argv[] ) {
   
@@ -69,38 +74,107 @@ int main( int argc, char* argv[] ) {
   std::cout << "------------------------------------------------------" << std::endl;
   std::cout << std::endl << std::endl;
   
-  
-  if( argc!=2  && argc!=3  ) {
-    std::cout << "USAGE: ./compareYield_bins_all [configFileName] [moriond2019/moriond2017]" << std::endl;
-    std::cout << "Exiting." << std::endl;
+
+cout << argc << endl;
+  if( argc!=2 && argc!=3 && argc!=4 && argc!=5 ) {
+    std::cout << "USAGE: ./compareYield_bins__all [configFileName1] [configFileName2] [configFileName3] [moriond2017/moriond2019]" << std::endl;
+    std::cout << "Note: if only one configFileName is entered, the plots wil be create only with this particular year" << std::endl;
+    std::cout << "Also, if no settings specified after config files: moriond2019 by default (i.e Moriond2019 regionsSet)" << std::endl;
+    std::cout << "In other words  ./compareYield_all [configFileName1] moriond2017                         creates plots for config1 and Moriond2017 regions set" << std::endl;
+    std::cout << "                ./compareYield_all [configFileName1]                                     creates plots for config1 and Moriond2019 regions set" << std::endl;
+    std::cout << "                ./compareYield_all [configFileName1] [configFileName2] [configFileName3] creates plots for full Run2 and Moriond2019 regions set" << std::endl;    std::cout << "Exiting." << std::endl;
     exit(11);
   }
   
   
-  std::string configFileName(argv[1]);
-  MT2Config cfg(configFileName);
+  std::string configFileName1(argv[1]);
+  MT2Config cfg(configFileName1);
 
-  // lumi = 18.1;
-  lumi = cfg.lumi();
+  std::string configFileName2;
+  std::string configFileName3;
+
+  if(argc == 4 || argc == 5){
+    configFileName2 = argv[2];
+    configFileName3 = argv[3];
+    doCombination = true;
+    doSanityCheck = false;
+  }
+  else{
+    configFileName2 = argv[1];
+    configFileName3 = argv[1];
+    doCombination = false;
+  }    
+    
+ 
+  
+  MT2Config cfg2(configFileName2);
+  MT2Config cfg3(configFileName3);
+
+  if(!doCombination){
+    lumi = cfg.lumi();
+  }
+  else if(doCombination){
+    lumi = cfg.lumi() + cfg2.lumi() + cfg3.lumi();
+  }
+
+
+  if(doCombination){
+    cout << "I will plot with the combined years" << endl;
+  }
+  else{
+    cout << "I will plot a single year" << endl;
+  }
 
   //switch between the different regions sets of Moriond2017 and Moriond2019
   std::string whatToDo;
-  if(argc == 2){
+  if(argc == 2 || argc == 4){
     whatToDo = "moriond2019";
   }
   else if(argc == 3){
     whatToDo = argv[2];
-    if(whatToDo != "moriond2017"){
+    if(whatToDo != "moriond2017" && whatToDo != "moriond2019"){
       cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
       cout << "Aborted" << endl;
       exit(11);
     }
   }
+  else if(argc == 5){
+    whatToDo = argv[4];
+    if(whatToDo != "moriond2017" && whatToDo != "moriond2019"){
+      cout << "Please enter 'moriond2017' if you want to use this convention (typo in the command?)" << endl;
+      cout << "Aborted" << endl;
+      exit(11);
+    }
+  }
+
+  if(whatToDo == "moriond2019"){
+    cout << "Using regionsSet 'Moriond2019'" << endl;
+  }
+  else if(whatToDo == "moriond2017"){
+    cout << "Using regionsSet 'zurich2016'" << endl;
+  }
+
+  
   
   TH1::AddDirectory(kTRUE);
   
   std::string dir = cfg.getEventYieldDir();
-  std::string outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned";
+  std::string dir2;
+  std::string dir3;
+  
+  if(doCombination){
+    dir2 = cfg2.getEventYieldDir();
+    dir3 = cfg3.getEventYieldDir();
+  }
+
+  std::string outputdir;
+
+  if(!doCombination){
+    outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned";
+  }
+  else{
+    outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned_combined";
+  }
  
  
   MT2Analysis<MT2Estimate>* analysis = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" ); // any one is good, just need to know the regions                                                                    
@@ -126,15 +200,36 @@ int main( int argc, char* argv[] ) {
 
   std::set<MT2Region> regions = analysis->getRegions();
 
-  MT2Analysis<MT2Estimate>* data = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
+  MT2Analysis<MT2Estimate>* data1 = MT2Analysis<MT2Estimate>::readFromFile( dir + "/analyses.root", "data" );
+  MT2Analysis<MT2Estimate>* data2;
+  MT2Analysis<MT2Estimate>* data3;
   
-  drawYields( outputdir.c_str(), data, dir, whatToDo );
+  if(doCombination){
+    data2 = MT2Analysis<MT2Estimate>::readFromFile( dir2 + "/analyses.root", "data" );
+    data3 = MT2Analysis<MT2Estimate>::readFromFile( dir3 + "/analyses.root", "data" );
+  }
+
+  MT2Analysis<MT2Estimate>* data = new MT2Analysis<MT2Estimate>(*(data1));
+  data->setName("data");
+  if(doCombination && (argc == 4 || argc == 5)){
+    (*data) += (*(data2));
+    (*data) += (*(data3));
+  }
+
+  //check if combination of years is sucessful
+  //string outFile = outputdir + "/check.root";
+  //data->addToFile(outFile);
+   
+  drawYields( outputdir.c_str(), data, dir, doSanityCheck, whatToDo );
 
   return 0;
-
+  
 }
 
-void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, std::string whatToDo ) {
+void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, bool doSanityCheck, std::string whatToDo ) {
+
+
+  TH1::AddDirectory(kFALSE);
 
   bool doMoriond2017 = false;
   bool doMoriond2019 = true;
@@ -168,7 +263,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   
   std::set<MT2Region> MT2Regions = data->getRegions();
   
-  TH1D* hdata = new TH1D("hdata", "", 213, 0, 213);
+  TH1D* hdata;
+  if(doMoriond2017){
+   hdata  = new TH1D("hdata", "", 213, 0, 213);
+  }
+  else if(doMoriond2019){
+    hdata  = new TH1D("hdata", "", 282, 0, 282); // 282 = 299 -17 (Nbintot - regions_in_extreme_HT)
+  }
   hdata->Sumw2();
   hdata->GetYaxis()->SetTitle("Entries");
   hdata->SetMarkerStyle(20);
@@ -183,13 +284,23 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   
   for(unsigned int b=0; b<bgSize; ++b){
   
-    hestimate[b]= new TH1D(Form("hestimate_%d", b), "", 213, 0, 213);
+    if(doMoriond2017){
+      hestimate[b]= new TH1D(Form("hestimate_%d", b), "", 213, 0, 213);
+    }
+    else if(doMoriond2019){
+      hestimate[b]= new TH1D(Form("hestimate_%d", b), "", 282, 0, 282);
+    }
     hestimate[b]->Sumw2();
     hestimate[b]->GetYaxis()->SetTitle("Entries");
     hestimate[b]->SetFillColor(colors[b]);
     hestimate[b]->SetLineColor(1);
 
-    hestimate_forRatio[b]= new TH1D(Form("hestimate_forRatio%d", b), "", 213, 0, 213);
+    if(doMoriond2017){
+      hestimate_forRatio[b]= new TH1D(Form("hestimate_forRatio%d", b), "", 213, 0, 213);
+    }
+    else if(doMoriond2019){
+      hestimate_forRatio[b]= new TH1D(Form("hestimate_forRatio%d", b), "", 282, 0, 282);
+    }
     hestimate_forRatio[b]->Sumw2();
     hestimate_forRatio[b]->GetYaxis()->SetTitle("Entries");
     hestimate_forRatio[b]->SetFillColor(colors[b]);
@@ -230,12 +341,16 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
       TH1D* h_first;
 
+      //extreme HT region has a special treatment since we drop the last bin the safety reasons
       if( iMT2->htMin()==1500 && iMT2->nJetsMin()>1 ){
 	double *binsExtreme = bins++;
 	h_first = new TH1D("h_first", "", nBins-1, binsExtreme);
 	
 	for( int iBin=0; iBin<nBins; ++iBin )
-	  h_first->SetBinContent( iBin, h_first_forExtreme->GetBinContent(iBin+1) );
+	  h_first->SetBinContent( iBin, h_first_forExtreme->GetBinContent(iBin+1));
+	
+	
+	//h_first = (TH1D*)h_first_forExtreme->Clone("h_first");
 
       }else 
 	h_first = (TH1D*)h_first_forExtreme->Clone("h_first");
@@ -281,19 +396,40 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 	if( iMT2->htMin()==1500 && iMT2->nJetsMin()>1 && bins[iBin]==200 ) continue;
 
 	std::string tableName;
-	if(iMT2->nJetsMax()==1){
-          tableName = std::string(Form("%s/datacard_templates/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
+
+	if(!doSanityCheck && !doCombination){
+	  //cout << endl << endl << endl << "I use single datacard" << endl << endl << endl;
+	  if(iMT2->nJetsMax()==1){
+	    tableName = std::string(Form("%s/datacard_templates/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
+	  }
+	  else{
+	    if( iBin < nBins-1 ){
+	      tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
+	    }else
+	      tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	  }
+	  //	if( iBin < nBins-1 )
+	  //	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
+	  //	else
+	  //	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
 	}
-        else{
-          if( iBin < nBins-1 ){
-	    tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
-          }else
-            tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
-        }
-//	if( iBin < nBins-1 )
-//	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
-//	else
-//	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	else if(doCombination || doSanityCheck){
+	  //cout << endl << endl << endl << "I use combined datacards" << endl << endl << endl;
+	  if(iMT2->nJetsMax()==1){
+	    tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m0toInf.txt", dir.c_str(), iMT2->getName().c_str() ));
+	  }
+	  else{
+	    if( iBin < nBins-1 ){
+	      tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
+	    }else
+	      tableName = std::string(Form("%s/datacard_templates_combined/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	  }
+	  //	if( iBin < nBins-1 )
+	  //	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lfto%.0lf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin], bins[iBin+1]) );
+	  //	else
+	  //	  tableName = std::string(Form("%s/datacard_templates/table_%s_m%.0lftoInf.txt", dir.c_str(), iMT2->getName().c_str(), bins[iBin] ));
+	}
+
 
 	BGTable thisTable = getTable(tableName);
 	
@@ -531,6 +667,10 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   for(unsigned int b=0; b<bgSize; ++b){
+    
+    if(doSanityCheck && !doCombination){
+      hestimate[b]->Scale(35.9/137.4);
+    }
 
     hestimate[b]->SetLineWidth(0);
     bgStack.Add(hestimate[b]);
@@ -543,8 +683,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     else hestimate_all_forRatio->Add(hestimate_forRatio[b]);
 
   }
+  
+  if(doSanityCheck && !doCombination){
+    hestimate_all_forRatio->Scale(35.9/137.4);
+  }
 
-
+ 
   TGraphAsymmErrors* g_Ratio = MT2DrawTools::getRatioGraph(hdata, hestimate_all_forRatio, "binWidth");  
   g_Ratio->SetMarkerStyle(20);
   g_Ratio->SetMarkerSize(1.6);
@@ -558,6 +702,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   g_Ratio->GetYaxis()->SetTitleOffset(0.4);
   g_Ratio->GetYaxis()->SetLabelSize(0.17);
   g_Ratio->GetYaxis()->SetTitle("Ratio");
+
+
+  Double_t xx, yy;
+  for(int i(0); i<g_Ratio->GetN(); ++i){
+    g_Ratio->GetPoint(i, xx, yy);
+    cout << i << " - x: " << xx << " - y: " << yy << endl;
+  }
 
   TGraphAsymmErrors* g_Ratio_zero = new TGraphAsymmErrors(*(g_Ratio));
   g_Ratio_zero->SetMarkerSize(0);
@@ -581,8 +732,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     
     float thisData    = hdata->GetBinContent(iBin);
     float thisDataErr = gdata->GetErrorY(iBin-1);
-    std::cout << "TEST!" << std::endl;
-    std::cout << thisData << "\t" << gdata->GetY()[iBin-1] << "\t" << thisDataErr << std::endl;
+    // std::cout << "TEST!" << std::endl;
+    //std::cout << thisData << "\t" << gdata->GetY()[iBin-1] << "\t" << thisDataErr << std::endl;
     
     float thisEst     = hestimate_all->GetBinContent(iBin);
     float thisEstErr  = hestimate_all->GetBinError(iBin);
@@ -640,7 +791,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     thisBin=213;
   }
   else if(doMoriond2019){
-    thisBin=299;
+    thisBin=282;
   }
 
   hestimate_all->GetXaxis()->SetRangeUser(0, thisBin);
@@ -1266,10 +1417,18 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
    
     x = left+ibin*binWidth;
 
-    if(left+binWidth*(ibin+(nBins_[12+7+nR])*0.5)>1-right-0.19)
-      line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-    else
-      line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+      if(left+binWidth*(ibin+(nBins_[12+11+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
 
 
   }
@@ -1640,7 +1799,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
       ibin+=nBins_[12+7+11*2+nR];
     }
     else if(doMoriond2019){
-      ibin+=nBins_[12+17+11*2+nR];
+      ibin+=nBins_[12+17*2+11*2+nR];
     }
 
     x = left+ibin*binWidth;
@@ -1723,7 +1882,192 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
 
+  /*
+  TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
+  c2_5->cd();
+  
+  TPad *pad1_5 = new TPad("pad1_5","pad1_5",0,0.3-0.1,1,1);
+  pad1_5->SetBottomMargin(0.18);
+  pad1_5->Draw();
+  pad1_5->cd();
 
+  pad1_5->SetLogy();
+    
+  yMin= 1e-2;
+
+  oldBin=thisBin;
+  if(doMoriond2017){
+    thisBin = 213;
+ }
+  else if(doMoriond2019){
+    thisBin = 282;
+  }
+  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
+  hestimate_all->GetXaxis()->LabelsOption("v");
+  hestimate_all->GetXaxis()->SetLabelSize(0.042);
+  hestimate_all->Draw("");  
+
+  bgStack.Draw("histo,same");
+  hestimate_all->Draw("E2,same");
+  //hdata->Draw("pe0,same");
+  gdata_zero->Draw("pe0,same");
+  gdata->Draw("pe0,same");
+  
+  legend->Draw("same");
+
+  labelTop->Draw("same");
+  labelCMS->Draw("same");
+    
+  htBox[5]->Draw("same");
+
+  left = pad1_5->GetLeftMargin();
+  right = pad1_5->GetRightMargin();
+  bot = pad1_5->GetBottomMargin();
+  top = pad1_5->GetTopMargin();
+  binWidth = (1.0-right-left)/(thisBin-1-oldBin);
+
+  text->SetTextAlign(13);
+  text->SetTextFont(42);
+  text->SetTextAngle(0);
+  text->SetTextSize(0.05);
+  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
+
+
+  ibin = 0;
+
+  for(int nR=0; nR<nRtot; nR++){
+    if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+nR])*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR])*0.5);
+    }
+    text->SetTextAlign(23);
+    text->SetTextFont(62);
+    text->SetTextSize(0.030);
+
+    float y=bot+(1-top-bot)*0.85;
+    if (xcenter>1-right-0.19){
+      y=0.67;
+    }
+
+    text->DrawLatex(xcenter, y, Jmed[nR]);
+    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
+
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+11+11+17+17+nR];
+    }
+      
+
+  }
+
+  line = new TLine();
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+
+  ibin=0;
+
+  for(int nR=0; nR<nRtot; nR++){
+    
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+nR];
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+11+11+17+17+nR];
+    }
+   
+    x = left+ibin*binWidth;
+
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+      if(left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+
+
+  }
+
+  gPad->RedrawAxis();
+  
+  c2_5->cd();
+  TPad *pad2_5 = new TPad("pad2_5","pad2_5",0,0,1,0.21);
+  pad2_5->SetTopMargin(0.06);
+  pad2_5->SetBottomMargin(0.1);
+  pad2_5->Draw();
+  pad2_5->cd();
+
+  TH2D* h2_axes_ratio_5;
+  if(doLogRatio){
+    gPad->SetLogy();
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
+  }
+  else
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0., 3.5 );
+
+  h2_axes_ratio_5->SetStats(0);
+  h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
+  h2_axes_ratio_5->GetXaxis()->SetTickLength(0.09);
+  h2_axes_ratio_5->GetYaxis()->SetNdivisions(5,5,0);
+  h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
+  h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
+  h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
+  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
+  
+  TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin, 1.0);
+  LineCentral_5->SetLineColor(1);
+
+  h2_axes_ratio_5->Draw("");
+  h_band->Draw("E2same");
+  LineCentral_5->Draw("same");
+  //h_Ratio->Draw("pe0,same");
+  g_Ratio->Draw("pe0,same");
+  
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+  ibin = oldBin;
+
+  for(int nR=0; nR<nRtot; nR++){
+    if(doMoriond2017){
+      ibin += nBins_[12+7+nR];
+    }
+    else if(doMoriond2019){
+      ibin += nBins_[12+11+11+17+17+nR];
+    }
+    line->DrawLine(ibin,0,ibin,3.5);
+  }
+
+  gPad->RedrawAxis();
+
+
+  c2_5->cd();
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
+  */
+
+
+  
+  
   TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
   c2_5->cd();
   
@@ -1736,7 +2080,405 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     
   yMax  /= 10;
   oldBin=thisBin;
-  if(doMoriond2019){
+   if(doMoriond2017){
+    thisBin = 213;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30 + 40 + 81 + 68 + 51;
+  }
+  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
+  hestimate_all->GetXaxis()->LabelsOption("v");
+  hestimate_all->GetXaxis()->SetLabelSize(0.042);
+
+  TH1D* haxes= new TH1D("haxes", "", thisBin+1-oldBin, oldBin, thisBin+1);
+  for (int b=1; b<=thisBin-oldBin; ++b)
+    haxes->GetXaxis()->SetBinLabel(b, hestimate_all->GetXaxis()->GetBinLabel(b+oldBin));
+
+  haxes->GetYaxis()->SetRangeUser(yMin, yMax);
+  haxes->GetXaxis()->LabelsOption("v");
+  haxes->GetXaxis()->SetLabelSize(0.042);
+  haxes->GetYaxis()->SetTitle("Entries");
+  haxes->GetYaxis()->SetTitleOffset(0.95);
+  haxes->GetYaxis()->SetLabelSize(0.042);
+
+  haxes->Draw("");
+  hestimate_all->Draw("same");  
+
+  //  ((TH1*)(bgStack.GetStack()->Last()))->SetBinContent(214,0);
+
+  bgStack.Draw("histo,same");
+  hestimate_all->Draw("E2,same");
+  //hdata->Draw("pe0,same");
+  gdata_zero->Draw("pe0,same");
+  gdata->Draw("pe0,same");
+  
+  legend->Draw("same");
+
+  labelTop->Draw("same");
+  labelCMS->Draw("same");
+
+  htBox[5]->Draw("same");
+
+  left  = pad1_5->GetLeftMargin();
+  right = pad1_5->GetRightMargin();
+  bot   = pad1_5->GetBottomMargin();
+  top   = pad1_5->GetTopMargin();
+  binWidth = (1.0-right-left)/(thisBin+1-oldBin);
+
+  text->SetTextAlign(13);
+  text->SetTextFont(42);
+  text->SetTextAngle(0);
+  text->SetTextSize(0.05);
+  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
+
+
+  ibin = 0;
+  for(int nR=0; nR<nRtot; nR++){
+
+   if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+11*2+nR]-1)*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR]-1)*0.5);
+    }
+
+    text->SetTextAlign(23);
+    text->SetTextFont(62);
+    text->SetTextSize(0.030);
+
+    float y=bot+(1-top-bot)*0.85;
+    if (xcenter>1-right-0.19)
+      y=0.67;
+
+    text->DrawLatex(xcenter, y, Jmed[nR]);
+    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
+
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11*3+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17*2+11*2+nR]-1;
+    }
+
+  }
+
+  line = new TLine();
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+
+  ibin=0;
+
+  for(int nR=0; nR<nRtot-1; nR++){
+
+  if(doMoriond2017){
+      ibin+=nBins_[12+7+11*3+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17+17+11*2+nR]-1;
+    }
+
+    x = left+ibin*binWidth;
+
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+11*3+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+      if(left+binWidth*(ibin+(nBins_[12+17+17+11*2+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+
+  }  line->DrawLine(ibin,0,ibin,3.0);
+
+  gPad->RedrawAxis();
+  
+  c2_5->cd();
+  TPad *pad2_5 = new TPad("pad2_5","pad2_5",0,0,1,0.21);
+  pad2_5->SetTopMargin(0.06);
+  pad2_5->SetBottomMargin(0.1);
+  pad2_5->Draw();
+  pad2_5->cd();
+
+  TH2D* h2_axes_ratio_5;
+  if(doLogRatio){
+    gPad->SetLogy();
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0.1, 10.0 );
+  }
+  else
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0., 3.0 );
+  //h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0., 2.0 );
+
+  h2_axes_ratio_5->SetStats(0);
+  h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
+  h2_axes_ratio_5->GetXaxis()->SetTickLength(0.09);
+  h2_axes_ratio_5->GetYaxis()->SetNdivisions(5,5,0);
+  h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
+  h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
+  h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
+  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
+  
+  TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin, 1.0);
+  LineCentral_5->SetLineColor(1);
+
+  h2_axes_ratio_5->Draw("");
+  h_band->Draw("E2same");
+  LineCentral_5->Draw("same");
+  //h_Ratio->Draw("pe0,same");
+  g_Ratio->Draw("pe0,same");
+  
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+  ibin = oldBin;
+
+  for(int nR=0; nR<nRtot-1; nR++){
+    if(doMoriond2017){
+      ibin += nBins_[12+7+11*3+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin += nBins_[12+17+17+11*2+nR]-1;
+    }
+    line->DrawLine(ibin,0,ibin,3.0);
+  }
+
+  gPad->RedrawAxis();
+
+  c2_5->cd();
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.C", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
+  
+
+
+
+
+  /*
+  
+  cout << endl << endl << endl << endl;
+  cout << "-----------------------------------------" << endl;
+  cout << "Begin extreme region plot creation" << endl;
+  cout << endl << endl << endl << endl;
+  
+  TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
+  c2_5->cd();
+  
+  TPad *pad1_5= new TPad("pad1_5","pad1_5",0,0.3-0.1,1,1);
+  pad1_5->SetBottomMargin(0.18);
+  pad1_5->Draw();
+  pad1_5->cd();
+
+  pad1_5->SetLogy();
+    
+  oldBin=thisBin;
+
+  if(doMoriond2017){
+    thisBin = 213;
+  }
+  else if(doMoriond2019){
+    thisBin = 12 + 30 + 40 + 81 + 68 + 51;
+  }
+
+  yMax  /= 10;
+
+  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  //g_Ratio->GetXaxis()->SetRangeUser(oldBin-10, thisBin+10);
+  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
+  hestimate_all->GetXaxis()->LabelsOption("v");
+  hestimate_all->GetXaxis()->SetLabelSize(0.042);
+  hestimate_all->Draw("");  
+
+  bgStack.Draw("histo,same");
+  hestimate_all->Draw("E2,same");
+  //hdata->Draw("pe0,same");
+  gdata_zero->Draw("pe0,same");
+  gdata->Draw("pe0,same");
+  
+  legend->Draw("same");
+
+  labelTop->Draw("same");
+  labelCMS->Draw("same");
+
+  htBox[5]->Draw("same");
+
+  left = pad1_5->GetLeftMargin();
+  right = pad1_5->GetRightMargin();
+  bot = pad1_5->GetBottomMargin();
+  top = pad1_5->GetTopMargin();
+  binWidth = (1.0-right-left)/(thisBin+1-oldBin);
+
+  text->SetTextAlign(13);
+  text->SetTextFont(42);
+  text->SetTextAngle(0);
+  text->SetTextSize(0.05);
+  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
+
+ 
+  ibin = 0;
+
+  for(int nR=0; nR<nRtot-1; nR++){
+    
+    if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+11*2+nR]-1)*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR]-1)*0.5);
+    }
+    text->SetTextAlign(23);
+    text->SetTextFont(62);
+    text->SetTextSize(0.030);
+
+    float y=bot+(1-top-bot)*0.85;
+    if (xcenter>1-right-0.19)
+      y=0.67;
+
+    text->DrawLatex(xcenter, y, Jmed[nR]);
+    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
+
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11*2+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17*2+11*2+nR]-1;
+    }
+
+  }
+
+  line = new TLine();
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+
+  ibin=0;
+
+  for(int nR=0; nR<nRtot-1; nR++){
+
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11*3+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17+17+11*2+nR]-1;
+    }
+
+    x = left+ibin*binWidth;
+
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+11*2+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+      if(left+binWidth*(ibin+(nBins_[12+17+17+11*2+nR])*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+
+
+  }
+
+  gPad->RedrawAxis();
+  
+  c2_5->cd();
+  TPad *pad2_5 = new TPad("pad2_5","pad2_5",0,0,1,0.21);
+  pad2_5->SetTopMargin(0.06);
+  pad2_5->SetBottomMargin(0.1);
+  pad2_5->Draw();
+  pad2_5->cd();
+
+  TH2D* h2_axes_ratio_5;
+  if(doLogRatio){
+    gPad->SetLogy();
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0.1, 10.0 );
+  }
+  else
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0., 5.0 );
+  //h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, 0., 2.0 );
+
+
+  h2_axes_ratio_5->SetStats(0);
+  h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
+  h2_axes_ratio_5->GetXaxis()->SetTickLength(0.09);
+  h2_axes_ratio_5->GetYaxis()->SetNdivisions(5,5,0);
+  h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
+  h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
+  h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
+  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
+  
+  TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin, 1.0);
+  LineCentral_5->SetLineColor(1);
+
+  h2_axes_ratio_5->Draw("");
+  h_band->Draw("E2same");
+  LineCentral_5->Draw("same");
+  //h_Ratio->Draw("pe0,same");
+  g_Ratio->Draw("pe0,same");
+  
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+  ibin = oldBin;
+
+  for(int nR=0; nR<nRtot-1; nR++){
+    if(doMoriond2017){
+      ibin += nBins_[12+7+11*2+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin += nBins_[12+17+17+11*2+nR]-1;
+    }
+    line->DrawLine(ibin,0,ibin,5.0);
+  }
+
+  gPad->RedrawAxis();
+
+  c2_5->cd();
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.root", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
+  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
+  
+*/
+
+
+
+
+
+
+  /*
+  TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
+  c2_5->cd();
+  
+  TPad *pad1_5 = new TPad("pad1_5","pad1_5",0,0.3-0.1,1,1);
+  pad1_5->SetBottomMargin(0.18);
+  pad1_5->Draw();
+  pad1_5->cd();
+
+  pad1_5->SetLogy();
+    
+  yMax  /= 10;
+  oldBin=thisBin;
+  if(doMoriond2017){
     thisBin=213;
   }
   else if(doMoriond2019){
@@ -1795,9 +2537,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
   ibin = 0;
-  for(int nR=0; nR<11; nR++){
+  for(int nR=0; nR<nRtot; nR++){
 
-    xcenter = left+binWidth*(ibin+(nBins_[12+7+11*3+nR]-1)*0.5);
+    if(doMoriond2017){
+      xcenter = left+binWidth*(ibin+(nBins_[12+7+11*3+nR]-1)*0.5);
+    }
+    else if(doMoriond2019){
+      xcenter = left+binWidth*(ibin+(nBins_[12+17*2+11*2+nR]-1)*0.5);
+    }
+      
     text->SetTextAlign(23);
     text->SetTextFont(62);
     text->SetTextSize(0.030);
@@ -1806,10 +2554,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     if (xcenter>1-right-0.19)
       y=0.67;
 
-    text->DrawLatex(xcenter, y, Jlab[nR]);
-    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Blab[nR]);
+    text->DrawLatex(xcenter, y, Jmed[nR]);
+    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
 
-    ibin+=nBins_[12+7+11*3+nR]-1;
+    if(doMoriond2017){
+      ibin+=nBins_[12+7+11*3+nR]-1;
+    }
+    else if(doMoriond2019){
+      ibin+=nBins_[12+17*2+11*2+nR]-1;
+    }
 
   }
 
@@ -1821,16 +2574,29 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   ibin=0;
 
-  for(int nR=0; nR<11-1; nR++){
+  for(int nR=0; nR<nRtot-1; nR++){
 
-    ibin+=(nBins_[12+7+11*3+nR]-1);
+    if(doMoriond2017){
+      ibin+=(nBins_[12+7+11*3+nR]-1);
+    }
+    else if(doMoriond2019){
+      ibin+=(nBins_[12+17*2+11*2+nR]-1);
+    }
+      
     x = left+ibin*binWidth;
 
-    if(left+binWidth*(ibin+(nBins_[12+7+11*3+nR]-1)*0.5)>1-right-0.19)
-      line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-    else
-      line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-
+    if(doMoriond2017){
+      if(left+binWidth*(ibin+(nBins_[12+7+11*3+nR]-1)*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
+    else if(doMoriond2019){
+      if(left+binWidth*(ibin+(nBins_[12+17*2+11*2+nR]-1)*0.5)>1-right-0.19)
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      else
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+    }
 
   }
 
@@ -1875,8 +2641,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   line->SetLineWidth(1);
   line->SetLineColor(kBlack);
   ibin = oldBin;
-  for(int nR=0; nR<11-1; nR++){
-    ibin += (nBins_[12+7+11*3+nR]-1);
+
+  for(int nR=0; nR<nRtot-1; nR++){
+    if(doMoriond2017){
+      ibin += (nBins_[12+7+11*3+nR]-1);
+    }
+    else if(doMoriond2019){
+      ibin += (nBins_[12+17+17+11*2+nR]-1);
+    }
     line->DrawLine(ibin,0.,ibin,3.0);
   }
 
@@ -1887,7 +2659,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.C", fullPath.c_str()) );
   c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
   c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
-
+  */
 
   gStyle->SetOptStat(1110);
   gStyle->SetOptFit(1);
@@ -1905,7 +2677,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c3->SaveAs( Form("%s/PullDistribution.png", fullPath.c_str()) );
   
 }
-
+ 
 
 
 BGTable getTable( const std::string& tableFileName ) {
