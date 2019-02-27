@@ -768,8 +768,8 @@ void plotEstimateVSNb_combined(){
 
   TH1::AddDirectory(kFALSE);
 
-  bool doZll = false;
-  bool doZinv = true;
+  bool doZll = true;
+  bool doZinv = false;
 
   TFile* file1;
   TFile* file2;
@@ -857,8 +857,8 @@ void plotEstimateVSNb_combined(){
       } 
 
    
-    //if((NjMinInt != NjMaxInt)){
-    if((htMinInt == 1500) && (htMaxInt == -1) && (NjMinInt == 7) && (NjMaxInt == 9)){
+    if((NjMinInt != NjMaxInt)){
+    //if((htMinInt == 1500) && (htMaxInt == -1) && (NjMinInt == 7) && (NjMaxInt == 9)){
       if(htMax != "-1"){
 	if(NjMax != "-1"){
 	  if(NbMin==NbMax){
@@ -1022,10 +1022,10 @@ void plotEstimateVSNb_combined(){
 
 
 	TString thisName = thisRegion->getName();
-	c->SaveAs(directoryToSave + n + "_Enormalized.pdf");
+	c->SaveAs(directoryToSave + n + "_normalized.pdf");
 	//c->SaveAs(directoryToSave + n + "_normalized.root");
 	if(legIndex>fileIndex){
-	  remove(directoryToSave + n_previous + "_Enormalized.pdf"); 
+	  remove(directoryToSave + n_previous + "_normalized.pdf"); 
 	  //remove(directoryToSave + n_previous + "_normalized.root"); 
 	}
 	
