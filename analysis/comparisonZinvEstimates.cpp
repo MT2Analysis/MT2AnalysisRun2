@@ -775,21 +775,22 @@ void plotEstimateVSNb_combined(){
   TFile* file2;
   TFile* file3;
 
-  TString directoryToSave = "EventYields_moriond2019_35p9ifb/plotsZllEstimates/MT2vsNb/";
+  //TString directoryToSave = "EventYields_moriond2019_35p9ifb/plotsZllEstimates/MT2vsNb/";
+  TString directoryToSave = "./MT2vsNb/initialVersion/";
 
   //we get the files for the three years
   //Zll:
   if(doZll){
-    file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/zllControlRegion/mc_forZinvEst.root");
-    file2 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_41p9ifb_2017/zllControlRegion/mc_forZinvEst.root");
-    file3 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_59p9ifb_2018/zllControlRegion/mc_forZinvEst.root");
+    file1 = TFile::Open("/work/anlyon/EventYields_moriond2019_35p9ifb/zllControlRegion/specialBinning/mc_forZinvEst.root");
+    file2 = TFile::Open("/work/anlyon/EventYields_moriond2019_41p9ifb_2017/zllControlRegion/specialBinning/mc_forZinvEst.root");
+    file3 = TFile::Open("/work/anlyon/EventYields_moriond2019_59p9ifb_2018/zllControlRegion/specialBinning/mc_forZinvEst.root");
   }
 
   //Zinv:
   if(doZinv){
-    file1 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_35p9ifb/analyses.root");
-    file2 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_41p9ifb_2017/analyses.root");
-    file3 = TFile::Open("/t3home/anlyon/CMSSW_8_0_12/src/myMT2Analysis/analysis/EventYields_moriond2019_59p9ifb_2018/analyses.root");
+    file1 = TFile::Open("/work/anlyon/EventYields_moriond2019_35p9ifb/specialBinning/analyses.root");
+    file2 = TFile::Open("/work/anlyon/EventYields_moriond2019_41p9ifb_2017/specialBinning/analyses.root");
+    file3 = TFile::Open("/work/anlyon/EventYields_moriond2019_59p9ifb_2018/specialBinning/analyses.root");
   }
   
   //only needed to get the regions
