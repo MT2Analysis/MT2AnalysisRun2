@@ -40,7 +40,8 @@ done
  
 # for combined configs:
 #   - combined control region plots, 
-#   - combined TF plots 
+#   - combined TF plots
+#   - combined RSFOF plots 
 #   - combined SR plots
 mkdir llep_combined
 mkdir zll_combined
@@ -56,11 +57,20 @@ cp ../../EventYields_${CFGS[$0]}/ratioPlots_combined/ratios_zll/$plotExpr ratios
 cp ../HTACCESS_1 ratios_llep_combined/.htaccess
 cp ../HTACCESS_1 ratios_zll_combined/.htaccess
 
+mkdir ratios_RSFOF_combined
+cp ../../ratioCombined/RSFOF*.p* ratios_RSFOF_combined
+cp ../HTACCESS_1 ratios_RSFOF_combined/.htaccess
 
 mkdir SRplots
 cp ../../EventYields_$CFG/YieldComparison_dataMC_binned_combined/mt2_*_fullEstimate.* SRplots/.
 cp ../HTACCESS_1 SRplots/.htaccess
-#
+
+mkdir MT2vsNb
+cp -r ../../MT2vsNb/Zll MT2vsNb/.
+cp -r ../../MT2vsNb/Zinv MT2vsNb/.
+cp ../HTACCESS_1 MT2vsNb/.htaccess
+cp ../HTACCESS_2 MT2vsNb/Zll/.htaccess
+cp ../HTACCESS_2 MT2vsNb/Zinv/.htaccess
 
 # tar everything and copy to eos
 cd ../

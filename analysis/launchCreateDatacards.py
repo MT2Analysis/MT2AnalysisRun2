@@ -28,7 +28,7 @@ M = range(700 if "T1" in model else 200 if "T2tt"==model else 200 if "T2cc"==mod
 Ms = range(700, 2301, stepSize)
 ms = range(500, 1601, stepSize)
 
-#print Ms
+print Ms
 
 logsDir="jobs_{}_{}_{}".format(model,cfg,label)
 os.system("mkdir {}".format(logsDir))
