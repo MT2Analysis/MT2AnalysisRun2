@@ -18,15 +18,19 @@ else:
 
 
 cfg = "moriond2019_35p9ifb" #"data_2016_SnT_36p8_FixedWJets"  #data_2016_SnTMC_362ifb_18ifbUB_Signal" #"data_Run2016_7p7ifb"
-stepSize = 5 if "T2cc" in model else 100 if model=="T1qqqq" else 50 # 25 is previous step used
+stepSize = 5 if "T2cc" in model else 50 if "T2qq" in model else 25  # 25 is previous step used, it is the right one to use close to the diagonal
 
 #M = range(600 if "T1" in model else 100 if "T2tt"==model else 100 if "T2cc"==model else 300, 2301 if "T1" in model else 1801 if "T2qq"==model else 500,stepSize) 
 # previous ranges abobe
-M = range(700 if "T1" in model else 200 if "T2tt"==model else 200 if "T2cc"==model else 400, 2401 if "T1" in model else 1901 if "T2qq"==model else 600,stepSize)
+#M = range(700 if "T1" in model else 200 if "T2tt"==model else 200 if "T2cc"==model else 400, 2401 if "T1" in model else 1901 if "T2qq"==model else 600,stepSize)
 #print M
 # NOTE: range is only for T1qqqq -> need to be adjusted
-Ms = range(700, 2301, stepSize)
-ms = range(500, 1601, stepSize)
+if model=="T1qqqq": 
+  Ms = range(700, 2301, stepSize)
+  ms = range(500, 1601, stepSize)
+elif model=="T2qq":
+  Ms = range(300, 1801, stepSize)
+  ms = range(100, 1401, stepSize)
 
 print Ms
 
