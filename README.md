@@ -198,7 +198,7 @@ Note that the .txt file will be created where you launched the command.
 
 Finally run interpolation and smoothing and create root file:
 ```
-python drawSMSLimit.py <txt-file-you-just-created> 
+python drawSMSlimit.py <txt-file-you-just-created> 
 ```
 
 ### Contour plots
