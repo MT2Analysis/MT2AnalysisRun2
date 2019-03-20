@@ -27,10 +27,10 @@ stepSize = 5 if "T2cc" in model else 50 if "T2qq" in model else 25  # 25 is prev
 # NOTE: range is only for T1qqqq -> need to be adjusted
 if model=="T1qqqq": 
   Ms = range(700, 2301, stepSize)
-  ms = range(500, 1601, stepSize)
+  ms = range(0, 501, stepSize) # 500 1601
 elif model=="T2qq":
   Ms = range(300, 1801, stepSize)
-  ms = range(100, 1401, stepSize)
+  ms = range(0, 101, stepSize) # 100 1401
 
 print Ms
 
@@ -49,7 +49,7 @@ for M in Ms:
     stdout = '`pwd`/{}/log_{}.out'.format(logsDir, job_name)
     stderr = '`pwd`/{}/log_{}.err'.format(logsDir, job_name)
     name = 'creatingDatacards_{}_{}'.format(model, job_name) 
-    command="qsub -l h_vmem=6g -q short.q -o {} -e {} -N {} createDatacards_batch.sh {} {} {} {} {} {} {}".format(stdout, stderr, name, cfg, model, m1, m2, m11, m22, label) # it is important to require higher possible memory
+    command="qsub -l h_vmem=6g -q short.q -o {} -e {} -N {} createDatacards_batch_fromHome.sh {} {} {} {} {} {} {}".format(stdout, stderr, name, cfg, model, m1, m2, m11, m22, label) # it is important to require higher possible memory
 
     print command
     os.system(command)

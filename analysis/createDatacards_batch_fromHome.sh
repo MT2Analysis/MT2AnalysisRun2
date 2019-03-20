@@ -5,8 +5,8 @@
 # NOTE: this script assumes that you have created a dir /pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards
 #!/bin/bash
 echo $#;
-if [ $# -lt 6 ]; then
-    echo "USAGE: ${0} MODEL CFG M1 M2 M11 M22 [LABEL]";
+if [ $# -lt 7 ]; then
+    echo "USAGE: ${0} MODEL CFG M1 M2 M11 M22 LABEL";
     exit;
 fi
 
@@ -16,12 +16,7 @@ M1=$3
 M2=$4
 M11=$5
 M22=$6
-
-if [ $# -ge 7 ]; then
-    LABEL=$7;
-else
-    LABEL="";
-fi
+LABEL=$7
 
 echo $CFG $1
 echo $MODEL $2
@@ -29,7 +24,7 @@ echo $M1 $3
 echo $M2 $4
 echo $M11 $5
 echo $M22 $6
-
+echo $LABEL $7
 
 source $VO_CMS_SW_DIR/cmsset_default.sh
 #source /mnt/t3nfs01/data01/swshare/glite/external/etc/profile.d/grid-env.sh
@@ -50,42 +45,25 @@ echo "Content of input dir"
 ls -al $INDIR
 ls -al $INDIR/EventYields_$CFG/analyses.root
 
-echo "Copying all needed stuff..."
+cd $INDIR
+echo "Working from input dir" $PWD
 
-mkdir -p $JOBDIR/analysis/ # makes parents directories if needed
-mkdir $JOBDIR/analysis/EventYields_$CFG
-# copy only necessary stuff in the jobdir
-cp    $INDIR/EventYields_$CFG/analyses.root                $JOBDIR/analysis/EventYields_$CFG/.
-#cp    $INDIR/EventYields_$CFG/llepEstimateCombined.root    $JOBDIR/analysis/EventYields_$CFG/.
-#cp    $INDIR/EventYields_$CFG/zinvFromZllCombined.root     $JOBDIR/analysis/EventYields_$CFG/.
-cp -r $INDIR/EventYields_$CFG/datacard_templates_combined/ $JOBDIR/analysis/EventYields_$CFG/.
-cp -r $INDIR/cfgs $JOBDIR/analysis/
-cp -r $INDIR/../samples $JOBDIR
+#echo "Copying all needed stuff..."
 
-cp    $INDIR/createDatacards_combined  $JOBDIR/analysis/
-
-cd $JOBDIR/analysis/
-echo $PWD
-
-echo "Content of job dir"
-ls -al $JOBDIR/
-ls -al $JOBDIR/analysis/
-ls -al $JOBDIR/analysis/EventYields_$CFG
+echo "Creating job directory where to put output"
+mkdir -p $JOBDIR/datacards_$MODEL
+ls -al $JOBDIR/datacards_$MODEL
 
 echo "Starting to create datacards..."
+./createDatacards_combined $1 moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 $2 $3 $4 $5 $6 $LABEL $JOBDIR/datacards_$MODEL
 
-./createDatacards_combined $1 moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 $2 $3 $4 $5 $6 $7
+echo "Finished creating datacards , at least in principle, content of datacards directory:"
+ls $JOBDIR/datacards_$MODEL
 
-echo "Finished creating datacards , at least in principle, content of local datacards directory:"
-
-ls $JOBDIR/analysis/EventYields_$CFG/datacards_$MODEL
-#ls $JOBDIR/analysis/
-#ls $JOBDIR/
-
-#if no datacards produced, don't copy anything (to be tested)
+cd $JOBDIR
 echo "About to issue copy"
-cd $JOBDIR/analysis/EventYields_$CFG/ #datacards_$MODEL
-ls -d $JOBDIR/analysis/EventYields_$CFG/datacards_$MODEL
+#cd $JOBDIR/analysis/EventYields_$CFG/ #datacards_$MODEL
+#ls -d $JOBDIR/analysis/EventYields_$CFG/datacards_$MODEL
 echo "About to tar the data-cards"
 echo "Name of archive" tared_${M1}_${M11}.tar.gz
 tar -czvf tared_${M1}_${M11}.tar.gz datacards_$MODEL #datacard*txt
