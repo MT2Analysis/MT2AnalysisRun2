@@ -298,8 +298,7 @@ public :
    Float_t         lep_phi[10];   //[nLep]
    Float_t         lep_mass[10];   //[nLep]
    Float_t         lep_charge[10];   //[nLep]
-   Float_t         lep_pdgId[10];   //[nLep]
-   Int_t           lep_pdgId_INT[10];   //[nLep]
+   Int_t           lep_pdgId[10];   //[nLep]
    Float_t         lep_dxy[10];   //[nLep]
    Float_t         lep_dz[10];   //[nLep]
    Float_t         lep_miniRelIso[10];   //[nLep]
@@ -328,8 +327,7 @@ public :
    Float_t         isoTrack_mass[10];
    Float_t         isoTrack_dz[10];
    Float_t         isoTrack_dxy[10];
-   Float_t         isoTrack_pdgId[10];   //[nLep]
-   Int_t           isoTrack_pdgId_INT[10];   //[nLep]
+   Int_t           isoTrack_pdgId[10];   //[nLep]
    Float_t         isoTrack_absIso[10];
    Float_t         isoTrack_miniPFRelIso_chg[10];
    Float_t         isoTrack_mtw[10];
@@ -708,7 +706,6 @@ public :
    TBranch        *b_lep_mass;   //!
    TBranch        *b_lep_charge;   //!
    TBranch        *b_lep_pdgId;   //!
-   TBranch        *b_lep_pdgId_INT;   //!
    TBranch        *b_lep_dxy;   //!
    TBranch        *b_lep_dz;   //!
    TBranch        *b_lep_miniRelIso;   //!
@@ -730,31 +727,30 @@ public :
    TBranch        *b_evt_filter;   //!
    TBranch        *b_evt_kfactor;   //!
    TBranch        *b_evt_year;   //!
-   TBranch        *b_nIt;
-   TBranch        *b_isoTrack_pt;
-   TBranch        *b_isoTrack_eta;
-   TBranch        *b_isoTrack_phi;
-   TBranch        *b_isoTrack_mass;
-   TBranch        *b_isoTrack_dz;
-   TBranch        *b_isoTrack_dxy;
+   TBranch        *b_nIt; //!
+   TBranch        *b_isoTrack_pt; //!
+   TBranch        *b_isoTrack_eta; //!
+   TBranch        *b_isoTrack_phi; //!
+   TBranch        *b_isoTrack_mass; //!
+   TBranch        *b_isoTrack_dz; //!
+   TBranch        *b_isoTrack_dxy; //!
    TBranch        *b_isoTrack_pdgId;   //!
-   TBranch        *b_isoTrack_pdgId_INT;   //!
-   TBranch        *b_isoTrack_absIso;
-   TBranch        *b_isoTrack_miniPFRelIso_chg;
-   TBranch        *b_isoTrack_mtw;
-   TBranch        *b_HLT_PFHT900;
-   TBranch        *b_HLT_PFHT300_PFMET110;
-   TBranch        *b_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
-   TBranch        *b_HLT_Mu30_TkMu11;
-   TBranch        *b_HLT_Mu40_TkMu11;
-   TBranch        *b_HLT_TkMu50;
-   TBranch        *b_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
+   TBranch        *b_isoTrack_absIso; //!
+   TBranch        *b_isoTrack_miniPFRelIso_chg; //!
+   TBranch        *b_isoTrack_mtw; //!
+   TBranch        *b_HLT_PFHT900; //!
+   TBranch        *b_HLT_PFHT300_PFMET110; //!
+   TBranch        *b_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL; //!
+   TBranch        *b_HLT_Mu30_TkMu11; //!
+   TBranch        *b_HLT_Mu40_TkMu11; //!
+   TBranch        *b_HLT_TkMu50; //!
+   TBranch        *b_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ; //!
    // TBranch        *b_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
-   TBranch        *b_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW;
-   TBranch        *b_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL;
-   TBranch        *b_HLT_Photon165_HE10;
-   TBranch        *b_HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL;
-   TBranch        *b_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
+   TBranch        *b_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW; //!
+   TBranch        *b_HLT_DoubleEle33_CaloIdL_GsfTrkIdVL; //!
+   TBranch        *b_HLT_Photon165_HE10; //!
+   TBranch        *b_HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL; //!
+   TBranch        *b_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL; //!
    // TBranch        *b_HLT_Mu33_Ele33_CaloIdL_GsfTrkIdVL;
 
    // SnT branches for MC
@@ -1201,8 +1197,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("lep_phi", lep_phi, &b_lep_phi);
    fChain->SetBranchAddress("lep_mass", lep_mass, &b_lep_mass);
    fChain->SetBranchAddress("lep_charge", lep_charge, &b_lep_charge);
-   if (isETH) fChain->SetBranchAddress("lep_pdgId", lep_pdgId, &b_lep_pdgId);
-   else       fChain->SetBranchAddress("lep_pdgId", lep_pdgId_INT, &b_lep_pdgId_INT);
+   fChain->SetBranchAddress("lep_pdgId", lep_pdgId, &b_lep_pdgId);
    fChain->SetBranchAddress("lep_dxy", lep_dxy, &b_lep_dxy);
    fChain->SetBranchAddress("lep_dz", lep_dz, &b_lep_dz);
    fChain->SetBranchAddress("lep_miniRelIso", lep_miniRelIso, &b_lep_miniRelIso);
@@ -1215,8 +1210,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("isoTrack_mass", isoTrack_mass, &b_isoTrack_mass);
    fChain->SetBranchAddress("isoTrack_dz", isoTrack_dz, &b_isoTrack_dz);
    fChain->SetBranchAddress("isoTrack_dxy", isoTrack_dxy, &b_isoTrack_dxy);
-   if (isETH) fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
-   else       fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId_INT, &b_isoTrack_pdgId_INT);
+   fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
    fChain->SetBranchAddress("isoTrack_absIso", isoTrack_absIso, &b_isoTrack_absIso);
    fChain->SetBranchAddress("isoTrack_miniPFRelIso_chg", isoTrack_miniPFRelIso_chg, &b_isoTrack_miniPFRelIso_chg);
    fChain->SetBranchAddress("isoTrack_mtw", isoTrack_mtw, &b_isoTrack_mtw);

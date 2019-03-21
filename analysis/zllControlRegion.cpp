@@ -498,13 +498,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     int lep0_pdgId_to_use = -1;
     int lep1_pdgId_to_use = -1;
 
-    if(isETH) {
-      lep0_pdgId_to_use = myTree.lep_pdgId[0];
-      lep1_pdgId_to_use = myTree.lep_pdgId[1];
-    } else {
-      lep0_pdgId_to_use = myTree.lep_pdgId_INT[0];
-      lep1_pdgId_to_use = myTree.lep_pdgId_INT[1];
-    }
+    lep0_pdgId_to_use = myTree.lep_pdgId[0];
+    lep1_pdgId_to_use = myTree.lep_pdgId[1];
 
     // if( myTree.isData && !myTree.isGolden ) continue;
 

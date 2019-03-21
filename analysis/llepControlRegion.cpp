@@ -328,7 +328,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         candLep_eta = myTree.lep_eta[ilep];
         candLep_phi = myTree.lep_phi[ilep];
         //mt_ = mt;
-        candLep_pdgId = isETH ? myTree.lep_pdgId[ilep]: myTree.lep_pdgId_INT[ilep];
+        candLep_pdgId = myTree.lep_pdgId[ilep]; 
         foundlep = true;
         break;
       }
@@ -341,7 +341,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         float eta = myTree.isoTrack_eta[itrk];
         float phi = myTree.isoTrack_phi[itrk];
         if (pt < 5.) continue;
-        int pdgId = isETH ? myTree.isoTrack_pdgId[itrk]: myTree.isoTrack_pdgId_INT[itrk];
+        int pdgId =  myTree.isoTrack_pdgId[itrk]; 
         if ((abs(pdgId) != 11) && (abs(pdgId) != 13)) continue;
         if (myTree.isoTrack_absIso[itrk]/pt > 0.2) continue;
         float mt = sqrt( 2 * myTree.met_pt * pt * ( 1 - cos( myTree.met_phi - myTree.isoTrack_phi[itrk]) ) );
