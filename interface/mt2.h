@@ -291,7 +291,6 @@ public :
    Float_t         zll_mt2;
    Float_t         zll_met_pt;
    Float_t         zll_met_phi;
-   UInt_t          nLep;
    Float_t         lep_pt[10];   //[nLep]
    Float_t         lep_eta[10];   //[nLep]
    Float_t         lep_phi[10];   //[nLep]
@@ -698,7 +697,6 @@ public :
    TBranch        *b_zll_mt2;   //!
    TBranch        *b_zll_met_pt;   //!
    TBranch        *b_zll_met_phi;   //!
-   TBranch        *b_nLep;   //!
    TBranch        *b_lep_pt;   //!
    TBranch        *b_lep_eta;   //!
    TBranch        *b_lep_phi;   //!
@@ -1189,7 +1187,6 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("zll_mt2", &zll_mt2, &b_zll_mt2);
    fChain->SetBranchAddress("zll_met_pt", &zll_met_pt, &b_zll_met_pt);
    fChain->SetBranchAddress("zll_met_phi", &zll_met_phi, &b_zll_met_phi);
-   fChain->SetBranchAddress("nLep", &nLep, &b_nLep);
    fChain->SetBranchAddress("lep_pt", lep_pt, &b_lep_pt);
    fChain->SetBranchAddress("lep_eta", lep_eta, &b_lep_eta);
    fChain->SetBranchAddress("lep_phi", lep_phi, &b_lep_phi);
@@ -1442,7 +1439,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 
     if (sel=="zll"){
     int lepSize = 0;
-    lepSize = isETH ? nLep : nlep;
+    lepSize = nlep; 
 
       return nJet30 >= 1 &&
 	nJet30FailId == 0 &&

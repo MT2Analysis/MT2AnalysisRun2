@@ -318,7 +318,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float candLep_phi = 0;
 
     // if reco leps, check those
-    int nlep_to_use = isETH ? myTree.nLep : myTree.nlep;
+    int nlep_to_use = myTree.nlep;
     if (nlep_to_use > 0) {
       for (int ilep = 0; ilep < nlep_to_use; ++ilep) {
         float mt = sqrt( 2 * myTree.met_pt * myTree.lep_pt[ilep] * ( 1 - cos( myTree.met_phi - myTree.lep_phi[ilep]) ) );

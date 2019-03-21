@@ -540,7 +540,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
 
     // Kinematic selections common to both SF and OF
-    int nLep_to_be_used = isETH ? myTree.nLep : myTree.nlep;
+    int nLep_to_be_used = myTree.nlep;
     if(!( nLep_to_be_used==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
