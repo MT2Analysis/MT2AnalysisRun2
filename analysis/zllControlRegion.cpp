@@ -631,7 +631,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       bool isFastSim = false;
 
-      bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
+      bTagSF->get_weight_btag(myTree.njet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
 
       //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
 
@@ -639,7 +639,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     }
 
     int nJetHF30_ = 0;
-    int nJet_to_use = (isETH) ? myTree.nJet : myTree.njet;
+    int nJet_to_use =  myTree.njet;
     for(int j=0; j<nJet_to_use; ++j){
       if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
       else ++nJetHF30_;

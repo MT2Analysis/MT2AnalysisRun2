@@ -36,7 +36,6 @@ public :
    Float_t         CaloMET_sumEt;
    UInt_t          nElectron;
    UInt_t          nIsoTrack;
-   UInt_t          nJet;
    Float_t         MET_MetUnclustEnUpDeltaX;
    Float_t         MET_MetUnclustEnUpDeltaY;
    Float_t         MET_covXX;
@@ -936,7 +935,6 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("CaloMET_sumEt", &CaloMET_sumEt, &b_CaloMET_sumEt);
    fChain->SetBranchAddress("nElectron", &nElectron, &b_nElectron);
    fChain->SetBranchAddress("nIsoTrack", &nIsoTrack, &b_nIsoTrack);
-   fChain->SetBranchAddress("nJet", &nJet, &b_nJet);
    fChain->SetBranchAddress("MET_MetUnclustEnUpDeltaX", &MET_MetUnclustEnUpDeltaX, &b_MET_MetUnclustEnUpDeltaX);
    fChain->SetBranchAddress("MET_MetUnclustEnUpDeltaY", &MET_MetUnclustEnUpDeltaY, &b_MET_MetUnclustEnUpDeltaY);
    fChain->SetBranchAddress("MET_covXX", &MET_covXX, &b_MET_covXX);
@@ -1523,7 +1521,7 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH, bool myIsData) const{
   if (year!=2018) return true; // only apply for 2018
 
   int jetSize = 0;
-  jetSize = isETH ? nJet : njet; // different branches names bw ETH and SnT
+  jetSize = njet;
 
   bool hasHEMFailJet = false;
 
