@@ -61,23 +61,30 @@ echo "Finished creating datacards , at least in principle, content of datacards 
 ls $JOBDIR/datacards_$MODEL
 
 cd $JOBDIR
-echo "About to issue copy"
 #cd $JOBDIR/analysis/EventYields_$CFG/ #datacards_$MODEL
 #ls -d $JOBDIR/analysis/EventYields_$CFG/datacards_$MODEL
-echo "About to tar the data-cards"
-echo "Name of archive" tared_${M1}_${M11}.tar.gz
-tar -czvf tared_${M1}_${M11}.tar.gz datacards_$MODEL #datacard*txt
-echo "After tar"
-ls -al
-echo ""
-du -sh
 
-xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR
-echo "Creating output dir" $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
-xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
-echo "Now copying tar to output dir"
-xrdcp -v tared_${M1}_${M11}.tar.gz root://t3dcachedb.psi.ch:1094/$OUTPUTDIR/datacards_${MODEL}_${LABEL}/.
-echo "After copying command"
+if [ "$(ls datacards_$MODEL | wc -l)" -eq "0" ] 
+then 
+  echo "No data-cards were created, not going to do anything"
+else
+  echo "About to tar the data-cards"
+  echo "Name of archive" tared_${M1}_${M11}.tar.gz
+  tar -czvf tared_${M1}_${M11}.tar.gz datacards_$MODEL #datacard*txt
+  echo "After tar"
+  ls -al
+  echo ""
+  du -sh
+
+  xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR
+  echo "Creating output dir" $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
+  xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
+  echo "Now copying tar to output dir"
+  xrdcp -v tared_${M1}_${M11}.tar.gz root://t3dcachedb.psi.ch:1094/$OUTPUTDIR/datacards_${MODEL}_${LABEL}/.
+  echo "After copying command"
+  #echo "ciao"; 
+fi
+
 
 cd /scratch/$USER/
 #rm -rf $JOBDIR
