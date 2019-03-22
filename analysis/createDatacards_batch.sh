@@ -42,7 +42,7 @@ echo $PWD
 eval `scramv1 runtime -sh`
 
 JOBDIR=/scratch/$USER/datacards/datacardCreation_$JOB_ID
-INDIR=/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/mg-branch/analysis/
+INDIR=/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/master/analysis/
 OUTPUTDIR=/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards/EventYields_$CFG/
 
 

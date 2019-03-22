@@ -63,8 +63,8 @@ int main( int argc, char* argv[] ) {
   std::cout << std::endl << std::endl;
 
 
-  if( argc != 5 && argc != 9 && argc != 10) {
-    std::cout << "USAGE: ./createDatacards [configFileName16] [configFileName17] [configFileName18] [model] [m1] [m2] [m11] [m22] ([label])" << std::endl;
+  if( argc != 5 && argc != 9 && argc != 10 && argc != 11) {
+    std::cout << "USAGE: ./createDatacards [configFileName16] [configFileName17] [configFileName18] [model] [m1] [m2] [m11] [m22] ([label]) ([cardsDir])" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
@@ -85,7 +85,7 @@ int main( int argc, char* argv[] ) {
 
   std::string model(argv[4]);
 
-  if( argc == 9 || argc == 10 ){
+  if( argc == 9 || argc == 10 || argc == 11){
 
     m1  = std::stof( argv[5] );
     m2  = std::stof( argv[6] );
@@ -95,10 +95,17 @@ int main( int argc, char* argv[] ) {
   }
 
   std::string label;
-  if( argc == 10 )
+  std::string path_sig;
+  if (argc==10){
     label = argv[9];
-  else
+    path_sig = "";
+  } else if (argc==11){
+    label = argv[9];
+    path_sig = argv[10];
+  } else {
     label = "";
+    path_sig = "";
+  }
 
   std::cout << "Will produce datacards for parent mass between " << m1 << " and " << m2 << ", and LSP mass between " << m11 <<  " and " << m22 << std::endl;
 
@@ -851,8 +858,9 @@ int main( int argc, char* argv[] ) {
 
 
     // Local path for datacards
-    std::string path = dir16 + "/datacards_" + sigName;
-    system(Form("mkdir -p %s", path.c_str()));
+    std::string path_mass = dir16 + "/datacards_" + sigName;
+    system(Form("mkdir -p %s", path_mass.c_str()));
+    if(path_sig!="") path_mass = path_sig;
 
     // SE path for datacards
     std::string pathSE = "";
@@ -860,8 +868,6 @@ int main( int argc, char* argv[] ) {
       pathSE = dir16 + "/datacards_" + sigName;
     else
       pathSE = dir16 + "/datacards_" + sigName + "_" + label;
-
-    std::string path_mass = path;
 
     float xs_norm=1.;
     ////// If you need to renormalize T2qq xsec, uncomment

@@ -162,7 +162,7 @@ Created data-cards will be saved to the storage element in the form of a tar fil
 2. make sure that the data-card templates were already created
 3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
 4. make sure that ```stepSize``` and ranges are set to desired values in ```launchCreateDatacards.py```
-5. edit ```INDIR``` in ```createDatacards_batch.sh```
+5. edit ```INDIR``` in ```createDatacards_batch_fromHome.sh```
 6. finally submit data card creation to the batch
 ```
 python launchCreateDatacards.py <model-name> <label> 
@@ -198,7 +198,7 @@ Note that the .txt file will be created where you launched the command.
 
 Finally run interpolation and smoothing and create root file:
 ```
-python drawSMSLimit.py <txt-file-you-just-created> 
+python drawSMSlimit.py <txt-file-you-just-created> 
 ```
 
 ### Contour plots
