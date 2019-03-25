@@ -44,10 +44,14 @@ TH1D*  h_muTrk_hi = 0;
 TH2D*  h_elTrk = 0;
 
 
-void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
+/*void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
 		      MT2BTagSFHelper* bTagSF,
+		      bool do_ZinvEst,  bool invertedZcuts = false );*/
+void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
+		      MT2Analysis<MT2EstimateTree>* anaTree,
+		      MT2Analysis<MT2EstimateTree>* anaTree_of,
 		      bool do_ZinvEst,  bool invertedZcuts = false );
 void addVariables(MT2Analysis<MT2EstimateTree>* anaTree);
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
@@ -139,10 +143,11 @@ int main(int argc, char* argv[]) {
    
 
     for( unsigned i=0; i<fSamples.size(); ++i ){
-      MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+      /*MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
       computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, bTagSF, false);
-     
-      bTagSF = nullptr;
+      bTagSF = nullptr;*/
+
+      computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, false);
     }
 
     mcTree->writeToFile(outputdir+"/mc.root");
@@ -157,9 +162,11 @@ int main(int argc, char* argv[]) {
       addVariables(mcTree_of_forZinvEst);
 
       for( unsigned i=0; i<fSamples.size(); ++i ){
-	MT2BTagSFHelper* bTagSF_forZinvEst = new MT2BTagSFHelper();
+	/*MT2BTagSFHelper* bTagSF_forZinvEst = new MT2BTagSFHelper();
 	computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, bTagSF_forZinvEst, true);
-	bTagSF_forZinvEst = nullptr;
+	bTagSF_forZinvEst = nullptr;*/
+
+	computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, true);
       }
 
       
@@ -185,9 +192,11 @@ int main(int argc, char* argv[]) {
 
       std::vector<MT2Sample> fSamples_top = MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc());
       for( unsigned i=0; i<fSamples_top.size(); ++i ){
-	MT2BTagSFHelper* bTagSF_top = new MT2BTagSFHelper();
+      	/*MT2BTagSFHelper* bTagSF_top = new MT2BTagSFHelper();
 	computeYieldSnO( fSamples_top[i], cfg, mc_top, mc_top_of, bTagSF_top, false);
-	bTagSF_top = nullptr;
+	bTagSF_top = nullptr;*/
+
+	computeYieldSnO( fSamples_top[i], cfg, mc_top, mc_top_of, false);
       }
 
 
@@ -216,10 +225,12 @@ int main(int argc, char* argv[]) {
 	addVariables(mc_top_of_forZinvEst);
 
 	for( unsigned i=0; i<fSamples_top.size(); ++i ){
-	  MT2BTagSFHelper* bTagSF_top_forZinvEst = new MT2BTagSFHelper();
+	  /*MT2BTagSFHelper* bTagSF_top_forZinvEst = new MT2BTagSFHelper();
 	  computeYieldSnO( fSamples_top[i], cfg, mc_top_forZinvEst, mc_top_of_forZinvEst, bTagSF_top_forZinvEst, true);
-	  bTagSF_top_forZinvEst = nullptr;
-	}
+	  bTagSF_top_forZinvEst = nullptr;*/
+
+	  computeYieldSnO( fSamples_top[i], cfg, mc_top_forZinvEst, mc_top_of_forZinvEst, true);
+   	}
 
 	mc_top_forZinvEst->writeToFile(outputdir+"/mc_Top_forZinvEst.root");
 	mc_top_of_forZinvEst->writeToFile(outputdir+"/mc_Top_of_forZinvEst.root");
@@ -253,9 +264,13 @@ int main(int argc, char* argv[]) {
       std::cout << std::endl;
     } else {
       for( unsigned i=0; i<samples_data.size(); ++i ){
-	MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+	/*MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
 	computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, bTagSF_data, false);
-	bTagSF_data = nullptr;
+	bTagSF_data = nullptr;*/
+
+	computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, false);
+
+
       }
       //      computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_filler, h_elSF, h_muSF, false);
 
@@ -267,19 +282,19 @@ int main(int argc, char* argv[]) {
     dataTree_of->writeToFile(outputdir+"/data_of.root");
 
     //we create here the estimates in the ttbar enriched CR (inverted cuts on Zmass and ZpT) that are needed to compute R(SF/OF) later on
-    MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
+    /* MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
     MT2Analysis<MT2EstimateTree>* dataTree_of_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_of_invertedZcuts", cfg.regionsSet() );
     addVariables(dataTree_invertedZcuts); addVariables(dataTree_of_invertedZcuts);
-
+    
     for(unsigned i=0; i<samples_data.size(); ++i){
       MT2BTagSFHelper* bTagSF_data_invertedCuts = new MT2BTagSFHelper();
       computeYieldSnO( samples_data[i], cfg, dataTree_invertedZcuts, dataTree_of_invertedZcuts, bTagSF_data_invertedCuts, false, true);
       bTagSF_data_invertedCuts = nullptr;
     }
-
+    
     dataTree_invertedZcuts->addToFile(outputdir+"/data_invertedZcuts.root");
     dataTree_of_invertedZcuts->addToFile(outputdir+"/data_of_invertedZcuts.root");
-
+    */
 
     if(doZinvEst){
       MT2Analysis<MT2EstimateTree>* dataTree_forZinvEst = new MT2Analysis<MT2EstimateTree>( "data", cfg.regionsSet() );
@@ -287,9 +302,12 @@ int main(int argc, char* argv[]) {
       addVariables(dataTree_forZinvEst); addVariables(dataTree_of_forZinvEst);
 
       for( unsigned i=0; i<samples_data.size(); ++i ){
-	MT2BTagSFHelper* bTagSF_data_forZinvEst = new MT2BTagSFHelper();
+	/*MT2BTagSFHelper* bTagSF_data_forZinvEst = new MT2BTagSFHelper();
 	computeYieldSnO( samples_data[i], cfg, dataTree_forZinvEst, dataTree_of_forZinvEst, bTagSF_data_forZinvEst, true);
-	bTagSF_data_forZinvEst = nullptr;
+	bTagSF_data_forZinvEst = nullptr;*/
+
+	computeYieldSnO( samples_data[i], cfg, dataTree_forZinvEst, dataTree_of_forZinvEst, true);
+
       }
 
       dataTree_forZinvEst->addToFile(outputdir+"/data_forZinvEst.root");
@@ -321,9 +339,14 @@ int main(int argc, char* argv[]) {
     addVariables(signalTree_of);
 
     for( unsigned i=0; i<fSamples.size(); ++i ){
-      MT2BTagSFHelper* bTagSF_signal = new MT2BTagSFHelper();
+      /*MT2BTagSFHelper* bTagSF_signal = new MT2BTagSFHelper();
       computeYieldSnO( fSamples[i], cfg, signalTree, signalTree_of, bTagSF_signal, true);
-      bTagSF_signal = nullptr;
+      bTagSF_signal = nullptr;*/
+
+     
+      computeYieldSnO( fSamples[i], cfg, signalTree, signalTree_of, true);
+    
+      
     }
 
     signalTree->addToFile(outputdir+"/signal_forZinvEst.root");
@@ -408,11 +431,16 @@ void addVariables(MT2Analysis<MT2EstimateTree>* anaTree){
 
 
 //Loop over same and oppsite flavor just once
-void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
+/*void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 		      MT2Analysis<MT2EstimateTree>* anaTree,
 		      MT2Analysis<MT2EstimateTree>* anaTree_of,
 		      MT2BTagSFHelper* bTagSF,
+		      bool do_ZinvEst, bool invertedZcuts = false ) {*/
+void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
+		      MT2Analysis<MT2EstimateTree>* anaTree,
+		      MT2Analysis<MT2EstimateTree>* anaTree_of,
 		      bool do_ZinvEst, bool invertedZcuts = false ) {
+
 
   std::cout << std::endl << std::endl << "Check: " ;
   if(invertedZcuts) std::cout << "invertedZcuts = true";
@@ -594,7 +622,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 
     //b-tagging scale factor
-    if(!isData and isETH){
+    /*if(!isData and isETH){
 
       // declaration of the b-tagged weight
       float weight_btagsf = 1.;
@@ -609,18 +637,18 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
 
-      //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
+      cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
 
       weight *= weight_btagsf;
-    }
-
+      }
+    */
     int nJetHF30_ = 0;
     int nJet_to_use = (isETH) ? myTree.nJet : myTree.njet;
     for(int j=0; j<nJet_to_use; ++j){
       if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
       else ++nJetHF30_;
     }
-
+    
 
     bool isSF = false;
     bool isOF = false;
