@@ -307,6 +307,8 @@ drawRSFOF_mc: drawRSFOF_mc.C
 comparisonZinvEstimates: comparisonZinvEstimates.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o 
 	$(CC) -Wall $(INCLUDES) -o comparisonZinvEstimates comparisonZinvEstimates.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
+check_distributions: check_distributions.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o 
+	$(CC) -Wall $(INCLUDES) -o check_distributions check_distributions.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 fitDeltaPhiQCD: fitDeltaPhiQCD.cpp  MT2Region.o MT2Estimate.o MT2EstimateQCD.o  MT2EstimateTree.o MT2Config.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o fitDeltaPhiQCD fitDeltaPhiQCD.cpp MT2Region.o MT2Estimate.o MT2EstimateQCD.o MT2EstimateTree.o MT2Config.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS)
