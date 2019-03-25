@@ -51,7 +51,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 void addVariables(MT2Analysis<MT2EstimateTree>* anaTree);
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
 //float getHLTweight( int lep1_pdgId, int lep2_pdgId, float lep1_pt, float lep2_pt, int variation);
-void assignVariablesToTree(MT2EstimateTree* thisTree, MT2Tree myTree, TLorentzVector Zvec, float HLT_weight, int lep0_pdgId_to_use, int lep1_pdgId_to_use, int nLep_to_be_used, int ID, int nJetHF30_); //fills the tree with additionnal variables - to avoid code repetition
+void assignVariablesToTree(MT2EstimateTree* thisTree, const MT2Tree& myTree, TLorentzVector Zvec, float HLT_weight, int lep0_pdgId_to_use, int lep1_pdgId_to_use, int nLep_to_be_used, int ID, int nJetHF30_); //fills the tree with additionnal variables - to avoid code repetition
 
 
 int main(int argc, char* argv[]) {
@@ -534,6 +534,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     float minMTBmet = -999;// myTree.minMTBMet;
     int ID = myTree.evt_id;
 
+
     TLorentzVector *LVec = new TLorentzVector[3];
     for(int i=0; i< 2; i++){
       LVec[i].SetPtEtaPhiM(myTree.lep_pt[i], myTree.lep_eta[i],myTree.lep_phi[i], myTree.lep_mass[i]);
@@ -646,6 +647,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       // if( abs(myTree.lep_pdgId[0])==11 && myTree.lep_tightId[0]< 0.5 ) continue;
       //if( abs(myTree.lep_pdgId[1])==11 && myTree.lep_tightId[1]< 0.5 ) continue;
 
+
       MT2EstimateTree* thisTree;
       if( regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016"){ //
 	if( ht<450 || njets<7 || nbjets<1 ) {//Fill it the normal way
@@ -681,8 +683,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }
 
       else if(regionsSet == "Moriond2019"){
-	if( njets<7 ) {//Fill it the normal way
-       	   
+	if( njets<7 ) {//Fill it the normal way     	   
 	  thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 ); 		
 	  if( thisTree==0 ) continue;
 	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
@@ -1028,7 +1029,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 }
 
 
-void assignVariablesToTree(MT2EstimateTree* thisTree, MT2Tree myTree, TLorentzVector Zvec, float HLT_weight, int lep0_pdgId_to_use, int lep1_pdgId_to_use, int nLep_to_be_used, int ID, int nJetHF30_){
+void assignVariablesToTree(MT2EstimateTree* thisTree, const MT2Tree& myTree, TLorentzVector Zvec, float HLT_weight, int lep0_pdgId_to_use, int lep1_pdgId_to_use, int nLep_to_be_used, int ID, int nJetHF30_){
 
  
   thisTree->assignVar("ID", ID );
