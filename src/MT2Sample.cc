@@ -83,7 +83,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       exit(1101);
     }
     TFile* file = TFile::Open(s.file.c_str());
-
+    //std::cout << "debug working on file" << s.file.c_str() << std::endl;
     TString treeName = isETH ? "Events" : "mt2";
     TTree* tree = (TTree*)file->Get(treeName);
     
@@ -99,8 +99,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
     
     tree->GetEntry(0);
     s.id       = evt_id;
-    if(s.id<=0){
-
+//    if(s.id<=0){
       if( rootFileName.Contains("JetHT") )               s.id = 1;
       else if( rootFileName.Contains("HTMHT") )          s.id = 2;
       else if( rootFileName.Contains("MET") )            s.id = 3;
@@ -111,18 +110,77 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename, const
       else if( rootFileName.Contains("SingleMuon") )     s.id = 8;
       else if( rootFileName.Contains("SingleElectron") ) s.id = 9;
       // else if( rootFileName.Contains("T1bbbb") )         s.id = 1020;
-      else if( rootFileName.Contains("singletop") )	 s.id = 403;
-      else if( rootFileName.Contains("mg_lo") )	         s.id =330 ;
+      //else if( rootFileName.Contains("singletop") )	 s.id = 403;
+      //else if( rootFileName.Contains("mg_lo") )	         s.id =330 ;
+      //else if( rootFileName.Contains("wjets") )	         s.id = 504;
+      //else if( rootFileName.Contains("dyjetsll") )	 s.id = 705;
+      //else if( rootFileName.Contains("T2bW") )	         s.id = 1490;
+      // declaring numbering convention from SnT ntuples
+      if (sampleFilePath_tstr.Contains("wjets_ht100to200"))                s.id=502;
+      else if (sampleFilePath_tstr.Contains("wjets_ht200to400"))                s.id=503;
+      else if (sampleFilePath_tstr.Contains("wjets_ht400to600"))                s.id=504;
+      else if (sampleFilePath_tstr.Contains("wjets_ht600to800"))                s.id=505;
+      else if (sampleFilePath_tstr.Contains("wjets_ht800to1200"))                s.id=506;
+      else if (sampleFilePath_tstr.Contains("wjets_ht1200to2500"))                s.id=507;
+      else if (sampleFilePath_tstr.Contains("wjets_ht2500toInf"))                s.id=508;
+
+      else if (sampleFilePath_tstr.Contains("zinv_ht100to200"))                s.id=602;
+      else if (sampleFilePath_tstr.Contains("zinv_ht200to400"))                s.id=603;
+      else if (sampleFilePath_tstr.Contains("zinv_ht400to600"))                s.id=604;
+      else if (sampleFilePath_tstr.Contains("zinv_ht600to800"))                s.id=605;
+      else if (sampleFilePath_tstr.Contains("zinv_ht800to1200"))                s.id=606;
+      else if (sampleFilePath_tstr.Contains("zinv_ht1200to2500"))                s.id=607;
+      else if (sampleFilePath_tstr.Contains("zinv_ht2500toInf"))                s.id=608;
       
-      else if( rootFileName.Contains("wjets") )	         s.id = 504;
-      else if( rootFileName.Contains("dyjetsll") )	 s.id = 705;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht100to200"))                s.id=702;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht200to400"))                s.id=703;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht400to600"))                s.id=704;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht600to800"))                s.id=705;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht800to1200"))                s.id=706;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht1200to2500"))                s.id=707;
+      else if (sampleFilePath_tstr.Contains("dyjetsll_ht2500toInf"))                s.id=708;
 
-      else if( rootFileName.Contains("T2bW") )	         s.id = 1490;
+      // Top
+      else if (sampleFilePath_tstr.Contains("ttdl_mg"))                            s.id=303;
+      else if (sampleFilePath_tstr.Contains("ttsl_top_mg"))                        s.id=301;
+      else if (sampleFilePath_tstr.Contains("ttsl_tbar_mg"))                       s.id=302;
 
-    }
+      // Single top - all several names that it can take across the years
+      // s-chan
+      else if (sampleFilePath_tstr.Contains("singletop_amcatnlo_4f_schan"))       s.id=400;
+      // t-chan top
+      else if (sampleFilePath_tstr.Contains("singletop_tchan_top"))               s.id=401;
+      else if (sampleFilePath_tstr.Contains("singletop_t_top"))                   s.id=401;
+      // t-chan tbar
+      else if (sampleFilePath_tstr.Contains("singletop_tchan_tbar"))              s.id=404;
+      else if (sampleFilePath_tstr.Contains("singletop_t_antitop"))               s.id=404;
+      else if (sampleFilePath_tstr.Contains("singletop_powheg_4f_tbartchan"))     s.id=404;
+      // tW top
+      else if (sampleFilePath_tstr.Contains("singletop_tW_top"))                  s.id=402;
+      else if (sampleFilePath_tstr.Contains("singletop_powheg_5f_tWchan"))        s.id=402;
+      // tW tbar
+      else if (sampleFilePath_tstr.Contains("singletop_tW_tbar.root"))            s.id=405;
+      else if (sampleFilePath_tstr.Contains("singletop_tW_antitop.root"))         s.id=405;
+      else if (sampleFilePath_tstr.Contains("singletop_powheg_5f_tbarWchan"))     s.id=405;
+      
+      // TT+W
+      else if (sampleFilePath_tstr.Contains("ttw"))                      s.id=450; // this uses the same number even for different samples : ttw_mg_lo, ttw_lnu, ttw_qq
+      // TT+Z
+      else if (sampleFilePath_tstr.Contains("ttz_llnunu"))               s.id=412; // 17 sample 1
+      else if (sampleFilePath_tstr.Contains("ttz_qq"))                   s.id=413; // 17 sample 2
+      else if (sampleFilePath_tstr.Contains("ttz_mg_lo"))                s.id=452; // 16 sample 
+      // TTTT
+      //else if (sampleFilePath_tstr.Contains("tttt"))               s.id=boh;
 
-//    std::cout << "s.id  = " << s.id << std::endl;
-//    std::cout << "evtid = " << evt_id << std::endl;
+      // Signals 
+      else if (sampleFilePath_tstr.Contains("T1qqqq")) s.id = 1001;
+      else if (sampleFilePath_tstr.Contains("T1bbbb")) s.id = 1101;
+      else if (sampleFilePath_tstr.Contains("T1tttt")) s.id = 1201;
+      else if (sampleFilePath_tstr.Contains("T2qq"))   s.id = 1301;
+      else if (sampleFilePath_tstr.Contains("T2bb"))   s.id = 1401;
+      else if (sampleFilePath_tstr.Contains("T2tt"))   s.id = 1501;
+//    }
+
     
 //    s.nevents  = evt_nEvts;
     s.xsection = evt_xsec;

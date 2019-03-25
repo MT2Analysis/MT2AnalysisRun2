@@ -293,18 +293,18 @@ public :
    Float_t         zll_met_pt;
    Float_t         zll_met_phi;
    UInt_t          nLep;
-   Float_t         lep_pt[5];   //[nLep]
-   Float_t         lep_eta[5];   //[nLep]
-   Float_t         lep_phi[5];   //[nLep]
-   Float_t         lep_mass[5];   //[nLep]
-   Float_t         lep_charge[5];   //[nLep]
-   Float_t         lep_pdgId[5];   //[nLep]  
-   Int_t         lep_pdgId_INT[5];   //[nLep]  
-   Float_t         lep_dxy[5];   //[nLep]
-   Float_t         lep_dz[5];   //[nLep]
-   Float_t         lep_miniRelIso[5];   //[nLep]
-   Int_t           lep_id[5];   //[nLep]
-   Float_t         lep_mtw[5];   //[nLep]
+   Float_t         lep_pt[10];   //[nLep]
+   Float_t         lep_eta[10];   //[nLep]
+   Float_t         lep_phi[10];   //[nLep]
+   Float_t         lep_mass[10];   //[nLep]
+   Float_t         lep_charge[10];   //[nLep]
+   Float_t         lep_pdgId[10];   //[nLep]
+   Int_t           lep_pdgId_INT[10];   //[nLep]
+   Float_t         lep_dxy[10];   //[nLep]
+   Float_t         lep_dz[10];   //[nLep]
+   Float_t         lep_miniRelIso[10];   //[nLep]
+   Int_t           lep_id[10];   //[nLep]
+   Float_t         lep_mtw[10];   //[nLep]
    Float_t         jet_pt[88];   //[nJet]
    Float_t         jet_eta[88];   //[nJet]
    Float_t         jet_phi[88];   //[nJet]
@@ -328,7 +328,8 @@ public :
    Float_t         isoTrack_mass[10];
    Float_t         isoTrack_dz[10];
    Float_t         isoTrack_dxy[10];
-   Float_t         isoTrack_pdgId[10];
+   Float_t         isoTrack_pdgId[10];   //[nLep]
+   Int_t           isoTrack_pdgId_INT[10];   //[nLep]
    Float_t         isoTrack_absIso[10];
    Float_t         isoTrack_miniPFRelIso_chg[10];
    Float_t         isoTrack_mtw[10];
@@ -346,8 +347,8 @@ public :
    Bool_t          HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL;
    Bool_t          HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
    // Bool_t          HLT_Mu33_Ele33_CaloIdL_GsfTrkIdVL;
-   
-   // SnT branches for MC 
+
+   // SnT branches for MC
    Float_t         evt_scale1fb;
    ULong64_t       evt_nEvts;
    Float_t         genWeight;
@@ -426,9 +427,10 @@ public :
    Float_t         weight_toppt;
    Int_t           njet;
    Int_t           nlep;
+   Float_t         mt2_genmet;
+   Int_t           nisoTrack;
+   //
 
-   // 
-   
 
 
    // List of branches
@@ -679,7 +681,7 @@ public :
    TBranch        *b_nPFLep5LowMTclean;   //!
    TBranch        *b_nPFHad10LowMT;   //!
    TBranch        *b_nLepLowMT;   //!
-   TBranch        *b_nLepHighMT; 
+   TBranch        *b_nLepHighMT;
    TBranch        *b_nRecoLepLowMT;   //!
    TBranch        *b_ht;   //!
    TBranch        *b_mht_pt;   //!
@@ -735,7 +737,8 @@ public :
    TBranch        *b_isoTrack_mass;
    TBranch        *b_isoTrack_dz;
    TBranch        *b_isoTrack_dxy;
-   TBranch        *b_isoTrack_pdgId;
+   TBranch        *b_isoTrack_pdgId;   //!
+   TBranch        *b_isoTrack_pdgId_INT;   //!
    TBranch        *b_isoTrack_absIso;
    TBranch        *b_isoTrack_miniPFRelIso_chg;
    TBranch        *b_isoTrack_mtw;
@@ -754,7 +757,7 @@ public :
    TBranch        *b_HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL;
    // TBranch        *b_HLT_Mu33_Ele33_CaloIdL_GsfTrkIdVL;
 
-   // SnT branches for MC 
+   // SnT branches for MC
    TBranch         *b_evt_scale1fb;     //!
    TBranch         *b_evt_nEvts;     //!
    TBranch         *b_genWeight;     //!
@@ -831,8 +834,11 @@ public :
    TBranch         *b_weight_pdfs_UP;     //!
    TBranch         *b_weight_pdfs_DN;     //!
    TBranch         *b_weight_toppt;     //!
-   TBranch        *b_njet;   //!
-   TBranch        *b_nlep;   //!
+   TBranch         *b_njet;   //!
+   TBranch         *b_nlep;   //!
+   TBranch         *b_mt2_genmet; //!
+   TBranch         *b_nisoTrack; //!
+
    //
 
    MT2Tree(TTree *tree=0, bool isETH=true);
@@ -859,13 +865,16 @@ public :
    virtual Bool_t   passMonoJetId( int j ) const;
    //virtual Int_t    get_nJetHF( float etaCut = 3.0 ) const;
    virtual Bool_t   passTriggerSelection(TString sel = "", int year = 2016) const;
-   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true) const;
+   virtual Bool_t   passHEMFailVeto(int year=2018, bool isETH=true, bool myIsData=true) const;
+   virtual Bool_t   passHEMFailElectronVeto(int year=2018, bool isETH=true, bool myIsData=true, float candLep_eta=1., float candLep_phi=1., int candLep_pdgId=13) const;
+   virtual Double_t getXSecCorrWeight(int sampleId, int year=2016);
+   virtual Float_t  getAverageISRWeight(int sampleId, int year=2016, int var=0);
 };
 
 #endif
 
 #ifdef mt2_cxx
-MT2Tree::MT2Tree(TTree *tree, bool isETH) : fChain(0) 
+MT2Tree::MT2Tree(TTree *tree, bool isETH) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -1206,7 +1215,8 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("isoTrack_mass", isoTrack_mass, &b_isoTrack_mass);
    fChain->SetBranchAddress("isoTrack_dz", isoTrack_dz, &b_isoTrack_dz);
    fChain->SetBranchAddress("isoTrack_dxy", isoTrack_dxy, &b_isoTrack_dxy);
-   fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
+   if (isETH) fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId, &b_isoTrack_pdgId);
+   else       fChain->SetBranchAddress("isoTrack_pdgId", isoTrack_pdgId_INT, &b_isoTrack_pdgId_INT);
    fChain->SetBranchAddress("isoTrack_absIso", isoTrack_absIso, &b_isoTrack_absIso);
    fChain->SetBranchAddress("isoTrack_miniPFRelIso_chg", isoTrack_miniPFRelIso_chg, &b_isoTrack_miniPFRelIso_chg);
    fChain->SetBranchAddress("isoTrack_mtw", isoTrack_mtw, &b_isoTrack_mtw);
@@ -1241,7 +1251,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, &b_HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ);
    // fChain->SetBranchAddress("HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", &HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ, &b_HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ);
 
-   // SnT branches for MC 
+   // SnT branches for MC
    fChain->SetBranchAddress("evt_scale1fb", &evt_scale1fb, &b_evt_scale1fb);
    fChain->SetBranchAddress("evt_nEvts", &evt_nEvts, &b_evt_nEvts);
    fChain->SetBranchAddress("genWeight", &genWeight, &b_genWeight);
@@ -1317,9 +1327,11 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("weight_scales_DN", &weight_scales_DN, &b_weight_scales_DN);
    fChain->SetBranchAddress("weight_pdfs_UP", &weight_pdfs_UP, &b_weight_pdfs_UP);
    fChain->SetBranchAddress("weight_pdfs_DN", &weight_pdfs_DN, &b_weight_pdfs_DN);
-   fChain->SetBranchAddress("weight_toppt", &weight_toppt, &b_weight_toppt);   
+   fChain->SetBranchAddress("weight_toppt", &weight_toppt, &b_weight_toppt);
    fChain->SetBranchAddress("njet", &njet, &b_njet);
    fChain->SetBranchAddress("nlep", &nlep, &b_nlep);
+   fChain->SetBranchAddress("mt2_genmet", &mt2_genmet, &b_mt2_genmet);
+   fChain->SetBranchAddress("nisoTrack", &nisoTrack, &b_nisoTrack);
    Notify();
 }
 
@@ -1433,7 +1445,7 @@ Bool_t MT2Tree::passMonoJetId( int j ) const {
 
 Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 {
-     
+
     float cutOnHT=1200;
 
     if (sel=="zll"){
@@ -1475,7 +1487,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
       //( (doCutHEMFail && nJet30HEMFail == 0 ) || !doCutHEMFail );
       //    return nVert > 0;
 
-  } 
+  }
 
   return kFALSE;
 }
@@ -1499,16 +1511,20 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
       return HLT_PFHT900 || HLT_PFJet450 || HLT_PFHT300_PFMET110 || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight;
     }
     else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || HLT_Mu30_TkMu11 || HLT_Mu40_TkMu11 ||  HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10; 
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || HLT_Mu30_TkMu11 || HLT_Mu40_TkMu11 ||  HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10;
     }
     else if(sel == "zllOF"){
       return HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10 ;
-    } 
+    }
   }
 }
 
 // hem fail veto
-Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
+Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH, bool myIsData) const{
+
+  // from Bennett
+  int HEM_startRun = 319077; // affects 38.58 out of 58.83 fb-1 in 2018
+  uint HEM_fracNum = 1286, HEM_fracDen = 1961; // 38.58/58.82 ~= 1286/1961. Used for figuring out if we should veto MC events
 
   if (year!=2018) return true; // only apply for 2018
 
@@ -1517,18 +1533,139 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH) const{
 
   bool hasHEMFailJet = false;
 
-  for (int i=0; i<jetSize; i++){
-    if (jet_pt[i] > 30 && 
-        jet_eta[i] > -4.7 && jet_eta[i] < -1.4 && 
-        jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
-    
-          hasHEMFailJet=true;
-          break; // exit from the loop as soon as you find a jet in the hem fail region
-    }
-  }
+  if((myIsData && run >= HEM_startRun) || (!myIsData && evt % HEM_fracDen < HEM_fracNum)){
+
+    for (int i=0; i<jetSize; i++){
+      if (jet_pt[i] > 30 &&
+          jet_eta[i] > -4.7 && jet_eta[i] < -1.4 &&
+          jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
+
+            hasHEMFailJet=true;
+            break; // exit from the loop as soon as you find a jet in the hem fail region
+      }
+    } // for jets
+  } // if HEM affected
 
   return !hasHEMFailJet;
 
+}
+
+Bool_t MT2Tree::passHEMFailElectronVeto(int year, bool isETH, bool myIsData, float candLep_eta, float candLep_phi, int candLep_pdgId) const{
+
+  int HEM_startRun = 319077; // affects 38.58 out of 58.83 fb-1 in 2018
+  uint HEM_fracNum = 1286, HEM_fracDen = 1961; // 38.58/58.82 ~= 1286/1961. Used for figuring out if we should veto MC events
+  if (year!=2018) return true; // only apply for 2018
+
+  if((myIsData && run >= HEM_startRun) || (!myIsData && evt % HEM_fracDen < HEM_fracNum)){
+    if (candLep_eta > -4.7 && candLep_eta < -1.4 &&
+        candLep_phi > -1.6 && candLep_phi < -0.8 &&
+        abs(candLep_pdgId) == 11){
+      return false;
+    }
+  }
+  return true;
+}
+
+
+Double_t MT2Tree::getXSecCorrWeight(int sampleId, int year){
+
+  double xSecCorr=1.;
+  if (year==2016){
+    if(sampleId==302)      xSecCorr=182.6724;
+    else if(sampleId==303) xSecCorr=87.315375;
+    else if(sampleId==301) xSecCorr=182.6724;
+
+    else if(sampleId==502) xSecCorr=1620.9402;
+    else if(sampleId==503) xSecCorr=441.765555;
+    else if(sampleId==504) xSecCorr=59.0627378;
+    else if(sampleId==505) xSecCorr=14.172246;
+    else if(sampleId==506) xSecCorr=5.97062037;
+    else if(sampleId==507) xSecCorr=1.447281;
+    else if(sampleId==508) xSecCorr=0.033854832;
+
+    else if(sampleId==602) xSecCorr=360.3478725;
+    else if(sampleId==603) xSecCorr=99.4509981;
+    else if(sampleId==604) xSecCorr=13.5542433;
+    else if(sampleId==605) xSecCorr=3.23747685;
+    else if(sampleId==606) xSecCorr=1.42786026;
+    else if(sampleId==607) xSecCorr=0.331654125;
+    else if(sampleId==608) xSecCorr=0.00781733511;
+
+    else if(sampleId==702) xSecCorr=182.027208;
+    else if(sampleId==703) xSecCorr=48.7034982;
+    else if(sampleId==704) xSecCorr=6.8442612;
+    else if(sampleId==705) xSecCorr=1.6477818;
+    else if(sampleId==706) xSecCorr=0.72111456;
+    else if(sampleId==707) xSecCorr=0.1675998;
+    else if(sampleId==708) xSecCorr=0.003946455;
+    else xSecCorr=evt_xsec * evt_filter * evt_kfactor;
+    //else if(sampleId==405) xSecCorr=19.559215;
+    //else if(sampleId==406) xSecCorr=19.559215;
+    //else if(sampleId==452) xSecCorr=0.7826;
+
+
+  } else if (year==2017 || year==2018){
+
+    if(sampleId==303)      xSecCorr=91.04433;
+    else if(sampleId==302) xSecCorr=182.9607;
+    else if(sampleId==301) xSecCorr=182.9607;
+
+    else if(sampleId==502) xSecCorr=1676.93295;
+    else if(sampleId==503) xSecCorr=494.429232;
+    else if(sampleId==504) xSecCorr=70.1887846;
+    else if(sampleId==505) xSecCorr=17.438278;
+    else if(sampleId==506) xSecCorr=7.80773433;
+    else if(sampleId==507) xSecCorr=1.73191293;
+    else if(sampleId==508) xSecCorr=0.0406257984;
+
+    else if(sampleId==602) xSecCorr=370.0031265;
+    else if(sampleId==603) xSecCorr=111.6793629;
+    else if(sampleId==604) xSecCorr=15.83748;
+    else if(sampleId==605) xSecCorr=3.90430044;
+    else if(sampleId==606) xSecCorr=1.67836206;
+    else if(sampleId==607) xSecCorr=0.37001844;
+    else if(sampleId==608) xSecCorr=0.00807982695;
+
+    else if(sampleId==702) xSecCorr=186.890964;
+    else if(sampleId==703) xSecCorr=56.3957548;
+    else if(sampleId==704) xSecCorr=7.996721;
+    else if(sampleId==705) xSecCorr=1.97211252;
+    else if(sampleId==706) xSecCorr=0.8474844;
+    else if(sampleId==707) xSecCorr=0.186783432;
+    else if(sampleId==708) xSecCorr=0.00407892656;
+
+    else xSecCorr=evt_xsec * evt_filter * evt_kfactor;
+    //else if(sampleId==406) xSecCorr=20.2478;
+
+  }
+
+  return xSecCorr;
+}
+
+
+
+
+
+Float_t MT2Tree::getAverageISRWeight(int sampleId, int year, int var) {
+
+  if(year==2017 || year==2018) return 1.; // no isr weights available for 17/18 yet
+
+  // madgraph ttsl, from RunIISummer16MiniAODv2
+  if (sampleId == 301 || sampleId == 302) {
+    if (var == 0) return 0.909; // nominal
+    else if (var == 1) return 0.954; // UP
+    else if (var == -1) return 0.863; // DN
+  }
+  // madgraph ttdl, from RunIISummer16MiniAODv2
+  else if (evt_id == 303) {
+    if (var == 0) return 0.895; // nominal
+    else if (var == 1) return 0.948; // UP
+    else if (var == -1) return 0.843; // DN
+  }
+
+  std::cout << "WARNING: MT2Looper::getAverageISRWeight: didn't recognize either evt_id: " << evt_id
+            << " or variation: " << var << std::endl;
+  return 1.;
 }
 
 

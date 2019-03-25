@@ -105,14 +105,14 @@ int main(){
 
   TString year = "all"; // 2016, 2017, 2018, all
 
-  TString parentDir = "/shome/mratti/mt2_workarea/CMSSW_8_0_12/src/master_13Jan/analysis/";
+  TString parentDir = "./";
   TString crDir = "/zllControlRegion/";
-  TString fileName1 = parentDir    + "EventYields_config_35p9ifb_incl"      + crDir + "data.root";
-  TString fileName2 = parentDir    + "EventYields_config_41p9ifb_incl_2017" + crDir + "data.root";
-  TString fileName3 = parentDir    + "EventYields_config_59p9ifb_incl_2018" + crDir + "data.root";
-  TString fileName1_OF = parentDir + "EventYields_config_35p9ifb_incl"      + crDir + "data_of.root";
-  TString fileName2_OF = parentDir + "EventYields_config_41p9ifb_incl_2017" + crDir + "data_of.root";
-  TString fileName3_OF = parentDir + "EventYields_config_59p9ifb_incl_2018" + crDir + "data_of.root";
+  TString fileName1 = parentDir    + "EventYields_moriond2019_35p9ifb_incl"      + crDir + "data.root";
+  TString fileName2 = parentDir    + "EventYields_moriond2019_41p9ifb_incl_2017" + crDir + "data.root";
+  TString fileName3 = parentDir    + "EventYields_moriond2019_59p9ifb_incl_2018" + crDir + "data.root";
+  TString fileName1_OF = parentDir + "EventYields_moriond2019_35p9ifb_incl"      + crDir + "data_of.root";
+  TString fileName2_OF = parentDir + "EventYields_moriond2019_41p9ifb_incl_2017" + crDir + "data_of.root";
+  TString fileName3_OF = parentDir + "EventYields_moriond2019_59p9ifb_incl_2018" + crDir + "data_of.root";
 
   TString directoryName;
   if (year=="2016") directoryName = "ratio2016/";
@@ -410,12 +410,13 @@ int main(){
   //           ratio as a function of HT           //
   ///////////////////////////////////////////////////
   
-  float bins_ht[]={250,450,575,1000,2000};
-  
-  TH1D* htSF = new TH1D("htSF", "", 4, bins_ht);
+  //float bins_ht[]={250,450,575,1000,2000};
+  float bins_ht[]={250,450,575,1200,1500,2000};
+  int nBins_ht = 5; 
+  TH1D* htSF = new TH1D("htSF", "", nBins_ht, bins_ht);
   htSF->Sumw2();
 
-  TH1D* htOF = new TH1D("htOF", "", 4, bins_ht);
+  TH1D* htOF = new TH1D("htOF", "", nBins_ht, bins_ht);
   htOF->Sumw2();
 
   htSF->SetLineColor(1);
@@ -432,12 +433,14 @@ int main(){
 
   //study of the variation of the value of the ratio as a function of the cut values (commented)
 
-  /*
+
 //modification of the cut on Z_pT, to estimate how strongly the value of the ratio depends on it
 
-  vector<int> npT = {160, 165, 170, 175, 180, 185, 190, 195, 198, 199, 200, 155, 150, 145, 140, 135, 130};
+  //vector<int> npT = {160, 165, 170, 175, 180, 185, 190, 195, 198, 199, 200, 155, 150, 145, 140, 135, 130};
+  vector<int> npT = {50,75,100,125,150,175,200};
   int size = npT.size();
-  vector<double> nMass = {50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130};
+  //vector<double> nMass = {50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130};
+  vector<double> nMass = {20, 50, 70, 110, 130, 150};
   int sizeM = nMass.size();
   Double_t x[size]; //will store the value of the cut on Z_pt
   Double_t y[sizeM]; //will store the value of the cut on Z_mass
@@ -478,7 +481,7 @@ int main(){
       y_err[i] = 0.;
       z[i] = RSFOF;
       z_err[i] = err_R;
-      percentage[i] = (z[i]-1.79424)/1.79424*100;
+      percentage[i] = (z[i]-1.05)/1.05*100;
       //percentagex[i] = (npT[i]-200.)/200. *100;
       //percentagey[j] = (nMass[i]-50.)/50. *100;
     
@@ -506,9 +509,9 @@ int main(){
   mygraph2d->Draw("colz");
  
   e->SetRightMargin(0.15);
-  e->SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_2016.pdf");
-  e->SaveAs("EventYields_dataETH_SnTMC_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_2016.png");
-*/
+  e->SaveAs("EventYields_moriond2019_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_"+year+".pdf");
+  e->SaveAs("EventYields_moriond2019_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_"+year+".png");
+
 
  
 
@@ -516,6 +519,10 @@ int main(){
   SF->Draw("ht>>htSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
   OF->Draw("ht>>htOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.))", "goff");
   
+  // add overflow
+  htSF->SetBinContent(nBins_ht, htSF->GetBinContent(nBins_ht)+htSF->GetBinContent(nBins_ht+1));
+  htOF->SetBinContent(nBins_ht, htOF->GetBinContent(nBins_ht)+htOF->GetBinContent(nBins_ht+1));
+
   integral_sf = htSF->IntegralAndError(1,-1, error_sf);
   integral_of = htOF->IntegralAndError(1,-1, error_of);
   
@@ -581,12 +588,12 @@ int main(){
   ///////////////////////////////////////////////////
 
 
-  float bins_nj[]={1,2,4,7,10};
-  
-  TH1D* njSF = new TH1D("njSF", "", 4, bins_nj);
+  float bins_nj[]={1,2,4,6,7,10};
+  int nBins_nj=5; 
+  TH1D* njSF = new TH1D("njSF", "", nBins_nj, bins_nj);
   njSF->Sumw2();
 
-  TH1D* njOF = new TH1D("njOF", "", 4, bins_nj);
+  TH1D* njOF = new TH1D("njOF", "", nBins_nj, bins_nj);
   njOF->Sumw2();
 
   njSF->SetLineColor(1);
@@ -603,6 +610,10 @@ int main(){
 
   SF->Draw("nJets>>njSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || mt2>250)", "goff");
   OF->Draw("nJets>>njOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || mt2>250)", "goff");
+
+  njSF->SetBinContent(nBins_nj, njSF->GetBinContent(nBins_nj)+njSF->GetBinContent(nBins_nj+1));
+  njOF->SetBinContent(nBins_nj, njOF->GetBinContent(nBins_nj)+njOF->GetBinContent(nBins_nj+1));
+
   
   integral_sf = njSF->IntegralAndError(1,-1, error_sf);
   integral_of = njOF->IntegralAndError(1,-1, error_of);
@@ -667,11 +678,12 @@ int main(){
   ///////////////////////////////////////////////////
 
   float bins_nb[]={0,1,2,3,4};
+  int nBins_nb=4;
   
-  TH1D* nbSF = new TH1D("nbSF", "", 4, bins_nb);
+  TH1D* nbSF = new TH1D("nbSF", "", nBins_nb, bins_nb);
   nbSF->Sumw2();
 
-  TH1D* nbOF = new TH1D("nbOF", "", 4, bins_nb);
+  TH1D* nbOF = new TH1D("nbOF", "", nBins_nb, bins_nb);
   nbOF->Sumw2();
 
   nbSF->SetLineColor(1);
@@ -689,7 +701,11 @@ int main(){
 
   SF->Draw("nBJets>>nbSF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) ", "goff");
   OF->Draw("nBJets>>nbOF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) ", "goff");
-  
+
+  // add overflow
+  nbSF->SetBinContent(nBins_nb, nbSF->GetBinContent(nBins_nb)+nbSF->GetBinContent(nBins_nb+1));
+  nbOF->SetBinContent(nBins_nb, nbOF->GetBinContent(nBins_nb)+nbOF->GetBinContent(nBins_nb+1));
+ 
   integral_sf = nbSF->IntegralAndError(1,-1, error_sf);
   integral_of = nbOF->IntegralAndError(1,-1, error_of);
   
@@ -753,11 +769,11 @@ int main(){
 
 
   float bins_mt2[]={200,300,400,1500};
-  
-  TH1D* mt2SF = new TH1D("mt2SF", "", 3, bins_mt2);
+  int nBins_mt2=3; 
+  TH1D* mt2SF = new TH1D("mt2SF", "", nBins_mt2, bins_mt2);
   mt2SF->Sumw2();
 
-  TH1D* mt2OF = new TH1D("mt2OF", "", 3, bins_mt2);
+  TH1D* mt2OF = new TH1D("mt2OF", "", nBins_mt2, bins_mt2);
   mt2OF->Sumw2();
 
   mt2SF->SetLineColor(1);
@@ -777,6 +793,11 @@ int main(){
   //OF->Draw("mt2>>mt2OF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) && nJets>1", "goff");
   SF->Draw("mt2>>mt2SF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) ", "goff");
   OF->Draw("mt2>>mt2OF", "Z_pt<=200 && Z_mass>=50 && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30. && (nJets>1 || (mt2>250.)) ", "goff");
+
+  // add overflow
+  mt2SF->SetBinContent(nBins_mt2, mt2SF->GetBinContent(nBins_mt2)+mt2SF->GetBinContent(nBins_mt2+1));
+  mt2OF->SetBinContent(nBins_mt2, mt2OF->GetBinContent(nBins_mt2)+mt2OF->GetBinContent(nBins_mt2+1));
+
 
   integral_sf = mt2SF->IntegralAndError(1,-1, error_sf);
   integral_of = mt2OF->IntegralAndError(1,-1, error_of);

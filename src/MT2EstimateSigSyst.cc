@@ -26,7 +26,7 @@ MT2EstimateSigSyst::MT2EstimateSigSyst( const std::string& aname, const MT2Regio
 //  for (int b=0; b<=nBinsM; ++b)
 //    binsM[b]=b*binWidthM;
 
-  int nBinsM=93;
+  int nBinsM=140;
   double binWidthM=25.;
   double binsM[nBinsM+1];
   for (int b=0; b<=nBinsM; ++b)
@@ -140,7 +140,7 @@ void MT2EstimateSigSyst::getShit( TFile* file, const std::string& path ) {
 
 void MT2EstimateSigSyst::print( std::ofstream& ofs_file, Float_t m1, Float_t m2, Int_t mt2_bin, float k, bool doGenAverage ){
 
-  int nBinsM=93;
+  int nBinsM=140;
   double binWidthM=25.;
   double binsM[nBinsM+1];
   for (int b=0; b<=nBinsM; ++b)

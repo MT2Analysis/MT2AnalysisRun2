@@ -98,11 +98,12 @@ Compile as usual and run:
 ./drawRSFOF
 ```
 
-Create the template data card. For the general syntax of data card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
-Edit the script to allow QCD estimate or not, currently supported only for Moriond19 
+Create the template data-cards. For the general syntax of data-card creation, see here: https://cms-hcomb.gitbooks.io/combine/content/
+Edit the options at the beginning of the script
 ```
-./createDatacards <cfg-file-name> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
+./createDatacards_combined <cfg-file-name1> <cfg-file-name2> <cfg-file-name3> <model-name> <m1> <m2> <M1> <M2> <label-for-SE>
 ```
+Run with m1=m2 and M1=M2 to skip signal part of data-card creation.
 
 Data/Bkg plotting:
 
@@ -122,20 +123,24 @@ For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis201
 
 ### Signals
 
-Run regionEventYields on the signal, for the moment just use those already run before
+Run regionEventYields on the desired signal scan, supported scans are (only for 2016):
+T1qqqq, T1bbbb, T1tttt, T2qq, T2bb, T2tt.
+Signal contamination removal not currently supported - so T1tttt, T2tt yields are not reliable
 
 ```
-/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/*root
+./regionEventYields <cfg-file-name16> signal <model>
 ```
 
-Run the data card creation also for the signal, e.g.
+Edit desired options in ```createDatacards_combined.cpp``` 
+Run the data-card creation for the signals, e.g.:
 ```
-./createDatacards_general_zllZinvEst dataETH_SnTMC_35p9ifb T2qq 300 305 200 205 pippo  # -> mass point or mass range
+./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 300 305 200 205 pippo  # for single mass point
+./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 1000 1105 200 255      # for mass scan
 ```
-Be sure that the you created some data cards for the signal, not only the template data card
 
 ### Limit tests
 For limit calculation you need software Combine. To set up the necessary framework, see [here](https://twiki.cern.ch/twiki/bin/viewauth/SusyMECCA/SusyMT2cernETHLegacy#Setting_up_Combine).
+From inside the ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory:
 
 Combine the data cards
 
@@ -150,26 +155,35 @@ combine -M AsymptoticLimits <combined-card> -n ${MODEL}_${M1}_${M2} >& log_${MOD
 ```
 
 ### Limits, full production and plotting 
-Submit data card creation to the batch (copySE=true, so that files are stored in your storage element)
+#### data-card creation
+From ```MT2AnalysisRun2/analysis``` submit data-card creation to the batch. 
+Created data-cards will be saved to the storage element in the form of a tar file. 
+1. make sure that ```/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards``` exists
+2. make sure that the data-card templates were already created
+3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
+4. make sure that ```stepSize``` and ranges are set to desired values in ```launchCreateDatacards.py```
+5. edit ```INDIR``` in ```createDatacards_batch_fromHome.sh```
+6. finally submit data card creation to the batch
 ```
-python launchCreateDatacards_2016.py <model-name> <label> 
+python launchCreateDatacards.py <model-name> <label> 
 ```
 Please don't forget the label because it is needed for the next steps.
 
 TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
 
-From now on the scripts are found in HiggsAnalysis-CombinedLimit/MT2Scripts/ 
-
-Sumbit data card combination to the batch
+#### data-card combination
+From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch.
+The combined cards will be copied to the same storage element location as the tar files
 ```
 python combineCards_scan.py <path> <model>
 ```
-Note that the path is the one to your Storage Element.
-
-Submit limit calculation to the batch
+#### limit calculation
+From the same directory, sumbit limit calculation to the batch. 
+The limits will be copied in a ```limits``` subdir from the original SE path
 ```
 python submitLimits_scan.py <path> <model>
 ```
+#### plotting
 Once you have the limits for each masses, copy them in your scratch area:
 ```
 sh copyLimits.sh <model> <label> <path>
@@ -184,7 +198,7 @@ Note that the .txt file will be created where you launched the command.
 
 Finally run interpolation and smoothing and create root file:
 ```
-python drawSMSLimit.py <txt-file-you-just-created> 
+python drawSMSlimit.py <txt-file-you-just-created> 
 ```
 
 ### Contour plots
@@ -219,7 +233,4 @@ python drawSMSsignificance.py <txt-file-just-created>
 ```
 
 
-
-For more info, Please follow [this link](https://github.com/MT2Analysis/HiggsAnalysis-CombinedLimit/blob/BASE_MT2Combine/MT2Scripts/HOWTORUN_limits_and_significance.txt)
-
-For plotting in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
+For plotting the contours in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
