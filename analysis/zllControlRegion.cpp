@@ -510,9 +510,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    } //else {
-    //  if(!myTree.passFiltersMC(cfg.year())) continue;
-    //}
+    } 
+    else {
+      if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
+    }
 
     // apply good vertex cut once for all
     if (isETH) {
