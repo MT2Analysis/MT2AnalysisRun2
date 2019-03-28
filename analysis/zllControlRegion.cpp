@@ -484,8 +484,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 
   int nentries = tree->GetEntries();
-  for( int iEntry=0; iEntry<30000; ++iEntry ) {
-    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  //for( int iEntry=0; iEntry<30000; ++iEntry ) {
+  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
@@ -582,7 +582,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       else {
         weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
         weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
-        if (cfg.year()==2017) weight *= myTree.weight_L1prefire; // FIXME apply also to 2016 when weights are avaialble
+        if (cfg.year()==2017) weight *= myTree.weight_L1prefire; // FIXME apply also to 2016 when weights are available
         if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); // nominal
       }
     }
