@@ -43,7 +43,8 @@ using namespace std;
 
 void randomizePoisson( MT2Analysis<MT2EstimateTree>* data );
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF, std::string otherRegion="" );
+//void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF, std::string otherRegion="" );
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, std::string otherRegion="" );
 template <class T>
 MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg );
 template <class T>
@@ -192,9 +193,10 @@ int main( int argc, char* argv[] ) {
       mcSRMap[sampleName] = new MT2Analysis<MT2EstimateTree> ( sampleName, cfg.regionsSet() );
       // then fill it from all samples in the group
       for (auto fSample : fSamplesMap[sampleName]){
-	MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
-        computeYield( fSample, cfg, mcSRMap[sampleName], bTagSF );
-	bTagSF = nullptr;
+	//MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+        //computeYield( fSample, cfg, mcSRMap[sampleName], bTagSF );
+	//bTagSF = nullptr;
+        computeYield( fSample, cfg, mcSRMap[sampleName] );
       }
       std::cout << "-> Done looping on samples for this group" << std::endl;
     }
@@ -214,9 +216,11 @@ int main( int argc, char* argv[] ) {
 
     for(int i(0); i<mySample.size(); ++i){
       cout << "Computing for sample " << i+1 << endl;
-      MT2BTagSFHelper* bTagSF_ZJetsIncl = new MT2BTagSFHelper();
-      computeYield(mySample[i], cfg, myEstimate, bTagSF_ZJetsIncl);
-      bTagSF_ZJetsIncl = nullptr;
+      //MT2BTagSFHelper* bTagSF_ZJetsIncl = new MT2BTagSFHelper();
+      //computeYield(mySample[i], cfg, myEstimate, bTagSF_ZJetsIncl);
+      //bTagSF_ZJetsIncl = nullptr;
+      computeYield(mySample[i], cfg, myEstimate);
+   
     }
 
     myEstimate->writeToFile(outputdir + "/ZJetsInclusive.root");
@@ -286,9 +290,10 @@ int main( int argc, char* argv[] ) {
     MT2Analysis<MT2EstimateTree> *dataSR = new MT2Analysis<MT2EstimateTree> ( "data", cfg.regionsSet() );;
 
     for (auto fSample : fSamplesData){
-      MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
-      computeYield( fSample, cfg, dataSR, bTagSF_data );
-      bTagSF_data = nullptr;
+      //MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+      //computeYield( fSample, cfg, dataSR, bTagSF_data );
+      //bTagSF_data = nullptr;
+      computeYield( fSample, cfg, dataSR);
     }
 
     // Add result to output handler
@@ -321,7 +326,8 @@ int main( int argc, char* argv[] ) {
 }
 
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF, std::string otherRegion){
+//void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF, std::string otherRegion){
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, std::string otherRegion){
 
   std::string regionsSet = cfg.regionsSet();
   if(otherRegion != ""){
@@ -372,9 +378,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    } //else {
-      //if(!myTree.passFiltersMC(cfg.year())) continue;
-    //}
+    } 
+    else {
+      if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
+    }
 
     // apply the triggers
     if(isData and isETH) {
@@ -436,7 +443,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
 
     //b-tagging scale factor
-    if(!isData and isETH){
+    /*if(!isData and isETH){
 
       // declaration of the b-tagged weight
       float weight_btagsf = 1.;
@@ -454,7 +461,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
 
       weight *= weight_btagsf;
-    }
+      }*/
 
     // Now that you have done the pre-selection
     // you can actually make the estimates

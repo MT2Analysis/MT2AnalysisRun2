@@ -1535,6 +1535,7 @@ Bool_t MT2Tree::passFiltersMC(int year, const bool& isETH) const {
       return Flag_goodVertices_BOOL && Flag_globalSuperTightHalo2016Filter_BOOL && Flag_HBHENoiseFilter_BOOL && Flag_HBHENoiseIsoFilter_BOOL && Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL && Flag_badMuonFilterV2_BOOL ;
     }
     else if(year == 2017 || year == 2018){  
+      cout << Flag_goodVertices_INT << " " << Flag_globalSuperTightHalo2016Filter_INT << " " << Flag_HBHENoiseFilter_INT << " " << Flag_HBHENoiseIsoFilter_INT << " " << Flag_EcalDeadCellTriggerPrimitiveFilter_INT << " " << Flag_badMuonFilterV2_INT << " " << Flag_ecalBadCalibFilter_INT << endl;
       return Flag_goodVertices_BOOL && Flag_globalSuperTightHalo2016Filter_BOOL && Flag_HBHENoiseFilter_BOOL && Flag_HBHENoiseIsoFilter_BOOL && Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL && Flag_badMuonFilterV2_BOOL && Flag_ecalBadCalibFilter_BOOL ;
     }
   }
