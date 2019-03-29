@@ -41,7 +41,8 @@ int roundD(float d) {
   return (int)(floor(d + 0.5));
 }
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF );
+//void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF );
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree );
 void roundLikeData( MT2Analysis<MT2EstimateTree>* data );
 
 float DeltaR(float eta1, float eta2, float phi1, float phi2);
@@ -123,9 +124,10 @@ int main( int argc, char* argv[] ) {
 
     MT2Analysis<MT2EstimateTree>* mcCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet ); // name given here is the name of the parent directory in the output file
     for( unsigned i=0; i < fSamples.size(); ++i ){
-      MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
-      computeYield( fSamples[i], cfg, mcCR, bTagSF );
-      bTagSF = nullptr;
+      //MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+      //computeYield( fSamples[i], cfg, mcCR, bTagSF );
+      //bTagSF = nullptr;
+      computeYield( fSamples[i], cfg, mcCR );
     }
     mcCR->writeToFile( outputdir + "/mc.root" );
     if( cfg.dummyAnalysis() ) {
@@ -192,9 +194,10 @@ int main( int argc, char* argv[] ) {
     MT2Analysis<MT2EstimateTree>* dataCR = new MT2Analysis<MT2EstimateTree> ( "llepCR", regionsSet );
 
     for( unsigned i=0; i < samples_data.size(); ++i ){
-      MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
-      computeYield( samples_data[i], cfg, dataCR, bTagSF_data );
-      bTagSF_data = nullptr;
+      //MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+      //computeYield( samples_data[i], cfg, dataCR, bTagSF_data );
+      //bTagSF_data = nullptr;
+      computeYield( samples_data[i], cfg, dataCR );
     }
 
     dataCR->writeToFile( outputdir + "/data.root" );
@@ -207,7 +210,8 @@ int main( int argc, char* argv[] ) {
 }
 
 
-void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF ){
+//void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree, MT2BTagSFHelper* bTagSF ){
+void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT2EstimateTree>* anaTree ){
 
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
@@ -266,9 +270,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    }  //else {
-//      if(!myTree.passFiltersMC(cfg.year())) continue;
-//    }
+    }  
+    else {
+      if(!myTree.passFiltersMC(cfg.year(), isETH)) {cout << "rejected by filter" << endl; continue;}
+    }
 
     // apply the triggers
     if(isData and isETH) {
@@ -415,7 +420,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
 
     //b-tagging scale factor
-    if(!isData and isETH){
+    /*if(!isData and isETH){
 
       // declaration of the b-tagged weight
       float weight_btagsf = 1.;
@@ -434,7 +439,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
       weight *= weight_btagsf;
     }
-
+    */
 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
