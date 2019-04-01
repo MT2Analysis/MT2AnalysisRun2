@@ -40,6 +40,8 @@ using namespace std;
 bool forMoriond2019 = true; 
 bool forMoriond2017 = false;
 
+bool doIntegrationOverNbWithMergedRegions = true;
+
 
 //---------------------------------------------------------//
 
@@ -121,8 +123,14 @@ int main( int argc, char* argv[] ) {
     cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2017" << endl << endl;
   }
   else if(forMoriond2019){
-    region_forExtrapol = "Moriond2019_forExtrapol";
-    cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019" << endl << endl;
+    if(!doIntegrationOverNbWithMergedRegions){
+      region_forExtrapol = "Moriond2019_forExtrapol";
+      cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019" << endl << endl;
+    }
+    else{
+      region_forExtrapol = "Moriond2019_forExtrapol_merged";
+      cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019 - merged" << endl << endl;
+    }    
   }
 
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this 
