@@ -40,8 +40,8 @@ using namespace std;
 bool forMoriond2019 = true; 
 bool forMoriond2017 = false;
 
-bool doIntegrationOverNbWithMergedRegions = true;
-
+bool doIntegrationOverNbWithMergedRegions = false;
+bool dontDoIntegration = false; //introduced for debugging purposes only
 
 //---------------------------------------------------------//
 
@@ -123,16 +123,20 @@ int main( int argc, char* argv[] ) {
     cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2017" << endl << endl;
   }
   else if(forMoriond2019){
-    if(!doIntegrationOverNbWithMergedRegions){
+    if(!doIntegrationOverNbWithMergedRegions && !dontDoIntegration){
       region_forExtrapol = "Moriond2019_forExtrapol";
       cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019" << endl << endl;
+    }
+    else if(!doIntegrationOverNbWithMergedRegions && dontDoIntegration){
+      region_forExtrapol = "Moriond2019";
+      cout << endl << "INFO: the computation of the estimate will be performed with the NON-INTEGRATED regions set used for Moriond2019" << endl << endl;
     }
     else{
       region_forExtrapol = "Moriond2019_forExtrapol_merged";
       cout << endl << "INFO: the computation of the estimate will be performed with the regions set used for Moriond2019 - merged" << endl << endl;
     }    
   }
-
+  
   TH1::AddDirectory(kTRUE); // stupid ROOT memory allocation needs this 
  
   //we fill the shapes in the integrated Nb regions (moriond2019_forExtrapol) 
@@ -169,8 +173,21 @@ int main( int argc, char* argv[] ) {
   extrapolToTopoRegion( zllData_shape_TR, (MT2Analysis<MT2Estimate>*)zllData_shape );
   extrapolToTopoRegion( zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape, 1 ); //1 means it is mc
   extrapolToTopoRegion( zinvMC_forShape_TR, (MT2Analysis<MT2Estimate>*)zinvMC_forShape, 1 );
- 
 
+  //objects introduced for debugging purposes only
+  MT2Analysis<MT2Estimate>* zllData_shape_TR_forTest = new MT2Analysis<MT2Estimate>("zllData_shape_TR_forTest", cfg.regionsSet() );
+  zllData_shape_TR_forTest->setName("zllData_shape_TR_forTest");
+  extrapolToTopoRegion( zllData_shape_TR_forTest, (MT2Analysis<MT2Estimate>*)zllData_shape );
+
+  MT2Analysis<MT2Estimate>* zllMC_shape_TR_forTest = new MT2Analysis<MT2Estimate>("zllMC_shape_TR_forTest", cfg.regionsSet() );
+  zllMC_shape_TR_forTest->setName("zllMC_shape_TR_forTest");
+  extrapolToTopoRegion( zllMC_shape_TR_forTest, (MT2Analysis<MT2Estimate>*)zllMC_shape );
+
+  MT2Analysis<MT2Estimate>* zinvMC_forShape_TR_forTest = new MT2Analysis<MT2Estimate>("zinvMC_forShape_TR_forTest", cfg.regionsSet() );
+  zinvMC_forShape_TR_forTest->setName("zinvMC_forShape_TR_forTest");
+  extrapolToTopoRegion( zinvMC_forShape_TR_forTest, (MT2Analysis<MT2Estimate>*)zinvMC_forShape );
+ 
+  
   //we build the hybrid shape with the above-created elements
   buildHybrid( zllHybrid_shape_TR, zllData_shape_TR, zinvMC_forShape_TR, zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape_forExtremeHT, bin_extrapol );
   
@@ -214,7 +231,9 @@ int main( int argc, char* argv[] ) {
   std::string outFile = cfg.getEventYieldDir() + "/zinvFromZll.root";
 
   zllData_shape	              ->addToFile(outFile);				  			     
-  zllMC_shape	              ->addToFile(outFile);				     			      			
+  zllMC_shape	              ->addToFile(outFile);
+  zllMC_shape_TR              ->addToFile(outFile);
+  zllMC_shape_TR_forTest      ->addToFile(outFile);
   purity_forHybrid            ->setName("purity_forHybrid");
   purity_forHybrid            ->addToFile(outFile);	
   bin_extrapol                ->addToFile(outFile);  
@@ -222,7 +241,9 @@ int main( int argc, char* argv[] ) {
   ZinvEstimateFromZll_hybrid  ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllData_shape_TR            ->addToFile(outFile);
+  zllData_shape_TR_forTest    ->addToFile(outFile);
   zinvMC_forShape_TR          ->addToFile(outFile);
+  zinvMC_forShape_TR_forTest  ->addToFile(outFile);
   zllHybrid_shape_TR          ->addToFile(outFile);
   alpha                       ->addToFile(outFile);
   zllData_of_forHybrid        ->addToFile(outFile);
@@ -354,10 +375,13 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
   std::set<MT2Region> regions_shape = shape->getRegions();
   
   //////////////loop over the SR regions, fill if contained//////////////
+  int n(1);
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
  
     MT2Region* regionToMatch = new MT2Region( *iR );
-    cout << endl << endl << "Analysis for the NORMAL REGION: " << regionToMatch->getName() << endl;
+    //if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
+      cout << endl << endl << "Analysis for the NORMAL REGION: " << regionToMatch->getName() << endl;
+      //}
 
     TH1D* this_shape_TR    = shape_TR   ->get(*iR)->yield;
     int nBins = this_shape_TR->GetNbinsX();
@@ -366,27 +390,43 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
     for( std::set<MT2Region>::iterator iR_shape=regions_shape.begin(); iR_shape!=regions_shape.end(); ++iR_shape ) { 
     
       MT2Region* regionToMatch_shape = new MT2Region( *iR_shape );
-      cout << "Try with forExtrapol region: " << regionToMatch_shape->getName() << endl;
-
+      //if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
+	cout << "Try with forExtrapol region: " << regionToMatch_shape->getName() << endl;
+	//}
+      
+  
 
       if( !(regionToMatch->MT2Region::isIncluded(regionToMatch_shape)) && !(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) )  ){continue;}  //not contained, doesn't matter
       if( regionToMatch->htMin() != regionToMatch_shape->htMin() ){continue;} //HT has to match both high and low  for all regions
       if( regionToMatch->htMax() != regionToMatch_shape->htMax() ){continue;}
 
-      if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1) ){
+      if(regionToMatch->htMin()!=1500){
+	if(regionToMatch_shape->nJetsMin() < regionToMatch->nJetsMin()) continue; //to avoid monojets to be counted where they should not
+	if((regionToMatch_shape->nJetsMin() > regionToMatch->nJetsMax()) && regionToMatch->nJetsMin()!= 7 && regionToMatch->nJetsMin()!=10) continue;
+      }
+
+      /*if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1) ){
 	//not true anymore due to 2 & 3 jets splitting, those have not to be summed no matter what,	if( (regionToMatch->nJetsMin() != regionToMatch_shape->nJetsMin()) && (regionToMatch->nJetsMax() != regionToMatch_shape->nJetsMax() ) ) continue; //lower or upper njets has to match, but not both
 	if ( regionToMatch->nBJetsMin()==3 && regionToMatch_shape->nJetsMin()==2 && regionToMatch->htMin()!=1500 ){continue;} //removing the 2j bin for the 3b shape (3b is ~requiring 3j)
-      }
-
-
-      if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3   ){
+	}*/
+       
+      //new conditions added to improve the treatment with the j2to6_b3toInf region
+      //if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
+      //if(regionToMatch_shape->nJetsMin()==7 || regionToMatch_shape->nJetsMin()==10 || (regionToMatch_shape->nJetsMin()==2 && regionToMatch_shape->nJetsMax()==-1)){
+      //	  continue;
+      //	}
+      // }
+     
+      /*
+      if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3 ){
 	if( !(regionToMatch_shape->nJetsMin()==2 || regionToMatch_shape->nJetsMin()==3) ){continue;}
       }
-
 
       if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3  && regionToMatch->nBJetsMin()==0 ){
        	std::cout << "doing the 2-3 region " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax()<<  " using the shape region " << regionToMatch_shape->nJetsMin() << "to" << regionToMatch_shape->nJetsMax() << "jets " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax() << std::endl;
       }
+      */
+      
 
       cout << "not rejected" << endl;
      
