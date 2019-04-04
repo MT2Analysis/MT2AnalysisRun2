@@ -53,7 +53,7 @@ void MT2EstimateTree::initTree( ) {
 
   tree->Branch( "run", &run, "run/I");
   tree->Branch( "lumi", &lumi, "lumi/I");
-  tree->Branch( "evt", &evt, "evt/l");
+  tree->Branch( "evt", &evt, "evt/L");
   tree->Branch( "weight", &weight, "weight/F");
   tree->Branch( "puWeight", &puWeight, "puWeight/F");
   tree->Branch( "id", &id, "id/I");
@@ -446,7 +446,7 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
 
   run    = mt2tree.run;
   lumi   = mt2tree.luminosityBlock;
-  evt    = mt2tree.event;
+  evt    = mt2tree.evt;
   weight = w;
 //  puWeight = mt2tree.puWeight;
   id     = mt2tree.evt_id;
