@@ -40,7 +40,7 @@ using namespace std;
 bool forMoriond2019 = true; 
 bool forMoriond2017 = false;
 
-bool doIntegrationOverNbWithMergedRegions = true;
+bool doIntegrationOverNbWithMergedRegions = false; //test with merged Nj regions
 bool dontDoIntegration = false; //introduced for debugging purposes only
 
 //---------------------------------------------------------//
@@ -298,6 +298,8 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
     MT2Region* region = new MT2Region( *iR );
     std::vector< std::string > niceNames = region->getNiceNames();
 
+    writeToFile << endl << endl << region->getName() << endl;
+
     MT2Estimate* SFEst = SF->get(*iR);
     MT2Estimate* OFEst = OF->get(*iR);
    
@@ -314,19 +316,24 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
       float R_sfof;
       float R_sfof_err;
       if(cfg.year()==2016){
-        R_sfof = 1.12;//1.13; // old value for preapp = 1.12; // old value for freezing 1.13;//old value 1.12(used for ehm before freezing //old value 1.11 (used for dec 2016 results)
-        R_sfof_err = 0.0; // old err, now in create DC= 0.15;
+        R_sfof = 1.12;
+        R_sfof_err = 0.0; 
       }
       else if(cfg.year()==2017){
-	R_sfof = 1.06;
-	R_sfof_err = 0.0; // FIXME: adjust this value
+	R_sfof = 1.02;
+	R_sfof_err = 0.0; 
+      }
+      else if(cfg.year()==2018){
+	R_sfof = 1.04;
+	R_sfof = 0.0;
       }
 	
       writeToFile << "R(SF/OF) = " << R_sfof << endl;
 
       float purity = 0.0;
       if(contentSF>(R_sfof * contentOF)){
-	purity = (contentSF - R_sfof * contentOF)/ contentSF;
+	//purity = (contentSF - R_sfof * contentOF)/ contentSF;
+	purity = 1.0;
 	writeToFile << "purity = (" << contentSF << " - " << R_sfof << " * " << contentOF << ")/ " << contentSF << endl;
 	writeToFile << "purity = " << purity << endl;
 	writeToFile << endl;
