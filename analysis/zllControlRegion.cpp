@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
     // MT2Analysis<MT2EstimateTree>* dataTree_filler = new MT2Analysis<MT2EstimateTree>( "data_filler", cfg.crRegionsSet() );
 
     addVariables(dataTree);      addVariables(dataTree_of); // addVariables(dataTree_filler);
-
+    /*
     if( samples_data.size()==0 ) {
       std::cout << std::endl;
       std::cout << "-> WARNING!! Didn't find any data in file: " << samplesFile_data << "!" << std::endl;
@@ -264,9 +264,9 @@ int main(int argc, char* argv[]) {
       std::cout << std::endl;
     } else {
       for( unsigned i=0; i<samples_data.size(); ++i ){
-	/*MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
-	computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, bTagSF_data, false);
-	bTagSF_data = nullptr;*/
+	//MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
+	//computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, bTagSF_data, false);
+	//bTagSF_data = nullptr;
 
 	computeYieldSnO( samples_data[i], cfg, dataTree, dataTree_of, false);
 
@@ -279,7 +279,7 @@ int main(int argc, char* argv[]) {
     }
 
     dataTree->addToFile(outputdir+"/data.root");
-    dataTree_of->writeToFile(outputdir+"/data_of.root");
+    dataTree_of->writeToFile(outputdir+"/data_of.root");*/
 
     //we create here the estimates in the ttbar enriched CR (inverted cuts on Zmass and ZpT) that are needed to compute R(SF/OF) later on
     /* MT2Analysis<MT2EstimateTree>* dataTree_invertedZcuts = new MT2Analysis<MT2EstimateTree>( "data_invertedZcuts", cfg.regionsSet() );
