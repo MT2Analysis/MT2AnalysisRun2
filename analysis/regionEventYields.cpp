@@ -362,8 +362,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   int nentries = tree->GetEntries();
 
-  //for( int iEntry=0; iEntry<20000; ++iEntry ) {
-  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  for( int iEntry=0; iEntry<20000; ++iEntry ) {
+    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ){
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
@@ -383,9 +383,14 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
     }
 
-    // apply the triggers
+    // apply the triggers on data
     if(isData and isETH) {
       if (!myTree.passTriggerSelection("SR", cfg.year())) continue;
+    }
+
+    //apply triggers on MC
+    if(!isData){
+      if(!myTree.passTriggerSelection_forMC("SR", cfg.year(), isETH)) continue;
     }
 
     if (isETH) {

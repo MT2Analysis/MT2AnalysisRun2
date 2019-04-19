@@ -141,11 +141,11 @@ int main(int argc, char* argv[]) {
     MT2Analysis<MT2EstimateTree>* mcTree_of = new MT2Analysis<MT2EstimateTree>( "zllCR_of", cfg.crRegionsSet() );
     addVariables(mcTree_of);
    
-
+    
     for( unsigned i=0; i<fSamples.size(); ++i ){
-      /*MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
-      computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, bTagSF, false);
-      bTagSF = nullptr;*/
+      //MT2BTagSFHelper* bTagSF = new MT2BTagSFHelper();
+      //computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, bTagSF, false);
+      //bTagSF = nullptr;
 
       computeYieldSnO( fSamples[i], cfg, mcTree, mcTree_of, false);
     }
@@ -162,9 +162,9 @@ int main(int argc, char* argv[]) {
       addVariables(mcTree_of_forZinvEst);
 
       for( unsigned i=0; i<fSamples.size(); ++i ){
-	/*MT2BTagSFHelper* bTagSF_forZinvEst = new MT2BTagSFHelper();
-	computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, bTagSF_forZinvEst, true);
-	bTagSF_forZinvEst = nullptr;*/
+	//MT2BTagSFHelper* bTagSF_forZinvEst = new MT2BTagSFHelper();
+	//computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, bTagSF_forZinvEst, true);
+	//bTagSF_forZinvEst = nullptr;
 
 	computeYieldSnO( fSamples[i], cfg, mcTree_forZinvEst, mcTree_of_forZinvEst, true);
       }
@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
       roundLikeData(mcTree_of);
       mcTree_of->addToFile(outputdir+"/data_of.root");
     }
-
+    
 
     if(do_bg==true){
       //MC
@@ -659,9 +659,12 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if( !(lep0_pdgId_to_use == -lep1_pdgId_to_use) ) isOF = true;
 
     if(isSF){ //////////SAME FLAVOR//////////////////////////////////////////
-      //apply the triggers
-      if(isData && isETH && !myTree.passTriggerSelection("zllSF", cfg.year()))continue;
+      //apply the triggers on data
+      if(isData && isETH && !myTree.passTriggerSelection("zllSF", cfg.year())) continue;
 
+      //apply triggers on MC
+      if(!isData && !myTree.passTriggerSelection_forMC("zllSF", cfg.year(), isETH)) continue;
+    
       if(do_ZinvEst){
 	//SF part
 	if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
@@ -856,8 +859,12 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       }
     } else if(isOF){ //////////Opposite FLAVOR//////////////////////////////////////////
-      //we apply the trigger
-      if(isData && !myTree.passTriggerSelection("zllOF", cfg.year())) continue;
+      //we apply the trigger on data
+      if(isData && isETH && !myTree.passTriggerSelection("zllOF", cfg.year())) continue;
+      
+      //we apply the trigger on MC
+      if(!isData && !myTree.passTriggerSelection_forMC("zllOF", cfg.year(), isETH)) continue;
+
       if(do_ZinvEst){
 	if( fabs(myTree.zll_mass-91.19)>=20. ) continue;
 	if( myTree.zll_pt <= 200. ) continue;
@@ -1069,13 +1076,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
   delete tree;
 
-
-
-
   file->Close();
   delete file;
-
-
 
 }
 

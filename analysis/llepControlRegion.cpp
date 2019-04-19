@@ -255,10 +255,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     }
 
-    if(iEntry == nentries){
-      cout << "finish loop on entries for this sample" << endl;
-    }
-
     myTree.GetEntry(iEntry);
 
     // Do the selection here: please try to keep a consistent order
@@ -272,12 +268,16 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if(!myTree.passFilters(cfg.year())) continue;
     }  
     else {
-      if(!myTree.passFiltersMC(cfg.year(), isETH)) {cout << "rejected by filter" << endl; continue;}
+      if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
     }
 
     // apply the triggers
     if(isData and isETH) {
-      if (!myTree.passTriggerSelection("llep", cfg.year())) continue;
+      if(!myTree.passTriggerSelection("llep", cfg.year())) continue;
+    }
+
+    if(!isData) {
+      if(!myTree.passTriggerSelection_forMC("llep", cfg.year(), isETH)) continue;
     }
 
     // apply good vertex cut once for all
