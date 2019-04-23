@@ -8,14 +8,14 @@ gammaTemplateRegions 13TeV_2016_inclusive
 crRegionsSet 13TeV_2016_inclusive
 qcdRegionsSet zurich2016_noMonojet
 
-mcSamples 2016MC_201901
+mcSamples 2016MC_201904
 dataSamples 2016data_201901
 sigSamples 2016Signals_mo17
 
 qcdMCSamples Summer16_SnT_06Mar_forQCD
 qcdDataSamples Run2016_35p9ifb_06Mar_forQCD
 
-qcdMonoJetMCSamples 2016MC_201812
+qcdMonoJetMCSamples 2016MC_201904
 qcdMonoJetDataSamples Run2016_35p9ifb_06Mar_forMonoJet
 
 #additionalStuff noSignals
