@@ -231,6 +231,7 @@ public :
    Int_t           Flag_EcalDeadCellTriggerPrimitiveFilter_INT;
    Int_t           Flag_EcalDeadCellBoundaryEnergyFilter_INT;
    Int_t           Flag_ecalBadCalibFilter_INT;
+   Int_t           Flag_ecalBadCalibFilterUpdate_INT;
    Int_t           Flag_goodVertices_INT;
    Int_t           Flag_eeBadScFilter_INT;
    Int_t           Flag_ecalLaserCorrFilter_INT;
@@ -245,7 +246,7 @@ public :
    Int_t           Flag_trkPOG_toomanystripclus53X_INT;
    Int_t           Flag_trkPOG_logErrorTooManyClusters_INT;
    Int_t           Flag_METFilters_INT;
-   Int_t           Flag_badMuonFilterV2_INT;
+   Int_t           Flag_badMuonFilter_INT;
    Int_t           Flag_badChargedHadronFilterV2_INT;
 /*   Bool_t          Flag_HBHENoiseFilter;
    Bool_t          Flag_HBHENoiseIsoFilter;
@@ -695,6 +696,7 @@ public :
    TBranch        *b_Flag_EcalDeadCellTriggerPrimitiveFilter_INT;   //!
    TBranch        *b_Flag_EcalDeadCellBoundaryEnergyFilter_INT;   //!
    TBranch        *b_Flag_ecalBadCalibFilter_INT;   //!
+   TBranch        *b_Flag_ecalBadCalibFilterUpdate_INT;   //!
    TBranch        *b_Flag_goodVertices_INT;   //!
    TBranch        *b_Flag_eeBadScFilter_INT;   //!
    TBranch        *b_Flag_ecalLaserCorrFilter_INT;   //!
@@ -709,7 +711,7 @@ public :
    TBranch        *b_Flag_trkPOG_toomanystripclus53X_INT;   //!
    TBranch        *b_Flag_trkPOG_logErrorTooManyClusters_INT;   //!
    TBranch        *b_Flag_METFilters_INT;   //!
-   TBranch        *b_Flag_badMuonFilterV2_INT;   //!
+   TBranch        *b_Flag_badMuonFilter_INT;   //!
    TBranch        *b_Flag_badChargedHadronFilterV2_INT;   //!
 
 /*   TBranch        *b_Flag_HBHENoiseFilter;   //!
@@ -1118,6 +1120,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter_INT, &b_Flag_EcalDeadCellTriggerPrimitiveFilter_INT);
    fChain->SetBranchAddress("Flag_EcalDeadCellBoundaryEnergyFilter", &Flag_EcalDeadCellBoundaryEnergyFilter_INT, &b_Flag_EcalDeadCellBoundaryEnergyFilter_INT);
    fChain->SetBranchAddress("Flag_ecalBadCalibFilter", &Flag_ecalBadCalibFilter_INT, &b_Flag_ecalBadCalibFilter_INT);
+   fChain->SetBranchAddress("Flag_ecalBadCalibFilterUpdate", &Flag_ecalBadCalibFilterUpdate_INT, &b_Flag_ecalBadCalibFilterUpdate_INT);
    fChain->SetBranchAddress("Flag_goodVertices", &Flag_goodVertices_INT, &b_Flag_goodVertices_INT);
    fChain->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter_INT, &b_Flag_eeBadScFilter_INT);
    fChain->SetBranchAddress("Flag_ecalLaserCorrFilter", &Flag_ecalLaserCorrFilter_INT, &b_Flag_ecalLaserCorrFilter_INT);
@@ -1132,7 +1135,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("Flag_trkPOG_toomanystripclus53X", &Flag_trkPOG_toomanystripclus53X_INT, &b_Flag_trkPOG_toomanystripclus53X_INT);
    fChain->SetBranchAddress("Flag_trkPOG_logErrorTooManyClusters", &Flag_trkPOG_logErrorTooManyClusters_INT, &b_Flag_trkPOG_logErrorTooManyClusters_INT);
    fChain->SetBranchAddress("Flag_METFilters", &Flag_METFilters_INT, &b_Flag_METFilters_INT);
-   fChain->SetBranchAddress("Flag_badMuonFilterV2", &Flag_badMuonFilterV2_INT, &b_Flag_badMuonFilterV2_INT);
+   fChain->SetBranchAddress("Flag_badMuonFilter", &Flag_badMuonFilter_INT, &b_Flag_badMuonFilter_INT);
    fChain->SetBranchAddress("Flag_badChargedHadronFilterV2", &Flag_badChargedHadronFilterV2_INT, &b_Flag_badChargedHadronFilterV2_INT);
    }
 //    fChain->SetBranchAddress("Flag_HBHENoiseFilter", &Flag_HBHENoiseFilter, &b_Flag_HBHENoiseFilter);
@@ -1614,14 +1617,15 @@ Bool_t MT2Tree::passFiltersMC(int year, const bool& isETH) const {
     bool Flag_HBHENoiseFilter_BOOL                    = (Flag_HBHENoiseFilter_INT == 1)? true : false;
     bool Flag_HBHENoiseIsoFilter_BOOL                 = (Flag_HBHENoiseIsoFilter_INT == 1)? true : false;
     bool Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL = (Flag_EcalDeadCellTriggerPrimitiveFilter_INT == 1)? true : false;
-    bool Flag_badMuonFilterV2_BOOL                    = (Flag_badMuonFilterV2_INT == 1)? true : false;
+    bool Flag_badMuonFilter_BOOL                      = (Flag_badMuonFilter_INT == 1)? true : false;
     //bool Flag_badChargedCandidateFilter_BOOL          = (Flag_BadChargedCandidateFilter_INT == 1)? true : false;
     bool Flag_ecalBadCalibFilter_BOOL                 = (Flag_ecalBadCalibFilter_INT == 1)? true : false;
+    bool Flag_ecalBadCalibFilterUpdate_BOOL           = (Flag_ecalBadCalibFilterUpdate_INT == 1)? true : false;
     if(year == 2016){     
-      return Flag_goodVertices_BOOL && Flag_globalSuperTightHalo2016Filter_BOOL && Flag_HBHENoiseFilter_BOOL && Flag_HBHENoiseIsoFilter_BOOL && Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL && Flag_badMuonFilterV2_BOOL ;
+      return Flag_goodVertices_BOOL && Flag_globalSuperTightHalo2016Filter_BOOL && Flag_HBHENoiseFilter_BOOL && Flag_HBHENoiseIsoFilter_BOOL && Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL && Flag_badMuonFilter_BOOL ;
     }
     else if(year == 2017 || year == 2018){  
-      return Flag_goodVertices_BOOL && Flag_globalSuperTightHalo2016Filter_BOOL && Flag_HBHENoiseFilter_BOOL && Flag_HBHENoiseIsoFilter_BOOL && Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL && Flag_badMuonFilterV2_BOOL && Flag_ecalBadCalibFilter_BOOL ;
+       return Flag_goodVertices_BOOL && Flag_globalSuperTightHalo2016Filter_BOOL && Flag_HBHENoiseFilter_BOOL && Flag_HBHENoiseIsoFilter_BOOL && Flag_EcalDeadCellTriggerPrimitiveFilter_BOOL && Flag_badMuonFilter_BOOL && Flag_ecalBadCalibFilterUpdate_BOOL ;
     }
   }
 }

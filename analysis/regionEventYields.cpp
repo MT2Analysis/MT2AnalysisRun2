@@ -362,8 +362,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   int nentries = tree->GetEntries();
 
-  for( int iEntry=0; iEntry<20000; ++iEntry ) {
-    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  //for( int iEntry=0; iEntry<20000; ++iEntry ) {
+  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ){
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;

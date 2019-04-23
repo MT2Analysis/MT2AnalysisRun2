@@ -268,7 +268,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if(!myTree.passFilters(cfg.year())) continue;
     }  
     else {
-      if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
+      if(!myTree.passFiltersMC(cfg.year(), isETH)){cout << "rejected by filter" << endl; continue;}
     }
 
     // apply the triggers
@@ -277,7 +277,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
 
     if(!isData) {
-      if(!myTree.passTriggerSelection_forMC("llep", cfg.year(), isETH)) continue;
+      if(!myTree.passTriggerSelection_forMC("llep", cfg.year(), isETH)){cout << "rejected by trigger" << endl; continue;}
     }
 
     // apply good vertex cut once for all
