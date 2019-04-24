@@ -323,7 +323,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float candLep_phi = 0;
 
     // if reco leps, check those
-    int nlep_to_use = isETH ? myTree.nLep : myTree.nlep;
+    int nlep_to_use = myTree.nlep;
     if (nlep_to_use > 0) {
       for (int ilep = 0; ilep < nlep_to_use; ++ilep) {
         float mt = sqrt( 2 * myTree.met_pt * myTree.lep_pt[ilep] * ( 1 - cos( myTree.met_phi - myTree.lep_phi[ilep]) ) );
@@ -433,7 +433,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
       bool isFastSim = false;
 
-      bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
+      bTagSF->get_weight_btag(myTree.njet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
 
       //cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
 

@@ -528,12 +528,12 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
     //crazy events! To be piped into a separate txt file
     if(myTree.jet_pt[0] > 13000){
-      std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
+      std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.evt << std::endl;
       continue;
     }
     //check if is there is a nan
     if( isnan(myTree.ht) || isnan(myTree.met_pt) ||  isinf(myTree.ht) || isinf(myTree.met_pt)  ){
-      std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
+      std::cout << "Rejecting nan/inf event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.evt << std::endl;
       continue;
     }
 
@@ -544,7 +544,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
 
     // Kinematic selections common to both SF and OF
-    int nLep_to_be_used = isETH ? myTree.nLep : myTree.nlep;
+    //int nLep_to_be_used = isETH ? myTree.nLep : myTree.nlep;
+    int nLep_to_be_used = myTree.nlep;
     if(!( nLep_to_be_used==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
@@ -554,7 +555,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
         if( !myTree.passSelection("zll", cfg.year(), isETH) ) continue;
     }
 
-    if((lep0_pdgId_to_use*lep1_pdgId_to_use)>0 )   continue;
+    if((lep0_pdgId_to_use*lep1_pdgId_to_use)>0 ) continue;
 
     int njets  = myTree.nJet30;
     int nbjets = myTree.nBJet20;
@@ -644,7 +645,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }
     */
     int nJetHF30_ = 0;
-    int nJet_to_use = (isETH) ? myTree.nJet : myTree.njet;
+    int nJet_to_use = myTree.njet;
     for(int j=0; j<nJet_to_use; ++j){
       if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
       else ++nJetHF30_;
@@ -659,12 +660,13 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if( !(lep0_pdgId_to_use == -lep1_pdgId_to_use) ) isOF = true;
 
     if(isSF){ //////////SAME FLAVOR//////////////////////////////////////////
+ 
       //apply the triggers on data
       if(isData && isETH && !myTree.passTriggerSelection("zllSF", cfg.year())) continue;
-
+     
       //apply triggers on MC
       if(!isData && !myTree.passTriggerSelection_forMC("zllSF", cfg.year(), isETH)) continue;
-    
+         
       if(do_ZinvEst){
 	//SF part
 	if( fabs(myTree.zll_mass-91.19)>=20 ) continue;
@@ -675,6 +677,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	if(myTree.zll_pt > 200.) continue;
 	if(myTree.zll_mass < 50) continue;
       }
+
       /////////////////////////
       //FIXME: what to do with SF weights?
       // if( abs(myTree.lep_pdgId[0])==11 && myTree.lep_tightId[0]< 0.5 ) continue;

@@ -36,7 +36,6 @@ public :
    Float_t         CaloMET_sumEt;
    UInt_t          nElectron;
    UInt_t          nIsoTrack;
-   UInt_t          nJet;
    Float_t         MET_MetUnclustEnUpDeltaX;
    Float_t         MET_MetUnclustEnUpDeltaY;
    Float_t         MET_covXX;
@@ -347,7 +346,6 @@ public :
    Float_t         zll_mt2;
    Float_t         zll_met_pt;
    Float_t         zll_met_phi;
-   UInt_t          nLep;
    Float_t         lep_pt[10];   //[nLep]
    Float_t         lep_eta[10];   //[nLep]
    Float_t         lep_phi[10];   //[nLep]
@@ -500,7 +498,6 @@ public :
    TBranch        *b_CaloMET_sumEt;   //!
    TBranch        *b_nElectron;   //!
    TBranch        *b_nIsoTrack;   //!
-   TBranch        *b_nJet;   //!
    TBranch        *b_MET_MetUnclustEnUpDeltaX;   //!
    TBranch        *b_MET_MetUnclustEnUpDeltaY;   //!
    TBranch        *b_MET_covXX;   //!
@@ -813,7 +810,6 @@ public :
    TBranch        *b_zll_mt2;   //!
    TBranch        *b_zll_met_pt;   //!
    TBranch        *b_zll_met_phi;   //!
-   TBranch        *b_nLep;   //!
    TBranch        *b_lep_pt;   //!
    TBranch        *b_lep_eta;   //!
    TBranch        *b_lep_phi;   //!
@@ -1053,7 +1049,6 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("CaloMET_sumEt", &CaloMET_sumEt, &b_CaloMET_sumEt);
    fChain->SetBranchAddress("nElectron", &nElectron, &b_nElectron);
    fChain->SetBranchAddress("nIsoTrack", &nIsoTrack, &b_nIsoTrack);
-   fChain->SetBranchAddress("nJet", &nJet, &b_nJet);
    fChain->SetBranchAddress("MET_MetUnclustEnUpDeltaX", &MET_MetUnclustEnUpDeltaX, &b_MET_MetUnclustEnUpDeltaX);
    fChain->SetBranchAddress("MET_MetUnclustEnUpDeltaY", &MET_MetUnclustEnUpDeltaY, &b_MET_MetUnclustEnUpDeltaY);
    fChain->SetBranchAddress("MET_covXX", &MET_covXX, &b_MET_covXX);
@@ -1196,7 +1191,6 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("zll_mt2", &zll_mt2, &b_zll_mt2);
    fChain->SetBranchAddress("zll_met_pt", &zll_met_pt, &b_zll_met_pt);
    fChain->SetBranchAddress("zll_met_phi", &zll_met_phi, &b_zll_met_phi);
-   fChain->SetBranchAddress("nLep", &nLep, &b_nLep);
    fChain->SetBranchAddress("lep_pt", lep_pt, &b_lep_pt);
    fChain->SetBranchAddress("lep_eta", lep_eta, &b_lep_eta);
    fChain->SetBranchAddress("lep_phi", lep_phi, &b_lep_phi);
@@ -1643,11 +1637,11 @@ Bool_t MT2Tree::passMonoJetId( int j ) const {
 Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 {
 
-    float cutOnHT=1200;
+    float cutOnHT=1200.;
 
     if (sel=="zll"){
-    int lepSize = 0;
-    lepSize = isETH ? nLep : nlep;
+      int lepSize = 0;
+      lepSize = nlep;
 
       return nJet30 >= 1 &&
 	nJet30FailId == 0 &&
@@ -1794,7 +1788,6 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH, bool myIsData) const{
 
   if((myIsData && run >= HEM_startRun) || (!myIsData && evt % HEM_fracDen < HEM_fracNum)){
     for (int i=0; i<jetSize; i++){
-      cout << i << endl;
       if (jet_pt[i] > 30 &&
           jet_eta[i] > -4.7 && jet_eta[i] < -1.4 &&
           jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
