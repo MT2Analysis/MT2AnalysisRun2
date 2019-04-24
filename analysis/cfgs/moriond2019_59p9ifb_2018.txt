@@ -9,7 +9,7 @@ crRegionsSet 13TeV_2016_inclusive
 qcdRegionsSet 13TeV_2016_inclusive
 
 mcSamples 2018MC_201904
-dataSamples 2018data_201901
+dataSamples 2018data_201904
 
 qcdMCSamples Summer16_SnT_06Mar_forQCD
 qcdDataSamples Run2016_35p9ifb_06Mar_forQCD
