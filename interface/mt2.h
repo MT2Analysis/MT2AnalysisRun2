@@ -1787,17 +1787,17 @@ Bool_t MT2Tree::passHEMFailVeto(int year, bool isETH, bool myIsData) const{
   if (year!=2018) return true; // only apply for 2018
 
   int jetSize = 0;
-  jetSize = isETH ? nJet : njet; // different branches names bw ETH and SnT
-
+  //jetSize = isETH ? nJet : njet; // different branches names bw ETH and SnT
+  jetSize = njet; 
+ 
   bool hasHEMFailJet = false;
 
   if((myIsData && run >= HEM_startRun) || (!myIsData && evt % HEM_fracDen < HEM_fracNum)){
-
     for (int i=0; i<jetSize; i++){
+      cout << i << endl;
       if (jet_pt[i] > 30 &&
           jet_eta[i] > -4.7 && jet_eta[i] < -1.4 &&
           jet_phi[i] > -1.6 && jet_phi[i] < -0.8){
-
             hasHEMFailJet=true;
             break; // exit from the loop as soon as you find a jet in the hem fail region
       }
