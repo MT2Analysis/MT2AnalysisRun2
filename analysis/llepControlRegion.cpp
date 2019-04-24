@@ -268,7 +268,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if(!myTree.passFilters(cfg.year())) continue;
     }  
     else {
-      if(!myTree.passFiltersMC(cfg.year(), isETH) continue;
+      if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
     }
 
     // apply the triggers
