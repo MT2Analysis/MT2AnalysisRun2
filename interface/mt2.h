@@ -925,6 +925,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
 
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("luminosityBlock", &luminosityBlock, &b_luminosityBlock);
+   fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("lumi", &lumi, &b_lumi);
    fChain->SetBranchAddress("isData", &isData, &b_isData);
    fChain->SetBranchAddress("evt", &evt, &b_evt);
@@ -1439,7 +1440,7 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 
     if (sel=="zll"){
     int lepSize = 0;
-    lepSize = nlep; 
+    lepSize = nlep;
 
       return nJet30 >= 1 &&
 	nJet30FailId == 0 &&
