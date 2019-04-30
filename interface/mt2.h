@@ -202,6 +202,7 @@ public :
    Bool_t          Flag_EcalDeadCellTriggerPrimitiveFilter;
    Bool_t          Flag_EcalDeadCellBoundaryEnergyFilter;
    Bool_t          Flag_ecalBadCalibFilter;
+   Bool_t          Flag_ecalBadCalibFilterV2;
    Bool_t          Flag_goodVertices;
    Bool_t          Flag_eeBadScFilter;
    Bool_t          Flag_ecalLaserCorrFilter;
@@ -662,6 +663,7 @@ public :
    TBranch        *b_Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
    TBranch        *b_Flag_EcalDeadCellBoundaryEnergyFilter;   //!
    TBranch        *b_Flag_ecalBadCalibFilter;   //!
+   TBranch        *b_Flag_ecalBadCalibFilterV2;   //!
    TBranch        *b_Flag_goodVertices;   //!
    TBranch        *b_Flag_eeBadScFilter;   //!
    TBranch        *b_Flag_ecalLaserCorrFilter;   //!
@@ -1082,6 +1084,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter, &b_Flag_EcalDeadCellTriggerPrimitiveFilter);
    fChain->SetBranchAddress("Flag_EcalDeadCellBoundaryEnergyFilter", &Flag_EcalDeadCellBoundaryEnergyFilter, &b_Flag_EcalDeadCellBoundaryEnergyFilter);
    fChain->SetBranchAddress("Flag_ecalBadCalibFilter", &Flag_ecalBadCalibFilter, &b_Flag_ecalBadCalibFilter);
+   fChain->SetBranchAddress("Flag_ecalBadCalibFilterV2", &Flag_ecalBadCalibFilterV2, &b_Flag_ecalBadCalibFilterV2);
    fChain->SetBranchAddress("Flag_goodVertices", &Flag_goodVertices, &b_Flag_goodVertices);
    fChain->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter, &b_Flag_eeBadScFilter);
    fChain->SetBranchAddress("Flag_ecalLaserCorrFilter", &Flag_ecalLaserCorrFilter, &b_Flag_ecalLaserCorrFilter);
@@ -1577,11 +1580,11 @@ Bool_t MT2Tree::passFilters(int year) const {
     // Flag_BadChargedCandidateFilter; temporally removed, under investigations of the POG
   }
   else if(year == 2017){
-    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilterV2;
     // && Flag_BadChargedCandidateFilter
   }
   else if(year == 2018){
-    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilterV2;
     // && Flag_BadChargedCandidateFilter
   }
 }
@@ -1594,10 +1597,10 @@ Bool_t MT2Tree::passFiltersMC(int year, const bool& isETH) const {
       return Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter ;
     }
     else if(year == 2017){
-      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilterV2;
     }
     else if(year == 2018){
-      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilterV2;
     }
   }
   else if(!isETH){ //SnT flags are ints instead of booleans
