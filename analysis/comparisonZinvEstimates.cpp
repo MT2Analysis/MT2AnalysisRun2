@@ -769,8 +769,8 @@ void plotEstimateVSNb_combined(){
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
 
-  bool doZll = false;
-  bool doZinv = true;
+  bool doZll = true;
+  bool doZinv = false;
 
   TFile* file1;
   TFile* file2;
@@ -1091,12 +1091,10 @@ void plotEstimateVSNb_combined(){
 	TString thisName = thisRegion->getName();
 	c->SaveAs(directoryToSave + n + "_normalized.pdf");
 	c->SaveAs(directoryToSave + n + "_normalized.png");
-	//c->SaveAs(directoryToSave + title + "_normalized.pdf");
-	//c->SaveAs(directoryToSave + n + "_normalized.root");
+	
 	if(legIndex>fileIndex){
 	  remove(directoryToSave + n_previous + "_normalized.pdf"); 
 	  remove(directoryToSave + n_previous + "_normalized.png"); 
-	  //remove(directoryToSave + n_previous + "_normalized.root"); 
 	}
 	
       }

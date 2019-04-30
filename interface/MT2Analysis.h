@@ -573,11 +573,8 @@ MT2Analysis<T>::MT2Analysis( const std::string& aname, const std::string& region
 
     regions_ = multiplyHTandSignal(htRegions, signalRegions);
     
-    //merged CR regions with Nj>=7
     regions_.insert(MT2Region(250., 450., 7, -1, 0, -1));
     regions_.insert(MT2Region(450., 575., 7, -1, 0, -1));
-    //regions_.insert(MT2Region(575., 1200., 7, -1, 0, -1));
-    //regions_.insert(MT2Region(1200., 1500., 7, -1, 0, -1));
     regions_.insert(MT2Region(575., 1200., 7, 9, 0, -1));
     regions_.insert(MT2Region(575., 1200., 10, -1, 0, -1));
     regions_.insert(MT2Region(1200., 1500., 7, 9, 0, -1));
@@ -599,6 +596,44 @@ MT2Analysis<T>::MT2Analysis( const std::string& aname, const std::string& region
     regions_.insert(MT2Region(450., 575., 1, 1, 1, -1));
     regions_.insert(MT2Region(575., 700., 1, 1, 1, -1));
     regions_.insert(MT2Region(700.,  -1, 1, 1, 1, -1));
+
+  }else if (regionsSet == "Moriond2019_forExtrapol_merged"){
+    std::set<MT2HTRegion> htRegions; 
+    htRegions.insert(MT2HTRegion(250., 450.));
+    htRegions.insert(MT2HTRegion(450., 575.));
+    htRegions.insert(MT2HTRegion(575., 1200.));
+    htRegions.insert(MT2HTRegion(1200., 1500.));
+   
+    std::set<MT2SignalRegion> signalRegions;
+    signalRegions.insert(MT2SignalRegion(2, 2, 0, -1));
+    signalRegions.insert(MT2SignalRegion(3, 3, 0, -1));
+    signalRegions.insert(MT2SignalRegion(4, 6, 0, -1));
+
+    regions_ = multiplyHTandSignal(htRegions, signalRegions);
+    
+    //merged CR regions with Nj>=7
+    regions_.insert(MT2Region(250., 450., 7, -1, 0, -1));
+    regions_.insert(MT2Region(450., 575., 7, -1, 0, -1));
+    regions_.insert(MT2Region(575., 1200., 7, -1, 0, -1));
+    regions_.insert(MT2Region(1200., 1500., 7, -1, 0, -1));
+    regions_.insert(MT2Region(1500., -1, 2, -1, 0, -1)); //for extreme high Ht we also integrate over Nj
+    
+    
+    //and the monojet regions
+    regions_.insert(MT2Region(250., 350., 1, 1, 0, 0)); 
+    regions_.insert(MT2Region(350., 450., 1, 1, 0, 0)); 
+    regions_.insert(MT2Region(450., 575., 1, 1, 0, 0));
+    regions_.insert(MT2Region(575., 700., 1, 1, 0, 0));
+    regions_.insert(MT2Region(700.,1000., 1, 1, 0, 0));
+    regions_.insert(MT2Region(1000.,1200., 1, 1, 0, 0));
+    regions_.insert(MT2Region(1200.,  -1, 1, 1, 0, 0));
+
+    regions_.insert(MT2Region(250., 350., 1, 1, 1, -1));
+    regions_.insert(MT2Region(350., 450., 1, 1, 1, -1));
+    regions_.insert(MT2Region(450., 575., 1, 1, 1, -1));
+    regions_.insert(MT2Region(575., 700., 1, 1, 1, -1));
+    regions_.insert(MT2Region(700.,  -1, 1, 1, 1, -1));
+
     
   }else if( regionsSet=="zurich2016" ){
 
