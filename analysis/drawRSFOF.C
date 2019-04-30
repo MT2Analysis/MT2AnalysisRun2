@@ -464,8 +464,8 @@ int main(){
       TString valpT = to_string(npT[i]);
       TString valMass = to_string(nMass[j]);
 
-      SF->Draw("ht>>htSF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nLep==2 ", "goff");
-      OF->Draw("ht>>htOF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nLep==2", "goff");
+      SF->Draw("ht>>htSF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nlep==2 ", "goff");
+      OF->Draw("ht>>htOF", "Z_pt<=" + valpT + " && Z_mass>=" + valMass + " && (Z_mass<=71.19 || Z_mass>111.19) && ht>=250 && mt2>200. && lep_pt0>100. && lep_pt1>30.  && (nJets>1 || (mt2>250.)) && nlep==2", "goff");
   
       integral_sf = htSF->IntegralAndError(1,-1, error_sf);
       integral_of = htOF->IntegralAndError(1,-1, error_of);

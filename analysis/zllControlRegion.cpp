@@ -496,13 +496,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     int lep0_pdgId_to_use = -1;
     int lep1_pdgId_to_use = -1;
 
-    if(isETH) {
-      lep0_pdgId_to_use = myTree.lep_pdgId[0];
-      lep1_pdgId_to_use = myTree.lep_pdgId[1];
-    } else {
-      lep0_pdgId_to_use = myTree.lep_pdgId_INT[0];
-      lep1_pdgId_to_use = myTree.lep_pdgId_INT[1];
-    }
+    lep0_pdgId_to_use = myTree.lep_pdgId[0];
+    lep1_pdgId_to_use = myTree.lep_pdgId[1];
 
     // if( myTree.isData && !myTree.isGolden ) continue;
 
@@ -544,7 +539,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
 
     // Kinematic selections common to both SF and OF
-    //int nLep_to_be_used = isETH ? myTree.nLep : myTree.nlep;
+
     int nLep_to_be_used = myTree.nlep;
     if(!( nLep_to_be_used==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
@@ -637,7 +632,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       bool isFastSim = false;
 
-      bTagSF->get_weight_btag(myTree.nJet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
+      bTagSF->get_weight_btag(myTree.njet, myTree.jet_pt, myTree.jet_eta, myTree.jet_mcFlavour, myTree.jet_btagCSV, weight_btagsf, weight_btagsf_heavy_UP, weight_btagsf_heavy_DN, weight_btagsf_light_UP, weight_btagsf_light_DN , isFastSim);
 
       cout << "nJet: " << myTree.nJet << " bTagSF: " << weight_btagsf << endl;
 
@@ -645,6 +640,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }
     */
     int nJetHF30_ = 0;
+
     int nJet_to_use = myTree.njet;
     for(int j=0; j<nJet_to_use; ++j){
       if( myTree.jet_pt[j] < 30. || fabs(myTree.jet_eta[j]) < 3.0 ) continue;
