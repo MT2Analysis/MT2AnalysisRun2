@@ -57,7 +57,7 @@ int main( int argc, char* argv[] ) {
   MT2Config cfg(configFileName);
 
 
-  TH1::AddDirectory(kTRUE);
+  TH1::AddDirectory(kFALSE);
 
 
   std::string llepControlRegionDir = cfg.getEventYieldDir() + "/llepControlRegion";
