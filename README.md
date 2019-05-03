@@ -58,6 +58,7 @@ and then recompile
 
 ## Run - time !
 
+
 ### Data and backgrounds
 
 Preliminary comment:
@@ -120,6 +121,18 @@ In each HT region
 'moriond2019' is set by default. 'moriond2017' produces the plots with the 'zurich2016' regions set.
 
 For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis2015/tree/MT2Analysis2015_RandD
+
+
+To run the analysis automatically, use launch_analysis.sh
+
+Open the file, and set the parameters in the user's decision board according to your wish.
+
+Once done, do
+
+```
+source launch_analysis.sh
+```
+
 
 ### Signals
 
