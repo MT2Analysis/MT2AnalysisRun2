@@ -122,6 +122,7 @@ In each HT region
 
 For post-fit plots, please consult https://github.com/MT2Analysis/MT2Analysis2015/tree/MT2Analysis2015_RandD
 
+#### Automatic launch
 
 To run the analysis automatically, use launch_analysis.sh
 
