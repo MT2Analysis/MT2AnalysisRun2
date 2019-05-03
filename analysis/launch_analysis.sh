@@ -28,9 +28,9 @@ doMakeClean=false #do you want to clean all the .o files?
 
 doCreationNtuples=false #do you want to create SR and CR ntuples?
 
-doComputationEstimates=false #do you want to compute the Lost Lepton and Z invisible estimates?
+doComputationEstimates=true #do you want to compute the Lost Lepton and Z invisible estimates?
 
-doDatacard=false #do you want to create the datacards?
+doDatacard=true #do you want to create the datacards?
 
 doSRplot=true #do you want to produce the SR plots?
 

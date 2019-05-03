@@ -106,7 +106,8 @@ int main( int argc, char* argv[] ) {
  
   
   //second component to build the estimate: purity of Z->ll in the control sample (retrieved from SF and OF data samples)
-  MT2Analysis<MT2EstimateSyst>* purity_forHybrid = computePurityOF(zllData_forHybrid, zllData_of_forHybrid, cfg, 1);  
+  MT2Analysis<MT2EstimateSyst>* purity_forHybrid = computePurityOF(zllData_forHybrid, zllData_of_forHybrid, cfg, 1); 
+  purity_forHybrid->setName("purity_forHybrid");
 
  
 
@@ -229,6 +230,20 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid = new MT2Analysis<MT2Estimate>( "ZinvEstimateFromZll_hybrid", cfg.regionsSet() );
   (*ZinvEstimateFromZll_hybrid) = (*zllData_forHybrid) * (*purity_forHybrid) * (*alpha) ;
 
+  //needed for further studies, please ignore
+  MT2Analysis<MT2Estimate>* kHybrid_alternative = new MT2Analysis<MT2Estimate>( "kHybrid_alternative", cfg.regionsSet() );
+  (*kHybrid_alternative) = (*zllData_shape_TR) * (*zinvMC_forShape_TR) / (*zllMC_shape_TR);
+  
+  std::set<MT2Region> regions = kHybrid_alternative->getRegions();
+  for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {    
+    double integral = kHybrid_alternative->get(*iR)->yield->Integral(1, -1);
+    kHybrid_alternative->get(*iR)->yield->Scale(1/integral);
+  }
+
+
+  MT2Analysis<MT2Estimate>* ZinvEstimateFromZll_hybrid_fullData = new MT2Analysis<MT2Estimate>( "ZinvEstimateFromZll_hybrid_fullData", cfg.regionsSet() );
+  (*ZinvEstimateFromZll_hybrid_fullData) = (*zllData_forHybrid) * (*purity_forHybrid) * (*ZinvZllRatioHybrid) * (*kHybrid_alternative) ;
+
 
   //we save in the output file
   std::string outFile = cfg.getEventYieldDir() + "/zinvFromZll.root";
@@ -237,11 +252,11 @@ int main( int argc, char* argv[] ) {
   zllMC_shape	              ->addToFile(outFile);
   zllMC_shape_TR              ->addToFile(outFile);
   zllMC_shape_TR_forTest      ->addToFile(outFile);
-  purity_forHybrid            ->setName("purity_forHybrid");
   purity_forHybrid            ->addToFile(outFile);	
   bin_extrapol                ->addToFile(outFile);  
   ZinvZllRatioHybrid          ->addToFile(outFile); 
   ZinvEstimateFromZll_hybrid  ->addToFile(outFile);
+  ZinvEstimateFromZll_hybrid_fullData  ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllData_shape_TR            ->addToFile(outFile);
   zllData_shape_TR_forTest    ->addToFile(outFile);
@@ -249,6 +264,7 @@ int main( int argc, char* argv[] ) {
   zinvMC_forShape_TR          ->addToFile(outFile);
   zinvMC_forShape_TR_forTest  ->addToFile(outFile);
   zllHybrid_shape_TR          ->addToFile(outFile);
+  kHybrid_alternative         ->addToFile(outFile);
   alpha                       ->addToFile(outFile);
   zllData_of_forHybrid        ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
@@ -530,7 +546,94 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
   int bin_extrapol = 1;
   int val_mt2 = 200;
 
-  if(region->htMin()==250 && region->htMax()==450 ){
+  string regionName = region->getName();
+  
+  if(regionName=="HT250to450_j2to3_b0") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j2to3_b1") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j2to3_b2") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j4to6_b0") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j4to6_b1") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j4to6_b2") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j7toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j7toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j7toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j7toInf_b3toInf") bin_extrapol = 1;
+
+  
+  else if(regionName=="HT450to575_j2to3_b0") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j2to3_b1") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j2to3_b2") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j7toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j7toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j7toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j2to6_b3toInf") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j7toInf_b3toInf") bin_extrapol = 1;
+
+
+  else if(regionName=="HT575to1200_j2to3_b0") bin_extrapol = 7;
+  else if(regionName=="HT575to1200_j2to3_b1") bin_extrapol = 5;
+  else if(regionName=="HT575to1200_j2to3_b2") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j4to6_b0") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j4to6_b1") bin_extrapol = 4;
+  else if(regionName=="HT575to1200_j4to6_b2") bin_extrapol = 4;
+  else if(regionName=="HT575to1200_j2to6_b3toInf") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j7to9_b0") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b1") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b2") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b3") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b4toInf") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b0") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b1") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b2") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b3") bin_extrapol = 3;
+  else if(regionName=="HT575to1200_j10toInf_b4toInf") bin_extrapol = 2;
+
+
+  else if(regionName=="HT1200to1500_j2to3_b0") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to3_b1") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to3_b2") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT1200to1500_j7to9_b0") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b1") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b2") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b3") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b4toInf") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b3") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b4toInf") bin_extrapol = 2;
+
+
+  else if(regionName=="HT1500toInf_j2to3_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to3_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to3_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT1500toInf_j7to9_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b3") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j7to9_b4toInf") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b0") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j10toInf_b1") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j10toInf_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b3") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b4toInf") bin_extrapol = 3;
+
+  else{ cout << "PROBLEM IN THE REGION NAME " << regionName <<  endl; 
+}
+
+  /*if(region->htMin()==250 && region->htMax()==450 ){
     if( region->nJetsMin()==2 )
       val_mt2 = 400;
     else
@@ -560,7 +663,9 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
   bin_extrapol = histo->FindBin( val_mt2 );
 
   if( histo->GetBinLowEdge(bin_extrapol) != val_mt2 ) 
-    std::cout << "the boundaries are wrong " << std::endl;
+  std::cout << "the boundaries are wrong " << std::endl;*/
+
+  
 
   return bin_extrapol;
 }
@@ -624,7 +729,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 0;
+    bool getExtrapolBin = 1;
 
     if(getExtrapolBin){
 
@@ -636,7 +741,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 	bin_extrapol = getFixedExtrapolBin( region, this_shape_data );
 
 	if( bin_extrapol == nBins ){ //We take the full shape from data!
-	  bin_extrapol = bin_extrapol+1;
+	  bin_extrapol = bin_extrapol; //bin_extrapol+1; removed the +1, as it is already taken into account in te getFixedExtrapolBin function
 	  integral = 1.;//we don't have to do a special normalization in this case
 	  errData  = 0.;
 	  integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
