@@ -18,6 +18,7 @@
 #include "../interface/Utils.h"
 #include "../interface/MT2LeptonSFTool.h"
 #include "../interface/MT2BTagSFHelper.h"
+#include "../interface/MT2PuReweightTool.h"
 
 #include "TMath.h"
 #include "TH1D.h"
@@ -453,6 +454,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
   bool diLepTrigEffHist = leptonSF.setDiLepTriggerHist(cfg.year());
 
+  // initialization of pu weight tool
+  MT2PuReweightTool puReweight;
+  bool puHist = puReweight.setPuWeightHist(cfg.year());
+
   std::string regionsSet = cfg.crRegionsSet();
   if( do_ZinvEst || invertedZcuts ) regionsSet = cfg.regionsSet();
 
@@ -509,6 +514,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     else {
       if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
     }
+
+    // additional ad-hoc filters, only available with SnT ntuples
+    if(!isETH && myTree.nJet200MuFrac50DphiMet > 0) continue;
+    if(!isETH && myTree.met_miniaodPt > 200. && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
 
     // apply good vertex cut once for all
     if (isETH) {
@@ -576,10 +585,26 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     else{
       if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
       else {
-        weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
-        weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
-        if (cfg.year()==2017) weight *= myTree.weight_L1prefire; // FIXME apply also to 2016 when weights are available
-        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); // nominal
+
+        // main normalization weight
+        weight = myTree.evt_scale1fb;
+        if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
+        
+        // lepton and btag scale factors 
+        weight *= myTree.weight_lepsf * myTree.weight_btagsf;
+        if (fabs(myTree.weight_btagsf) < 0.001) continue;
+
+        // pu reweighting based on nTrueInt
+        if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt); 
+
+        // prefire weights
+        if (cfg.year()==2017 || cfg.year()==2016) weight *= myTree.weight_L1prefire; 
+        
+        // isr reweighting
+        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); 
+        
+        // TTHF weights
+        weight *= myTree.getTTHFWeight(sample.id);
       }
     }
 
