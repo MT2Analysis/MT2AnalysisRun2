@@ -252,8 +252,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     nGenWeighted = getNgen(sample.file, "genEventSumw");
   }
 
-  //int nentries = tree->GetEntries();
-  int nentries = 1000;
+  int nentries = tree->GetEntries();
 
   //for( int iEntry=0; iEntry<50000; ++iEntry ) {
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
