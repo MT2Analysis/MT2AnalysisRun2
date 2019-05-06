@@ -413,6 +413,8 @@ public :
    Int_t           nJet30JECdn;
    Int_t           nBJet20JECup;
    Int_t           nBJet20JECdn;
+   Int_t           extraGenB;
+   Int_t           nJet200MuFrac50DphiMet;
    Float_t         deltaPhiMinJECup;
    Float_t         deltaPhiMinJECdn;
    Float_t         diffMetMhtJECup;
@@ -433,6 +435,8 @@ public :
    Float_t         met_phiJECup;
    Float_t         met_ptJECdn;
    Float_t         met_phiJECdn;
+   Float_t         met_caloPt;
+   Float_t         met_miniaodPt;
    Float_t         zll_mt2JECup;
    Float_t         zll_deltaPhiMinJECup;
    Float_t         zll_diffMetMhtJECup;
@@ -875,6 +879,8 @@ public :
    TBranch         *b_nJet30JECdn;     //!
    TBranch         *b_nBJet20JECup;     //!
    TBranch         *b_nBJet20JECdn;     //!
+   TBranch         *b_extraGenB;     //!
+   TBranch         *b_nJet200MuFrac50DphiMet;     //!
    TBranch         *b_deltaPhiMinJECup;     //!
    TBranch         *b_deltaPhiMinJECdn;     //!
    TBranch         *b_diffMetMhtJECup;     //!
@@ -895,6 +901,8 @@ public :
    TBranch         *b_met_phiJECup;     //!
    TBranch         *b_met_ptJECdn;     //!
    TBranch         *b_met_phiJECdn;     //!
+   TBranch         *b_met_caloPt;     //!
+   TBranch         *b_met_miniaodPt;     //!
    TBranch         *b_zll_mt2JECup;     //!
    TBranch         *b_zll_deltaPhiMinJECup;     //!
    TBranch         *b_zll_diffMetMhtJECup;     //!
@@ -974,6 +982,8 @@ public :
    virtual Bool_t   passHEMFailElectronVeto(int year=2018, bool isETH=true, bool myIsData=true, float candLep_eta=1., float candLep_phi=1., int candLep_pdgId=13) const;
    virtual Double_t getXSecCorrWeight(int sampleId, int year=2016);
    virtual Float_t  getAverageISRWeight(int sampleId, int year=2016, int var=0);
+   virtual Float_t  getTTHFWeight(int sampleId);
+
 };
 
 #endif
@@ -1429,6 +1439,8 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("nJet30JECdn", &nJet30JECdn, &b_nJet30JECdn);
    fChain->SetBranchAddress("nBJet20JECup", &nBJet20JECup, &b_nBJet20JECup);
    fChain->SetBranchAddress("nBJet20JECdn", &nBJet20JECdn, &b_nBJet20JECdn);
+   fChain->SetBranchAddress("extraGenB", &extraGenB, &b_extraGenB);
+   fChain->SetBranchAddress("nJet200MuFrac50DphiMet", &nJet200MuFrac50DphiMet, &b_nJet200MuFrac50DphiMet);
    fChain->SetBranchAddress("deltaPhiMinJECup", &deltaPhiMinJECup, &b_deltaPhiMinJECup);
    fChain->SetBranchAddress("deltaPhiMinJECdn", &deltaPhiMinJECdn, &b_deltaPhiMinJECdn);
    fChain->SetBranchAddress("diffMetMhtJECup", &diffMetMhtJECup, &b_diffMetMhtJECup);
@@ -1449,6 +1461,8 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("met_phiJECup", &met_phiJECup, &b_met_phiJECup);
    fChain->SetBranchAddress("met_ptJECdn", &met_ptJECdn, &b_met_ptJECdn);
    fChain->SetBranchAddress("met_phiJECdn", &met_phiJECdn, &b_met_phiJECdn);
+   fChain->SetBranchAddress("met_caloPt", &met_caloPt, &b_met_caloPt);
+   fChain->SetBranchAddress("met_miniaodPt", &met_miniaodPt, &b_met_miniaodPt);
    fChain->SetBranchAddress("zll_mt2JECup", &zll_mt2JECup, &b_zll_mt2JECup);
    fChain->SetBranchAddress("zll_deltaPhiMinJECup", &zll_deltaPhiMinJECup, &b_zll_deltaPhiMinJECup);
    fChain->SetBranchAddress("zll_diffMetMhtJECup", &zll_diffMetMhtJECup, &b_zll_diffMetMhtJECup);
@@ -1910,9 +1924,18 @@ Float_t MT2Tree::getAverageISRWeight(int sampleId, int year, int var) {
     else if (var == -1) return 0.843; // DN
   }
 
-  std::cout << "WARNING: MT2Looper::getAverageISRWeight: didn't recognize either evt_id: " << evt_id
-            << " or variation: " << var << std::endl;
   return 1.;
+}
+
+
+Float_t MT2Tree::getTTHFWeight(int sampleId){
+  
+  //only apply to tt(V) events with >=2 gen b-jets not from top
+  if(((sampleId>=300 && sampleId<400)||(sampleId>=410 && sampleId<460)) && extraGenB >= 2)
+    return 1.71;
+  else
+    return 1.0;
+
 }
 
 
