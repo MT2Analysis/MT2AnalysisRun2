@@ -12,7 +12,7 @@ doCombinedYears=false
 
 
 #If not, which year would you like to process?
-year=2017
+year=2016
 
 
 #--------------------------------------------------------------
@@ -66,25 +66,25 @@ echo " "
 if [ "$doFullAnalysis" = true ] && [ "$doCombinedYears" = true ] ; then
     echo "--> The full analysis will be run on the full Run2 dataset <--"
 fi
-if [ "$doFullAnalysis" = true ] && [ "$year" == 2016 ] ; then
+if [ "$doFullAnalysis" = true ] && [ "$year" == 2016 ] && [ "$doCombinedYears" = false ] ; then
     echo "--> The full analysis will be run on the 2016 dataset <--"
 fi
-if [ "$doFullAnalysis" = true ] && [ "$year" == 2017 ] ; then
+if [ "$doFullAnalysis" = true ] && [ "$year" == 2017 ] && [ "$doCombinedYears" = false ] ; then
     echo "--> The full analysis will be run on the 2017 dataset <--"
 fi
-if [ "$doFullAnalysis" = true ] && [ "$year" == 2018 ] ; then
+if [ "$doFullAnalysis" = true ] && [ "$year" == 2018 ] && [ "$doCombinedYears" = false ] ; then
     echo "--> The full analysis will be run on the 2018 dataset <--"
 fi
 if [ "$doFullAnalysis" = false ] && [ "$doCombinedYears" = true ] ; then
     echo "--> Partial analysis will be run on the full Run2 dataset <--"
 fi
-if [ "$doFullAnalysis" = false ] && [ "$year" == 2016 ] ; then
+if [ "$doFullAnalysis" = false ] && [ "$year" == 2016 ] && [ "$doCombinedYears" = false ] ; then
     echo "--> Partial analysis will be run on the 2016 dataset <--"
 fi
-if [ "$doFullAnalysis" = false ] && [ "$year" == 2017 ] ; then
+if [ "$doFullAnalysis" = false ] && [ "$year" == 2017 ] && [ "$doCombinedYears" = false ] ; then
     echo "--> Partial analysis will be run on the 2017 dataset <--"
 fi
-if [ "$doFullAnalysis" = false ] && [ "$year" == 2018 ] ; then
+if [ "$doFullAnalysis" = false ] && [ "$year" == 2018 ] && [ "$doCombinedYears" = false ] ; then
     echo "--> Partial analysis will be run on the 2018 dataset <--"
 fi
 
