@@ -1713,10 +1713,10 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_TkMu50 || 
 	HLT_Mu55 || 
 	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 
-	//HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
+	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
 	HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  
 	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-	//HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
+	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
 	HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL || 
 	HLT_Photon165_HE10 ;
     }
@@ -1728,15 +1728,15 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_PFHT500_PFMET100_PFMHT100_IDTight || // SnT applies HLT_PFHT500_PFMET100_PFMHT100 instead 
 	HLT_PFMET120_PFMHT120_IDTight || // SnT applies HLT_PFMET120_PFMHT120 instead
 	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight; 
-	//HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; // should be applied but not in our baby tree - SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
+	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; // should be applied but not in our baby tree - SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
     }
     else if(sel == "zllSF"){
       return //HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || //not applied by SnT
-	//HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || //should be applied but not in our babytree //in 2018 but not in 2017
+	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || //should be applied but not in our babytree //in 2018 but not in 2017
 	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8 || 
-	//HLT_Mu37_TkMu27 || // should be applied but not in our babytree //in  2018 but not in 2017
+	HLT_Mu37_TkMu27 || // should be applied but not in our babytree //in  2018 but not in 2017
 	HLT_Mu50 || 
-	//HLT_Mu55 || // should be applied but not in our babytree
+	HLT_Mu55 || // should be applied but not in our babytree
 	//HLT_TkMu50 || // should be applied but not in our babytree
 	HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
 	//HLT_DoubleEle25_CaloIdL_MW || not applied in SnT
@@ -1745,18 +1745,18 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
     }
     else if(sel == "zllOF"){
       return HLT_Mu50 || 
-	//HLT_Mu55 ||  // should be applied but not in our babytree
+	HLT_Mu55 ||  // should be applied but not in our babytree
 	//HLT_TkMu50 || // should be applied but not in our babytree
-	//HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || // should be applied but not in our babytree
+	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || // should be applied but not in our babytree
 	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
 	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-	//HLT_Mu27_Ele37_CaloIdL_MW || //should be applied but not in our babytree
-	//HLT_Mu37_Ele27_CaloIdL_MW || //should be applied but not in our babytree
+	HLT_Mu27_Ele37_CaloIdL_MW || //should be applied but not in our babytree
+	HLT_Mu37_Ele27_CaloIdL_MW || //should be applied but not in our babytree
 	HLT_Photon200;
     }
   }
   else if(year == 2018){
-    if(sel == "llep" || sel == "SR"){
+    if(sel == "llep" || sel == "SR"){      
       return  HLT_PFHT1050 || 
 	HLT_PFJet500 || 
 	HLT_PFHT500_PFMET100_PFMHT100_IDTight || // SnT applies HLT_PFHT500_PFMET100_PFMHT100 instead 
@@ -1764,7 +1764,7 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight ||
 	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; //SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
     }
-    else if(sel == "zllSF"){
+    else if(sel == "zllSF"){  
       return //HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || //not applied by SnT
 	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || //in 2018 but not in 2017
 	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8 || 
