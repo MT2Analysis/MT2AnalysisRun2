@@ -12,7 +12,7 @@ doCombinedYears=false
 
 
 #If not, which year would you like to process?
-year=2016
+year=2017
 
 
 #--------------------------------------------------------------

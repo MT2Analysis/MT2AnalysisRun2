@@ -722,13 +722,99 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
 
 
 
-
 int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
 
   int bin_extrapol = 1;
   int val_mt2 = 200;
 
-  if(region->htMin()==250 && region->htMax()==450 ){
+  string regionName = region->getName();
+  
+  if(regionName=="HT250to450_j2to3_b0") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j2to3_b1") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j2to3_b2") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j4to6_b0") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j4to6_b1") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j4to6_b2") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j7toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j7toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j7toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j7toInf_b3toInf") bin_extrapol = 1;
+
+  
+  else if(regionName=="HT450to575_j2to3_b0") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j2to3_b1") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j2to3_b2") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j7toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j7toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j7toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j2to6_b3toInf") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j7toInf_b3toInf") bin_extrapol = 1;
+
+
+  else if(regionName=="HT575to1200_j2to3_b0") bin_extrapol = 7;
+  else if(regionName=="HT575to1200_j2to3_b1") bin_extrapol = 5;
+  else if(regionName=="HT575to1200_j2to3_b2") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j4to6_b0") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j4to6_b1") bin_extrapol = 4;
+  else if(regionName=="HT575to1200_j4to6_b2") bin_extrapol = 4;
+  else if(regionName=="HT575to1200_j2to6_b3toInf") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j7to9_b0") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b1") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b2") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b3") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b4toInf") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b0") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b1") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b2") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b3") bin_extrapol = 3;
+  else if(regionName=="HT575to1200_j10toInf_b4toInf") bin_extrapol = 2;
+
+
+  else if(regionName=="HT1200to1500_j2to3_b0") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to3_b1") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to3_b2") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT1200to1500_j7to9_b0") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b1") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b2") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b3") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b4toInf") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b3") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b4toInf") bin_extrapol = 2;
+
+
+  else if(regionName=="HT1500toInf_j2to3_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to3_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to3_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT1500toInf_j7to9_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b3") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j7to9_b4toInf") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b0") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j10toInf_b1") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j10toInf_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b3") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b4toInf") bin_extrapol = 3;
+
+  else{ cout << "PROBLEM IN THE REGION NAME " << regionName <<  endl; 
+}
+
+  /*if(region->htMin()==250 && region->htMax()==450 ){
     if( region->nJetsMin()==2 )
       val_mt2 = 400;
     else
@@ -758,11 +844,12 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
   bin_extrapol = histo->FindBin( val_mt2 );
 
   if( histo->GetBinLowEdge(bin_extrapol) != val_mt2 ) 
-    std::cout << "the boundaries are wrong " << std::endl;
+  std::cout << "the boundaries are wrong " << std::endl;*/
+
+  
 
   return bin_extrapol;
 }
-
 
 
 
@@ -823,7 +910,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 0;
+    bool getExtrapolBin = 1;
 
     if(getExtrapolBin){
 
