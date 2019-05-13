@@ -715,7 +715,7 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
 
 void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* shape_MCcr_forExtremeHT, MT2Analysis<MT2Estimate>* bin_extrapol ) {
   
-  bool getBinByHand = true; //this flag is only introduced for debugging purpose. Always turn it to false for normal routine
+  bool getBinByHand = false; //this flag is only introduced for debugging purpose. Always turn it to false for normal routine
 
   std::set<MT2Region> regions       = shape_data->getRegions();
     
@@ -769,7 +769,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 0;
+    bool getExtrapolBin = 1;
 
     if(getExtrapolBin){
 
