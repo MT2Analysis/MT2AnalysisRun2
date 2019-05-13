@@ -40,8 +40,8 @@ computeZllGammaRatio_New: computeZllGammaRatio_New.cpp MT2Region.o MT2Sample.o M
 computeZllofBackground: computeZllofBackground.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o
 	$(CC) -Wall $(INCLUDES) -o computeZllofBackground computeZllofBackground.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
-zllControlRegion: zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o
-	$(CC) -Wall $(INCLUDES) -o zllControlRegion zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+zllControlRegion: zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o MT2PuReweightTool.o
+	$(CC) -Wall $(INCLUDES) -o zllControlRegion zllControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2EstimateTree.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o MT2PuReweightTool.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 singleLeptonControlRegion: singleLeptonControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2Config.o MT2EstimateTree.o MT2DrawTools.o
 	$(CC) -Wall $(INCLUDES) -o singleLeptonControlRegion singleLeptonControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateSyst.o MT2Estimate.o MT2Config.o MT2EstimateTree.o MT2DrawTools.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -61,8 +61,8 @@ computeLostLepton: computeLostLepton.cpp MT2Region.o MT2Sample.o MT2Estimate.o M
 computeLostLepton_combined: computeLostLepton_combined.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o computeLostLepton_combined computeLostLepton_combined.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2EstimateTree.o MT2EstimateSyst.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS)
 
-llepControlRegion: llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o
-	$(CC) -Wall $(INCLUDES) -o llepControlRegion llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+llepControlRegion: llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o MT2PuReweightTool.o
+	$(CC) -Wall $(INCLUDES) -o llepControlRegion llepControlRegion.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2LeptonSFTool.o MT2BTagSFHelper.o BTagCalibrationStandalone.o MT2PuReweightTool.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 llepControlRegion_compatible2016: llepControlRegion_compatible2016.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o llepControlRegion_compatible2016 llepControlRegion_compatible2016.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateZinvGamma.o MT2EstimateSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -100,8 +100,8 @@ computeZinv2b: computeZinv2b.cpp MT2Region.o MT2Sample.o MT2Estimate.o MT2Estima
 plotZllGratio_2d: plotZllGratio_2d.C
 	$(CC) -Wall $(INCLUDES) -o plotZllGratio_2d plotZllGratio_2d.C $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
-regionEventYields: regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2BTagSFHelper.o BTagCalibrationStandalone.o
-	$(CC) -Wall $(INCLUDES) -o regionEventYields regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2BTagSFHelper.o BTagCalibrationStandalone.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
+regionEventYields: regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2BTagSFHelper.o BTagCalibrationStandalone.o MT2PuReweightTool.o
+	$(CC) -Wall $(INCLUDES) -o regionEventYields regionEventYields.cpp MT2Region.o MT2Sample.o MT2EstimateAllSigSyst.o MT2EstimateSigSyst.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o MT2BTagSFHelper.o BTagCalibrationStandalone.o MT2PuReweightTool.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
 
 regionEventYields_scales: regionEventYields_scales.cpp MT2Region.o MT2Sample.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o
 	$(CC) -Wall $(INCLUDES) -o regionEventYields_scales regionEventYields_scales.cpp MT2Region.o MT2Sample.o MT2EstimateTree.o MT2Estimate.o MT2DrawTools.o MT2Config.o $(ROOTFLAG) $(EXTRALIBS) -fpermissive
@@ -461,7 +461,9 @@ MT2DrawTools_ForRatios.o: ../src/MT2DrawTools_ForRatios.cc MT2Region.o MT2Estima
 
 MT2LeptonSFTool.o: ../src/MT2LeptonSFTool.cc
 	$(CC) -Wall $(INCLUDES) -c ../src/MT2LeptonSFTool.cc $(ROOTFLAG) $(EXTRALIBS)
-# TO DO: add MT2LeptonSFTool for dependencies
+
+MT2PuReweightTool.o: ../src/MT2PuReweightTool.cc
+	$(CC) -Wall $(INCLUDES) -c ../src/MT2PuReweightTool.cc $(ROOTFLAG) $(EXTRALIBS)
 
 MT2GoodrunClass.o: ../src/MT2GoodrunClass.cc
 	$(CC) -Wall $(INCLUDES) -c ../src/MT2GoodrunClass.cc $(ROOTFLAG) $(EXTRALIBS)

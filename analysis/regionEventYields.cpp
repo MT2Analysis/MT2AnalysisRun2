@@ -28,6 +28,7 @@
 #include "interface/MT2DrawTools.h"
 #include "interface/MT2Config.h"
 #include "interface/MT2BTagSFHelper.h"
+#include "interface/MT2PuReweightTool.h"
 //#include "interface/MT2GoodrunClass.h"
 
 #include "TRandom3.h"
@@ -334,6 +335,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     regionsSet = otherRegion;
   }
 
+  // initialization of pu weight tool
+  MT2PuReweightTool puReweight;
+  bool puHist = puReweight.setPuWeightHist(cfg.year());
+
   std::cout << std::endl << std::endl;
   std::cout << "-> Starting computation for sample: " << sample.name << std::endl;
 
@@ -383,6 +388,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
     }
 
+    // additional ad-hoc filters, only available with SnT ntuples
+    if(!isETH && myTree.nJet200MuFrac50DphiMet > 0) continue;
+    if(!isETH && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
+    
     // apply the triggers on data
     if(isData and isETH) {
       if (!myTree.passTriggerSelection("SR", cfg.year())) continue;
@@ -398,12 +407,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     } else {
       if(myTree.nVert <= 0) continue;
     }
-
-    // some additional cleanings
-    //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter --> not in nanoAOD
-    //if( myTree.met_miniaodPt/myTree.met_caloPt > 5.0 ) continue; -->not in nanoAOD
-    //std::cout << "DEBUG " <<  myTree.event << " " <<  myTree.evt << std::endl;
-    //crazy events! To be piped into a separate txt file
 
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.evt << std::endl;
@@ -439,10 +442,26 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     else{
       if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
       else {
-        weight = myTree.evt_scale1fb / (myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter) * myTree.weight_lepsf * myTree.weight_btagsf;
-        weight *= myTree.getXSecCorrWeight(sample.id, cfg.year());
-        if (cfg.year()==2017) weight *= myTree.weight_L1prefire; // FIXME apply also to 2016 when weights are avaialble
-        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); // nominal
+
+        // main normalization weight
+        weight = myTree.evt_scale1fb;
+        if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
+        
+        // lepton and btag scale factors 
+        weight *= myTree.weight_lepsf * myTree.weight_btagsf;
+        if (fabs(myTree.weight_btagsf) < 0.001) continue;
+
+        // pu reweighting based on nTrueInt
+        if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt); 
+
+        // prefire weights
+        if (cfg.year()==2017 || cfg.year()==2016) weight *= myTree.weight_L1prefire; 
+        
+        // isr reweighting
+        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); 
+        
+        // TTHF weights
+        weight *= myTree.getTTHFWeight(sample.id);
       }
     }
 
@@ -595,9 +614,10 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     }
 
     if( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
-
-    //if( myTree.nJet20BadFastsim > 0 ) continue;
-    //if( myTree.nJet200MuFrac50DphiMet > 0 ) continue; // new RA2 filter
+ 
+    // additional ad-hoc filters, only available with SnT ntuples
+    if(!isETH && myTree.nJet200MuFrac50DphiMet > 0) continue;
+    if(!isETH && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
 
 
     float ht   = myTree.ht;
