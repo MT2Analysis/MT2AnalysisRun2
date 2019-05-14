@@ -348,7 +348,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
     } // nlep>0
     // otherwise check PF leps that don't overlap with a reco lepton
-    int nIsoTrack_to_use = myTree.nisoTrack;
+    int nIsoTrack_to_use = isETH ? myTree.nIsoTrack : myTree.nisoTrack;
     if (!foundlep && myTree.nPFLep5LowMT > 0) {
       for (int itrk = 0; itrk < nIsoTrack_to_use; ++itrk) {
         float pt = myTree.isoTrack_pt[itrk];
