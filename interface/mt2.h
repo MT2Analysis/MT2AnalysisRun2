@@ -202,7 +202,6 @@ public :
    Bool_t          Flag_EcalDeadCellTriggerPrimitiveFilter;
    Bool_t          Flag_EcalDeadCellBoundaryEnergyFilter;
    Bool_t          Flag_ecalBadCalibFilter;
-   Bool_t          Flag_ecalBadCalibFilterV2;
    Bool_t          Flag_goodVertices;
    Bool_t          Flag_eeBadScFilter;
    Bool_t          Flag_ecalLaserCorrFilter;
@@ -667,7 +666,6 @@ public :
    TBranch        *b_Flag_EcalDeadCellTriggerPrimitiveFilter;   //!
    TBranch        *b_Flag_EcalDeadCellBoundaryEnergyFilter;   //!
    TBranch        *b_Flag_ecalBadCalibFilter;   //!
-   TBranch        *b_Flag_ecalBadCalibFilterV2;   //!
    TBranch        *b_Flag_goodVertices;   //!
    TBranch        *b_Flag_eeBadScFilter;   //!
    TBranch        *b_Flag_ecalLaserCorrFilter;   //!
@@ -1094,7 +1092,6 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter, &b_Flag_EcalDeadCellTriggerPrimitiveFilter);
    fChain->SetBranchAddress("Flag_EcalDeadCellBoundaryEnergyFilter", &Flag_EcalDeadCellBoundaryEnergyFilter, &b_Flag_EcalDeadCellBoundaryEnergyFilter);
    fChain->SetBranchAddress("Flag_ecalBadCalibFilter", &Flag_ecalBadCalibFilter, &b_Flag_ecalBadCalibFilter);
-   fChain->SetBranchAddress("Flag_ecalBadCalibFilterV2", &Flag_ecalBadCalibFilterV2, &b_Flag_ecalBadCalibFilterV2);
    fChain->SetBranchAddress("Flag_goodVertices", &Flag_goodVertices, &b_Flag_goodVertices);
    fChain->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter, &b_Flag_eeBadScFilter);
    fChain->SetBranchAddress("Flag_ecalLaserCorrFilter", &Flag_ecalLaserCorrFilter, &b_Flag_ecalLaserCorrFilter);
@@ -1594,11 +1591,11 @@ Bool_t MT2Tree::passFilters(int year) const {
     // Flag_BadChargedCandidateFilter; temporally removed, under investigations of the POG
   }
   else if(year == 2017){
-    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilterV2;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
     // && Flag_BadChargedCandidateFilter
   }
   else if(year == 2018){
-    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilterV2;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
     // && Flag_BadChargedCandidateFilter
   }
 }
@@ -1611,10 +1608,10 @@ Bool_t MT2Tree::passFiltersMC(int year, const bool& isETH) const {
       return Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter ;
     }
     else if(year == 2017){
-      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilterV2;
+      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
     }
     else if(year == 2018){
-      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilterV2;
+      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
     }
   }
   else if(!isETH){ //SnT flags are ints instead of booleans
@@ -1699,108 +1696,26 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 
 
 Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
-  if(year == 2016){
+  if(year == 2017 || year == 2018){
     if(sel == "llep" || sel == "SR"){
-      return HLT_PFHT900 || 
-	HLT_PFJet450 || 
-	HLT_PFHT300_PFMET110 || 
-	HLT_PFMET120_PFMHT120_IDTight || //SnT applies HLT_PFMET120_PFMHT120 instead 
-	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight; // HLT_PFMETNoMu120_PFMHTNoMu120 instead
+      return  HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
     }
     else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || 
-	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || 
-	HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || 
-	HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || 
-	HLT_Mu30_TkMu11 || 
-	HLT_Mu40_TkMu11 ||  
-	HLT_Mu50 || 
-	HLT_TkMu50 || 
-	HLT_Mu55 || 
-	HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
-	HLT_DoubleEle33_CaloIdL_MW || 
-	HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || 
-	HLT_Photon165_HE10;
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200;
     }
     else if(sel == "zllOF"){
-      return HLT_Mu50 ||
-	HLT_TkMu50 || 
-	HLT_Mu55 || 
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
-	HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  
-	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
-	HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL || 
-	HLT_Photon165_HE10 ;
+      return HLT_Mu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu27_Ele37_CaloIdL_MW || HLT_Mu37_Ele27_CaloIdL_MW || HLT_Photon200;
     }
   }
-  else if(year == 2017){
+  else if(year == 2016){
     if(sel == "llep" || sel == "SR"){
-      return  HLT_PFHT1050 || 
-	HLT_PFJet500 || 
-	HLT_PFHT500_PFMET100_PFMHT100_IDTight || // SnT applies HLT_PFHT500_PFMET100_PFMHT100 instead 
-	HLT_PFMET120_PFMHT120_IDTight || // SnT applies HLT_PFMET120_PFMHT120 instead
-	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight; 
-	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; // should be applied but not in our baby tree - SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
+      return HLT_PFHT900 || HLT_PFJet450 || HLT_PFHT300_PFMET110 || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight;
     }
     else if(sel == "zllSF"){
-      return //HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || //not applied by SnT
-	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || //should be applied but not in our babytree //in 2018 but not in 2017
-	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8 || 
-	HLT_Mu37_TkMu27 || // should be applied but not in our babytree //in  2018 but not in 2017
-	HLT_Mu50 || 
-	HLT_Mu55 || // should be applied but not in our babytree
-	//HLT_TkMu50 || // should be applied but not in our babytree
-	HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
-	//HLT_DoubleEle25_CaloIdL_MW || not applied in SnT
-	HLT_DoubleEle33_CaloIdL_MW || 
-	HLT_Photon200;
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || HLT_Mu30_TkMu11 || HLT_Mu40_TkMu11 ||  HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10;
     }
     else if(sel == "zllOF"){
-      return HLT_Mu50 || 
-	HLT_Mu55 ||  // should be applied but not in our babytree
-	//HLT_TkMu50 || // should be applied but not in our babytree
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || // should be applied but not in our babytree
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
-	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-	HLT_Mu27_Ele37_CaloIdL_MW || //should be applied but not in our babytree
-	HLT_Mu37_Ele27_CaloIdL_MW || //should be applied but not in our babytree
-	HLT_Photon200;
-    }
-  }
-  else if(year == 2018){
-    if(sel == "llep" || sel == "SR"){      
-      return  HLT_PFHT1050 || 
-	HLT_PFJet500 || 
-	HLT_PFHT500_PFMET100_PFMHT100_IDTight || // SnT applies HLT_PFHT500_PFMET100_PFMHT100 instead 
-	HLT_PFMET120_PFMHT120_IDTight || // SnT applies HLT_PFMET120_PFMHT120 instead
-	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight ||
-	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; //SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
-    }
-    else if(sel == "zllSF"){  
-      return //HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || //not applied by SnT
-	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || //in 2018 but not in 2017
-	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8 || 
-	HLT_Mu37_TkMu27 || //in  2018 but not in 2017
-	HLT_Mu50 || 
-	HLT_Mu55 || 
-	//HLT_TkMu50 || // should be applied but not in our babytree
-	HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
-	//HLT_DoubleEle25_CaloIdL_MW || //not applied in SnT
-	HLT_DoubleEle33_CaloIdL_MW || 
-	HLT_Photon200;
-    }
-    else if(sel == "zllOF"){
-      return HLT_Mu50 || 
-	HLT_Mu55 || 
-	//HLT_TkMu50 || // added wrt SnT
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
-	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-	HLT_Mu27_Ele37_CaloIdL_MW || 
-	HLT_Mu37_Ele27_CaloIdL_MW || 
-	HLT_Photon200;
+      return HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10 ;
     }
   }
 }
