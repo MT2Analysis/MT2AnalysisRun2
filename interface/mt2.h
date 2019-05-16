@@ -492,7 +492,7 @@ public :
    TBranch        *b_run;   //!
    TBranch        *b_luminosityBlock;   //!
    TBranch        *b_lumi;   //!
-   TBranch        *b_isData; //!
+   TBranch        *b_isData;
    TBranch        *b_evt;   //!
    TBranch        *b_event;   //!
    TBranch        *b_CaloMET_phi;   //!
@@ -755,31 +755,31 @@ public :
    TBranch        *b_HLT_Photon20;   //!
    TBranch        *b_HLT_Ele15_CaloIdL_TrackIdL_IsoVL_PFJet30;   //!
 
-   TBranch        *b_HLT_PFHT1050_INT; //!
-   TBranch        *b_HLT_PFMET120_PFMHT120_INT; //!
-   TBranch        *b_HLT_PFJet500_INT;//!
-   TBranch        *b_HLT_PFHT800_PFMET75_PFMHT75_INT; //!
-   TBranch        *b_HLT_PFHT500_PFMET100_PFMHT100_INT; //!
-   TBranch        *b_HLT_PFMET120_PFMHT120_PFHT60_INT; //!
-   TBranch        *b_HLT_PFMETNoMu120_PFMHTNoMu120_INT;//!
-   TBranch        *b_HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60_INT;//!
-   TBranch        *b_HLT_DoubleEl_INT; //!
-   TBranch        *b_HLT_DoubleMu_INT; //!
-   TBranch        *b_HLT_Photon200_INT;//!
-   TBranch        *b_HLT_DoubleMu_NonIso_INT; //!
-   TBranch        *b_HLT_SingleMu_NonIso_INT; //!
-   TBranch        *b_HLT_DoubleEl33_INT; //!
-   TBranch        *b_HLT_MuX_Ele12_INT; //!
-   TBranch        *b_HLT_Mu8_EleX_INT; //!
-   TBranch        *b_HLT_Mu12_EleX_INT; //!
-   TBranch        *b_HLT_Mu37_Ele27_NonIso_INT; //!
-   TBranch        *b_HLT_Mu27_Ele37_NonIso_INT; //!
-   TBranch        *b_HLT_Photon165_HE10_INT; //!
-   TBranch        *b_HLT_Mu30_Ele30_NonIso_INT; //!
-   TBranch        *b_HLT_Mu33_Ele33_NonIso_INT; //!
-   TBranch        *b_HLT_PFHT900_INT; //!
-   TBranch        *b_HLT_PFJet450_INT; //!
-   TBranch        *b_HLT_PFHT300_PFMET110_INT;//! 
+   TBranch        *b_HLT_PFHT1050_INT;
+   TBranch        *b_HLT_PFMET120_PFMHT120_INT;
+   TBranch        *b_HLT_PFJet500_INT;
+   TBranch        *b_HLT_PFHT800_PFMET75_PFMHT75_INT; 
+   TBranch        *b_HLT_PFHT500_PFMET100_PFMHT100_INT; 
+   TBranch        *b_HLT_PFMET120_PFMHT120_PFHT60_INT; 
+   TBranch        *b_HLT_PFMETNoMu120_PFMHTNoMu120_INT;
+   TBranch        *b_HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60_INT;
+   TBranch        *b_HLT_DoubleEl_INT; 
+   TBranch        *b_HLT_DoubleMu_INT; 
+   TBranch        *b_HLT_Photon200_INT;
+   TBranch        *b_HLT_DoubleMu_NonIso_INT; 
+   TBranch        *b_HLT_SingleMu_NonIso_INT; 
+   TBranch        *b_HLT_DoubleEl33_INT; 
+   TBranch        *b_HLT_MuX_Ele12_INT; 
+   TBranch        *b_HLT_Mu8_EleX_INT; 
+   TBranch        *b_HLT_Mu12_EleX_INT; 
+   TBranch        *b_HLT_Mu37_Ele27_NonIso_INT; 
+   TBranch        *b_HLT_Mu27_Ele37_NonIso_INT; 
+   TBranch        *b_HLT_Photon165_HE10_INT; 
+   TBranch        *b_HLT_Mu30_Ele30_NonIso_INT; 
+   TBranch        *b_HLT_Mu33_Ele33_NonIso_INT; 
+   TBranch        *b_HLT_PFHT900_INT; 
+   TBranch        *b_HLT_PFJet450_INT; 
+   TBranch        *b_HLT_PFHT300_PFMET110_INT; 
 
    TBranch        *b_nJet20;   //!
    TBranch        *b_nJet30;   //!
@@ -827,9 +827,9 @@ public :
    TBranch        *b_jet_eta;   //!
    TBranch        *b_jet_phi;   //!
    TBranch        *b_jet_id;   //!
-   TBranch        *b_jet_mcFlavour;//!
-   TBranch        *b_jet_btagCSV;//!
-   TBranch        *b_jet_btagDeepCSV;//!
+   TBranch        *b_jet_mcFlavour;
+   TBranch        *b_jet_btagCSV;
+   TBranch        *b_jet_btagDeepCSV;
    TBranch        *b_zll_pt;   //!
    TBranch        *b_zll_eta;   //!
    TBranch        *b_zll_phi;   //!
@@ -1591,11 +1591,11 @@ Bool_t MT2Tree::passFilters(int year) const {
     // Flag_BadChargedCandidateFilter; temporally removed, under investigations of the POG
   }
   else if(year == 2017){
-    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter;
     // && Flag_BadChargedCandidateFilter
   }
   else if(year == 2018){
-    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter ;
+    return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter;
     // && Flag_BadChargedCandidateFilter
   }
 }
@@ -1608,10 +1608,10 @@ Bool_t MT2Tree::passFiltersMC(int year, const bool& isETH) const {
       return Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_globalSuperTightHalo2016Filter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter ;
     }
     else if(year == 2017){
-      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter;
     }
     else if(year == 2018){
-      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter ;
+      return Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && Flag_ecalBadCalibFilter;
     }
   }
   else if(!isETH){ //SnT flags are ints instead of booleans
@@ -1694,48 +1694,37 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
 }
 
 
-/*
-Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
-  if(year == 2017 || year == 2018){
-    if(sel == "llep" || sel == "SR"){
-      return  HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
-    }
-    else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200;
-    }
-    else if(sel == "zllOF"){
-      return HLT_Mu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu27_Ele37_CaloIdL_MW || HLT_Mu37_Ele27_CaloIdL_MW || HLT_Photon200;
-    }
-  }
-  else if(year == 2016){
-    if(sel == "llep" || sel == "SR"){
-      return HLT_PFHT900 || HLT_PFJet450 || HLT_PFHT300_PFMET110 || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight;
-    }
-    else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || HLT_Mu30_TkMu11 || HLT_Mu40_TkMu11 ||  HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW || HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10;
-    }
-    else if(sel == "zllOF"){
-      return HLT_Mu50 || HLT_TkMu50 || HLT_Mu55 || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL || HLT_Photon165_HE10 ;
-    }
-  }
-}
-*/
-
 
 Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
-  if(year == 2017 || year == 2018){
+  if(year == 2016){
     if(sel == "llep" || sel == "SR"){
-      return  HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
+      return HLT_PFHT900 || 
+	HLT_PFJet450 || 
+	HLT_PFHT300_PFMET110 || 
+	HLT_PFMET120_PFMHT120_IDTight || //SnT applies HLT_PFMET120_PFMHT120 instead 
+	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight; // HLT_PFMETNoMu120_PFMHTNoMu120 instead
     }
     else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200;
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || 
+	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || 
+	HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || 
+	HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || 
+	HLT_Mu30_TkMu11 || 
+	HLT_Mu40_TkMu11 ||  
+	HLT_Mu50 || 
+	HLT_TkMu50 || 
+	HLT_Mu55 || 
+	HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
+	HLT_DoubleEle33_CaloIdL_MW || 
+	HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || 
+	HLT_Photon165_HE10;
     }
     else if(sel == "zllOF"){
       return HLT_Mu50 ||
 	HLT_TkMu50 || 
 	HLT_Mu55 || 
-	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 	
-        HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
+	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 
+	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
 	HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL ||  
 	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
 	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || //should be applied but not in our babytree
@@ -1743,14 +1732,14 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_Photon165_HE10 ;
     }
   }
-  else if(year == 2016){
+  else if(year == 2017){
     if(sel == "llep" || sel == "SR"){
       return  HLT_PFHT1050 || 
 	HLT_PFJet500 || 
 	HLT_PFHT500_PFMET100_PFMHT100_IDTight || // SnT applies HLT_PFHT500_PFMET100_PFMHT100 instead 
 	HLT_PFMET120_PFMHT120_IDTight || // SnT applies HLT_PFMET120_PFMHT120 instead
 	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight; 
-	//HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; // should be applied but not in our baby tree - SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
+	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60; // should be applied but not in our baby tree - SnT uses HLT_PFMETNoMu120_PFMHTNoMu120_PFHT60 instead
     }
     else if(sel == "zllSF"){
       return //HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || //not applied by SnT
@@ -1766,15 +1755,15 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_Photon200;
     }
     else if(sel == "zllOF"){
-        return HLT_Mu50 || 
-       	HLT_Mu55 ||  // should be applied but not in our babytree
-        //HLT_TkMu50 || // should be applied but not in our babytree
+      return HLT_Mu50 || 
+	HLT_Mu55 ||  // should be applied but not in our babytree
+	//HLT_TkMu50 || // should be applied but not in our babytree
 	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || // should be applied but not in our babytree
-        HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ ||
-        HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-        HLT_Mu27_Ele37_CaloIdL_MW || //should be applied but not in our babytree
-        HLT_Mu37_Ele27_CaloIdL_MW || //should be applied but not in our babytree
-        HLT_Photon200;
+	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
+	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
+	HLT_Mu27_Ele37_CaloIdL_MW || //should be applied but not in our babytree
+	HLT_Mu37_Ele27_CaloIdL_MW || //should be applied but not in our babytree
+	HLT_Photon200;
     }
   }
   else if(year == 2018){
@@ -1806,12 +1795,14 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 
 	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
 	HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || // SnT applies HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL instead
-        HLT_Mu27_Ele37_CaloIdL_MW || 
+	HLT_Mu27_Ele37_CaloIdL_MW || 
 	HLT_Mu37_Ele27_CaloIdL_MW || 
 	HLT_Photon200;
     }
   }
-} 
+}
+
+
 
 Bool_t MT2Tree::passTriggerSelection_forMC(TString sel, int year, const bool& isETH) const{
   if(!isETH){
