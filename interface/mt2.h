@@ -1723,28 +1723,12 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 
 
 Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
-  if(year == 2016){
+  if(year == 2017 || year == 2018){
     if(sel == "llep" || sel == "SR"){
-      return HLT_PFHT900 || 
-	HLT_PFJet450 || 
-	HLT_PFHT300_PFMET110 || 
-	HLT_PFMET120_PFMHT120_IDTight || //SnT applies HLT_PFMET120_PFMHT120 instead 
-	HLT_PFMETNoMu120_PFMHTNoMu120_IDTight; // HLT_PFMETNoMu120_PFMHTNoMu120 instead
+      return  HLT_PFHT1050 || HLT_PFJet500 || HLT_PFHT500_PFMET100_PFMHT100_IDTight || HLT_PFMET120_PFMHT120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight || HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60;
     }
     else if(sel == "zllSF"){
-      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || 
-	HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || 
-	HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL || 
-	HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ || 
-	HLT_Mu30_TkMu11 || 
-	HLT_Mu40_TkMu11 ||  
-	HLT_Mu50 || 
-	HLT_TkMu50 || 
-	HLT_Mu55 || 
-	HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || 
-	HLT_DoubleEle33_CaloIdL_MW || 
-	HLT_DoubleEle33_CaloIdL_GsfTrkIdVL || 
-	HLT_Photon165_HE10;
+      return HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8 || HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ || HLT_Mu37_TkMu27 || HLT_Mu50 || HLT_Mu55 || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ || HLT_DoubleEle25_CaloIdL_MW || HLT_DoubleEle33_CaloIdL_MW || HLT_Photon200;
     }
     else if(sel == "zllOF"){
       return HLT_Mu50 ||
@@ -1759,7 +1743,7 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
 	HLT_Photon165_HE10 ;
     }
   }
-  else if(year == 2017){
+  else if(year == 2016){
     if(sel == "llep" || sel == "SR"){
       return  HLT_PFHT1050 || 
 	HLT_PFJet500 || 
@@ -1791,9 +1775,9 @@ Bool_t MT2Tree::passTriggerSelection(TString sel, int year) const{
         HLT_Mu27_Ele37_CaloIdL_MW || //should be applied but not in our babytree
         HLT_Mu37_Ele27_CaloIdL_MW || //should be applied but not in our babytree
         HLT_Photon200;
-   }
+    }
   }
-else if(year == 2018){
+  else if(year == 2018){
     if(sel == "llep" || sel == "SR"){      
       return  HLT_PFHT1050 || 
 	HLT_PFJet500 || 
@@ -1816,7 +1800,7 @@ else if(year == 2018){
 	HLT_Photon200;
     }
     else if(sel == "zllOF"){
-        return HLT_Mu50 || 
+      return HLT_Mu50 || 
 	HLT_Mu55 || 
 	//HLT_TkMu50 || // added wrt SnT
 	HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || 
@@ -1826,8 +1810,8 @@ else if(year == 2018){
 	HLT_Mu37_Ele27_CaloIdL_MW || 
 	HLT_Photon200;
     }
-   }
- } 
+  }
+} 
 
 Bool_t MT2Tree::passTriggerSelection_forMC(TString sel, int year, const bool& isETH) const{
   if(!isETH){
