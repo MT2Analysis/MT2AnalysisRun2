@@ -12,13 +12,13 @@ doCombinedYears=false
 
 
 #If not, which year would you like to process?
-year=2017
+year=2016
 
 
 #--------------------------------------------------------------
 #      2. Do you want to run the full analysis?
 
-doFullAnalysis=false
+doFullAnalysis=true
 
 
 #--------------------------------------------------------------
@@ -200,7 +200,7 @@ if [ "$doComputationEstimates" = true ] ; then
 
     echo "Done with the Lost Lepton estimate"
 
-    echo "->Computation of the Z invisible estimate with the years separate"
+    echo "->Computation of the Z invisible estimate"
     if [ "$year" = 2016 ] && [ "$doCombinedYears" = false ] ; then
 	./computeZinvFromZll moriond2019_35p9ifb > logs/log_zinvEstimate_16.txt 
     fi

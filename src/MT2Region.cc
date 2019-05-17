@@ -2432,17 +2432,17 @@ std::vector< std::string > MT2Region::getNiceNamesLatex() const {
 
 
 std::string MT2Region::getBinName(double& min, double& max) const {
+   
+ char binName[500];
+    if( max < 0 )
+      sprintf( binName, "M_{T2} > %.0f GeV", min );
+    else
+      sprintf( binName, "%.0f < M_{T2} < %.0f GeV", min, max );
+  
+    std::string binName_str(binName);
+  
+    return binName_str;
 
-  char binName[500];
-  if( max < 0 )
-    sprintf( binName, "M_{T2} > %.0f GeV", min );
-  else
-    sprintf( binName, "%.0f < M_{T2} < %.0f GeV", min, max );
-  
-  std::string binName_str(binName);
-  
-  return binName_str;
-  
 }
 
 std::string MT2Region::getBinNameLatex(double& min, double& max) const {
@@ -2488,6 +2488,47 @@ std::vector< std::string> MT2Region::getBinNamesLatex() const {
   names.push_back( getBinNameLatex(bins[nBins-1], lastbin) );
 
   return names;
+
+}
+
+
+double MT2Region::getBinValue(double& min, double& max, string sel) const {
+  if(sel=="min"){
+    return min;
+  }
+  else if(sel=="max"){
+    return max;
+  }
+  
+}
+
+std::vector<double> MT2Region::binMin() const{ 
+
+  int nBins;
+  double* bins;
+  this->getBins(nBins, bins);
+  
+  std::vector<double> values;
+  for( int i=1; i<=nBins; ++i ){
+    values.push_back( getBinValue(bins[i-1], bins[i], "min") );
+  }
+   
+  return values;
+}
+
+
+std::vector<double> MT2Region::binMax() const{ 
+
+  int nBins;
+  double* bins;
+  this->getBins(nBins, bins);
+  
+  std::vector<double> values;
+  for( int i=1; i<=nBins; ++i ){
+    values.push_back( getBinValue(bins[i-1], bins[i], "max") );
+  }
+
+  return values;
 
 }
 
