@@ -8,17 +8,17 @@
 #     1. On which year do you want to run the analysis?
 
 #Make analysis on combined years?
-doCombinedYears=false
+doCombinedYears=true
 
 
 #If not, which year would you like to process?
-year=2016
+year=2017
 
 
 #--------------------------------------------------------------
 #      2. Do you want to run the full analysis?
 
-doFullAnalysis=true
+doFullAnalysis=false
 
 
 #--------------------------------------------------------------
