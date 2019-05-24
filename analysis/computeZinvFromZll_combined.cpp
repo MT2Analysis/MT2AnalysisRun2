@@ -578,9 +578,7 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
 }
 
 
-
-
-void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool mergedHighNj, bool dontDoIntegration, bool isMC ) {
+void extrapolToTopoRegion(MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool mergedHighNj, bool isMC){
 
   std::set<MT2Region> regions       = shape_TR->getRegions();
   std::set<MT2Region> regions_shape = shape->getRegions();
@@ -606,34 +604,30 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
       MT2Region* regionToMatch_shape = new MT2Region( *iR_shape );
      
       writeToFile << "Try with forExtrapol region: " << regionToMatch_shape->getName() << endl;
+ 
+      if( !(regionToMatch->MT2Region::isIncluded(regionToMatch_shape)) && !(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) )  ){continue;}  //not contained, doesn't matter
+      if( regionToMatch->htMin() != regionToMatch_shape->htMin() ){continue;} //HT has to match both high and low for all regions
+      if( regionToMatch->htMax() != regionToMatch_shape->htMax() ){continue;}
 
-      if(dontDoIntegration){
-	if((regionToMatch->htMin() != regionToMatch_shape->htMin()) || (regionToMatch->nJetsMin() != regionToMatch_shape->nJetsMin()) || (regionToMatch->nBJetsMin() != regionToMatch_shape->nBJetsMin())) { continue; }
-      }
-      else{
-	if( !(regionToMatch->MT2Region::isIncluded(regionToMatch_shape)) && !(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) )  ){continue;}  //not contained, doesn't matter
-	if( regionToMatch->htMin() != regionToMatch_shape->htMin() ){continue;} //HT has to match both high and low for all regions
-	if( regionToMatch->htMax() != regionToMatch_shape->htMax() ){continue;}
-
-	if(!mergedHighNj){
-	  if(regionToMatch->htMin()!=1500){
-	    if(regionToMatch_shape->nJetsMin() < regionToMatch->nJetsMin()) continue; //to avoid monojets to be counted where they should not
-	    if((regionToMatch_shape->nJetsMin() > regionToMatch->nJetsMax()) && regionToMatch->nJetsMin()!= 7 && regionToMatch->nJetsMin()!=10) continue; //so that higher Nj regions don't fill lower Nj regions
-	    if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
-	      if(regionToMatch_shape->nJetsMin()==2) continue; //since 2-6j regions require a minimum of 3b, then we exclude the 2j region
-	    }
-	  }
-	}
-	else{ //slightly different treatment when the high Nj regions are merged
-	  if(regionToMatch->htMin()!=1500){
-	    if((regionToMatch_shape->nJetsMin() < regionToMatch->nJetsMin()) && regionToMatch->nJetsMin()!=10) continue; //to avoid monojets to be counted where they should not
-	    if((regionToMatch_shape->nJetsMin() > regionToMatch->nJetsMax()) && regionToMatch->nJetsMin()!= 7 && regionToMatch->nJetsMin()!=10) continue; //so that higher Nj regions don't fill lower Nj regions
-	    if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
-	      if(regionToMatch_shape->nJetsMin()==2) continue; //since 2-6j regions require a minimum of 3b, then we exclude the 2j region
-	    }
+      if(!mergedHighNj){
+	if(regionToMatch->htMin()!=1500){
+	  if(regionToMatch_shape->nJetsMin() < regionToMatch->nJetsMin()) continue; //to avoid monojets to be counted where they should not
+	  if((regionToMatch_shape->nJetsMin() > regionToMatch->nJetsMax()) && regionToMatch->nJetsMin()!= 7 && regionToMatch->nJetsMin()!=10) continue; //so that higher Nj regions don't fill lower Nj regions
+	  if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
+	    if(regionToMatch_shape->nJetsMin()==2) continue; //since 2-6j regions require a minimum of 3b, then we exclude the 2j region
 	  }
 	}
       }
+      else{ //slightly different treatment when the high Nj regions are merged
+	if(regionToMatch->htMin()!=1500){
+	  if((regionToMatch_shape->nJetsMin() < regionToMatch->nJetsMin()) && regionToMatch->nJetsMin()!=10) continue; //to avoid monojets to be counted where they should not
+	  if((regionToMatch_shape->nJetsMin() > regionToMatch->nJetsMax()) && regionToMatch->nJetsMin()!= 7 && regionToMatch->nJetsMin()!=10) continue; //so that higher Nj regions don't fill lower Nj regions
+	  if(regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==6){
+	    if(regionToMatch_shape->nJetsMin()==2) continue; //since 2-6j regions require a minimum of 3b, then we exclude the 2j region
+	  }
+	}
+      }
+      
 
       writeToFile << "not rejected" << endl;
      
