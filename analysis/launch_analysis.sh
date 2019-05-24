@@ -8,7 +8,7 @@
 #     1. On which year do you want to run the analysis?
 
 #Make analysis on combined years?
-doCombinedYears=true
+doCombinedYears=false
 
 
 #If not, which year would you like to process?

@@ -1266,7 +1266,7 @@ void MT2Region::getBins( int &nBins, double*& bins) const {
     }
     else if( regionName == "HT1500toInf_j2toInf_b0toInf" ){     
       const int nBins_tmp                        = 8;
-      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1400., 1800., 2400.};
+      bins = new double[nBins_tmp+1]{200., 400., 600., 800., 1000., 1200., 1400., 1600., 2400.};
       nBins = nBins_tmp;
     }
     
