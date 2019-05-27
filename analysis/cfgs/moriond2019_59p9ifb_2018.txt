@@ -1,4 +1,4 @@
-lumi 59.97
+lumi 59.74
 year 2018
 regionsSet Moriond2019
 useETHdata 1

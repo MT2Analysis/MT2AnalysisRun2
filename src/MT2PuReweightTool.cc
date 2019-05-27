@@ -28,6 +28,7 @@ bool MT2PuReweightTool::setPuWeightHist(int year){
 
   f->Close();
 
+  delete h_nTrueInt_weights_temp;
   delete f;
 
   return true;
