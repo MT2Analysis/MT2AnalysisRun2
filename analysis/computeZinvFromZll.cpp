@@ -786,13 +786,15 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     TH1D* this_shape_MCsr = (TH1D*)shape_MCsr ->get( *iR)->yield;
 
     //At extreme HT we get the shape from MC after MT2 400 per TR
-    TH1D* this_shape_MCcr;
-    if( (region->nJetsMin() > 1) && (region->htMin()==1500) ){
-      this_shape_MCcr = (TH1D*)shape_MCcr_forExtremeHT ->get( *iR)->yield;
-    }
-    else{
-      this_shape_MCcr = (TH1D*)shape_MCcr ->get( *iR)->yield;     
-    }
+    TH1D* this_shape_MCcr  = (TH1D*)shape_MCcr ->get( *iR)->yield;  
+    
+    //MC_cr used not to be integrated for extreme regions
+    //if( (region->nJetsMin() > 1) && (region->htMin()==1500) ){
+    //  this_shape_MCcr = (TH1D*)shape_MCcr_forExtremeHT ->get( *iR)->yield; 
+    //}
+    //else{
+    //  this_shape_MCcr = (TH1D*)shape_MCcr ->get( *iR)->yield;     
+    //}
 
     TH1D* this_shape_hybrid  = (TH1D*)shape_hybrid ->get( *iR)->yield;
     TH1D* this_binExtrapol   = (TH1D*)bin_extrapol ->get( *iR)->yield;
