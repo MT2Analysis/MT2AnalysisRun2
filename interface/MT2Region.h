@@ -143,6 +143,10 @@ class MT2Region {
   std::string getBinNameLatex( double& min, double& max ) const;
   std::vector< std::string > getBinNamesLatex() const;
 
+  double getBinValue(double& min, double& max, std::string sel = "") const;
+  std::vector<double> binMin() const;
+  std::vector<double> binMax() const;
+
   std::string getRegionCuts() const;
 
   MT2HTRegion* htRegion() const {

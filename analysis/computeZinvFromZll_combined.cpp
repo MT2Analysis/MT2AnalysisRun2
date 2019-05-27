@@ -63,6 +63,8 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
 
 void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool mergedHighNj=false, bool isMC=0 );
 
+void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* this_shape_TR, TH1D* this_shape, int iBin_TR, int iBin, int nBins, int nBins_shape, bool isMC, ofstream& writeFill);
+
 void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* shape_MCcr_forExtremeHT, MT2Analysis<MT2Estimate>* bin_extrapol );
 
 int getFixedExtrapolBin( MT2Region* region, TH1D* histo );
@@ -576,32 +578,33 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
 }
 
 
-
-
-void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool mergedHighNj, bool isMC ) {
+void extrapolToTopoRegion(MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Estimate>* shape, bool mergedHighNj, bool isMC){
 
   std::set<MT2Region> regions       = shape_TR->getRegions();
   std::set<MT2Region> regions_shape = shape->getRegions();
+
+  ofstream writeToFile("file_extrapolationToTR.txt");
+  ofstream writeFill("file_fillRegion.txt");
   
-  //////////////loop over the SR regions, fill if contained//////////////
+  //loop over the SR regions, fill if contained
+
   for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
  
     MT2Region* regionToMatch = new MT2Region( *iR );
 
-    cout << endl << endl << "Analysis for the NORMAL REGION: " << regionToMatch->getName() << endl;
+    writeToFile << endl << endl << "Analysis for the NORMAL REGION: " << regionToMatch->getName() << endl;       
      
     TH1D* this_shape_TR    = shape_TR   ->get(*iR)->yield;
   
     int nBins = this_shape_TR->GetNbinsX();
 
-    //Loop over the shape regions///////////FILL CORRECTLY THE DATA SHAPE (NON NORMALIZED)
+    //Loop over the shape regions
     for( std::set<MT2Region>::iterator iR_shape=regions_shape.begin(); iR_shape!=regions_shape.end(); ++iR_shape ) { 
     
       MT2Region* regionToMatch_shape = new MT2Region( *iR_shape );
      
-      cout << "Try with forExtrapol region: " << regionToMatch_shape->getName() << endl;
-      
-
+      writeToFile << "Try with forExtrapol region: " << regionToMatch_shape->getName() << endl;
+ 
       if( !(regionToMatch->MT2Region::isIncluded(regionToMatch_shape)) && !(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) )  ){continue;}  //not contained, doesn't matter
       if( regionToMatch->htMin() != regionToMatch_shape->htMin() ){continue;} //HT has to match both high and low for all regions
       if( regionToMatch->htMax() != regionToMatch_shape->htMax() ){continue;}
@@ -624,100 +627,135 @@ void extrapolToTopoRegion( MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Es
 	  }
 	}
       }
-
-      //previous selection:
-      /*if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1) ){
-	//not true anymore due to 2 & 3 jets splitting, those have not to be summed no matter what,	if( (regionToMatch->nJetsMin() != regionToMatch_shape->nJetsMin()) && (regionToMatch->nJetsMax() != regionToMatch_shape->nJetsMax() ) ) continue; //lower or upper njets has to match, but not both
-	if ( regionToMatch->nBJetsMin()==3 && regionToMatch_shape->nJetsMin()==2 && regionToMatch->htMin()!=1500 ){continue;} //removing the 2j bin for the 3b shape (3b is ~requiring 3j)
-	}
-      
-      if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3 ){
-	if( !(regionToMatch_shape->nJetsMin()==2 || regionToMatch_shape->nJetsMin()==3) ){continue;}
-      }
-
-      if( regionToMatch->nJetsMin()==2 && regionToMatch->nJetsMax()==3  && regionToMatch->nBJetsMin()==0 ){
-       	std::cout << "doing the 2-3 region " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax()<<  " using the shape region " << regionToMatch_shape->nJetsMin() << "to" << regionToMatch_shape->nJetsMax() << "jets " <<  regionToMatch->htMin() << "to" << regionToMatch->htMax() << std::endl;
-      }
-      */
       
 
-      cout << "not rejected" << endl;
+      writeToFile << "not rejected" << endl;
      
       //yields from the forExtrapol regions
       TH1D* this_shape  = shape->get(*iR_shape)->yield;
-      int   nBins_shape = this_shape->GetNbinsX();
+      int nBins_shape = this_shape->GetNbinsX();
 
-      //we loop on the bins of main region set
-      for(int iBin=1; iBin<= nBins; iBin++){
-	cout << "iBin : nBins : nBins_forExtrapol : " << iBin << " : " << nBins << " : " << nBins_shape << endl;
 
-	if(iBin == nBins && nBins_shape > nBins){
-	  if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3 ) && this_shape_TR->GetBinContent( iBin )!=0 ){
-	    	  
-	    //If MC
-	    if( isMC ){
-	      double int_err= 0.;
-	      this_shape->IntegralAndError(iBin,-1,int_err);
-	      double int_err_previous_Region= 0.;
-	      this_shape_TR->IntegralAndError(iBin,-1,int_err_previous_Region);
-	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) );
-	      this_shape_TR->SetBinError( iBin, sqrt( int_err*int_err +int_err_previous_Region *int_err_previous_Region ) );
-	      cout << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) << endl; 
-	    }else{ 
-	      cout << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) << endl;
-	      this_shape_TR->SetBinError( iBin, sqrt( this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 )*this_shape_TR->Integral( iBin,-1 )) );
-	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin,-1)+this_shape_TR->Integral( iBin,-1 ) );
-	    }
+     
+      //if(regionToMatch->getName() =="HT575to1200_j2to3_b0" || regionToMatch->getName() =="HT575to1200_j2to3_b1" || regionToMatch->getName() =="HT575to1200_j2to3_b2" || regionToMatch->getName() =="HT575to1200_j4to6_b0" || regionToMatch->getName() =="HT575to1200_j4to6_b1"  || regionToMatch->getName() =="HT575to1200_j4to6_b2"){ 
+      
+      writeFill << endl << endl << regionToMatch->getName() << endl;
+
+      //for each region we create vectors that will contain the upper and lower boundaries of the bin
+      vector<double> bin_min = regionToMatch->binMin();
+      vector<double> bin_max = regionToMatch->binMax();
+     
+      // will contain the bin boundary information of the b-integrated regions ("*_forExtrapol" regionsSet)
+      vector<double> bin_min_filler = regionToMatch_shape->binMin();
+      vector<double> bin_max_filler = regionToMatch_shape->binMax();
+      
+         
+
+      int index = 0;
+      int tmp = 0;
+      int ladder = 0;
+      //we loop on the bins of main regions set
+      for(int iBin=1; iBin< nBins+1; iBin++){
+	//writeToFile << "iBin : nBins : nBins_forExtrapol : " << iBin << " : " << nBins << " : " << nBins_shape << endl;
+	
+	if(bin_min[iBin-1] == bin_min_filler[iBin-1+ladder] && bin_max[iBin-1] == bin_max_filler[iBin-1+ladder]){
+	 
+	  writeFill << "[" << bin_min_filler[iBin-1+ladder] << ", " <<  bin_max_filler[iBin-1+ladder] <<  "] -> [" << bin_min[iBin-1] << ", " << bin_max[iBin-1] << "] ";
+	  fillRegion(regionToMatch, regionToMatch_shape, this_shape_TR, this_shape, iBin, iBin+ladder, nBins, nBins_shape, isMC, writeFill);	  
+	 
+	}
+	else if(bin_min[iBin-1] <= bin_min_filler[iBin-1+ladder] && bin_max[iBin-1] > bin_max_filler[iBin-1+ladder]){
+	 
+	  while(bin_max_filler[iBin-1+ladder+index] <= bin_max[iBin-1] && iBin-1+ladder+index <= nBins_shape-1 ){
+	   
+	    writeFill << "[" << bin_min_filler[iBin-1+ladder+index] << ", " <<  bin_max_filler[iBin-1+ladder+index] <<  "] -> [" << bin_min[iBin-1] << ", " << bin_max[iBin-1] << "] ";
+	    fillRegion(regionToMatch, regionToMatch_shape, this_shape_TR, this_shape, iBin, iBin+ladder+index, nBins, nBins_shape, isMC, writeFill);
+	   
+	    ++index;
 	    
-	  }else{
-	    if( isMC ){
-	      double int_err= 0.;
-	      this_shape->IntegralAndError(iBin,-1,int_err);
-	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin, -1) );
-	      this_shape_TR->SetBinError( iBin, int_err );
-	      cout << "[2] Filling with... " << this_shape->Integral(iBin, -1) << endl;
-	    }else{
-	      cout << "[2] Filling with... " << this_shape->Integral(iBin, -1) << endl;
-	      this_shape_TR->SetBinContent( iBin, this_shape->Integral(iBin, -1) );
-	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->Integral(iBin, -1)) );
-	    }
 	  }
-	}else{ //if it is not the last bin
-	  if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3 ) && this_shape_TR->GetBinContent( iBin )!=0 ){
-	    //if( regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6|| regionToMatch->nJetsMax()==-1) && this_shape_TR->GetBinContent( iBin )!=0 ){
+	  tmp = index -1;
+	  ladder = ladder + tmp;
+	  index = 0;	 
+	  
+	}
 
-	    if( !isMC ){
-	      cout << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) << endl;
-	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin)));
-	      this_shape_TR->SetBinContent(iBin,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) );
-	     
-	    }else{ 
-	     
-	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin)*this_shape_TR->GetBinError(iBin)));
-	      cout << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) << endl;  
-	      this_shape_TR->SetBinContent(iBin,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent( iBin ) );
-	     
-	    }  
-	  }else{
-	    if( !isMC ){
-	      cout << "[4] Filling with... " << this_shape->GetBinContent(iBin)<< endl;
-	      this_shape_TR->SetBinContent( iBin, this_shape->GetBinContent(iBin));
-	      this_shape_TR->SetBinError( iBin, sqrt(this_shape->GetBinContent(iBin)));
-	    }else{
-	      this_shape_TR->SetBinContent( iBin, this_shape->GetBinContent(iBin));
-	      this_shape_TR->SetBinError( iBin, this_shape->GetBinError(iBin) );
-	      cout << "[4] Filling with... " << this_shape->GetBinContent(iBin) << endl;
-	    }
-	  }
+      }
+      
+      writeFill << "-------------------------------------------" << endl;
+      for(int iBin=1; iBin< nBins+1; iBin++){
 
-	} 
-      }//filled and fine
+	writeFill << "[" <<  bin_min[iBin-1] << ", " << bin_max[iBin-1] << "] " << this_shape_TR->GetBinContent(iBin) << endl;
+
+      }
+      
+      //}//end of region condition
     }//end loop over shape regions
   }//end loop over TR 
 
  
   return;
 
+}
+
+
+void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* this_shape_TR, TH1D* this_shape, int iBin_TR, int iBin, int nBins, int nBins_shape, bool isMC, ofstream& writeFill){
+   
+  
+  if(iBin_TR == nBins_shape && nBins_shape > nBins){
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) && this_shape_TR->GetBinContent(iBin)!=0 ){	    
+     writeFill << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin,-1) << endl;
+     this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1));
+     
+
+     if(isMC){
+       double int_err= 0.;
+       this_shape->IntegralAndError(iBin,-1,int_err);
+       double int_err_previous_Region= 0.;
+       this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);
+       this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region));  
+     }else{  
+       this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1)*this_shape_TR->Integral(iBin_TR,-1))); 
+     }
+	    
+    }else{
+     
+      writeFill << "[2] Filling with... " << this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1) << endl;
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1));
+	
+      if(isMC){
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1)*this_shape_TR->Integral(iBin_TR,-1)));	
+    }else{
+      this_shape_TR->SetBinError(iBin, sqrt(this_shape->Integral(iBin, -1) + this_shape_TR->Integral(iBin_TR, -1)));	
+    }
+      
+    }
+  }else{ //if it is not the last bin
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) && this_shape_TR->GetBinContent(iBin)!=0){
+
+      writeFill << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin) << endl;  
+      this_shape_TR->SetBinContent(iBin_TR,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR));
+
+      if(isMC){
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));	     
+      }else{ 	    
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));    
+      }  
+
+      
+    }else{
+     
+      writeFill << "[4] Filling with... " << this_shape->GetBinContent(iBin)+ this_shape_TR->GetBinContent(iBin_TR) << endl;
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->GetBinContent(iBin) + this_shape_TR->GetBinContent(iBin_TR));
+
+
+      if(isMC){
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));
+      }else{	
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));
+      }      
+    }
+  } 
 }
 
 
@@ -728,7 +766,94 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
   int bin_extrapol = 1;
   int val_mt2 = 200;
 
-  if(region->htMin()==250 && region->htMax()==450 ){
+  string regionName = region->getName();
+  
+  if(regionName=="HT250to450_j2to3_b0") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j2to3_b1") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j2to3_b2") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j4to6_b0") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j4to6_b1") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j4to6_b2") bin_extrapol = 2;
+  else if(regionName=="HT250to450_j7toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j7toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j7toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT250to450_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT250to450_j7toInf_b3toInf") bin_extrapol = 1;
+
+  
+  else if(regionName=="HT450to575_j2to3_b0") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j2to3_b1") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j2to3_b2") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT450to575_j7toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j7toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j7toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT450to575_j2to6_b3toInf") bin_extrapol = 5;
+  else if(regionName=="HT450to575_j7toInf_b3toInf") bin_extrapol = 1;
+
+
+  else if(regionName=="HT575to1200_j2to3_b0") bin_extrapol = 7;
+  else if(regionName=="HT575to1200_j2to3_b1") bin_extrapol = 5;
+  else if(regionName=="HT575to1200_j2to3_b2") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j4to6_b0") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j4to6_b1") bin_extrapol = 4;
+  else if(regionName=="HT575to1200_j4to6_b2") bin_extrapol = 4;
+  else if(regionName=="HT575to1200_j2to6_b3toInf") bin_extrapol = 6;
+  else if(regionName=="HT575to1200_j7to9_b0") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b1") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b2") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b3") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j7to9_b4toInf") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b0") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b1") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b2") bin_extrapol = 2;
+  else if(regionName=="HT575to1200_j10toInf_b3") bin_extrapol = 3;
+  else if(regionName=="HT575to1200_j10toInf_b4toInf") bin_extrapol = 2;
+
+
+  else if(regionName=="HT1200to1500_j2to3_b0") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to3_b1") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to3_b2") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT1200to1500_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT1200to1500_j7to9_b0") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b1") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b2") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b3") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j7to9_b4toInf") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b0") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b1") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b2") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b3") bin_extrapol = 1;
+  else if(regionName=="HT1200to1500_j10toInf_b4toInf") bin_extrapol = 2;
+
+
+  else if(regionName=="HT1500toInf_j2to3_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to3_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to3_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j4to6_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j2to6_b3toInf") bin_extrapol = 4;
+  else if(regionName=="HT1500toInf_j7to9_b0") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b1") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j7to9_b3") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j7to9_b4toInf") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b0") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j10toInf_b1") bin_extrapol = 2;
+  else if(regionName=="HT1500toInf_j10toInf_b2") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b3") bin_extrapol = 3;
+  else if(regionName=="HT1500toInf_j10toInf_b4toInf") bin_extrapol = 3;
+
+  else{ cout << "PROBLEM IN THE REGION NAME " << regionName <<  endl; 
+}
+
+  /*if(region->htMin()==250 && region->htMax()==450 ){
     if( region->nJetsMin()==2 )
       val_mt2 = 400;
     else
@@ -758,11 +883,12 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
   bin_extrapol = histo->FindBin( val_mt2 );
 
   if( histo->GetBinLowEdge(bin_extrapol) != val_mt2 ) 
-    std::cout << "the boundaries are wrong " << std::endl;
+  std::cout << "the boundaries are wrong " << std::endl;*/
+
+  
 
   return bin_extrapol;
 }
-
 
 
 
@@ -823,7 +949,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 0;
+    bool getExtrapolBin = 1;
 
     if(getExtrapolBin){
 

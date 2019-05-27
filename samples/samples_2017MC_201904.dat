@@ -5,7 +5,7 @@
 /scratch/mmasciov/NEWSnTtrees/2017/dyjetsll_ht400to600.root
 /scratch/mmasciov/NEWSnTtrees/2017/dyjetsll_ht600to800.root
 /scratch/mmasciov/NEWSnTtrees/2017/dyjetsll_ht800to1200.root
-/scratch/mmasciov/NEWSnTtrees/2017/dyjetsll_m50_incl.root
+#/scratch/mmasciov/NEWSnTtrees/2017/dyjetsll_m50_incl.root
 /scratch/mmasciov/NEWSnTtrees/2017/gjets_dr0p05_ht100to200.root
 /scratch/mmasciov/NEWSnTtrees/2017/gjets_dr0p05_ht200to400.root
 /scratch/mmasciov/NEWSnTtrees/2017/gjets_dr0p05_ht400to600.root
@@ -38,7 +38,7 @@
 /scratch/mmasciov/NEWSnTtrees/2017/wjets_ht400to600.root
 /scratch/mmasciov/NEWSnTtrees/2017/wjets_ht600to800.root
 /scratch/mmasciov/NEWSnTtrees/2017/wjets_ht800to1200.root
-/scratch/mmasciov/NEWSnTtrees/2017/wjets_incl.root
+#/scratch/mmasciov/NEWSnTtrees/2017/wjets_incl.root
 /scratch/mmasciov/NEWSnTtrees/2017/ww.root
 /scratch/mmasciov/NEWSnTtrees/2017/wz.root
 /scratch/mmasciov/NEWSnTtrees/2017/zinv_ht100to200.root
