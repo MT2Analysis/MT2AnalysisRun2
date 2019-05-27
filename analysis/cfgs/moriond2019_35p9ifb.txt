@@ -10,7 +10,7 @@ qcdRegionsSet zurich2016_noMonojet
 
 mcSamples 2016MC_201904
 dataSamples 2016data_201904
-sigSamples 2016Signals_mo17
+sigSamples 2016Signals_201904
 
 qcdMCSamples Summer16_SnT_06Mar_forQCD
 qcdDataSamples Run2016_35p9ifb_06Mar_forQCD
