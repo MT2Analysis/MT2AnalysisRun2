@@ -1,4 +1,4 @@
-lumi 59.97
+lumi 59.74
 year 2018
 regionsSet 13TeV_2016_inclusive
 useETHdata 1
