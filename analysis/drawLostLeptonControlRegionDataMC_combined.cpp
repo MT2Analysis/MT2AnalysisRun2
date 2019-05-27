@@ -142,7 +142,7 @@ int main( int argc, char* argv[] ) {
   /////////////////////////////////////
   //---------------------------------//
 
-  std::string plotsDir = "combined_CRplots";
+  std::string plotsDir = cfg1.getEventYieldDir() + "/combined_CRplots";
   if(plotElectron && !plotMuon){
     plotsDir += "/llepControlRegion/electron/" + dirName;
   }
