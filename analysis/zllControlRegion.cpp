@@ -489,8 +489,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 
   int nentries = tree->GetEntries();
-  //for( int iEntry=0; iEntry<30000; ++iEntry ) {
-  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  for( int iEntry=0; iEntry<30000; ++iEntry ) {
+    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
@@ -899,6 +899,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	if(myTree.zll_mass < 50) continue;
       }
 
+     
       // FIXME: what to do with lep_tightID?
       //      if( abs(myTree.lep_pdgId[0])==11 && myTree.lep_tightId[0]< 0.5 ) continue;
       //if( abs(myTree.lep_pdgId[1])==11 && myTree.lep_tightId[1]< 0.5 ) continue;
@@ -954,7 +955,6 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	  //outFileOF << "[merged] no" << endl << endl;
 	   
 	  thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
-		
 	  if( thisTree_of==0 ) continue;
 	  assignVariablesToTree(thisTree_of, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
 	  thisTree_of->fillTree_zll(myTree, weight );
@@ -1074,7 +1074,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
       }
 
       else if(regionsSet=="Moriond2019" && !doMerging) {
-
+	
 	thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
 	if( thisTree_of==0 ) continue;
 	assignVariablesToTree(thisTree_of, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
@@ -1091,7 +1091,18 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	thisTree_of->yield->Fill( mt2, weight );
 
       }
-    } else continue;
+      else {
+	//for instance the case of inclusive region
+	//we don't merge any region
+	
+        thisTree_of = anaTree_of->get( ht, njets, nbjets, minMTBmet, mt2 );
+        if( thisTree_of==0 ) continue;
+	assignVariablesToTree(thisTree_of, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+        thisTree_of->fillTree_zll(myTree, weight );
+        thisTree_of->yield->Fill( mt2, weight );
+
+      }
+    }// else continue;
 
   } // for entries
   
