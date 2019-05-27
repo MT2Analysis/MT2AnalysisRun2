@@ -122,7 +122,8 @@ int main( int argc, char* argv[] ) {
 
   if( argc > 3){
     std::string model = signalName;
-    std::string filename = Form("/scratch/mratti/WeightsForMoriond17Signals/nsig_weights_%s.root", model.c_str() ); // these come from SnT repo
+				int year_to_use = (cfg.year()!=2018) ? cfg.year() : 2017;
+    std::string filename = Form("/scratch/mratti/SigWeights/%d/nsig_weights_%s.root", year_to_use, model.c_str() ); // these come from SnT repo
     TFile* f_avWeights = new TFile(filename.c_str() );
 
     h_nsig                       = (TH2D*) f_avWeights->Get("h_nsig");
@@ -221,7 +222,7 @@ int main( int argc, char* argv[] ) {
       //computeYield(mySample[i], cfg, myEstimate, bTagSF_ZJetsIncl);
       //bTagSF_ZJetsIncl = nullptr;
       computeYield(mySample[i], cfg, myEstimate);
-   
+
     }
 
     myEstimate->writeToFile(outputdir + "/ZJetsInclusive.root");
@@ -383,7 +384,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // filters should be the same bw ETH and SnT
     if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
-    } 
+    }
     else {
       if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
     }
@@ -391,7 +392,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     // additional ad-hoc filters, only available with SnT ntuples
     if(!isETH && myTree.nJet200MuFrac50DphiMet > 0) continue;
     if(!isETH && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
-    
+
     // apply the triggers on data
     if(isData and isETH) {
       if (!myTree.passTriggerSelection("SR", cfg.year())) continue;
@@ -446,20 +447,20 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         // main normalization weight
         weight = myTree.evt_scale1fb;
         if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
-        
-        // lepton and btag scale factors 
+
+        // lepton and btag scale factors
         weight *= myTree.weight_lepsf * myTree.weight_btagsf;
         if (fabs(myTree.weight_btagsf) < 0.001) continue;
 
         // pu reweighting based on nTrueInt
-        if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt); 
+        if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt);
 
         // prefire weights
-        if (cfg.year()==2017 || cfg.year()==2016) weight *= myTree.weight_L1prefire; 
-        
+        if (cfg.year()==2017 || cfg.year()==2016) weight *= myTree.weight_L1prefire;
+
         // isr reweighting
-        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0); 
-        
+        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0);
+
         // TTHF weights
         weight *= myTree.getTTHFWeight(sample.id);
       }
@@ -518,6 +519,10 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
 template <class T>
 MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg ) {
+
+	 // initialization of pu weight tool
+	 MT2PuReweightTool puReweight;
+	 bool puHist = puReweight.setPuWeightHist(cfg.year());
 
   bool dogenmet = true;
 
@@ -578,13 +583,30 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     myTree.GetEntry(iEntry);
 
+    // apply the filters
+    // filters should be the same bw ETH and SnT
+    if(isData) {
+      if(!myTree.passFilters(cfg.year())) continue;
+    }
+    else {
+      if(!myTree.passFiltersMC(cfg.year(), isETH)) continue;
+    }
+
+    // additional ad-hoc filters, only available with SnT ntuples
+    if(!isETH && myTree.nJet200MuFrac50DphiMet > 0) continue;
+    if(!isETH && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
+
+
+    //apply triggers on MC - currently disabled for signals
+    //if(!isData){
+    //		if(!myTree.passTriggerSelection_forMC("SR", cfg.year(), isETH)) continue;
+    //}
+
     if (isETH) {
       if(myTree.PV_npvs <= 0) continue;
     } else {
       if(myTree.nVert <= 0) continue;
     }
-
-    //crazy events! To be piped into a separate txt file
 
     if(myTree.jet_pt[0] > 13000){
       std::cout << "Rejecting weird event at run:lumi:evt = " << myTree.run << ":" << myTree.luminosityBlock << ":" << myTree.event << std::endl;
@@ -607,18 +629,13 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     bool passRecoMET=true;
 
     if( regionsSet!="13TeV_noCut" ){
-      if( !myTree.passSelection(cfg.additionalStuff()) ) passRecoMET=false;
+      if( !myTree.passSelection("", cfg.year(), isETH) ) passRecoMET=false;
       if(dogenmet)
-        if( !myTree.passSelection("genmet") ) passGenMET=false;
+        if( !myTree.passSelection("genmet"), cfg.year(), isETH ) passGenMET=false;
       if (!passGenMET && !passRecoMET) continue;
     }
 
     if( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
- 
-    // additional ad-hoc filters, only available with SnT ntuples
-    if(!isETH && myTree.nJet200MuFrac50DphiMet > 0) continue;
-    if(!isETH && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
-
 
     float ht   = myTree.ht;
     ////    float met  = myTree.met_pt;
@@ -689,9 +706,10 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
         // std::cout << " sig_xs " << sig_xs << std::endl;
         weight *= sig_xs; // * 1000 ?
       }else{
-        //weight *= myTree.evt_xsec*myTree.evt_filter*1000;  // NOTE: normalized to 1/fb
-        weight *= sig_xs*myTree.evt_filter*1000; // NOTE: normalized to 1/fb
-        if (cfg.year()==2017) weight *= myTree.weight_L1prefire; // FIXME apply also to 2016 when weights are avaialble
+        //weight *= myTree.evt_xsec*myTree.evt_filter*1000;
+        weight *= sig_xs*myTree.evt_filter*1000*cfg.lumi(); // NOTE: now normalized to lumi of the year
+        if(cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
+								if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt);
       }
 
     } else  std::cout << "THIS SHOULD NOT HAPPEN, PLEASE CHECK" << std::endl;
