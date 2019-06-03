@@ -22,17 +22,17 @@ cfg = "moriond2019_35p9ifb" #"data_2016_SnT_36p8_FixedWJets"  #data_2016_SnTMC_3
 stepSize = 25
 
 if model=="T1qqqq": 
-  Ms = range(700, 2301, stepSize)
-  ms = range(0, 1601, stepSize) # 500 1601
+  Ms = range(600, 2801, stepSize)
+  ms = range(0, 1901, stepSize) # 500 1601
 elif model=="T2qq":
-  Ms = range(300, 1801, stepSize)
-  ms = range(0, 1401, stepSize) # 100 1401
+  Ms = range(200, 2601, stepSize)
+  ms = range(0, 2201, stepSize) # 100 1401
 elif model=="T1bbbb":
-  Ms = range(600, 2301, stepSize)
-  ms = range(0, 1601, stepSize)
+  Ms = range(600, 2801, stepSize)
+  ms = range(0, 1901, stepSize)
 elif model=="T2bb":
-  Ms = range(300, 1601, stepSize)
-  ms = range(0, 1101, stepSize)
+  Ms = range(300, 2601, stepSize)
+  ms = range(0, 2101, stepSize)
 
 print Ms
 
