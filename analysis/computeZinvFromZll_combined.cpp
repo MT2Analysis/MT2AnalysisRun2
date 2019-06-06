@@ -891,7 +891,314 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
 }
 
 
+void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* shape_MCcr_forExtremeHT, MT2Analysis<MT2Estimate>* bin_extrapol ) {
+  
+  bool getBinByHand = false; //this flag is only introduced for debugging purpose. Always turn it to false for normal routine
 
+  std::set<MT2Region> regions       = shape_data->getRegions();
+    
+  bool writeToExtFile = true;
+  ofstream writeToFile("file_hybridShape.txt");
+  if(writeToFile.fail()){
+     cerr << "Erreur lors de l'ouverture du fichier" << endl;
+     return;
+  }
+  else{
+    writeToFile << "Notation: " << endl;
+    writeToFile << "[1] last bin + sufficient MC_cr statistics" << endl;
+    writeToFile << "[2] not last bin + sufficient MC_cr statistics" << endl;
+    writeToFile << "[3] not enough MC_cr statistics" << endl;
+    writeToFile << "[above] bin above extrapolation bin" << endl;
+    writeToFile << "[below] bin below extrapolation bin" << endl;
+    writeToFile << "-----------------------------------------------" << endl << endl << endl;
+  }
+ 
+  for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
+   
+    MT2Region* region = new MT2Region( *iR );
+       
+    if(writeToExtFile){ 
+      writeToFile << endl << "--------------------------------------------------" << endl;
+      writeToFile << endl << region->getName() << endl;
+    }
+
+    TH1D* this_shape_data = (TH1D*)shape_data ->get( *iR)->yield;
+    TH1D* this_shape_MCsr = (TH1D*)shape_MCsr ->get( *iR)->yield;
+
+    //At extreme HT we get the shape from MC after MT2 400 per TR
+    TH1D* this_shape_MCcr  = (TH1D*)shape_MCcr ->get( *iR)->yield;  
+    
+    //MC_cr used not to be integrated for extreme regions
+    //if( (region->nJetsMin() > 1) && (region->htMin()==1500) ){
+    //  this_shape_MCcr = (TH1D*)shape_MCcr_forExtremeHT ->get( *iR)->yield; 
+    //}
+    //else{
+    //  this_shape_MCcr = (TH1D*)shape_MCcr ->get( *iR)->yield;     
+    //}
+
+    TH1D* this_shape_hybrid  = (TH1D*)shape_hybrid ->get( *iR)->yield;
+    TH1D* this_binExtrapol   = (TH1D*)bin_extrapol ->get( *iR)->yield;
+
+    int nBins = this_shape_data->GetNbinsX();
+    //for each topo region will have a bin number indicating where we extrapolate
+    int bin_extrapol = 1;
+    int bin_extrapol_fixed = 1;
+    double integral = 0.;
+    double errData = 0.;
+    double integralMC = 0.;
+    double errMC = 0.;
+ 
+   
+    bool getExtrapolBin = 1;
+
+    if(getExtrapolBin){
+
+      if(region->nJetsMax()==1){ 
+	bin_extrapol = 2;
+      }
+      else{
+
+	bin_extrapol = getFixedExtrapolBin( region, this_shape_data );
+
+	if( bin_extrapol == nBins ){ //We take the full shape from data!
+	  bin_extrapol = bin_extrapol; //bin_extrapol+1; removed the +1, as it is already taken into account in te getFixedExtrapolBin function
+	  integral = 1.;//we don't have to do a special normalization in this case
+	  errData  = 0.;
+	  integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
+	}else{
+	  bin_extrapol = bin_extrapol;
+	  integral = this_shape_data->IntegralAndError( bin_extrapol, -1, errData);
+	  integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
+	}
+      }
+    }else{
+      //if(region->getName() != "HT575to1200_j4to6_b0" && region->getName() != "HT575to1200_j4to6_b1" && region->getName() != "HT575to1200_j4to6_b2"){
+      if(!getBinByHand){
+	cout << region->getName() << ": OK" << endl;
+	if(writeToExtFile){
+	  writeToFile << "Maximum number of events in MC CR: " <<  this_shape_MCcr->Integral(1, -1) << endl;
+	}
+	for( int iBin=nBins; iBin>= 1; iBin-- ){
+	  if( this_shape_MCcr->Integral( iBin, -1) >= 50. ){
+	    if( iBin == nBins ){ //We take the full shape from data!
+	      bin_extrapol = iBin+1;
+	      integral = 1.;//we don't have to do a special normalization in this case
+	      errData  = 0.;
+	      integralMC = this_shape_MCcr->IntegralAndError( iBin, -1, errMC);
+	      if(writeToExtFile){
+		writeToFile << "[1] integral: " << integral << endl;
+		writeToFile << "[1] integralMC: " << integralMC << endl;
+	      }
+	    }else{
+	      bin_extrapol = iBin;
+	      integral = this_shape_data->IntegralAndError( iBin, -1, errData);
+	      integralMC = this_shape_MCcr->IntegralAndError( iBin, -1, errMC);
+	      if(writeToExtFile){
+		writeToFile << "[2] integral: " << integral << endl;
+		writeToFile << "[2] integralMC: " << integralMC << endl;
+	      }
+	    }
+	    break;
+	  }
+	  else{	
+	    bin_extrapol = 1;
+	    integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
+	    integral   = this_shape_data->IntegralAndError( bin_extrapol, -1, errData);
+	    if(writeToExtFile){
+	      writeToFile << "[3] integral: " << integral << endl;
+	      writeToFile << "[3] integralMC: " << integralMC << endl;
+	    }
+	  }
+	}
+      }
+      else{//we get bin extrapol by hand
+	cout << region->getName() << ": special treatment" << endl;
+	bin_extrapol = 1;
+	integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
+	integral   = this_shape_data->IntegralAndError( bin_extrapol, -1, errData);
+
+      }
+    }//got the extrapol bin myself
+
+
+    //as a check now, compute bin_extrapol fixed to compare it with other method
+    if( region->nJetsMax()==1){ 
+	bin_extrapol_fixed = 2;
+    }
+    else{
+	bin_extrapol_fixed = getFixedExtrapolBin( region, this_shape_data );
+
+	if( bin_extrapol_fixed == nBins ){ 
+	  bin_extrapol_fixed = bin_extrapol_fixed+1;
+	}else{
+	  bin_extrapol_fixed = bin_extrapol_fixed;
+	}
+    }
+    
+    if(writeToExtFile){
+      //writeToFile << "Check: bin_extrapol / bin_extrapol_fixed / nBins :  " << bin_extrapol << " / " << bin_extrapol_fixed << " / " << nBins << endl;
+      writeToFile << "bin_extrapol / nBins :  " << bin_extrapol << " / " << nBins << endl << endl;
+    }
+   
+    //Filling the histo that knows where we extrapolate
+    this_binExtrapol->SetBinContent( 1, bin_extrapol );
+
+    double errZinv;
+    double integralZinv = this_shape_MCsr->IntegralAndError( bin_extrapol, -1, errZinv);
+    double relativeErrZinv = 1.0;
+    if(integralZinv>0){
+      relativeErrZinv = errZinv/integralZinv;
+    }
+
+    double relativeErrData = 1.0;
+    if(integral>0){
+      relativeErrData = errData/integral;
+    }
+
+    double errShapeExt = sqrt(relativeErrData*relativeErrData+relativeErrZinv*relativeErrZinv);
+
+    double relativeErrMC = 1.0;
+    if(integralMC>0){
+      relativeErrMC = errMC/integralMC;
+    }
+
+    double errShapeMCExt = sqrt(relativeErrMC*relativeErrMC+relativeErrZinv*relativeErrZinv);
+  
+    for(int iBin=1; iBin<= nBins; iBin++){
+      double MCsr_cont;
+      double MCcr_cont;
+      double MCsr_contErr;
+      double MCcr_contErr;
+      double MCsr_forkMT2;
+
+      if(iBin < bin_extrapol){
+
+	MCsr_cont = this_shape_MCsr->GetBinContent(iBin);
+	MCcr_cont = this_shape_MCcr->GetBinContent(iBin);
+	MCsr_contErr = this_shape_MCsr->GetBinError(iBin);
+	MCcr_contErr = this_shape_MCcr->GetBinError(iBin);
+
+	MCsr_forkMT2 = MCsr_cont;
+
+	if(writeToExtFile){
+	  writeToFile << "Bin " << iBin << ":" << endl;
+	  writeToFile << "[below] MC_sr_cont: " << MCsr_cont << endl;
+	  writeToFile << "[below] MC_cr_cont: " << MCcr_cont << endl;
+	}	 
+
+      }
+      else{
+
+	MCsr_cont = integralZinv;
+	MCcr_cont = integralMC;
+	MCsr_contErr = errZinv;
+	MCcr_contErr = errMC;
+
+	MCsr_forkMT2 = this_shape_MCsr->GetBinContent(iBin);
+
+	if(writeToExtFile){
+	  writeToFile << "Bin " << iBin << ":" << endl;
+	  writeToFile << "[above] MC_sr_cont: " << MCsr_cont << endl;
+	  writeToFile << "[above] MC_cr_cont: " << MCcr_cont << endl;
+	}
+
+      }
+
+      double ratioMC_cont = MCsr_cont/MCcr_cont;
+      double ratioMC_err  = sqrt( (MCsr_contErr/MCcr_cont)*(MCsr_contErr/MCcr_cont) + (MCsr_cont*MCcr_contErr/(MCcr_cont*MCcr_cont))*(MCsr_cont*MCcr_contErr/(MCcr_cont*MCcr_cont)) );
+
+      
+
+      if (ratioMC_cont>0)
+        ratioMC_err /= ratioMC_cont;
+
+      float relativeErrorData;
+      float relativeErrorMC;
+
+      double kMT2_zinv = MCsr_forkMT2/integralZinv;
+
+      if( iBin<bin_extrapol ){
+	
+	relativeErrorData = sqrt( (this_shape_data->GetBinError(iBin)*this_shape_data->GetBinError(iBin))/(this_shape_data->GetBinContent(iBin)*this_shape_data->GetBinContent(iBin)) +  ratioMC_err*ratioMC_err );
+	relativeErrorMC = sqrt( (this_shape_MCcr->GetBinError(iBin)*this_shape_MCcr->GetBinError(iBin))/(this_shape_MCcr->GetBinContent(iBin)*this_shape_MCcr->GetBinContent(iBin)) +  ratioMC_err*ratioMC_err );
+
+	if(writeToExtFile){
+	  writeToFile << "[below] this_shape_data avant: " << this_shape_data->GetBinContent(iBin) << endl;
+	  writeToFile << "Then this_shape_data computed as this_shape_data->GetBinContent(iBin)*(MCsr_cont/MCcr_cont)" << endl;
+	}
+
+	this_shape_data ->SetBinContent(iBin, this_shape_data->GetBinContent(iBin)*ratioMC_cont);
+	this_shape_MCcr ->SetBinContent(iBin, this_shape_MCcr->GetBinContent(iBin)*ratioMC_cont);
+	this_shape_data ->SetBinError(iBin, this_shape_data->GetBinContent(iBin)*relativeErrorData);
+	this_shape_MCcr ->SetBinError(iBin, this_shape_MCcr->GetBinContent(iBin)*relativeErrorMC);
+	
+	if(writeToExtFile){
+	  writeToFile << "[below] this_shape_data apres: " << this_shape_data->GetBinContent(iBin) << endl;
+	}
+
+      }else{
+
+	relativeErrorData = sqrt( errShapeExt*errShapeExt + ratioMC_err*ratioMC_err );
+        relativeErrorMC = sqrt( errShapeMCExt*errShapeMCExt + ratioMC_err*ratioMC_err );
+
+	if(writeToExtFile){
+	  writeToFile << "[above] integral: " << integral << endl;
+	  writeToFile << "[above] ratioMC_cont: " << ratioMC_cont << endl;
+	  writeToFile << "[above] kMT2_zinv: " << kMT2_zinv << endl;
+	  writeToFile << "[above] integralZinv: " << integralZinv << endl;
+	}
+
+	if(writeToExtFile){
+	  writeToFile << "[above] this_shape_data avant: " << this_shape_data->GetBinContent(iBin) << endl;
+	  writeToFile << "Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv" << endl;
+	}
+
+        this_shape_data ->SetBinContent(iBin, integral*ratioMC_cont*kMT2_zinv);
+        this_shape_MCcr ->SetBinContent(iBin, integralMC*ratioMC_cont*kMT2_zinv);
+        this_shape_data ->SetBinError(iBin, relativeErrorData*this_shape_data->GetBinContent(iBin));
+        this_shape_MCcr ->SetBinError(iBin, relativeErrorMC*this_shape_MCcr->GetBinContent(iBin));
+
+	if(writeToExtFile){
+	  writeToFile << "[above] this_shape_data apres: " << this_shape_data->GetBinContent(iBin) << endl;
+	}
+
+      }      
+      
+      this_shape_hybrid->SetBinContent(iBin, this_shape_data->GetBinContent(iBin) );    
+      this_shape_hybrid->SetBinError  (iBin, this_shape_data->GetBinError(iBin) );
+      
+      if(writeToExtFile){
+	writeToFile << "zllHybrid_shape_TR filled with (this_shape_data): " << this_shape_hybrid->GetBinContent(iBin) << endl;
+	writeToFile << "and error: " <<  this_shape_hybrid->GetBinError(iBin) << endl << endl;
+      }
+    }
+
+    //And now it has to be normalized if there is at least one event
+    this_shape_MCcr ->Scale( 1./this_shape_MCcr->Integral());
+    
+    if(this_shape_data->Integral() != 0){
+      this_shape_data   ->Scale( 1./this_shape_data->Integral());
+      this_shape_hybrid ->Scale( 1./this_shape_hybrid->Integral());
+      if(writeToExtFile){
+	for(int iBin=1; iBin<= nBins; iBin++){
+	  writeToFile << "In bin " << iBin << ", normalized hybrid_shape is: " << this_shape_hybrid->GetBinContent(iBin) << endl;
+	}
+      }
+    }else{
+      if(writeToExtFile){
+	writeToFile << "Hybrid shape filled with 0, and not normalized to avoid propagation of nan" << endl;
+      }
+    }
+  
+    if( nBins == 1) this_shape_hybrid->SetBinError( 1, 0.0 );
+
+  
+  }//end loop over final estimate loops
+
+  return;
+
+}
+/*
 
 void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* shape_MCcr_forExtremeHT, MT2Analysis<MT2Estimate>* bin_extrapol ) {
   
@@ -1198,7 +1505,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
   return;
 
 }
-
+*/
 
 
 

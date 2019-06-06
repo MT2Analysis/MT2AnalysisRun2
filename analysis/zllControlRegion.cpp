@@ -489,8 +489,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
 
   int nentries = tree->GetEntries();
-  for( int iEntry=0; iEntry<30000; ++iEntry ) {
-    //for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+  //for( int iEntry=0; iEntry<30000; ++iEntry ) {
+  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
