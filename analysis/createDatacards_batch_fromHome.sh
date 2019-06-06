@@ -1,7 +1,7 @@
 # Script to launch the data card production of a given mass mass point of a model
 # creates a tar of the datacards - assumes no directory structure inside the tar
 # example:
-#qsub -q short.q  -l h_vmem=6g -o `pwd`/log_900_1000_0_100.out -e `pwd`/log_900_1000_0_100.err -N creatingDatacards_T1qqqq_900_1000_0_100 createDatacards_batch.sh moriond2019_35p9ifb T1qqqq 900 1000 0 100 V0
+#qsub -q short.q  -l h_vmem=6g -o `pwd`/log_900_1000_0_100.out -e `pwd`/log_900_1000_0_100.err -N creatingDatacards_T1qqqq_900_1000_0_100 createDatacards_batch_fromHome.sh moriond2019_35p9ifb T1qqqq 900 1000 0 100 V0
 # NOTE: this script assumes that you have created a dir /pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards
 #!/bin/bash
 echo $#;
@@ -43,7 +43,7 @@ OUTPUTDIR=/pnfs/psi.ch/cms/trivcat/store/user/$USER/datacards/EventYields_$CFG/
 
 echo "Content of input dir"
 ls -al $INDIR
-ls -al $INDIR/EventYields_$CFG/analyses.root
+ls -al $INDIR/EventYields_$CFG/analyses_signals_merged.root
 
 cd $INDIR
 echo "Working from input dir" $PWD
@@ -80,7 +80,7 @@ else
   echo "Creating output dir" $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
   xrdfs t3dcachedb03.psi.ch mkdir $OUTPUTDIR/datacards_${MODEL}_${LABEL}/
   echo "Now copying tar to output dir"
-  xrdcp -v tared_${M1}_${M11}.tar.gz root://t3dcachedb.psi.ch:1094/$OUTPUTDIR/datacards_${MODEL}_${LABEL}/.
+  xrdcp -v -f tared_${M1}_${M11}.tar.gz root://t3dcachedb.psi.ch:1094/$OUTPUTDIR/datacards_${MODEL}_${LABEL}/.
   echo "After copying command"
   #echo "ciao"; 
 fi

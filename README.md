@@ -177,13 +177,16 @@ Created data-cards will be saved to the storage element in the form of a tar fil
 3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
 4. make sure that ```stepSize``` and ranges are set to desired values in ```launchCreateDatacards.py```
 5. edit ```INDIR``` in ```createDatacards_batch_fromHome.sh```
-6. finally submit data card creation to the batch
+6. if you do not have a valid proxy already, ```voms-proxy-init --voms cms --valid 196:00```
+7. finally submit data card creation to the batch
 ```
 python launchCreateDatacards.py <model-name> <label> 
 ```
 Please don't forget the label because it is needed for the next steps.
 
-TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
+Note that it is possible that a significant fraction of jobs will fail.
+Therefore it may be needed to relaunch the data-card production with a different version and then merge 
+together two sets of limits obtained with two different data-card productions.
 
 #### data-card combination
 From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch.
@@ -191,6 +194,10 @@ The combined cards will be copied to the same storage element location as the ta
 ```
 python combineCards_scan.py <path> <model>
 ```
+Note that often a non-negligible fraction of these jobs fails. 
+Check for signficant fraction of data-cards with size 0.
+You can then relaunch the combination, use exactly the same command - it will remove empty combined data-cards and relaunch only the jobs that failed previously.
+
 #### limit calculation
 From the same directory, sumbit limit calculation to the batch. 
 The limits will be copied in a ```limits``` subdir from the original SE path

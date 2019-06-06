@@ -977,10 +977,10 @@ int main( int argc, char* argv[] ) {
               std::string templateDatacard( Form("%s/datacard_%s.txt", path_templ.c_str(), binName.c_str()) );
 
               // Create new card for this bin
-              std::string newDatacard( Form("%s/datacard_%s_%s_%.0f_%.0f.txt", path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
-              std::string helpDatacard( Form("%s/datacard_%s_%s_%.0f_%.0f_forSed.txt", path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
+              std::string newDatacard(  Form("%s/datacard_%s_%s_%.0f_%.0f.txt",        path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
+              //std::string helpDatacard( Form("%s/datacard_%s_%s_%.0f_%.0f_forSed.txt", path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
 
-              std::ifstream thisNewDatacard( newDatacard.c_str() );
+              //std::ifstream thisNewDatacard( newDatacard.c_str() );
               //if( thisNewDatacard.good() ) continue; // if data-card exists do not overwrite
 
               float sig = this_signal->GetBinContent(iBin);
@@ -1033,9 +1033,6 @@ int main( int argc, char* argv[] ) {
 
               // only at the end multiply by lumi the yield
               //sig *= lumiComb; // not needed ATM
-
-              std::string mvCommand( Form("mv %s %s", newDatacard.c_str(), helpDatacard.c_str()) );
-              std::string rmCommand( Form("rm -f %s", helpDatacard.c_str()) );
 
               std::string sedCommand( Form("sed 's/XXX/%.3f/' %s > %s", sig, templateDatacard.c_str(), newDatacard.c_str()) );
               system( sedCommand.c_str() );
