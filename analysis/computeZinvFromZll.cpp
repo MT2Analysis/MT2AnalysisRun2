@@ -376,7 +376,7 @@ MT2Analysis<MT2EstimateSyst>* computePurityOF( MT2Analysis<MT2Estimate>* SF, MT2
       }
       else if(cfg.year()==2018){
 	R_sfof = 1.04;
-	R_sfof = 0.0;
+	R_sfof_err = 0.0;
       }
 	
       writeToFile << "R(SF/OF) = " << R_sfof << endl;
