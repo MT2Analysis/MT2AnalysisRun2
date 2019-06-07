@@ -699,65 +699,68 @@ void extrapolToTopoRegion(MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Est
 }
 
 
+
 void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* this_shape_TR, TH1D* this_shape, int iBin_TR, int iBin, int nBins, int nBins_shape, bool isMC, ofstream& writeFill){
-   
   
   if(iBin_TR == nBins_shape && nBins_shape > nBins){
-    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) && this_shape_TR->GetBinContent(iBin)!=0 ){	    
-     writeFill << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin,-1) << endl;
-     this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1));
-     
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3))	
 
-     if(isMC){
-       double int_err= 0.;
-       this_shape->IntegralAndError(iBin,-1,int_err);
-       double int_err_previous_Region= 0.;
-       this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);
-       this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region));  
-     }else{  
-       this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1)*this_shape_TR->Integral(iBin_TR,-1))); 
-     }
+      if(isMC){
+	double int_err= 0.;
+	this_shape->IntegralAndError(iBin,-1,int_err);
+	double int_err_previous_Region= 0.;
+	this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);   
+	this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region));  
+      }else{  
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1) + this_shape_TR->Integral(iBin_TR,-1))); 
+      }
+    
+      writeFill << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin,-1) << endl;
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1));          
 	    
     }else{
+
+      if(isMC){
+	double int_err= 0.;
+	this_shape->IntegralAndError(iBin,-1,int_err);
+	double int_err_previous_Region= 0.;
+	this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);   
+	this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region)); 
+      }else{
+	this_shape_TR->SetBinError(iBin, sqrt(this_shape->Integral(iBin, -1) + this_shape_TR->Integral(iBin_TR, -1)));	
+      }
      
       writeFill << "[2] Filling with... " << this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1) << endl;
-      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1));
-	
-      if(isMC){
-	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1)*this_shape_TR->Integral(iBin_TR,-1)));	
-    }else{
-      this_shape_TR->SetBinError(iBin, sqrt(this_shape->Integral(iBin, -1) + this_shape_TR->Integral(iBin_TR, -1)));	
-    }
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1));             
       
     }
+
   }else{ //if it is not the last bin
-    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) && this_shape_TR->GetBinContent(iBin)!=0){
-
-      writeFill << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin) << endl;  
-      this_shape_TR->SetBinContent(iBin_TR,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR));
-
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3)){
+      
       if(isMC){
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));	     
       }else{ 	    
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));    
-      }  
+      } 
 
+      writeFill << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR) << endl;
+      this_shape_TR->SetBinContent(iBin_TR,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR));  
       
     }else{
-     
-      writeFill << "[4] Filling with... " << this_shape->GetBinContent(iBin)+ this_shape_TR->GetBinContent(iBin_TR) << endl;
-      this_shape_TR->SetBinContent(iBin_TR, this_shape->GetBinContent(iBin) + this_shape_TR->GetBinContent(iBin_TR));
-
 
       if(isMC){
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));
       }else{	
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));
-      }      
+      }   
+     
+      writeFill << "[4] Filling with... " << this_shape->GetBinContent(iBin)+ this_shape_TR->GetBinContent(iBin_TR) << endl;
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->GetBinContent(iBin) + this_shape_TR->GetBinContent(iBin_TR));
+        
     }
   } 
 }
-
 
 
 
