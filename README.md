@@ -137,13 +137,20 @@ source launch_analysis.sh
 
 ### Signals
 
-Run regionEventYields on the desired signal scan, supported scans are (only for 2016):
+Run regionEventYields on the desired signal scan, supported scans are:
 T1qqqq, T1bbbb, T1tttt, T2qq, T2bb, T2tt.
 Signal contamination removal not currently supported - so T1tttt, T2tt yields are not reliable
 
 ```
 ./regionEventYields <cfg-file-name16> signal <model>
+./regionEventYields <cfg-file-name17> signal <model>
+./regionEventYields <cfg-file-name18> signal <model>
 ```
+Merge the output signals in one root file to be stored in the '16 cfg file:
+```
+hadd EventYields_<cfg-file-name16>/analyses_signals_merged.root EventYields_<cfg-file-name16>/analyses.root EventYields_<cfg-file-name17>/analyses.root EventYields_<cfg-file-name18>/analyses.root
+```
+
 
 Edit desired options in ```createDatacards_combined.cpp``` 
 Run the data-card creation for the signals, e.g.:
