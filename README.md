@@ -262,3 +262,37 @@ python drawSMSsignificance.py <txt-file-just-created>
 
 
 For plotting the contours in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
+
+
+### Ranking of topological regions
+You do this procedure to understand what topological regions are driving the sensitivity for a particular mass-mass point.
+
+Make sure you have done once:
+
+```
+mkdir /scratch/`whoami`/datacards
+mkdir /scratch/`whoami`/ranking
+```
+
+Run locally the data-cards creation for the mass-mass point of interest and copy them. Example
+```
+./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 1200 1205 850 855
+mkdir /scratch/`whoami`/datacards/datacards_T2qq_1200_850/
+cp EventYields_moriond2019_35p9ifb/datacards_T2qq/*T2qq_1200_850*txt /scratch/`whoami`/datacards/datacards_T2qq_1200_850
+```
+
+Run the limits for each TR separately (this step usually requires 10-15 minutes)
+```
+source combineAsymptotic_forRanking.sh T2qq_1200_850
+```
+
+Extract the informatiion from the logs of the limits into a .txt file
+```
+source readAsymptoticLimits_forRanking.sh T2qq_1200_850
+```
+
+Rank the limits by the strongest to the weakest:
+```
+python rankRegions.py T2qq_1200_850
+```
+
