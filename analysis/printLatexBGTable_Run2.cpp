@@ -118,7 +118,7 @@ int main( int argc, char* argv[] ) {
     std::string dataLine = "Observation ";
 
     std::string qcdCRLine  = "QCD CR ";
-    std::string zinvCRLine = "Photon CR ";
+    std::string zinvCRLine = "Zll CR ";
     std::string llepCRLine = "1-lepton CR ";
 
     std::string totPostLine = "Total (post-fit) ";
@@ -230,7 +230,8 @@ int main( int argc, char* argv[] ) {
     
     ofs << "\\end{tabular}}" << std::endl;
     ofs << "\\end{table}" << std::endl;
-  
+
+    ofs << "\\clearpage" << std::endl;  
 
   } // for selected region
 

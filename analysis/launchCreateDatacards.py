@@ -47,6 +47,21 @@ for M in Ms:
     m22=m+stepSize
     if m11 >= m2: continue
 
+    # patch for T1bbbb 
+    #if M>1400 or (M-m)>100: 
+    #  print 'patch for T1bbbb skipping this point, only considering DeltaM <= 100 and M<=1400'
+    #  continue
+    
+    # patch for T1qqqq
+    #if M>1300:
+    #  print 'patch for T1qqqq skipping this point'
+    #  continue
+
+    # patch for T2bb
+    #if M>800:
+    #  print 'patch for T2bb, skipping this point'
+    #  continue
+
     job_name = "{}_{}_{}_{}".format(m1, m2, m11, m22)
     stdout = '`pwd`/{}/log_{}.out'.format(logsDir, job_name)
     stderr = '`pwd`/{}/log_{}.err'.format(logsDir, job_name)

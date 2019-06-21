@@ -296,3 +296,13 @@ Rank the limits by the strongest to the weakest:
 python rankRegions.py T2qq_1200_850
 ```
 
+Create sig + bkg table yields
+```
+./printLatexBGTable_Run2 EventYields_moriond2019_35p9ifb
+```
+NOTE: following step not working yet
+Edit the name of the latex table created at the previous step in ```makeRankingTables.py```
+```
+python makeRankingTables.py T2qq_1200_850 137
+```
+
