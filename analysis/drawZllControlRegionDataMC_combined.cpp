@@ -215,10 +215,10 @@ int main(int argc, char* argv[]){
   bgYields_of2.push_back( Zll_of2 );
   bgYields_of3.push_back( Zll_of3 );
 
-  std::string plotsDir = "combined_CRplots/zllControlRegion/SF";
+  std::string plotsDir = cfg1.getEventYieldDir() + "/combined_CRplots/zllControlRegion/SF";
   if( shapeNorm ) plotsDir += "_shape";
 
-  std::string plotsDir_of = "combined_CRplots/zllControlRegion/OF";
+  std::string plotsDir_of = cfg1.getEventYieldDir() + "/combined_CRplots/zllControlRegion/OF";
   if( shapeNorm ) plotsDir_of += "_shape";
 
 

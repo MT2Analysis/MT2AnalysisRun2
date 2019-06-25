@@ -699,65 +699,68 @@ void extrapolToTopoRegion(MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Est
 }
 
 
+
 void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* this_shape_TR, TH1D* this_shape, int iBin_TR, int iBin, int nBins, int nBins_shape, bool isMC, ofstream& writeFill){
-   
   
   if(iBin_TR == nBins_shape && nBins_shape > nBins){
-    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) && this_shape_TR->GetBinContent(iBin)!=0 ){	    
-     writeFill << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin,-1) << endl;
-     this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1));
-     
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3))	
 
-     if(isMC){
-       double int_err= 0.;
-       this_shape->IntegralAndError(iBin,-1,int_err);
-       double int_err_previous_Region= 0.;
-       this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);
-       this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region));  
-     }else{  
-       this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1)*this_shape_TR->Integral(iBin_TR,-1))); 
-     }
+      if(isMC){
+	double int_err= 0.;
+	this_shape->IntegralAndError(iBin,-1,int_err);
+	double int_err_previous_Region= 0.;
+	this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);   
+	this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region));  
+      }else{  
+	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1) + this_shape_TR->Integral(iBin_TR,-1))); 
+      }
+    
+      writeFill << "[1] Filling with... " << this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin,-1) << endl;
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1));          
 	    
     }else{
+
+      if(isMC){
+	double int_err= 0.;
+	this_shape->IntegralAndError(iBin,-1,int_err);
+	double int_err_previous_Region= 0.;
+	this_shape_TR->IntegralAndError(iBin_TR,-1,int_err_previous_Region);   
+	this_shape_TR->SetBinError(iBin_TR, sqrt(int_err*int_err +int_err_previous_Region *int_err_previous_Region)); 
+      }else{
+	this_shape_TR->SetBinError(iBin, sqrt(this_shape->Integral(iBin, -1) + this_shape_TR->Integral(iBin_TR, -1)));	
+      }
      
       writeFill << "[2] Filling with... " << this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1) << endl;
-      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1));
-	
-      if(isMC){
-	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->Integral(iBin,-1)*this_shape->Integral(iBin,-1)+this_shape_TR->Integral(iBin_TR,-1)*this_shape_TR->Integral(iBin_TR,-1)));	
-    }else{
-      this_shape_TR->SetBinError(iBin, sqrt(this_shape->Integral(iBin, -1) + this_shape_TR->Integral(iBin_TR, -1)));	
-    }
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->Integral(iBin, -1)+this_shape_TR->Integral(iBin_TR, -1));             
       
     }
+
   }else{ //if it is not the last bin
-    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3) && this_shape_TR->GetBinContent(iBin)!=0){
-
-      writeFill << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin) << endl;  
-      this_shape_TR->SetBinContent(iBin_TR,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR));
-
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3)){
+      
       if(isMC){
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));	     
       }else{ 	    
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));    
-      }  
+      } 
 
+      writeFill << "[3] Filling with... " << this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR) << endl;
+      this_shape_TR->SetBinContent(iBin_TR,this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR));  
       
     }else{
-     
-      writeFill << "[4] Filling with... " << this_shape->GetBinContent(iBin)+ this_shape_TR->GetBinContent(iBin_TR) << endl;
-      this_shape_TR->SetBinContent(iBin_TR, this_shape->GetBinContent(iBin) + this_shape_TR->GetBinContent(iBin_TR));
-
 
       if(isMC){
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));
       }else{	
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));
-      }      
+      }   
+     
+      writeFill << "[4] Filling with... " << this_shape->GetBinContent(iBin)+ this_shape_TR->GetBinContent(iBin_TR) << endl;
+      this_shape_TR->SetBinContent(iBin_TR, this_shape->GetBinContent(iBin) + this_shape_TR->GetBinContent(iBin_TR));
+        
     }
   } 
 }
-
 
 
 
@@ -891,8 +894,6 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
 }
 
 
-
-
 void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* shape_MCcr_forExtremeHT, MT2Analysis<MT2Estimate>* bin_extrapol ) {
   
   bool getBinByHand = false; //this flag is only introduced for debugging purpose. Always turn it to false for normal routine
@@ -900,7 +901,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
   std::set<MT2Region> regions       = shape_data->getRegions();
     
   bool writeToExtFile = true;
-  ofstream writeToFile("file_hybridShape_combined.txt");
+  ofstream writeToFile("file_hybridShape.txt");
   if(writeToFile.fail()){
      cerr << "Erreur lors de l'ouverture du fichier" << endl;
      return;
@@ -928,13 +929,15 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     TH1D* this_shape_MCsr = (TH1D*)shape_MCsr ->get( *iR)->yield;
 
     //At extreme HT we get the shape from MC after MT2 400 per TR
-    TH1D* this_shape_MCcr;
-    if( (region->nJetsMin() > 1) && (region->htMin()==1500) ){
-      this_shape_MCcr = (TH1D*)shape_MCcr_forExtremeHT ->get( *iR)->yield;
-    }
-    else{
-      this_shape_MCcr = (TH1D*)shape_MCcr ->get( *iR)->yield;     
-    }
+    TH1D* this_shape_MCcr  = (TH1D*)shape_MCcr ->get( *iR)->yield;  
+    
+    //MC_cr used not to be integrated for extreme regions
+    //if( (region->nJetsMin() > 1) && (region->htMin()==1500) ){
+    //  this_shape_MCcr = (TH1D*)shape_MCcr_forExtremeHT ->get( *iR)->yield; 
+    //}
+    //else{
+    //  this_shape_MCcr = (TH1D*)shape_MCcr ->get( *iR)->yield;     
+    //}
 
     TH1D* this_shape_hybrid  = (TH1D*)shape_hybrid ->get( *iR)->yield;
     TH1D* this_binExtrapol   = (TH1D*)bin_extrapol ->get( *iR)->yield;
@@ -961,7 +964,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
 	bin_extrapol = getFixedExtrapolBin( region, this_shape_data );
 
 	if( bin_extrapol == nBins ){ //We take the full shape from data!
-	  bin_extrapol = bin_extrapol+1;
+	  bin_extrapol = bin_extrapol; //bin_extrapol+1; removed the +1, as it is already taken into account in te getFixedExtrapolBin function
 	  integral = 1.;//we don't have to do a special normalization in this case
 	  errData  = 0.;
 	  integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
@@ -1013,7 +1016,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
       }
       else{//we get bin extrapol by hand
 	cout << region->getName() << ": special treatment" << endl;
-	bin_extrapol = nBins+1;
+	bin_extrapol = 1;
 	integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
 	integral   = this_shape_data->IntegralAndError( bin_extrapol, -1, errData);
 
@@ -1198,7 +1201,6 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
   return;
 
 }
-
 
 
 
