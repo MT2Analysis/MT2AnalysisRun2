@@ -203,7 +203,7 @@ python combineCards_scan.py <path> <model>
 ```
 Note that often a non-negligible fraction of these jobs fails. 
 Check for signficant fraction of data-cards with size 0.
-You can then relaunch the combination, use exactly the same command - it will remove empty combined data-cards and relaunch only the jobs that failed previously.
+You can relaunch the combination, use exactly the same command - it will remove combined data-cards of size 0 and relaunch only the jobs that failed previously.
 
 #### limit calculation
 From the same directory, sumbit limit calculation to the batch. 
@@ -214,15 +214,13 @@ python submitLimits_scan.py <path> <model>
 #### plotting
 Once you have the limits for each masses, copy them in your scratch area:
 ```
-sh copyLimits.sh <model> <label> <path>
+sh copyLimits.sh <model> <label> <path-minus-lastDir>
 ```
 
-Then, create a txt file with your full limits:
+Then, create a .txt file with your full limits by running:
 ```
 sh readAsymptoticLimits_Scan.sh <model> <label> 
 ```
-
-Note that the .txt file will be created where you launched the command.
 
 Finally run interpolation and smoothing and create root file:
 ```
