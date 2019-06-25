@@ -35,7 +35,7 @@ bool doQCDEstimate = true; // add QCD background to datacards and tables, defaul
 
 // Edit these options
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
-bool doOnlySig = true; // set to true for signal scans on the batch, default false
+bool doOnlySig = false; // set to true for signal scans on the batch, default false
 bool includeSignalUnc = true; // signal lep eff commented out till available, currently set to false because requires too much memory
 
 
