@@ -197,6 +197,7 @@ together two sets of limits obtained with two different data-card productions.
 
 #### data-card combination
 From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch.
+Remember to modify the path in ```combineCards_batch_scan.sh``` to the location where the needed CMSSW release is.
 The combined cards will be copied to the same storage element location as the tar files
 ```
 python combineCards_scan.py <path> <model>
@@ -207,6 +208,7 @@ You can relaunch the combination, use exactly the same command - it will remove 
 
 #### limit calculation
 From the same directory, sumbit limit calculation to the batch. 
+Remember to modify the path in ```submitLimits_batch_scan.sh``` to the location where the needed CMSSW release is.
 The limits will be copied in a ```limits``` subdir from the original SE path
 ```
 python submitLimits_scan.py <path> <model>
