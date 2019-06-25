@@ -931,8 +931,9 @@ std::vector<TCanvas*> MT2DrawTools_ForRatios::drawRegionYields_fromTree( const s
 
     // now build the sum for MC
     std::cout << "histo 0=" << histos_mc[0]->GetBinContent(1)<< std::endl;
-    std::cout << "histo 1=" << histos_mc[1]->GetBinContent(1)<< std::endl;
-    std::cout << "histo 2=" << histos_mc[2]->GetBinContent(1)<< std::endl;
+    std::cout << "debug" << std::endl;
+    //std::cout << "histo 1=" << histos_mc[1]->GetBinContent(1)<< std::endl;
+    //std::cout << "histo 2=" << histos_mc[2]->GetBinContent(1)<< std::endl;
     TH1D* mc_sum = (TH1D*)histos_mc[0]->Clone("mc_sum");
     std::cout << "debug mc sum,  i=" << 0 << " mcsum=" << mc_sum->GetBinContent(1) << std::endl;
     for( unsigned i=0; i<histos_mc.size(); ++i ) {

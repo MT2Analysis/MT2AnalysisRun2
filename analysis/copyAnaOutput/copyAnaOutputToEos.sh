@@ -1,6 +1,6 @@
 # Script to tar analysis output and copy to eos
 
-VERSION="2019_02_25_V0"
+VERSION="2019_05_07_V0"
 CFGS=("moriond2019_35p9ifb_incl" "moriond2019_41p9ifb_incl_2017" "moriond2019_59p9ifb_incl_2018")
 CFG="moriond2019_35p9ifb"
 YEARS=("2016" "2017" "2018")
@@ -50,27 +50,27 @@ cp ../../combined_CRplots/zllControlRegion/SF_shape/$plotExpr zll_combined/.
 cp ../HTACCESS_1 llep_combined/.htaccess
 cp ../HTACCESS_1 zll_combined/.htaccess
 
-mkdir ratios_llep_combined
-mkdir ratios_zll_combined
-cp ../../EventYields_${CFGS[$0]}/ratioPlots_combined/ratios_llep/$plotExpr ratios_llep_combined/
-cp ../../EventYields_${CFGS[$0]}/ratioPlots_combined/ratios_zll/$plotExpr ratios_zll_combined/
-cp ../HTACCESS_1 ratios_llep_combined/.htaccess
-cp ../HTACCESS_1 ratios_zll_combined/.htaccess
-
-mkdir ratios_RSFOF_combined
-cp ../../ratioCombined/RSFOF*.p* ratios_RSFOF_combined
-cp ../HTACCESS_1 ratios_RSFOF_combined/.htaccess
+#mkdir ratios_llep_combined
+#mkdir ratios_zll_combined
+#cp ../../EventYields_${CFGS[$0]}/ratioPlots_combined/ratios_llep/$plotExpr ratios_llep_combined/
+#cp ../../EventYields_${CFGS[$0]}/ratioPlots_combined/ratios_zll/$plotExpr ratios_zll_combined/
+#cp ../HTACCESS_1 ratios_llep_combined/.htaccess
+#cp ../HTACCESS_1 ratios_zll_combined/.htaccess
+#
+#mkdir ratios_RSFOF_combined
+#cp ../../ratioCombined/RSFOF*.p* ratios_RSFOF_combined
+#cp ../HTACCESS_1 ratios_RSFOF_combined/.htaccess
 
 mkdir SRplots
 cp ../../EventYields_$CFG/YieldComparison_dataMC_binned_combined/mt2_*_fullEstimate.* SRplots/.
 cp ../HTACCESS_1 SRplots/.htaccess
 
-mkdir MT2vsNb
-cp -r ../../MT2vsNb/Zll MT2vsNb/.
-cp -r ../../MT2vsNb/Zinv MT2vsNb/.
-cp ../HTACCESS_1 MT2vsNb/.htaccess
-cp ../HTACCESS_2 MT2vsNb/Zll/.htaccess
-cp ../HTACCESS_2 MT2vsNb/Zinv/.htaccess
+#mkdir MT2vsNb
+#cp -r ../../MT2vsNb/Zll MT2vsNb/.
+#cp -r ../../MT2vsNb/Zinv MT2vsNb/.
+#cp ../HTACCESS_1 MT2vsNb/.htaccess
+#cp ../HTACCESS_2 MT2vsNb/Zll/.htaccess
+#cp ../HTACCESS_2 MT2vsNb/Zinv/.htaccess
 
 # tar everything and copy to eos
 cd ../
