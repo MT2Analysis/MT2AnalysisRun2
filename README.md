@@ -137,13 +137,20 @@ source launch_analysis.sh
 
 ### Signals
 
-Run regionEventYields on the desired signal scan, supported scans are (only for 2016):
+Run regionEventYields on the desired signal scan, supported scans are:
 T1qqqq, T1bbbb, T1tttt, T2qq, T2bb, T2tt.
 Signal contamination removal not currently supported - so T1tttt, T2tt yields are not reliable
 
 ```
 ./regionEventYields <cfg-file-name16> signal <model>
+./regionEventYields <cfg-file-name17> signal <model>
+./regionEventYields <cfg-file-name18> signal <model>
 ```
+Merge the output signals in one root file to be stored in the '16 cfg file:
+```
+hadd EventYields_<cfg-file-name16>/analyses_signals_merged.root EventYields_<cfg-file-name16>/analyses.root EventYields_<cfg-file-name17>/analyses.root EventYields_<cfg-file-name18>/analyses.root
+```
+
 
 Edit desired options in ```createDatacards_combined.cpp``` 
 Run the data-card creation for the signals, e.g.:
@@ -177,22 +184,31 @@ Created data-cards will be saved to the storage element in the form of a tar fil
 3. edit ```doOnlySig=true``` in ```createDatacards_combined.cpp``` and recompile
 4. make sure that ```stepSize``` and ranges are set to desired values in ```launchCreateDatacards.py```
 5. edit ```INDIR``` in ```createDatacards_batch_fromHome.sh```
-6. finally submit data card creation to the batch
+6. if you do not have a valid proxy already, ```voms-proxy-init --voms cms --valid 196:00```
+7. finally submit data card creation to the batch
 ```
 python launchCreateDatacards.py <model-name> <label> 
 ```
 Please don't forget the label because it is needed for the next steps.
 
-TODO: split more wisely instead of one job per point, to avoid overloading the I/O of the tier3.
+Note that it is possible that a significant fraction of jobs will fail.
+Therefore it may be needed to relaunch the data-card production with a different version and then merge 
+together two sets of limits obtained with two different data-card productions.
 
 #### data-card combination
 From ```HiggsAnalysis/CombinedLimit/MT2Scripts``` directory sumbit the data-card combination to the batch.
+Remember to modify the path in ```combineCards_batch_scan.sh``` to the location where the needed CMSSW release is.
 The combined cards will be copied to the same storage element location as the tar files
 ```
 python combineCards_scan.py <path> <model>
 ```
+Note that often a non-negligible fraction of these jobs fails. 
+Check for signficant fraction of data-cards with size 0.
+You can relaunch the combination, use exactly the same command - it will remove combined data-cards of size 0 and relaunch only the jobs that failed previously.
+
 #### limit calculation
 From the same directory, sumbit limit calculation to the batch. 
+Remember to modify the path in ```submitLimits_batch_scan.sh``` to the location where the needed CMSSW release is.
 The limits will be copied in a ```limits``` subdir from the original SE path
 ```
 python submitLimits_scan.py <path> <model>
@@ -200,15 +216,13 @@ python submitLimits_scan.py <path> <model>
 #### plotting
 Once you have the limits for each masses, copy them in your scratch area:
 ```
-sh copyLimits.sh <model> <label> <path>
+sh copyLimits.sh <model> <label> <path-minus-lastDir>
 ```
 
-Then, create a txt file with your full limits:
+Then, create a .txt file with your full limits by running:
 ```
 sh readAsymptoticLimits_Scan.sh <model> <label> 
 ```
-
-Note that the .txt file will be created where you launched the command.
 
 Finally run interpolation and smoothing and create root file:
 ```
@@ -248,3 +262,47 @@ python drawSMSsignificance.py <txt-file-just-created>
 
 
 For plotting the contours in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
+
+
+### Ranking of topological regions
+You do this procedure to understand what topological regions are driving the sensitivity for a particular mass-mass point.
+
+Make sure you have done once:
+
+```
+mkdir /scratch/`whoami`/datacards
+mkdir /scratch/`whoami`/ranking
+```
+
+Run locally the data-cards creation for the mass-mass point of interest and copy them. Example
+```
+./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2qq 1200 1205 850 855
+mkdir /scratch/`whoami`/datacards/datacards_T2qq_1200_850/
+cp EventYields_moriond2019_35p9ifb/datacards_T2qq/*T2qq_1200_850*txt /scratch/`whoami`/datacards/datacards_T2qq_1200_850
+```
+
+Run the limits for each TR separately (this step usually requires 10-15 minutes)
+```
+source combineAsymptotic_forRanking.sh T2qq_1200_850
+```
+
+Extract the informatiion from the logs of the limits into a .txt file
+```
+source readAsymptoticLimits_forRanking.sh T2qq_1200_850
+```
+
+Rank the limits by the strongest to the weakest:
+```
+python rankRegions.py T2qq_1200_850
+```
+
+Create sig + bkg table yields
+```
+./printLatexBGTable_Run2 EventYields_moriond2019_35p9ifb
+```
+NOTE: following step not working yet
+Edit the name of the latex table created at the previous step in ```makeRankingTables.py```
+```
+python makeRankingTables.py T2qq_1200_850 137
+```
+

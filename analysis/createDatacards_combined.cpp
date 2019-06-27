@@ -32,7 +32,6 @@ bool doSimultaneousFit = false;
 bool doGenAverage = false; // MG also off,  it's what this syst takes into account in absence of signal contamination
 bool addSigLepSF= true;
 bool doQCDEstimate = true; // add QCD background to datacards and tables, default is true
-bool copy2SE = false; // copy signal datacards to Storage Element, default is false
 
 // Edit these options
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
@@ -64,7 +63,7 @@ int main( int argc, char* argv[] ) {
 
 
   if( argc != 5 && argc != 9 && argc != 10 && argc != 11) {
-    std::cout << "USAGE: ./createDatacards [configFileName16] [configFileName17] [configFileName18] [model] [m1] [m2] [m11] [m22] ([label]) ([cardsDir])" << std::endl;
+    std::cout << "USAGE: ./createDatacards_combined [configFileName16] [configFileName17] [configFileName18] [model] [m1] [m2] [m11] [m22] ([label]) ([cardsDir])" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
@@ -114,9 +113,8 @@ int main( int argc, char* argv[] ) {
   std::string dir18 = cfg18.getEventYieldDir();
 
   std::string mc_fileName = dir16 + "/analyses.root";
-  //std::string data_fileName = dir16 + "/analyses.root";
-  float lumiComb = cfg16.lumi() + cfg17.lumi() + cfg18.lumi();
-  std::cout << "Will normalize signals by combined luminosity " << lumiComb << std::endl;
+  //float lumiComb = cfg16.lumi() + cfg17.lumi() + cfg18.lumi(); // not needed ATM
+  //std::cout << "Will normalize signals by combined luminosity " << lumiComb << std::endl; // not needed ATM
 
   //  float err_qcd_uncorr  = 1.0; // 100% of QCD MC yield, if use MC for QCD
 
@@ -836,7 +834,7 @@ int main( int argc, char* argv[] ) {
   std::string modelName = model;
 
   //signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "isr" );
-  signals       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses.root", modelName, "nominal" ); // the last string is just a nickname I assign to the analysis
+  signals       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses_signals_merged.root", modelName, "nominal" ); // the last string is just a nickname I assign to the analysis
 
   if (signals.size()==0) std::cout << "WARNING: Signal analysis is empty!" << std::endl;
 
@@ -855,7 +853,6 @@ int main( int argc, char* argv[] ) {
     std::string scont = "_sigcontam";
     std::string::size_type pos = sigName.find(scont);
     if(pos != std::string::npos) sigName.erase(pos,scont.length());
-
 
     // Local path for datacards
     std::string path_mass = dir16 + "/datacards_" + sigName;
@@ -955,9 +952,9 @@ int main( int argc, char* argv[] ) {
           for( int iBin=1; iBin<this_signal->GetNbinsX()+1; ++iBin ) {
           std::cout << "        MT2 bin=" << iBin << " Region=" << iR->getName() << std::endl;
 
-            bool includeCR=false;
-            if(iBin==1) includeCR=true;
-            if(iR->nJetsMin()>=7 && iR->nBJetsMin()>1) includeCR=false;
+            //bool includeCR=false;
+            //if(iBin==1) includeCR=true;
+            //if(iR->nJetsMin()>=7 && iR->nBJetsMin()>1) includeCR=false;
 
             if( this_signal->GetBinLowEdge( iBin ) > iR->htMax() && iR->htMax()>0 ) continue;
 
@@ -975,40 +972,15 @@ int main( int argc, char* argv[] ) {
               else
                 binName = std::string( Form("%s_m%.0ftoInf", iR->getName().c_str(), mt2Min) );
 
-              // If datacard exists already on SE, do not create it again
-              Long_t id;
-              Long_t flags;
-              Long_t modtime;
-              Long_t size;
-              std::string fullPathSE;
-              int checkFileSE;
-              std::string rmOnSE;
-              if( copy2SE ){
-                fullPathSE = Form("/pnfs/psi.ch/cms/trivcat/store/user/`whoami`/%s/datacards_%.0f_%.0f/datacard_%s_%s_%.0f_%.0f.txt", pathSE.c_str(), mParent, mLSP, binName.c_str(), sigName.c_str(), mParent, mLSP);
-                checkFileSE = (int) gSystem->GetPathInfo(fullPathSE.c_str(), &id, &size, &flags, &modtime);
-                std::cout << fullPathSE << "\t" << checkFileSE << "\t" <<size<< std::endl;
-
-                //std::string rmOnSE( Form("env --unset=LD_LIBRARY_PATH gfal-rm gsiftp://t3se01.psi.ch/%s", fullPathSE.c_str()) );
-                rmOnSE = Form("gfal-rm gsiftp://t3se01.psi.ch/%s", fullPathSE.c_str()) ;
-
-                if( checkFileSE==0 && (size)==0 ){
-                  std::cout << "Removing. File " << fullPathSE << " exists and has zero size " << (size) << ". Removing." << std::endl;
-                  system( rmOnSE.c_str() );
-                }
-                else if ( checkFileSE==0 && (size)>0 ){
-                  std::cout << "Skipping. File " << fullPathSE << " exists and has non-zero size  " << (size) << ". Skipping." << std::endl;
-                  continue;
-                }
-              } // end if copy2SE
 
               // Get template card for this bin
               std::string templateDatacard( Form("%s/datacard_%s.txt", path_templ.c_str(), binName.c_str()) );
 
               // Create new card for this bin
-              std::string newDatacard( Form("%s/datacard_%s_%s_%.0f_%.0f.txt", path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
-              std::string helpDatacard( Form("%s/datacard_%s_%s_%.0f_%.0f_forSed.txt", path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
+              std::string newDatacard(  Form("%s/datacard_%s_%s_%.0f_%.0f.txt",        path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
+              //std::string helpDatacard( Form("%s/datacard_%s_%s_%.0f_%.0f_forSed.txt", path_mass.c_str(), binName.c_str(), sigName.c_str(), mParent, mLSP) );
 
-              std::ifstream thisNewDatacard( newDatacard.c_str() );
+              //std::ifstream thisNewDatacard( newDatacard.c_str() );
               //if( thisNewDatacard.good() ) continue; // if data-card exists do not overwrite
 
               float sig = this_signal->GetBinContent(iBin);
@@ -1019,8 +991,7 @@ int main( int argc, char* argv[] ) {
               float sigErr = this_signal_reco->GetBinError(iBin)/sig_reco;
 
               sig*=xs_norm; // To eventually rescale xsec.
-              //Scaling to lumi (so one doesn't have to reloop to change lumi), for ETH, not for SnT histograms
-              //sig *= cfg.lumi(;)
+              //sig *= cfg.lumi();   // not needed ATM
 
               float isrErr;
               float bTagErr_heavy;
@@ -1061,10 +1032,7 @@ int main( int argc, char* argv[] ) {
               if(sig<0.) sig=0.;
 
               // only at the end multiply by lumi the yield
-              sig *= lumiComb;
-
-              std::string mvCommand( Form("mv %s %s", newDatacard.c_str(), helpDatacard.c_str()) );
-              std::string rmCommand( Form("rm -f %s", helpDatacard.c_str()) );
+              //sig *= lumiComb; // not needed ATM
 
               std::string sedCommand( Form("sed 's/XXX/%.3f/' %s > %s", sig, templateDatacard.c_str(), newDatacard.c_str()) );
               system( sedCommand.c_str() );
@@ -1088,28 +1056,6 @@ int main( int argc, char* argv[] ) {
                   system( sedCommand_lepEffErr.c_str() );
               } // end do includeSignalUnc
 
-              if( copy2SE ){
-                // Copying on SE
-                std::string mkdirOnSE( Form("env --unset=LD_LIBRARY_PATH gfal-mkdir -p  gsiftp://t3se01.psi.ch/pnfs/psi.ch/cms/trivcat/store/user/`whoami`/%s/datacards_%.0f_%.0f", pathSE.c_str(), mParent, mLSP) );
-                std::string copyOnSE( Form("xrdcp -v %s root://t3dcachedb.psi.ch:1094///pnfs/psi.ch/cms/trivcat/store/user/`whoami`/%s/datacards_%.0f_%.0f/datacard_%s_%s_%.0f_%.0f.txt", newDatacard.c_str(), pathSE.c_str(), mParent, mLSP, binName.c_str(), sigName.c_str(), mParent, mLSP) );
-                system( mkdirOnSE.c_str() );
-                system( copyOnSE.c_str() );
-
-                // Attempt copying 3 times (to maximize efficiency)
-                for(int c=0; c<3; ++c){
-                  checkFileSE = (int) gSystem->GetPathInfo(fullPathSE.c_str(),&id, &size, &flags, &modtime);
-                  if( checkFileSE==0 && (size)==0 ){
-                    std::cout << "Copy did not work. Trying again: " << c << std::endl;
-                    system( rmOnSE.c_str() );
-                    system( copyOnSE.c_str() );
-                  }
-                  else{
-                    std::cout << "Copy succeded. Exiting." << std::endl;
-                    system( rmCommand.c_str() );
-                    break;
-                  } //
-                } // for copy attempts
-              } // copy2SE
             } // signal yield > 0
           } // for bins X (MT2)
         } // for bins Z (mLSP)

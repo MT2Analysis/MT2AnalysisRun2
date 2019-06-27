@@ -484,6 +484,9 @@ public :
    Int_t           nlep;
    Float_t         mt2_genmet;
    Int_t           nisoTrack;
+   Float_t         deltaPhiMin_genmet;
+   Float_t         diffMetMht_genmet;
+   Float_t         met_genPt;
    //
 
 
@@ -950,7 +953,9 @@ public :
    TBranch         *b_nlep;   //!
    TBranch         *b_mt2_genmet; //!
    TBranch         *b_nisoTrack; //!
-
+   TBranch         *b_diffMetMht_genmet; //!
+   TBranch         *b_deltaPhiMin_genmet; //!
+   TBranch         *b_met_genPt; //!
    //
 
    MT2Tree(TTree *tree=0, bool isETH=true);
@@ -1510,6 +1515,9 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("nlep", &nlep, &b_nlep);
    fChain->SetBranchAddress("mt2_genmet", &mt2_genmet, &b_mt2_genmet);
    fChain->SetBranchAddress("nisoTrack", &nisoTrack, &b_nisoTrack);
+   fChain->SetBranchAddress("diffMetMht_genmet", &diffMetMht_genmet, &b_diffMetMht_genmet);
+   fChain->SetBranchAddress("deltaPhiMin_genmet", &deltaPhiMin_genmet, &b_deltaPhiMin_genmet);
+   fChain->SetBranchAddress("met_genPt", &met_genPt, &b_met_genPt);
    Notify();
 }
 
@@ -1674,6 +1682,13 @@ Bool_t MT2Tree::passBaselineKinematic(TString sel, int year, bool isETH) const
       // ( ( nJet30>1 && ht<1000. && met_genPt>250.) || ( nJet30>1 && ht>=1000. && met_genPt>30.) || (nJet30==1 && met_genPt>250.) ) &&
       // diffMetMht_genmet < 0.5*met_genPt;
       // //   return nVert > 0;
+    }
+    else if (sel=="genmet"){
+      return nJet30 >=1 &&
+        nJet30FailId == 0 &&
+        deltaPhiMin_genmet > 0.3 && 
+        ( ( nJet30>1 && ht<cutOnHT && met_genPt>250.) || ( nJet30>1 && ht>=cutOnHT && met_genPt>30.) || (nJet30==1 && met_genPt>250.) ) && 
+        diffMetMht_genmet < 0.5*met_genPt;
     }
     else{
 
