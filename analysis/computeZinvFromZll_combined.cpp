@@ -447,6 +447,16 @@ int main( int argc, char* argv[] ) {
   zllData_of_forHybrid        ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllMC_shape_forExtremeHT    ->addToFile(outFile);
+  
+
+
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid = new MT2Analysis<MT2Estimate>(*(Zinv_forHybrid1));
+  Zinv_forHybrid->setName("Zinv_forHybrid");
+  (*Zinv_forHybrid) += (*(Zinv_forHybrid2));
+  (*Zinv_forHybrid) += (*(Zinv_forHybrid3));
+
+  Zinv_forHybrid              ->addToFile(outFile);
+  
    
   delete tmp;
 
@@ -896,7 +906,7 @@ int getFixedExtrapolBin( MT2Region* region, TH1D* histo ){
 
 void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimate>* shape_data, MT2Analysis<MT2Estimate>* shape_MCsr, MT2Analysis<MT2Estimate>* shape_MCcr, MT2Analysis<MT2Estimate>* shape_MCcr_forExtremeHT, MT2Analysis<MT2Estimate>* bin_extrapol ) {
   
-  bool getBinByHand = false; //this flag is only introduced for debugging purpose. Always turn it to false for normal routine
+  bool getBinByHand = true; //this flag is only introduced for debugging purpose. Always turn it to false for normal routine
 
   std::set<MT2Region> regions       = shape_data->getRegions();
     
@@ -952,7 +962,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 1;
+    bool getExtrapolBin = 0;
 
     if(getExtrapolBin){
 
@@ -1016,7 +1026,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
       }
       else{//we get bin extrapol by hand
 	cout << region->getName() << ": special treatment" << endl;
-	bin_extrapol = 1;
+	bin_extrapol = nBins+1;
 	integralMC = this_shape_MCcr->IntegralAndError( bin_extrapol, -1, errMC);
 	integral   = this_shape_data->IntegralAndError( bin_extrapol, -1, errData);
 
