@@ -455,30 +455,11 @@ TGraphAsymmErrors* MT2DrawTools::getRatioGraph( TH1D* histo_data, TH1D* histo_mc
 
 TGraphAsymmErrors* MT2DrawTools::getPullPlot( TH1D* data_hist, TH1D* estimate_hist){
 
-  cout << "bonjour" << endl;
-
- 
-  /*for(int iBin=1; iBin<=hestimate_all->GetNbinsX(); ++iBin){
-    
-    float thisData    = hdata->GetBinContent(iBin);
-    float thisDataErr = gdata->GetErrorY(iBin-1);
-    // std::cout << "TEST!" << std::endl;
-    //std::cout << thisData << "\t" << gdata->GetY()[iBin-1] << "\t" << thisDataErr << std::endl;
-    
-    float thisEst     = hestimate_all->GetBinContent(iBin);
-    float thisEstErr  = hestimate_all->GetBinError(iBin);
-    
-    
-    hPull->Fill( (-thisEst+thisData)/( TMath::Sqrt( thisDataErr*thisDataErr + thisEstErr*thisEstErr ) ) );
-    
-    }*/
-
   if( !data_hist || !estimate_hist ) return 0;
 
   TGraphAsymmErrors* graph  = new TGraphAsymmErrors();
   
   TGraphAsymmErrors* graph_data = MT2DrawTools::getPoissonGraph(data_hist, true);
-  
   
   for( int i=0; i < graph_data->GetN(); ++i){
     
@@ -487,29 +468,25 @@ TGraphAsymmErrors* MT2DrawTools::getPullPlot( TH1D* data_hist, TH1D* estimate_hi
 
     Double_t data_errUp = graph_data->GetErrorYhigh(i);
     Double_t data_errDn = graph_data->GetErrorYlow(i);
-
      
     int iBin = estimate_hist->FindBin(x_tmp);
+
     float mc = estimate_hist->GetBinContent(iBin);
     float mc_err = estimate_hist->GetBinError(iBin);
 
     float data_err = data_hist->GetBinError(iBin);
 
+    float sigma = sqrt(data_err*data_err + mc_err*mc_err);
     
-    float residual =  (data-mc)/(sqrt(data_err*data_err + mc_err*mc_err));
-    float ratio_errUp = sqrt( data_errUp*data_errUp/(mc*mc) + mc_err*mc_err*data*data/(mc*mc*mc*mc) ); // to be adjusted
-    float ratio_errDn = sqrt( data_errDn*data_errDn/(mc*mc) + mc_err*mc_err*data*data/(mc*mc*mc*mc) ); // to be adjusted
-
-   
-    double xerr =  estimate_hist->GetBinWidth(iBin)/2.;
-   
+    float residual =  (data-mc)/sigma;
+    
+    float errUp = (data_errUp + mc_err)/sigma;
+    float errDn = (data_errDn + mc_err)/sigma; 
 
     graph->SetPoint(i, x_tmp, residual );
-    graph->SetPointEYhigh(i, ratio_errUp );
-    graph->SetPointEYlow(i, ratio_errDn );
-    //graph->SetPointEXhigh(i, xerr );
-    //graph->SetPointEXlow(i, xerr );
-
+    graph->SetPointEYhigh(i, errUp );
+    graph->SetPointEYlow(i, errDn );
+   
   }
 
   graph->SetLineColor(1);
