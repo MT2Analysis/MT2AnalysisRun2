@@ -404,12 +404,13 @@ TGraphAsymmErrors* MT2DrawTools::getRatioGraph( TH1D* histo_data, TH1D* histo_mc
   //TGraphAsymmErrors* graph_tmp = MT2DrawTools::getPoissonGraph(histo_mc, true);
   //cout << "Ndata: " << graph_data->GetN() << endl;
   //cout << "Nmc: " << graph_tmp->GetN() << endl;
+
   
   for( int i=0; i < graph_data->GetN(); ++i){
     
     Double_t x_tmp, data;
     graph_data->GetPoint( i, x_tmp, data );
-
+      
     Double_t data_errUp = graph_data->GetErrorYhigh(i);
     Double_t data_errDn = graph_data->GetErrorYlow(i);
     
@@ -460,7 +461,7 @@ TGraphAsymmErrors* MT2DrawTools::getPullPlot( TH1D* data_hist, TH1D* estimate_hi
   TGraphAsymmErrors* graph  = new TGraphAsymmErrors();
   
   TGraphAsymmErrors* graph_data = MT2DrawTools::getPoissonGraph(data_hist, true);
-  
+
   for( int i=0; i < graph_data->GetN(); ++i){
     
     Double_t x_tmp, data;
@@ -474,7 +475,8 @@ TGraphAsymmErrors* MT2DrawTools::getPullPlot( TH1D* data_hist, TH1D* estimate_hi
     float mc = estimate_hist->GetBinContent(iBin);
     float mc_err = estimate_hist->GetBinError(iBin);
 
-    float data_err = data_hist->GetBinError(iBin);
+    //float data_err = data_hist->GetBinError(iBin);
+    float data_err = graph_data->GetErrorY(i);
 
     float sigma = sqrt(data_err*data_err + mc_err*mc_err);
     
@@ -486,6 +488,17 @@ TGraphAsymmErrors* MT2DrawTools::getPullPlot( TH1D* data_hist, TH1D* estimate_hi
     graph->SetPoint(i, x_tmp, residual );
     graph->SetPointEYhigh(i, errUp );
     graph->SetPointEYlow(i, errDn );
+
+    //  if(i>=0&&i<13){
+    //  cout << "data: " << data << endl;
+    //  cout << "data_err: " << data_err << endl;
+    //  cout << "estimate: " << mc << endl;
+    //  cout << "mc_err: " << mc_err << endl;
+    //  cout << "sigma " << sigma << endl;
+    //  cout << "residual: " << residual << endl;
+    //  cout << "monojet " << i << " " << residual << endl;
+    //  cout << endl;
+    // }
    
   }
 

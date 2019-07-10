@@ -63,6 +63,8 @@ void doSRplot(string region, float yMin, float yMax, int nBins_[85], TLegend* le
 float lumi; //fb-1 
 bool doSanityCheck = false; //the sanity check consists in confronting the estimated background following the strategy of combined years to the 2016 data, and normalize by lumi_16/lumi_tot
 bool doCombination; //creates the plots for the full Run2
+
+//set to true only oe of the two following flags:
 bool plotRatio = false; //down pad will show the ratio
 bool plotPull = true; // down pad will show residuals
 
@@ -329,6 +331,8 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   TH1D* hPull = new TH1D("hPull", "", 101, -5.05, 5.05);
   hPull->Sumw2();
+  hPull->SetMarkerStyle(20);
+  hPull->SetMarkerSize(0.6);
   hPull->GetXaxis()->SetTitle("(Data - Est.)/#sigma");
   hPull->GetYaxis()->SetTitle("Entries");
     
@@ -721,6 +725,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   g_Ratio->GetYaxis()->SetTitle("Ratio");
 
   TGraphAsymmErrors* pullPlot = MT2DrawTools::getPullPlot(hdata, hestimate_all); 
+  //TGraphAsymmErrors* pullPlot = MT2DrawTools::getPoissonGraph(hPull, true);
   pullPlot->SetMarkerStyle(20);
   pullPlot->SetMarkerSize(1.6);
   pullPlot->SetMarkerColor( 1 );
@@ -766,7 +771,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   
   for(int iBin=1; iBin<=hestimate_all->GetNbinsX(); ++iBin){
-    
+  
     float thisData    = hdata->GetBinContent(iBin);
     float thisDataErr = gdata->GetErrorY(iBin-1);
     // std::cout << "TEST!" << std::endl;
@@ -775,9 +780,9 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     float thisEst     = hestimate_all->GetBinContent(iBin);
     float thisEstErr  = hestimate_all->GetBinError(iBin);
     
-    
+   
     hPull->Fill( (-thisEst+thisData)/( TMath::Sqrt( thisDataErr*thisDataErr + thisEstErr*thisEstErr ) ) );
-    
+       
   }
 
   TCanvas* c_pull = new TCanvas("c_pull", "", 1100, 600);
@@ -2298,7 +2303,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
 
-  gStyle->SetOptStat(1110);
+  //gStyle->SetOptStat(1110);
   gStyle->SetOptFit(1);
   
   TF1* fgauss= new TF1("fgauss", "gaus", -5, 5);
@@ -2306,11 +2311,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   TCanvas* c3 = new TCanvas("c3", "", 600, 600);
   c3->cd();
-  //<hPull->SetStats(1110);
-  hPull->Draw("hist");
+  
+  //gStyle->SetOptStat("emr");
+  hPull->SetStats();
+  hPull->Draw();
   hPull->Fit("fgauss");
   fgauss->Draw("same");
   c3->SaveAs( Form("%s/PullDistribution.pdf", fullPath.c_str()) );
+  c3->SaveAs( Form("%s/PullDistribution.C", fullPath.c_str()) );
   c3->SaveAs( Form("%s/PullDistribution.png", fullPath.c_str()) );
   
 }
