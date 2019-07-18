@@ -447,6 +447,16 @@ int main( int argc, char* argv[] ) {
   zllData_of_forHybrid        ->addToFile(outFile);
   zllData_forHybrid           ->addToFile(outFile);
   zllMC_shape_forExtremeHT    ->addToFile(outFile);
+  
+
+
+  MT2Analysis<MT2Estimate>* Zinv_forHybrid = new MT2Analysis<MT2Estimate>(*(Zinv_forHybrid1));
+  Zinv_forHybrid->setName("Zinv_forHybrid");
+  (*Zinv_forHybrid) += (*(Zinv_forHybrid2));
+  (*Zinv_forHybrid) += (*(Zinv_forHybrid3));
+
+  Zinv_forHybrid              ->addToFile(outFile);
+  
    
   delete tmp;
 
@@ -699,11 +709,10 @@ void extrapolToTopoRegion(MT2Analysis<MT2Estimate>* shape_TR, MT2Analysis<MT2Est
 }
 
 
-
 void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* this_shape_TR, TH1D* this_shape, int iBin_TR, int iBin, int nBins, int nBins_shape, bool isMC, ofstream& writeFill){
   
   if(iBin_TR == nBins_shape && nBins_shape > nBins){
-    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3))	
+    if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3)){	
 
       if(isMC){
 	double int_err= 0.;
@@ -737,10 +746,10 @@ void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* 
 
   }else{ //if it is not the last bin
     if(regionToMatch->nJetsMin()==2 && (regionToMatch->nJetsMax()==6 || regionToMatch->nJetsMax()==-1 || regionToMatch->nJetsMax()==3)){
-      
+     
       if(isMC){
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinError(iBin)*this_shape->GetBinError(iBin)+this_shape_TR->GetBinError(iBin_TR)*this_shape_TR->GetBinError(iBin_TR)));	     
-      }else{ 	    
+      }else{ 
 	this_shape_TR->SetBinError(iBin_TR, sqrt(this_shape->GetBinContent(iBin)+this_shape_TR->GetBinContent(iBin_TR)));    
       } 
 
@@ -761,6 +770,7 @@ void fillRegion(MT2Region* regionToMatch, MT2Region* regionToMatch_shape, TH1D* 
     }
   } 
 }
+
 
 
 
@@ -952,7 +962,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 1;
+    bool getExtrapolBin = 0;
 
     if(getExtrapolBin){
 

@@ -51,15 +51,24 @@ struct BGTable {
 
 
 
-
+//functions
 BGTable getTable( const std::string& tableFileName );
+
 void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, std::string dir, bool doSanityCheck, std::string whatToDo = "moriond2019" );
 
+void doSRplot(string region, float yMin, float yMax, int nBins_[85], TLegend* legend, TH1D* hestimate_all, TH1D* hdata, TH1D* h_band, TGraphAsymmErrors* g_Ratio, TGraphAsymmErrors* pullPlot, TGraphAsymmErrors* gdata, TGraphAsymmErrors* gdata_zero, THStack bgStack, TPaveText* htBox[5], TPaveText* labelCMS, TPaveText* labelTop, bool plotRatio, bool plotPull, bool doMoriond2017, bool doMoriond2019, string fullPath);
+
+
+//global variables
 float lumi; //fb-1 
-bool doSanityCheck = false; 
-//the sanity check consists in confronting the estimated background following the strategy of combined years to the 2016 data, and normalize by lumi_16/lumi_tot
-bool doCombination; 
-//creates the plots for the full Run2
+bool doSanityCheck = false; //the sanity check consists in confronting the estimated background following the strategy of combined years to the 2016 data, and normalize by lumi_16/lumi_tot
+bool doCombination; //creates the plots for the full Run2
+
+//set to true only oe of the two following flags:
+bool plotRatio = false; //down pad will show the ratio
+bool plotPull = true; // down pad will show residuals
+
+
 
 int main( int argc, char* argv[] ) {
   
@@ -169,11 +178,21 @@ cout << argc << endl;
 
   std::string outputdir;
 
-  if(!doCombination){
-    outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned";
+  if(plotRatio){
+    if(!doCombination){
+      outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned";
+    }
+    else{
+      outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned_combined";
+    }
   }
-  else{
-    outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned_combined";
+  else if(plotPull){
+    if(!doCombination){
+      outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned/pullPlots";
+    }
+    else{
+      outputdir = cfg.getEventYieldDir() + "/YieldComparison_dataMC_binned_combined/pullPlots";
+    }
   }
  
  
@@ -312,11 +331,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   TH1D* hPull = new TH1D("hPull", "", 101, -5.05, 5.05);
   hPull->Sumw2();
+  hPull->SetMarkerStyle(20);
+  hPull->SetMarkerSize(0.6);
   hPull->GetXaxis()->SetTitle("(Data - Est.)/#sigma");
   hPull->GetYaxis()->SetTitle("Entries");
-  
+    
   std::string fullPath = outputdir;
-  
+
   std::string labelsMono[12]={"[250,350]","[350,450]","[450,575]","[575,700]","[700,1000]","[1000,1200]", ">1200","[250,350]","[350,450]","[450,575]","[575,700]", ">700"};
   
   TFile* bigHistoFile = TFile::Open( Form("%s/histograms_ALL.root", fullPath.c_str()), "recreate" );
@@ -703,12 +724,33 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   g_Ratio->GetYaxis()->SetLabelSize(0.17);
   g_Ratio->GetYaxis()->SetTitle("Ratio");
 
+  TGraphAsymmErrors* pullPlot = MT2DrawTools::getPullPlot(hdata, hestimate_all); 
+  //TGraphAsymmErrors* pullPlot = MT2DrawTools::getPoissonGraph(hPull, true);
+  pullPlot->SetMarkerStyle(20);
+  pullPlot->SetMarkerSize(1.6);
+  pullPlot->SetMarkerColor( 1 );
+  pullPlot->SetLineColor(1);
+  pullPlot->GetXaxis()->SetLabelSize(0.00);
+  pullPlot->GetXaxis()->SetTickLength(0.09);
+  pullPlot->GetYaxis()->SetNdivisions(5,5,0);
+  pullPlot->GetYaxis()->SetRangeUser(0.0,2.0);
+  pullPlot->GetYaxis()->SetTitleSize(0.17);
+  pullPlot->GetYaxis()->SetTitleOffset(0.4);
+  pullPlot->GetYaxis()->SetLabelSize(0.17);
+  pullPlot->GetYaxis()->SetTitle("Ratio");
 
-  Double_t xx, yy;
-  for(int i(0); i<g_Ratio->GetN(); ++i){
-    g_Ratio->GetPoint(i, xx, yy);
-    cout << i << " - x: " << xx << " - y: " << yy << endl;
-  }
+  TCanvas* c_residuals = new TCanvas();
+  c_residuals->cd();
+  pullPlot->Draw();
+  c_residuals->SaveAs("residuals.pdf");
+
+
+  //for debugging purposes:
+  //Double_t xx, yy;
+  //for(int i(0); i<g_Ratio->GetN(); ++i){
+  //  g_Ratio->GetPoint(i, xx, yy);
+  //  cout << i << " - x: " << xx << " - y: " << yy << endl;
+  //}
 
   TGraphAsymmErrors* g_Ratio_zero = new TGraphAsymmErrors(*(g_Ratio));
   g_Ratio_zero->SetMarkerSize(0);
@@ -729,7 +771,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   
   for(int iBin=1; iBin<=hestimate_all->GetNbinsX(); ++iBin){
-    
+  
     float thisData    = hdata->GetBinContent(iBin);
     float thisDataErr = gdata->GetErrorY(iBin-1);
     // std::cout << "TEST!" << std::endl;
@@ -738,13 +780,20 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     float thisEst     = hestimate_all->GetBinContent(iBin);
     float thisEstErr  = hestimate_all->GetBinError(iBin);
     
-    
+   
     hPull->Fill( (-thisEst+thisData)/( TMath::Sqrt( thisDataErr*thisDataErr + thisEstErr*thisEstErr ) ) );
-    
+       
   }
 
+  TCanvas* c_pull = new TCanvas("c_pull", "", 1100, 600);
+  c_pull->cd();
+  hPull->Draw();
+  c_pull->SaveAs("hPull.pdf");
 
   //  gdata->GetXaxis()->SetRangeUser(0, thisBin);
+
+
+
 
   TCanvas* c2 = new TCanvas("c2", "", 1100, 600);
   c2->cd();
@@ -966,6 +1015,9 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     hestimate[b]->Write();
 
 
+
+
+
   TCanvas* c2_0 = new TCanvas("c2_0", "", 1100, 600);
   c2_0->cd();
   
@@ -983,6 +1035,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1075,11 +1128,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     h2_axes_ratio_0 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
     h_Ratio->GetYaxis()->SetRangeUser(0.1, 10.0);
   }
-  else
+  else if(plotRatio){
     h2_axes_ratio_0 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, 0.0, 2 );
+  }
+  else if(plotPull){
+    h2_axes_ratio_0 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
 
-
-
+ 
   h2_axes_ratio_0->SetStats(0);
   h2_axes_ratio_0->GetXaxis()->SetLabelSize(0.00);
   h2_axes_ratio_0->GetXaxis()->SetTickLength(0.09);
@@ -1087,18 +1143,42 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   h2_axes_ratio_0->GetYaxis()->SetTitleSize(0.18);
   h2_axes_ratio_0->GetYaxis()->SetTitleOffset(0.26);
   h2_axes_ratio_0->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_0->GetYaxis()->SetTitle("Data/Est.");
+  if(plotRatio){
+    h2_axes_ratio_0->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_0->GetYaxis()->SetTitle("Residuals");
+  }
   
   TLine* LineCentral_0 = new TLine(oldBin, 1.0, thisBin, 1.0);
   LineCentral_0->SetLineColor(1);
 
-  h2_axes_ratio_0->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_0->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
+  TLine* lineUp = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp->SetLineColor(4);
+
+  TLine* lineDown = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown->SetLineColor(4);
   
-  line->DrawLine(monoBin[0],0.0,monoBin[0],2.0);
+  TLine* lineMiddle = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle->SetLineColor(1);
+
+  h2_axes_ratio_0->Draw("");
+
+  if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_0->Draw("same");
+    g_Ratio->Draw("pe0,same");
+  }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp->Draw("same");
+    lineDown->Draw("same");
+    lineMiddle->Draw("same");
+  }
+  
+  if(plotRatio){
+    line->DrawLine(monoBin[0],0.0,monoBin[0],2.0);
+  }
 
   gPad->RedrawAxis();
 
@@ -1107,7 +1187,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2_0->SaveAs( Form("%s/mt2_monojet_fullEstimate.png", fullPath.c_str()) );
   c2_0->SaveAs( Form("%s/mt2_monojet_fullEstimate.eps", fullPath.c_str()) );
 
-
+  
 
   TCanvas* c2_1 = new TCanvas("c2_1", "", 1100, 600);
   c2_1->cd();
@@ -1129,6 +1209,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1246,9 +1327,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     gPad->SetLogy();
     h2_axes_ratio_1 = new TH2D("axes_ratio_1", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
   }
-  else
+  else if(plotRatio){
     h2_axes_ratio_1 = new TH2D("axes_ratio_1", "", 10, oldBin, thisBin, 10, 0.0, 2 );
-  //h2_axes_ratio_1 = new TH2D("axes_ratio_1", "", 10, oldBin, thisBin, 10, 0., 2.0 );
+  }
+  else if(plotPull){
+    h2_axes_ratio_1 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
 
   h2_axes_ratio_1->SetStats(0);
   h2_axes_ratio_1->GetXaxis()->SetLabelSize(0.00);
@@ -1257,25 +1341,49 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   h2_axes_ratio_1->GetYaxis()->SetTitleSize(0.18);
   h2_axes_ratio_1->GetYaxis()->SetTitleOffset(0.26);
   h2_axes_ratio_1->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_1->GetYaxis()->SetTitle("Data/Est.");
+ if(plotRatio){
+    h2_axes_ratio_1->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_1->GetYaxis()->SetTitle("Residuals");
+  }
   
   TLine* LineCentral_1 = new TLine(oldBin, 1.0, thisBin, 1.0);
   LineCentral_1->SetLineColor(1);
 
-  h2_axes_ratio_1->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_1->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
+  TLine* lineUp_1 = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp_1->SetLineColor(4);
+
+  TLine* lineDown_1 = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown_1->SetLineColor(4);
   
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
-  for(int nR=0; nR<nRtot; nR++){
-    ibin += nBins_[oldBin+nR];
-    line->DrawLine(ibin,0.0,ibin,2.0);
+  TLine* lineMiddle_1 = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle_1->SetLineColor(1);
+
+
+  h2_axes_ratio_1->Draw("");
+  if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_1->Draw("same");
+    g_Ratio->Draw("pe0,same");
+  }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp_1->Draw("same");
+    lineDown_1->Draw("same");
+    lineMiddle_1->Draw("same");
+  }
+  
+  if(plotRatio){
+    line->SetNDC(1);
+    line->SetLineStyle(2);
+    line->SetLineWidth(1);
+    line->SetLineColor(kBlack);
+    ibin = oldBin;
+    for(int nR=0; nR<nRtot; nR++){
+      ibin += nBins_[oldBin+nR];
+      line->DrawLine(ibin,0.0,ibin,2.0);
+    }
   }
   
   gPad->RedrawAxis();
@@ -1286,7 +1394,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2_1->SaveAs( Form("%s/mt2_veryLowHT_fullEstimate.eps", fullPath.c_str()) );
 
 
-
+  
   TCanvas* c2_2 = new TCanvas("c2_2", "", 1100, 600);
   c2_2->cd();
   
@@ -1309,6 +1417,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1447,8 +1556,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     gPad->SetLogy();
     h2_axes_ratio_2 = new TH2D("axes_ratio_2", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
   }
-  else
+  else if(plotRatio){
     h2_axes_ratio_2 = new TH2D("axes_ratio_2", "", 10, oldBin, thisBin, 10, 0., 3.5 );
+  }
+  else if(plotPull){
+    h2_axes_ratio_2 = new TH2D("axes_ratio_2", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
+
 
   h2_axes_ratio_2->SetStats(0);
   h2_axes_ratio_2->GetXaxis()->SetLabelSize(0.00);
@@ -1457,32 +1571,57 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   h2_axes_ratio_2->GetYaxis()->SetTitleSize(0.18);
   h2_axes_ratio_2->GetYaxis()->SetTitleOffset(0.26);
   h2_axes_ratio_2->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_2->GetYaxis()->SetTitle("Data/Est.");
+  if(plotRatio){
+    h2_axes_ratio_2->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_2->GetYaxis()->SetTitle("Residuals");
+  }
   
   TLine* LineCentral_2 = new TLine(oldBin, 1.0, thisBin, 1.0);
   LineCentral_2->SetLineColor(1);
 
-  h2_axes_ratio_2->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_2->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
-  
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
+  TLine* lineUp_2 = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp_2->SetLineColor(4);
 
-  for(int nR=0; nR<nRtot; nR++){
-    if(doMoriond2017){
-      ibin += nBins_[12+7+nR];
-    }
-    else if(doMoriond2019){
-      ibin += nBins_[12+11+nR];
-    }
-    line->DrawLine(ibin,0,ibin,3.5);
+  TLine* lineDown_2 = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown_2->SetLineColor(4);
+  
+  TLine* lineMiddle_2 = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle_2->SetLineColor(1);
+
+  h2_axes_ratio_2->Draw("");
+
+ if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_2->Draw("same");
+    g_Ratio->Draw("pe0,same");
   }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp_2->Draw("same");
+    lineDown_2->Draw("same");
+    lineMiddle_2->Draw("same");
+  }
+
+
+ if(plotRatio){
+   line->SetNDC(1);
+   line->SetLineStyle(2);
+   line->SetLineWidth(1);
+   line->SetLineColor(kBlack);
+   ibin = oldBin;
+  
+   for(int nR=0; nR<nRtot; nR++){
+     if(doMoriond2017){
+       ibin += nBins_[12+7+nR];
+     }
+     else if(doMoriond2019){
+       ibin += nBins_[12+11+nR];
+     }
+     line->DrawLine(ibin,0,ibin,3.5);
+   }
+ }
 
   gPad->RedrawAxis();
 
@@ -1515,6 +1654,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1653,9 +1793,13 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     gPad->SetLogy();
     h2_axes_ratio_3 = new TH2D("axes_ratio_3", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
   }
-  else
+  else if(plotRatio){
     h2_axes_ratio_3 = new TH2D("axes_ratio_3", "", 10, oldBin, thisBin, 10, 0., 2.0 );
-  //h2_axes_ratio_3 = new TH2D("axes_ratio_3", "", 10, oldBin, thisBin, 10, 0., 2.0 );
+  }
+  else if(plotPull){
+    h2_axes_ratio_3 = new TH2D("axes_ratio_3", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
+
 
   h2_axes_ratio_3->SetStats(0);
   h2_axes_ratio_3->GetXaxis()->SetLabelSize(0.00);
@@ -1664,31 +1808,55 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   h2_axes_ratio_3->GetYaxis()->SetTitleSize(0.18);
   h2_axes_ratio_3->GetYaxis()->SetTitleOffset(0.26);
   h2_axes_ratio_3->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_3->GetYaxis()->SetTitle("Data/Est.");
+  if(plotRatio){
+    h2_axes_ratio_3->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_3->GetYaxis()->SetTitle("Residuals");
+  }
   
   TLine* LineCentral_3 = new TLine(oldBin, 1.0, thisBin, 1.0);
   LineCentral_3->SetLineColor(1);
 
+  TLine* lineUp_3 = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp_3->SetLineColor(4);
+
+  TLine* lineDown_3 = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown_3->SetLineColor(4);
+  
+  TLine* lineMiddle_3 = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle_3->SetLineColor(1);
+
   h2_axes_ratio_3->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_3->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
 
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
+  if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_3->Draw("same");
+    g_Ratio->Draw("pe0,same");
+  }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp_3->Draw("same");
+    lineDown_3->Draw("same");
+    lineMiddle_3->Draw("same");
+  }
 
-  for(int nR=0; nR<nRtot; nR++){
-    if(doMoriond2017){
-      ibin += nBins_[12+7+11+nR];
+  if(plotRatio){
+    line->SetNDC(1);
+    line->SetLineStyle(2);
+    line->SetLineWidth(1);
+    line->SetLineColor(kBlack);
+    ibin = oldBin;
+
+    for(int nR=0; nR<nRtot; nR++){
+      if(doMoriond2017){
+	ibin += nBins_[12+7+11+nR];
+      }
+      else if(doMoriond2019){
+	ibin += nBins_[12+11+11+nR];
+      }
+      line->DrawLine(ibin,0.,ibin,2.0);
     }
-    else if(doMoriond2019){
-      ibin += nBins_[12+11+11+nR];
-    }
-    line->DrawLine(ibin,0.,ibin,2.0);
   }
 
   gPad->RedrawAxis();
@@ -1721,6 +1889,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
@@ -1834,10 +2003,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     gPad->SetLogy();
     h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
   }
-  else
+  else if(plotRatio){
     h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, 0., 5.0 );
-  //h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, 0., 2.0 );
-
+  }
+  else if(plotPull){
+    h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
 
   h2_axes_ratio_4->SetStats(0);
   h2_axes_ratio_4->GetXaxis()->SetLabelSize(0.00);
@@ -1846,31 +2017,55 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   h2_axes_ratio_4->GetYaxis()->SetTitleSize(0.18);
   h2_axes_ratio_4->GetYaxis()->SetTitleOffset(0.26);
   h2_axes_ratio_4->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_4->GetYaxis()->SetTitle("Data/Est.");
+  if(plotRatio){
+    h2_axes_ratio_4->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_4->GetYaxis()->SetTitle("Residuals");
+  }
   
   TLine* LineCentral_4 = new TLine(oldBin, 1.0, thisBin, 1.0);
   LineCentral_4->SetLineColor(1);
 
-  h2_axes_ratio_4->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_4->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
-  
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
+  TLine* lineUp_4 = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp_4->SetLineColor(4);
 
-  for(int nR=0; nR<nRtot; nR++){
-    if(doMoriond2017){
-      ibin += nBins_[12+7+11*2+nR];
+  TLine* lineDown_4 = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown_4->SetLineColor(4);
+  
+  TLine* lineMiddle_4 = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle_4->SetLineColor(1);
+
+  h2_axes_ratio_4->Draw("");
+
+  if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_4->Draw("same");
+    g_Ratio->Draw("pe0,same");
+  }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp_4->Draw("same");
+    lineDown_4->Draw("same");
+    lineMiddle_4->Draw("same");
+  }
+  
+  if(plotRatio){
+    line->SetNDC(1);
+    line->SetLineStyle(2);
+    line->SetLineWidth(1);
+    line->SetLineColor(kBlack);
+    ibin = oldBin;
+
+    for(int nR=0; nR<nRtot; nR++){
+      if(doMoriond2017){
+	ibin += nBins_[12+7+11*2+nR];
+      }
+      else if(doMoriond2019){
+	ibin += nBins_[12+17+11*2+nR];
+      }
+      line->DrawLine(ibin,0,ibin,5.0);
     }
-    else if(doMoriond2019){
-      ibin += nBins_[12+17+11*2+nR];
-    }
-    line->DrawLine(ibin,0,ibin,5.0);
   }
 
   gPad->RedrawAxis();
@@ -1879,192 +2074,6 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   c2_4->SaveAs( Form("%s/mt2_highHT_fullEstimate.pdf", fullPath.c_str()) );
   c2_4->SaveAs( Form("%s/mt2_highHT_fullEstimate.png", fullPath.c_str()) );
   c2_4->SaveAs( Form("%s/mt2_highHT_fullEstimate.eps", fullPath.c_str()) );
-
-
-
-  /*
-  TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
-  c2_5->cd();
-  
-  TPad *pad1_5 = new TPad("pad1_5","pad1_5",0,0.3-0.1,1,1);
-  pad1_5->SetBottomMargin(0.18);
-  pad1_5->Draw();
-  pad1_5->cd();
-
-  pad1_5->SetLogy();
-    
-  yMin= 1e-2;
-
-  oldBin=thisBin;
-  if(doMoriond2017){
-    thisBin = 213;
- }
-  else if(doMoriond2019){
-    thisBin = 282;
-  }
-  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
-  hestimate_all->GetXaxis()->LabelsOption("v");
-  hestimate_all->GetXaxis()->SetLabelSize(0.042);
-  hestimate_all->Draw("");  
-
-  bgStack.Draw("histo,same");
-  hestimate_all->Draw("E2,same");
-  //hdata->Draw("pe0,same");
-  gdata_zero->Draw("pe0,same");
-  gdata->Draw("pe0,same");
-  
-  legend->Draw("same");
-
-  labelTop->Draw("same");
-  labelCMS->Draw("same");
-    
-  htBox[5]->Draw("same");
-
-  left = pad1_5->GetLeftMargin();
-  right = pad1_5->GetRightMargin();
-  bot = pad1_5->GetBottomMargin();
-  top = pad1_5->GetTopMargin();
-  binWidth = (1.0-right-left)/(thisBin-1-oldBin);
-
-  text->SetTextAlign(13);
-  text->SetTextFont(42);
-  text->SetTextAngle(0);
-  text->SetTextSize(0.05);
-  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
-
-
-  ibin = 0;
-
-  for(int nR=0; nR<nRtot; nR++){
-    if(doMoriond2017){
-      xcenter = left+binWidth*(ibin+(nBins_[12+7+nR])*0.5);
-    }
-    else if(doMoriond2019){
-      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR])*0.5);
-    }
-    text->SetTextAlign(23);
-    text->SetTextFont(62);
-    text->SetTextSize(0.030);
-
-    float y=bot+(1-top-bot)*0.85;
-    if (xcenter>1-right-0.19){
-      y=0.67;
-    }
-
-    text->DrawLatex(xcenter, y, Jmed[nR]);
-    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
-
-    if(doMoriond2017){
-      ibin+=nBins_[12+7+nR];
-    }
-    else if(doMoriond2019){
-      ibin+=nBins_[12+11+11+17+17+nR];
-    }
-      
-
-  }
-
-  line = new TLine();
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-
-  ibin=0;
-
-  for(int nR=0; nR<nRtot; nR++){
-    
-    if(doMoriond2017){
-      ibin+=nBins_[12+7+nR];
-    }
-    else if(doMoriond2019){
-      ibin+=nBins_[12+11+11+17+17+nR];
-    }
-   
-    x = left+ibin*binWidth;
-
-    if(doMoriond2017){
-      if(left+binWidth*(ibin+(nBins_[12+7+nR])*0.5)>1-right-0.19)
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-      else
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-    }
-    else if(doMoriond2019){
-      if(left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR])*0.5)>1-right-0.19)
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-      else
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-    }
-
-
-  }
-
-  gPad->RedrawAxis();
-  
-  c2_5->cd();
-  TPad *pad2_5 = new TPad("pad2_5","pad2_5",0,0,1,0.21);
-  pad2_5->SetTopMargin(0.06);
-  pad2_5->SetBottomMargin(0.1);
-  pad2_5->Draw();
-  pad2_5->cd();
-
-  TH2D* h2_axes_ratio_5;
-  if(doLogRatio){
-    gPad->SetLogy();
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
-  }
-  else
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0., 3.5 );
-
-  h2_axes_ratio_5->SetStats(0);
-  h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
-  h2_axes_ratio_5->GetXaxis()->SetTickLength(0.09);
-  h2_axes_ratio_5->GetYaxis()->SetNdivisions(5,5,0);
-  h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
-  h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
-  h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
-  
-  TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin, 1.0);
-  LineCentral_5->SetLineColor(1);
-
-  h2_axes_ratio_5->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_5->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
-  
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
-
-  for(int nR=0; nR<nRtot; nR++){
-    if(doMoriond2017){
-      ibin += nBins_[12+7+nR];
-    }
-    else if(doMoriond2019){
-      ibin += nBins_[12+11+11+17+17+nR];
-    }
-    line->DrawLine(ibin,0,ibin,3.5);
-  }
-
-  gPad->RedrawAxis();
-
-
-  c2_5->cd();
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
-  */
-
 
   
   
@@ -2092,6 +2101,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
   h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
   g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
   hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
   hestimate_all->GetXaxis()->LabelsOption("v");
   hestimate_all->GetXaxis()->SetLabelSize(0.042);
@@ -2216,9 +2226,12 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
     gPad->SetLogy();
     h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0.1, 10.0 );
   }
-  else
+  else if(plotRatio){
     h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0., 3.0 );
-  //h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0., 2.0 );
+  }
+  else if(plotPull){
+    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
 
   h2_axes_ratio_5->SetStats(0);
   h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
@@ -2227,33 +2240,57 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
   h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
   h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
+  if(plotRatio){
+    h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_5->GetYaxis()->SetTitle("Residuals");
+  }
   
   TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin, 1.0);
   LineCentral_5->SetLineColor(1);
 
-  h2_axes_ratio_5->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_5->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
-  
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
+  TLine* lineUp_5 = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp_5->SetLineColor(4);
 
-  for(int nR=0; nR<nRtot-1; nR++){
-    if(doMoriond2017){
-      ibin += nBins_[12+7+11*3+nR]-1;
-    }
-    else if(doMoriond2019){
-      ibin += nBins_[12+17+17+11*2+nR]-1;
-    }
-    line->DrawLine(ibin,0,ibin,3.0);
+  TLine* lineDown_5 = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown_5->SetLineColor(4);
+  
+  TLine* lineMiddle_5 = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle_5->SetLineColor(1);
+
+  h2_axes_ratio_5->Draw("");
+
+  if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_5->Draw("same");
+    g_Ratio->Draw("pe0,same");
+  }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp_5->Draw("same");
+    lineDown_5->Draw("same");
+    lineMiddle_5->Draw("same");
   }
 
+  if(plotRatio){
+    line->SetNDC(1);
+    line->SetLineStyle(2);
+    line->SetLineWidth(1);
+    line->SetLineColor(kBlack);
+    ibin = oldBin;
+
+    for(int nR=0; nR<nRtot-1; nR++){
+      if(doMoriond2017){
+	ibin += nBins_[12+7+11*3+nR]-1;
+      }
+      else if(doMoriond2019){
+	ibin += nBins_[12+17+17+11*2+nR]-1;
+      }
+      line->DrawLine(ibin,0,ibin,3.0);
+    }
+  }
+  
   gPad->RedrawAxis();
 
   c2_5->cd();
@@ -2266,402 +2303,7 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
 
 
-  /*
-  
-  cout << endl << endl << endl << endl;
-  cout << "-----------------------------------------" << endl;
-  cout << "Begin extreme region plot creation" << endl;
-  cout << endl << endl << endl << endl;
-  
-  TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
-  c2_5->cd();
-  
-  TPad *pad1_5= new TPad("pad1_5","pad1_5",0,0.3-0.1,1,1);
-  pad1_5->SetBottomMargin(0.18);
-  pad1_5->Draw();
-  pad1_5->cd();
-
-  pad1_5->SetLogy();
-    
-  oldBin=thisBin;
-
-  if(doMoriond2017){
-    thisBin = 213;
-  }
-  else if(doMoriond2019){
-    thisBin = 12 + 30 + 40 + 81 + 68 + 51;
-  }
-
-  yMax  /= 10;
-
-  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  //g_Ratio->GetXaxis()->SetRangeUser(oldBin-10, thisBin+10);
-  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
-  hestimate_all->GetXaxis()->LabelsOption("v");
-  hestimate_all->GetXaxis()->SetLabelSize(0.042);
-  hestimate_all->Draw("");  
-
-  bgStack.Draw("histo,same");
-  hestimate_all->Draw("E2,same");
-  //hdata->Draw("pe0,same");
-  gdata_zero->Draw("pe0,same");
-  gdata->Draw("pe0,same");
-  
-  legend->Draw("same");
-
-  labelTop->Draw("same");
-  labelCMS->Draw("same");
-
-  htBox[5]->Draw("same");
-
-  left = pad1_5->GetLeftMargin();
-  right = pad1_5->GetRightMargin();
-  bot = pad1_5->GetBottomMargin();
-  top = pad1_5->GetTopMargin();
-  binWidth = (1.0-right-left)/(thisBin+1-oldBin);
-
-  text->SetTextAlign(13);
-  text->SetTextFont(42);
-  text->SetTextAngle(0);
-  text->SetTextSize(0.05);
-  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
-
- 
-  ibin = 0;
-
-  for(int nR=0; nR<nRtot-1; nR++){
-    
-    if(doMoriond2017){
-      xcenter = left+binWidth*(ibin+(nBins_[12+7+11*2+nR]-1)*0.5);
-    }
-    else if(doMoriond2019){
-      xcenter = left+binWidth*(ibin+(nBins_[12+11+11+17+17+nR]-1)*0.5);
-    }
-    text->SetTextAlign(23);
-    text->SetTextFont(62);
-    text->SetTextSize(0.030);
-
-    float y=bot+(1-top-bot)*0.85;
-    if (xcenter>1-right-0.19)
-      y=0.67;
-
-    text->DrawLatex(xcenter, y, Jmed[nR]);
-    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
-
-    if(doMoriond2017){
-      ibin+=nBins_[12+7+11*2+nR]-1;
-    }
-    else if(doMoriond2019){
-      ibin+=nBins_[12+17*2+11*2+nR]-1;
-    }
-
-  }
-
-  line = new TLine();
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-
-  ibin=0;
-
-  for(int nR=0; nR<nRtot-1; nR++){
-
-    if(doMoriond2017){
-      ibin+=nBins_[12+7+11*3+nR]-1;
-    }
-    else if(doMoriond2019){
-      ibin+=nBins_[12+17+17+11*2+nR]-1;
-    }
-
-    x = left+ibin*binWidth;
-
-    if(doMoriond2017){
-      if(left+binWidth*(ibin+(nBins_[12+7+11*2+nR])*0.5)>1-right-0.19)
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-      else
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-    }
-    else if(doMoriond2019){
-      if(left+binWidth*(ibin+(nBins_[12+17+17+11*2+nR])*0.5)>1-right-0.19)
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-      else
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-    }
-
-
-  }
-
-  gPad->RedrawAxis();
-  
-  c2_5->cd();
-  TPad *pad2_5 = new TPad("pad2_5","pad2_5",0,0,1,0.21);
-  pad2_5->SetTopMargin(0.06);
-  pad2_5->SetBottomMargin(0.1);
-  pad2_5->Draw();
-  pad2_5->cd();
-
-  TH2D* h2_axes_ratio_5;
-  if(doLogRatio){
-    gPad->SetLogy();
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0.1, 10.0 );
-  }
-  else
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0., 5.0 );
-  //h2_axes_ratio_4 = new TH2D("axes_ratio_4", "", 10, oldBin, thisBin, 10, 0., 2.0 );
-
-
-  h2_axes_ratio_5->SetStats(0);
-  h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
-  h2_axes_ratio_5->GetXaxis()->SetTickLength(0.09);
-  h2_axes_ratio_5->GetYaxis()->SetNdivisions(5,5,0);
-  h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
-  h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
-  h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
-  
-  TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin, 1.0);
-  LineCentral_5->SetLineColor(1);
-
-  h2_axes_ratio_5->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_5->Draw("same");
-  //h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
-  
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
-
-  for(int nR=0; nR<nRtot-1; nR++){
-    if(doMoriond2017){
-      ibin += nBins_[12+7+11*2+nR]-1;
-    }
-    else if(doMoriond2019){
-      ibin += nBins_[12+17+17+11*2+nR]-1;
-    }
-    line->DrawLine(ibin,0,ibin,5.0);
-  }
-
-  gPad->RedrawAxis();
-
-  c2_5->cd();
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.root", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
-  
-*/
-
-
-
-
-
-
-  /*
-  TCanvas* c2_5 = new TCanvas("c2_5", "", 1100, 600);
-  c2_5->cd();
-  
-  TPad *pad1_5 = new TPad("pad1_5","pad1_5",0,0.3-0.1,1,1);
-  pad1_5->SetBottomMargin(0.18);
-  pad1_5->Draw();
-  pad1_5->cd();
-
-  pad1_5->SetLogy();
-    
-  yMax  /= 10;
-  oldBin=thisBin;
-  if(doMoriond2017){
-    thisBin=213;
-  }
-  else if(doMoriond2019){
-    thisBin = 12 + 30 + 40 + 81 + 68 + 68;
-  }
-  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  h_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
-  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
-  hestimate_all->GetXaxis()->LabelsOption("v");
-  hestimate_all->GetXaxis()->SetLabelSize(0.042);
-
-  TH1D* haxes= new TH1D("haxes", "", thisBin+1-oldBin, oldBin, thisBin+1);
-  for (int b=1; b<=thisBin-oldBin; ++b)
-    haxes->GetXaxis()->SetBinLabel(b, hestimate_all->GetXaxis()->GetBinLabel(b+oldBin));
-
-  haxes->GetYaxis()->SetRangeUser(yMin, yMax);
-  haxes->GetXaxis()->LabelsOption("v");
-  haxes->GetXaxis()->SetLabelSize(0.042);
-  haxes->GetYaxis()->SetTitle("Entries");
-  haxes->GetYaxis()->SetTitleOffset(0.95);
-  haxes->GetYaxis()->SetLabelSize(0.042);
-
-  haxes->Draw("");
-  hestimate_all->Draw("same");  
-
-  //  ((TH1*)(bgStack.GetStack()->Last()))->SetBinContent(214,0);
-
-  bgStack.Draw("histo,same");
-  hestimate_all->Draw("E2,same");
-  //hdata->Draw("pe0,same");
-  gdata_zero->Draw("pe0,same");
-  gdata->Draw("pe0,same");
-  
-  legend->Draw("same");
-
-  labelTop->Draw("same");
-  labelCMS->Draw("same");
-
-  htBox[5]->Draw("same");
-
-  left  = pad1_5->GetLeftMargin();
-  right = pad1_5->GetRightMargin();
-  bot   = pad1_5->GetBottomMargin();
-  top   = pad1_5->GetTopMargin();
-  binWidth = (1.0-right-left)/(thisBin+1-oldBin);
-
-  text->SetTextAlign(13);
-  text->SetTextFont(42);
-  text->SetTextAngle(0);
-  text->SetTextSize(0.05);
-  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
-
-
-  ibin = 0;
-  for(int nR=0; nR<nRtot; nR++){
-
-    if(doMoriond2017){
-      xcenter = left+binWidth*(ibin+(nBins_[12+7+11*3+nR]-1)*0.5);
-    }
-    else if(doMoriond2019){
-      xcenter = left+binWidth*(ibin+(nBins_[12+17*2+11*2+nR]-1)*0.5);
-    }
-      
-    text->SetTextAlign(23);
-    text->SetTextFont(62);
-    text->SetTextSize(0.030);
-
-    float y=bot+(1-top-bot)*0.85;
-    if (xcenter>1-right-0.19)
-      y=0.67;
-
-    text->DrawLatex(xcenter, y, Jmed[nR]);
-    text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Bmed[nR]);
-
-    if(doMoriond2017){
-      ibin+=nBins_[12+7+11*3+nR]-1;
-    }
-    else if(doMoriond2019){
-      ibin+=nBins_[12+17*2+11*2+nR]-1;
-    }
-
-  }
-
-  line = new TLine();
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-
-  ibin=0;
-
-  for(int nR=0; nR<nRtot-1; nR++){
-
-    if(doMoriond2017){
-      ibin+=(nBins_[12+7+11*3+nR]-1);
-    }
-    else if(doMoriond2019){
-      ibin+=(nBins_[12+17*2+11*2+nR]-1);
-    }
-      
-    x = left+ibin*binWidth;
-
-    if(doMoriond2017){
-      if(left+binWidth*(ibin+(nBins_[12+7+11*3+nR]-1)*0.5)>1-right-0.19)
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-      else
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-    }
-    else if(doMoriond2019){
-      if(left+binWidth*(ibin+(nBins_[12+17*2+11*2+nR]-1)*0.5)>1-right-0.19)
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
-      else
-	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
-    }
-
-  }
-
-  gPad->RedrawAxis();
-  
-  c2_5->cd();
-  TPad *pad2_5 = new TPad("pad2_5","pad2_5",0,0,1,0.21);
-  pad2_5->SetTopMargin(0.06);
-  pad2_5->SetBottomMargin(0.1);
-  pad2_5->Draw();
-  pad2_5->cd();
-
-  TH2D* h2_axes_ratio_5;
-  if(doLogRatio){
-    gPad->SetLogy();
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0.1, 10.0 );
-  }
-  else
-    h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin+1, 10, 0., 3.0 );
-  //h2_axes_ratio_5 = new TH2D("axes_ratio_5", "", 10, oldBin, thisBin, 10, 0., 2.0 );
-
-  h2_axes_ratio_5->SetStats(0);
-  h2_axes_ratio_5->GetXaxis()->SetLabelSize(0.00);
-  h2_axes_ratio_5->GetXaxis()->SetTickLength(0.09);
-  h2_axes_ratio_5->GetYaxis()->SetNdivisions(5,5,0);
-  h2_axes_ratio_5->GetYaxis()->SetTitleSize(0.18);
-  h2_axes_ratio_5->GetYaxis()->SetTitleOffset(0.26);
-  h2_axes_ratio_5->GetYaxis()->SetLabelSize(0.17);
-  h2_axes_ratio_5->GetYaxis()->SetTitle("Data/Est.");
-  
-  TLine* LineCentral_5 = new TLine(oldBin, 1.0, thisBin+1, 1.0);
-  LineCentral_5->SetLineColor(1);
-
-  h2_axes_ratio_5->Draw("");
-  h_band->Draw("E2same");
-  LineCentral_5->Draw("same");
-  //  h_Ratio->Draw("pe0,same");
-  g_Ratio->Draw("pe0,same");
-  
-  line->SetNDC(1);
-  line->SetLineStyle(2);
-  line->SetLineWidth(1);
-  line->SetLineColor(kBlack);
-  ibin = oldBin;
-
-  for(int nR=0; nR<nRtot-1; nR++){
-    if(doMoriond2017){
-      ibin += (nBins_[12+7+11*3+nR]-1);
-    }
-    else if(doMoriond2019){
-      ibin += (nBins_[12+17+17+11*2+nR]-1);
-    }
-    line->DrawLine(ibin,0.,ibin,3.0);
-  }
-
-  gPad->RedrawAxis();
-
-  c2_5->cd();
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.pdf", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.C", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.png", fullPath.c_str()) );
-  c2_5->SaveAs( Form("%s/mt2_extremeHT_fullEstimate.eps", fullPath.c_str()) );
-  */
-
-  gStyle->SetOptStat(1110);
+  //gStyle->SetOptStat(1110);
   gStyle->SetOptFit(1);
   
   TF1* fgauss= new TF1("fgauss", "gaus", -5, 5);
@@ -2669,11 +2311,14 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
 
   TCanvas* c3 = new TCanvas("c3", "", 600, 600);
   c3->cd();
-  hPull->SetStats(1110);
-  hPull->Draw("hist");
+  
+  //gStyle->SetOptStat("emr");
+  hPull->SetStats();
+  hPull->Draw();
   hPull->Fit("fgauss");
   fgauss->Draw("same");
   c3->SaveAs( Form("%s/PullDistribution.pdf", fullPath.c_str()) );
+  c3->SaveAs( Form("%s/PullDistribution.C", fullPath.c_str()) );
   c3->SaveAs( Form("%s/PullDistribution.png", fullPath.c_str()) );
   
 }
@@ -2724,5 +2369,386 @@ BGTable getTable( const std::string& tableFileName ) {
   }
 
   return table;
+
+}
+
+
+void doSRplot(string region, float yMin, float yMax, int nBins_[85], TLegend* legend, TH1D* hestimate_all, TH1D* hdata, TH1D* h_band, TGraphAsymmErrors* g_Ratio, TGraphAsymmErrors* pullPlot, TGraphAsymmErrors* gdata, TGraphAsymmErrors* gdata_zero, THStack bgStack, TPaveText* htBox[5], TPaveText* labelCMS, TPaveText* labelTop, bool plotRatio, bool plotPull, bool doMoriond2017, bool doMoriond2019, string fullPath  ){
+
+  TCanvas* c = new TCanvas("c", "", 1100, 600);
+  c->cd();
+  
+  TPad *pad1 = new TPad("pad1","pad1",0,0.3-0.1,1,1);
+  pad1->SetBottomMargin(0.18);
+  pad1->Draw();
+  pad1->cd();
+
+  if(region!="monojet"){
+     pad1->SetLogy();
+  }
+
+
+  if(region=="monojet" || region=="veryLowHT"){
+    yMin = 1e-1;
+  }
+  else if(region=="lowHT"){
+    yMin = 1e-2;
+  }
+  
+
+  int oldBin; 
+
+  if(region=="monojet"){ oldBin = 0; }
+  else if(region=="veryLowHT"){ oldBin = 12; }
+  else if(region=="lowHT"){ oldBin = 42; }
+  
+  pad1->SetLogy();
+    
+  int thisBin(1);
+  if(region == "monojet"){
+    thisBin=12;
+  }
+  else if(region == "veryLowHT"){
+    if(doMoriond2017){
+      thisBin=12+21;
+    }
+    else if(doMoriond2019){
+      thisBin = 12 + 30;
+    }
+  }
+  else if(region=="lowHT"){
+    if(doMoriond2017){
+      thisBin=12+21+40;
+    }
+    else if(doMoriond2019){
+      thisBin = 12 + 30 + 40;
+    }
+  }
+
+  hestimate_all->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  hdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  pullPlot->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  gdata_zero->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  g_Ratio->GetXaxis()->SetRangeUser(oldBin, thisBin);
+  
+  hestimate_all->GetYaxis()->SetRangeUser(yMin, yMax);
+  hestimate_all->GetXaxis()->LabelsOption("v");
+  hestimate_all->GetXaxis()->SetLabelSize(0.042);
+  hestimate_all->GetYaxis()->SetTitleOffset(0.95);
+  hestimate_all->GetYaxis()->SetLabelSize(0.042);
+ 
+  hestimate_all->Draw("");  
+
+  bgStack.Draw("histo,same");
+  hestimate_all->Draw("E2,same");
+  gdata_zero->Draw("pe0,same");
+  gdata->Draw("pe0,same");
+
+  legend->Draw("same");
+  labelTop->Draw("same");
+  labelCMS->Draw("same");
+
+  if(region=="monojet"){
+    htBox[0]->Draw("same");
+  }
+  else if(region=="veryLowHT"){
+    htBox[1]->Draw("same");
+  }
+  else if(region=="lowHT"){
+    htBox[2]->Draw("same");
+  }
+  
+  float left = pad1->GetLeftMargin();
+  float right = pad1->GetRightMargin();
+  float bot = pad1->GetBottomMargin();
+  float top = pad1->GetTopMargin();
+  float binWidth = (1.0-right-left)/(thisBin-oldBin);
+  
+  TLatex* text = new TLatex();
+  text->SetNDC(1);
+  text->SetTextAlign(13);
+  text->SetTextFont(42);
+  text->SetTextAngle(0);
+  text->SetTextSize(0.05);
+  text->DrawLatex(left+0.04,1-top-0.01, "Pre-fit background");
+
+
+  float ibin = 0;
+
+  //monojet regions
+  int monoBin[2]={7,5};
+  TString monoJ[2] = {"1j", "1j"};
+  TString monoB[2] = {"0b", "#geq 1b"};
+
+  //lowHT regions
+  int nRtot(1); //number of different regions in j and b for this given HT region
+  TString vlJ[11];
+  TString vlB[11];
+
+  if(doMoriond2017){
+    nRtot = 7;
+    TString vlJint[nRtot] = {"2-3j","2-3j","2-3j","#geq4j","#geq4j","#geq4j", "#geq2j"};
+    TString vlBint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "#geq3b"};
+    for(int i(0); i<nRtot; ++i){ 
+      vlJ[i] = vlJint[i];
+      vlB[i] = vlBint[i];
+    }
+  }
+  else if(doMoriond2019){
+    nRtot = 11;
+    TString vlJint[nRtot] = {"2-3j", "2-3j", "2-3j", "4-6j", "4-6j", "4-6j", "#geq7j", "#geq7j", "#geq7j", "2-6j", "#geq7j"};
+    TString vlBint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b", "#geq3b", "#geq3b"};
+    for(int i(0); i<nRtot; ++i){
+      vlJ[i] = vlJint[i];     
+      vlB[i] = vlBint[i];    
+    }
+  }
+
+
+  //low HT regions
+  TString Jlab[11];
+  TString Blab[11];
+
+   if(doMoriond2017){
+    nRtot = 11;
+    TString Jlabint[nRtot] = {"2-3j","2-3j","2-3j","4-6j","4-6j","4-6j","#geq7j","#geq7j","#geq7j","2-6j", "#geq7j"};
+    TString Blabint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b","#geq3b","#geq3b"};
+    for(int i(0); i<nRtot; ++i){ 
+      Jlab[i] = Jlabint[i];
+      Blab[i] = Blabint[i];
+    }
+  }
+  else if(doMoriond2019){
+    nRtot = 11;
+    cout << nRtot << endl;
+    TString Jlabint[nRtot] = {"2-3j", "2-3j", "2-3j", "4-6j", "4-6j", "4-6j", "#geq7j", "#geq7j", "#geq7j", "2-6j", "#geq7j"};
+    TString Blabint[nRtot] = {"0b", "1b", "2b", "0b", "1b", "2b", "0b", "1b", "2b", "#geq3b", "#geq3b"};
+    for(int i(0); i<nRtot; ++i){
+      Jlab[i] = Jlabint[i];
+      Blab[i] = Blabint[i];
+    }
+  }
+
+
+
+ 
+  float xcenter;
+
+  int limit;
+  if(region=="monojet"){ limit=2; }
+  else if(region=="veryLowHT" || region=="lowHT"){ limit=nRtot; }
+
+  for(int nR=0; nR<limit; nR++){ 
+    
+    if(region=="monojet"){
+      xcenter = left+binWidth*(ibin+(monoBin[nR]-1)*0.5);
+    }
+    else if(region=="veryLowHT"){
+      xcenter = left+binWidth*(ibin+(nBins_[oldBin+nR])*0.5);
+    }
+    else if(region=="lowHT"){
+      if(doMoriond2017){
+	xcenter = left+binWidth*(ibin+(nBins_[12+7+nR])*0.5);
+      }
+      else if(doMoriond2019){
+	xcenter = left+binWidth*(ibin+(nBins_[12+11+nR])*0.5);
+      }
+    }
+
+    text->SetTextAlign(23);
+    text->SetTextFont(62);
+    text->SetTextSize(0.030);
+    
+    float y=bot+(1-top-bot)*0.85;
+    if (xcenter>1-right-0.19)
+      y=0.67;
+    
+     if(region=="monojet"){
+       text->DrawLatex(xcenter, y, monoJ[nR]);
+       text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,monoB[nR]);
+       ibin+=monoBin[nR];
+     }
+     else if(region=="veryLowHT"){
+       text->DrawLatex(xcenter, y, vlJ[nR]);
+       text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,vlB[nR]);
+       ibin+=nBins_[12+nR];
+     }
+     else if(region=="lowHT"){
+       text->DrawLatex(xcenter, y, Jlab[nR]);
+       text->DrawLatex(xcenter,y-text->GetTextSize()-0.001,Blab[nR]);
+
+       if(doMoriond2017){
+	 ibin+=nBins_[12+7+nR];
+       }
+       else if(doMoriond2019){
+	 ibin+=nBins_[12+11+nR];
+       }
+     }
+  }
+  
+  TLine* line = new TLine();
+  line->SetNDC(1);
+  line->SetLineStyle(2);
+  line->SetLineWidth(1);
+  line->SetLineColor(kBlack);
+  float x;
+
+  
+
+  if(region=="monojet"){
+    x=left+monoBin[0]*binWidth;
+    line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+  }
+  else if(region=="veryLowHT"){   
+    for(int nR=0; nR<limit; nR++){
+      ibin=0;
+      ibin+=nBins_[oldBin+nR];
+      x = left+ibin*binWidth;
+    
+      if(left+binWidth*(ibin+(nBins_[oldBin+nR])*0.5)>1-right-0.19){
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+      }
+      else{
+	line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);  
+      } 
+    }
+  }
+  else if(region=="lowHT"){
+    ibin=0;
+
+    for(int nR=0; nR<nRtot; nR++){
+    
+      if(doMoriond2017){
+	ibin+=nBins_[12+7+nR];
+      }
+      else if(doMoriond2019){
+	ibin+=nBins_[12+11+nR];
+      }
+   
+      x = left+ibin*binWidth;
+
+      if(doMoriond2017){
+	if(left+binWidth*(ibin+(nBins_[12+7+nR])*0.5)>1-right-0.19)
+	  line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+	else
+	  line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+      }
+      else if(doMoriond2019){
+	if(left+binWidth*(ibin+(nBins_[12+11+nR])*0.5)>1-right-0.19)
+	  line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.65);
+	else
+	  line->DrawLineNDC(x, bot, x, bot+(1-top-bot)*0.85);
+      }
+    }
+  }
+    
+  gPad->RedrawAxis();
+  
+  c->cd();
+  TPad *pad2 = new TPad("pad2","pad2",0,0,1,0.21);
+  pad2->SetTopMargin(0.06);
+  pad2->SetBottomMargin(0.1);
+  pad2->Draw();
+  pad2->cd();
+
+  bool doLogRatio = false;
+
+  TH2D* h2_axes_ratio_0;
+  if(doLogRatio){
+    gPad->SetLogy();
+    h2_axes_ratio_0 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, 0.1, 10.0 );
+    g_Ratio->GetYaxis()->SetRangeUser(0.1, 10.0);
+  }
+  else if(plotRatio){
+    h2_axes_ratio_0 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, 0.0, 2 );
+  }
+  else if(plotPull){
+    h2_axes_ratio_0 = new TH2D("axes_ratio_0", "", 10, oldBin, thisBin, 10, -5, 5 );
+  }
+
+
+  h2_axes_ratio_0->SetStats(0);
+  h2_axes_ratio_0->GetXaxis()->SetLabelSize(0.00);
+  h2_axes_ratio_0->GetXaxis()->SetTickLength(0.09);
+  h2_axes_ratio_0->GetYaxis()->SetNdivisions(5,5,0);
+  h2_axes_ratio_0->GetYaxis()->SetTitleSize(0.18);
+  h2_axes_ratio_0->GetYaxis()->SetTitleOffset(0.26);
+  h2_axes_ratio_0->GetYaxis()->SetLabelSize(0.17);
+  if(plotRatio){
+    h2_axes_ratio_0->GetYaxis()->SetTitle("Data/Est.");
+  }
+  else if(plotPull){
+    h2_axes_ratio_0->GetYaxis()->SetTitle("Residuals");
+  }
+  
+  TLine* LineCentral_0 = new TLine(oldBin, 1.0, thisBin, 1.0);
+  LineCentral_0->SetLineColor(1);
+
+  TLine* lineUp = new TLine(oldBin, 3.0, thisBin, 3.0);
+  lineUp->SetLineColor(4);
+
+  TLine* lineDown = new TLine(oldBin, -3.0, thisBin, -3.0);
+  lineDown->SetLineColor(4);
+  
+  TLine* lineMiddle = new TLine(oldBin, 0.0, thisBin, 0.0);
+  lineMiddle->SetLineColor(1);
+
+  h2_axes_ratio_0->Draw("");
+
+  if(plotRatio){
+    h_band->Draw("E2same");
+    LineCentral_0->Draw("same");
+    g_Ratio->Draw("pe0,same");
+  }
+  else if(plotPull){
+    pullPlot->Draw("peo, same");
+    lineUp->Draw("same");
+    lineDown->Draw("same");
+    lineMiddle->Draw("same");
+  }
+  
+  if(region=="monojet"){
+    line->DrawLine(monoBin[0],0.0,monoBin[0],2.0);
+  }
+  else if(region=="veryLowHT"){
+    ibin = 12;
+    for(int nR=0; nR<limit; nR++){
+      ibin += nBins_[oldBin+nR];
+      line->DrawLine(ibin,0.0,ibin,2.0);
+    }
+  }
+  else if(region=="lowHT"){
+    ibin = 42;
+
+    for(int nR=0; nR<nRtot; nR++){
+      if(doMoriond2017){
+	ibin += nBins_[12+7+nR];
+      }
+      else if(doMoriond2019){
+	ibin += nBins_[12+11+nR];
+      }
+      line->DrawLine(ibin,0,ibin,3.5);
+    }
+  }
+
+  gPad->RedrawAxis();
+
+  c->cd();
+  if(region=="monojet"){
+    c->SaveAs( Form("%s/mt2_monojet_fullEstimate.pdf", fullPath.c_str()) );
+    c->SaveAs( Form("%s/mt2_monojet_fullEstimate.png", fullPath.c_str()) );
+    c->SaveAs( Form("%s/mt2_monojet_fullEstimate.eps", fullPath.c_str()) );
+  }
+  else if(region=="veryLowHT"){
+    c->SaveAs( Form("%s/mt2_veryLowHT_fullEstimate.pdf", fullPath.c_str()) );
+    c->SaveAs( Form("%s/mt2_veryLowHT_fullEstimate.png", fullPath.c_str()) );
+    c->SaveAs( Form("%s/mt2_veryLowHT_fullEstimate.eps", fullPath.c_str()) );
+  }
+  else if(region=="lowHT"){
+    c->SaveAs( Form("%s/mt2_lowHT_fullEstimate.pdf", fullPath.c_str()) );
+    c->SaveAs( Form("%s/mt2_lowHT_fullEstimate.png", fullPath.c_str()) );
+    c->SaveAs( Form("%s/mt2_lowHT_fullEstimate.eps", fullPath.c_str()) );
+  }
 
 }

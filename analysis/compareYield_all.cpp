@@ -253,8 +253,15 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   unsigned int bgSize = 3;
   
   std::set<MT2Region> MT2Regions = data->getRegions();
-  
-  TH1D* hdata = new TH1D("hdata", "", 63, 0, 63);
+
+  TH1D* hdata;
+  if(doMoriond2017){
+    hdata  = new TH1D("hdata", "", 63, 0, 63);
+  }
+  else if(doMoriond2019){
+    hdata  = new TH1D("hdata", "", 85, 0, 85); 
+  }
+
   hdata->Sumw2();
   hdata->GetYaxis()->SetTitle("Entries");
   hdata->SetMarkerStyle(20);
@@ -269,13 +276,25 @@ void drawYields( const std::string& outputdir, MT2Analysis<MT2Estimate>* data, s
   
   for(unsigned int b=0; b<bgSize; ++b){
   
-    hestimate[b]= new TH1D(Form("hestimate_%d", b), "", 63, 0, 63);
+    if(doMoriond2017){
+      hestimate[b]= new TH1D(Form("hestimate_%d", b), "", 63, 0, 63);
+    }
+    else if(doMoriond2019){
+      hestimate[b]= new TH1D(Form("hestimate_%d", b), "", 85, 0, 85);
+    }
+
     hestimate[b]->Sumw2();
     hestimate[b]->GetYaxis()->SetTitle("Entries");
     hestimate[b]->SetFillColor(colors[b]);
     hestimate[b]->SetLineColor(1);
 
-    hestimate_forRatio[b]= new TH1D(Form("hestimate_forRatio%d", b), "", 63, 0, 63);
+    if(doMoriond2017){
+      hestimate_forRatio[b]= new TH1D(Form("hestimate_forRatio%d", b), "", 63, 0, 63);
+    }
+    else if(doMoriond2019){
+      hestimate_forRatio[b]= new TH1D(Form("hestimate_forRatio%d", b), "", 85, 0, 85);
+    }
+
     hestimate_forRatio[b]->Sumw2();
     hestimate_forRatio[b]->GetYaxis()->SetTitle("Entries");
     hestimate_forRatio[b]->SetFillColor(colors[b]);
