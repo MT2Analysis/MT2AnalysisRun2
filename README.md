@@ -244,12 +244,11 @@ python python/makeSMSplots.py config/<config-file> <name>
 ### Significance
 You might want to compute the significance as well. For that, once all the createDatacard jobs are finished, follow the same procedure as with limits, with the following commands:
 ```
-python submitSignificance_scan.py <pathSE> <pathSE> 
+python submitSignificance_scan.py <path> <model>
 ```
-Note: the two path can be the same (to the storage element)
 
 ```
-sh copySignificance.sh <model> <label> <pathSE> 
+sh copySignificance.sh <model> <label> <path> 
 ```
 
 ```
