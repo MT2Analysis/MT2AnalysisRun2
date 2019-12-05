@@ -331,6 +331,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float candLep_eta = 0;
     float candLep_phi = 0;
 
+/*
     // if reco leps, check those
     int nlep_to_use = myTree.nlep;
     if (nlep_to_use > 0) {
@@ -384,7 +385,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         break;
       } // loop on isotracks
     }
-
+*/
 //FIXME    if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
 
     // HEM electron veto, can do it only after identifying candidate lepton

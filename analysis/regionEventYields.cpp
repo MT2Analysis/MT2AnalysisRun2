@@ -123,7 +123,7 @@ int main( int argc, char* argv[] ) {
   if( argc > 3){
     std::string model = signalName;
 				int year_to_use = (cfg.year()!=2018) ? cfg.year() : 2017;
-    std::string filename = Form("/scratch/mratti/SigWeights/%d/nsig_weights_%s.root", year_to_use, model.c_str() ); // these come from SnT repo
+    std::string filename = Form("/t3home/mratti/MT2/SigWeights/%d/nsig_weights_%s.root", year_to_use, model.c_str() ); // these come from SnT repo
     TFile* f_avWeights = new TFile(filename.c_str() );
 
     h_nsig                       = (TH2D*) f_avWeights->Get("h_nsig");
@@ -543,7 +543,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     fileName = "squark.root";
     histoName = "sqsq";
   }
-  sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/NNLO_approx_NNLL_80X_compatible/" + fileName);
+  sigXSFile = TFile::Open("/work/mratti/SUSxsecs/NNLO_approx_NNLL_80X_compatible/" + fileName);
   TH1F* sigXS = (TH1F*) sigXSFile->Get(histoName);
 
 
