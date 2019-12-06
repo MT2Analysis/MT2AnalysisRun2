@@ -1,6 +1,8 @@
-# Script to launch the datacard creation for the signals
-# python launchCreateDatacards_2016.py T2qq <label>
-# Currently sends one job per mass mass point
+''' 
+Script to launch the datacard creation for the signals
+python launchCreateDatacards.py T2qq <label>
+Currently sends one job per mass mass point
+'''
 
 import os
 import sys
@@ -17,16 +19,17 @@ else:
     label = ""
 
 
-cfg = "moriond2019_35p9ifb" #"data_2016_SnT_36p8_FixedWJets"  #data_2016_SnTMC_362ifb_18ifbUB_Signal" #"data_Run2016_7p7ifb"
-#stepSize = 5 if "T2cc" in model else 50 if "T2qq" in model else 25  # 25 is previous step used, it is the right one to use close to the diagonal
-stepSize = 25
+cfg = "moriond2019_35p9ifb" # assumes 
+stepSize = 25 # 25 is the smallest interval between points in the diagonal
 
 if model=="T1qqqq": 
   Ms = range(600, 2801, stepSize)
-  ms = range(0, 1901, stepSize) # 500 1601
+  ms = range(0, 1901, stepSize) 
+  Ms = range(2100, 2101, stepSize)
+  ms = range(0, 26, stepSize) 
 elif model=="T2qq":
   Ms = range(200, 2601, stepSize)
-  ms = range(0, 2201, stepSize) # 100 1401
+  ms = range(0, 2201, stepSize) 
 elif model=="T1bbbb":
   Ms = range(600, 2801, stepSize)
   ms = range(0, 1901, stepSize)
@@ -36,7 +39,7 @@ elif model=="T2bb":
 
 print Ms
 
-logsDir="jobs_{}_{}_{}".format(model,cfg,label)
+logsDir="jobs_dcc_{}_{}_{}".format(model,cfg,label)
 os.system("mkdir {}".format(logsDir))
 
 for M in Ms:
@@ -47,26 +50,11 @@ for M in Ms:
     m22=m+stepSize
     if m11 >= m2: continue
 
-    # patch for T1bbbb 
-    #if M>1400 or (M-m)>100: 
-    #  print 'patch for T1bbbb skipping this point, only considering DeltaM <= 100 and M<=1400'
-    #  continue
-    
-    # patch for T1qqqq
-    #if M>1300:
-    #  print 'patch for T1qqqq skipping this point'
-    #  continue
-
-    # patch for T2bb
-    #if M>800:
-    #  print 'patch for T2bb, skipping this point'
-    #  continue
-
     job_name = "{}_{}_{}_{}".format(m1, m2, m11, m22)
-    stdout = '`pwd`/{}/log_{}.out'.format(logsDir, job_name)
-    stderr = '`pwd`/{}/log_{}.err'.format(logsDir, job_name)
+    stdout = '`pwd`/{}/log_{}.log'.format(logsDir, job_name)
     name = 'creatingDatacards_{}_{}'.format(model, job_name) 
-    command="qsub -l h_vmem=6g -q short.q -o {} -e {} -N {} createDatacards_batch_fromHome.sh {} {} {} {} {} {} {}".format(stdout, stderr, name, cfg, model, m1, m2, m11, m22, label) # it is important to require higher possible memory
+
+    command="sbatch -p wn --account=cn-test -o {} -e {} --job-name={} --time=0-00:30 --ntasks=1  createDatacards_batch_fromHome_slurm.sh {} {} {} {} {} {} {}".format(stdout, stdout, name, cfg, model, m1, m2, m11, m22, label) # add a requirement on the memory? # --mem 6000 #(6GB)
 
     print command
     os.system(command)
