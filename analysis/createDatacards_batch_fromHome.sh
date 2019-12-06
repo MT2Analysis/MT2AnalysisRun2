@@ -31,8 +31,6 @@ echo $LABEL $7
 
 # setup the environment 
 source $VO_CMS_SW_DIR/cmsset_default.sh
-#export SCRAM_ARCH=slc6_amd64_gcc491 # is this needed ?
-#export LD_LIBRARY_PATH=/mnt/t3nfs01/data01/swshare/glite/d-cache/dcap/lib/:$LD_LIBRARY_PATH
 echo "Loading root via cmssw"
 cd /work/mratti/mt2_workarea/CMSSW_8_0_12/src/
 echo $PWD
@@ -57,6 +55,7 @@ ls -al $JOBDIR/datacards_$MODEL
 
 echo "Starting to create datacards..."
 ./createDatacards_combined $1 moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 $2 $3 $4 $5 $6 $LABEL $JOBDIR/datacards_$MODEL
+# the two additional cfg files are irrelevant, but some argument is needed
 
 echo "Finished creating datacards, at least in principle, content of datacards directory:"
 ls $JOBDIR/datacards_$MODEL

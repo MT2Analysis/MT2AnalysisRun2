@@ -19,14 +19,14 @@ else:
     label = ""
 
 
-cfg = "moriond2019_35p9ifb" # assumes 
-stepSize = 25 # 25 is the smallest interval between points in the diagonal
+cfg = "moriond2019_35p9ifb" # config file name for 2016, where signals are stored
+stepSize = 50 # 25 is the smallest interval between points in the diagonal
 
 if model=="T1qqqq": 
   Ms = range(600, 2801, stepSize)
   ms = range(0, 1901, stepSize) 
-  Ms = range(2100, 2101, stepSize)
-  ms = range(0, 26, stepSize) 
+#  Ms = range(2100, 2101, stepSize)
+#  ms = range(0, 26, stepSize) 
 elif model=="T2qq":
   Ms = range(200, 2601, stepSize)
   ms = range(0, 2201, stepSize) 
@@ -54,7 +54,7 @@ for M in Ms:
     stdout = '`pwd`/{}/log_{}.log'.format(logsDir, job_name)
     name = 'creatingDatacards_{}_{}'.format(model, job_name) 
 
-    command="sbatch -p wn --account=cn-test -o {} -e {} --job-name={} --time=0-00:30 --ntasks=1  createDatacards_batch_fromHome_slurm.sh {} {} {} {} {} {} {}".format(stdout, stdout, name, cfg, model, m1, m2, m11, m22, label) # add a requirement on the memory? # --mem 6000 #(6GB)
+    command="sbatch -p wn --account=cn-test -o {} -e {} --job-name={} --time=0-00:30 --ntasks=1  createDatacards_batch_fromHome.sh {} {} {} {} {} {} {}".format(stdout, stdout, name, cfg, model, m1, m2, m11, m22, label) # add a requirement on the memory? # --mem 6000 #(6GB)
 
     print command
     os.system(command)
