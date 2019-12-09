@@ -257,9 +257,11 @@ int main( int argc, char* argv[] ) {
     double integral_MCcr = 1.; 
     if(thisRegion->htMin()!=1500){
       integral_MCcr = zllMC_shape_TR->get(*iR)->yield->Integral(1, -1);
+if  (zllMC_shape_TR->get(*iR)==0) cout<<"integral_MCcrTR not found"<<endl;
     }
     else{
       integral_MCcr = zllMC_shape_forExtremeHT->get(*iR)->yield->Integral(1, -1);
+if (zllMC_shape_forExtremeHT->get(*iR)==0) cout<<"integral_MCcrExtreme not found"<<endl;
     }
 
     double integral_data = zllData_shape_TR->get(*iR)->yield->Integral(1, -1);
@@ -268,7 +270,7 @@ int main( int argc, char* argv[] ) {
     kHybrid_alternative_MC->get(*iR)->yield->Scale(integral_data/integral_MCcr);
        
     cout << thisRegion->getName() << endl;
-    cout << "integral_data/integral_MCcr = " << integral_data/integral_MCcr << endl;
+    cout << "integral_data/integral_MCcr = " <<integral_data<<"/"<<integral_MCcr<<"="<<integral_data/integral_MCcr << endl;
     
     double integral =  kHybrid_alternative_MC->get(*iR)->yield->Integral(1,-1);
     kHybrid_alternative_MC->get(*iR)->yield->Scale(1/integral);  
@@ -810,7 +812,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 1;
+    bool getExtrapolBin = 0;
 
     if(getExtrapolBin){
 

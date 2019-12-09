@@ -123,12 +123,16 @@ int main(int argc, char* argv[]) {
 
    if( cfg.useMC() && !onlyData ) { // run on MC
 
-    std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
+    std::string samplesFileName = "../samples/samples_" + cfg.zllmcSamples() + ".dat";
+    std::string samplesMLscore="";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
+    if(cfg.zllmcMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.zllmcMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
 
-
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 700, 799, cfg.useETHmc()); // DY signal only
+    std::vector<MT2Sample> fSamples = (cfg.zllmcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 700, 799, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 700, 799, cfg.useETHmc())); // DY signal only
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
@@ -191,7 +195,7 @@ int main(int argc, char* argv[]) {
       MT2Analysis<MT2EstimateTree>* mc_top_of = new MT2Analysis<MT2EstimateTree>( "Top", cfg.crRegionsSet(),300, "Top" );
       addVariables(mc_top);      addVariables(mc_top_of);
 
-      std::vector<MT2Sample> fSamples_top = MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc());
+      std::vector<MT2Sample> fSamples_top = ((cfg.zllmcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 300, 499, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc())));
       for( unsigned i=0; i<fSamples_top.size(); ++i ){
       	/*MT2BTagSFHelper* bTagSF_top = new MT2BTagSFHelper();
 	computeYieldSnO( fSamples_top[i], cfg, mc_top, mc_top_of, bTagSF_top, false);
@@ -244,11 +248,15 @@ int main(int argc, char* argv[]) {
   if( !onlyMC ) {
 
     //DATA
-    std::string samplesFile_data = "../samples/samples_" + cfg.dataSamples() + ".dat";
+    std::string samplesFile_data = "../samples/samples_" + cfg.zlldataSamples() + ".dat";
     std::cout << std::endl << std::endl;
+    std::string samplesMLscore="";
     std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
-    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", -1, 100, cfg.useETHdata());
- 
+    if(cfg.zlldataMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.zlldataMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
+    std::vector<MT2Sample> samples_data = ((cfg.zlldataMLscore()!="")?(MT2Sample::loadSamples(samplesFile_data,samplesMLscore,"", -1, 100, cfg.useETHdata())):(MT2Sample::loadSamples(samplesFile_data, -1, 100, cfg.useETHdata())));
 
     MT2Analysis<MT2EstimateTree>* dataTree = new MT2Analysis<MT2EstimateTree>( "data", cfg.crRegionsSet() );
     MT2Analysis<MT2EstimateTree>* dataTree_of = new MT2Analysis<MT2EstimateTree>( "data_of", cfg.crRegionsSet() );
@@ -322,12 +330,15 @@ int main(int argc, char* argv[]) {
 
   if( onlySignal){
     std::cout << "DOING THE SIGNAL" << std::endl;
-
-    std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
+    std::string samplesFileName = "../samples/samples_" + cfg.zllsigSamples() + ".dat";
+    std::string samplesMLscore="";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
-
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 999, 2000, cfg.useETHmc()); // signal only
+    if(cfg.zllsigMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.zllsigMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
+    std::vector<MT2Sample> fSamples = ((cfg.zllsigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 999, 2000, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 999, 2000, cfg.useETHmc()))) ; // signal only
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
@@ -476,7 +487,8 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   // Tree initialization
   TString treeName = isETH ? "Events" : "mt2";
   TTree* tree = (TTree*)file->Get(treeName);
-
+  if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());
+  std::cout<<"use score: "<<sample.score<<endl;}
   MT2Tree myTree(tree, isETH);
   //myTree.Init(tree, isETH);
 
@@ -490,6 +502,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
   int nentries = tree->GetEntries();
   //for( int iEntry=0; iEntry<30000; ++iEntry ) {
+  int Entryremain=0;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
@@ -553,6 +566,10 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if(!( nLep_to_be_used==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
+    if(cfg.MLcut()>0){
+      if ( myTree.score_V01<cfg.MLcut()) continue; 
+    }
+
 
     if( cfg.analysisType() == "mt2"){
       if( regionsSet!="13TeV_noCut" )
@@ -1103,9 +1120,9 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       }
     }// else continue;
-
+Entryremain++;
   } // for entries
-  
+  cout<<"Entry remain= "<<Entryremain<<endl;
   anaTree->finalize();
   anaTree_of->finalize();
 

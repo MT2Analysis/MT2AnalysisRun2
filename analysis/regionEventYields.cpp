@@ -123,7 +123,8 @@ int main( int argc, char* argv[] ) {
   if( argc > 3){
     std::string model = signalName;
 				int year_to_use = (cfg.year()!=2018) ? cfg.year() : 2017;
-    std::string filename = Form("/scratch/mratti/SigWeights/%d/nsig_weights_%s.root", year_to_use, model.c_str() ); // these come from SnT repo
+//    std::string filename = Form("/scratch/mratti/SigWeights/%d/nsig_weights_%s.root", year_to_use, model.c_str() ); // these come from SnT repo
+    std::string filename = Form("/t3home/mratti/MT2/SigWeights/%d/nsig_weights_%s.root", year_to_use, model.c_str() );
     TFile* f_avWeights = new TFile(filename.c_str() );
 
     h_nsig                       = (TH2D*) f_avWeights->Get("h_nsig");
@@ -166,9 +167,13 @@ int main( int argc, char* argv[] ) {
 
     // Load samples
     std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
+    std::string samplesMLscore;
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
-
+    if(cfg.mcMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.mcMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
     // std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 101, 999); // not interested in signal here (see later)
     //if( fSamples.size()==0 ) {
     //  std::cout << "There must be an error: samples is empty!" << std::endl;
@@ -178,13 +183,13 @@ int main( int argc, char* argv[] ) {
     // create Groups of samples, i.e. vectors - e.g. one for Wjets, one for top, etc
     std::map<TString, std::vector<MT2Sample>> fSamplesMap;
     std::cout << "-> Creating sample list for Top " << std::endl;
-    fSamplesMap["Top"] = MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc());
+    fSamplesMap["Top"] = ((cfg.mcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 300, 499, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 300, 499, cfg.useETHmc())));
     std::cout << "-> Creating sample list for WJets " << std::endl;
-    fSamplesMap["WJets"] = MT2Sample::loadSamples(samplesFileName, 500, 509, cfg.useETHmc());
+    fSamplesMap["WJets"] = ((cfg.mcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 500, 509, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 500, 509, cfg.useETHmc())));
     std::cout << "-> Creating sample list for QCD " << std::endl;
-    fSamplesMap["QCD"] = MT2Sample::loadSamples(samplesFileName, 100, 199, cfg.useETHmc());
+    fSamplesMap["QCD"] = ((cfg.mcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 100, 199, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 100, 199, cfg.useETHmc())));
     std::cout << "-> Creating sample list for ZJets " << std::endl;
-    fSamplesMap["ZJets"] = MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc());
+    fSamplesMap["ZJets"] = ((cfg.mcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 600, 699, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc())));
 
 
 
@@ -211,7 +216,7 @@ int main( int argc, char* argv[] ) {
     cout << "Now ZJets samples" << endl;
 
     //Now create ZJets estimate in the inclusive region (needed to compute Zinv Estimates)
-    vector<MT2Sample> mySample = MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc());
+    vector<MT2Sample> mySample = ((cfg.mcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 600, 699, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc())));
     MT2Analysis<MT2EstimateTree>* myEstimate = new MT2Analysis<MT2EstimateTree>("ZJets", "13TeV_2016_inclusive");
 
     cout << "size: " << mySample.size() << endl;
@@ -235,25 +240,29 @@ int main( int argc, char* argv[] ) {
   // ********************
 
   MT2Analysis<MT2EstimateAllSigSyst>* merged_signal;
-
+//*******************************************************signal part remain to be changed by MLoptimize
   std::vector< MT2Analysis< MT2EstimateAllSigSyst>* > signals;
   if( cfg.sigSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData ) { // Take signals from a different sample file, compulsory, otherwise no signals analysis
 
     std::string samplesFileName = "../samples/samples_" + cfg.sigSamples() + ".dat";
+    std::string samplesMLscore;
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading signal samples from file: " << samplesFileName << std::endl;
     std::cout << "     signal name " << signalName << std::endl;
-
+    if(cfg.sigMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.sigMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
     //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, signalName); // only signal (id>=1000)
     //std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc()); // only signal (id>=1000)
     // only load samples related to the chosen signal scan
     std::vector<MT2Sample> fSamplesSig;
-    if       (signalName=="T1qqqq")   fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1000, 1100, cfg.useETHmc());
-    else if  (signalName=="T1bbbb")   fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1100, 1200, cfg.useETHmc());
-    else if  (signalName=="T1tttt")   fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1200, 1300, cfg.useETHmc());
-    else if  (signalName=="T2qq")     fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1300, 1400, cfg.useETHmc());
-    else if  (signalName=="T2bb")     fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1400, 1500, cfg.useETHmc());
-    else if  (signalName=="T2tt")     fSamplesSig=MT2Sample::loadSamples(samplesFileName, 1500, 1600, cfg.useETHmc());
+    if       (signalName=="T1qqqq")   fSamplesSig=((cfg.sigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1000, 1100, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1000, 1100, cfg.useETHmc())));
+    else if  (signalName=="T1bbbb")   fSamplesSig=((cfg.sigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1100, 1200, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1100, 1200, cfg.useETHmc())));
+    else if  (signalName=="T1tttt")   fSamplesSig=((cfg.sigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1200, 1300, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1200, 1300, cfg.useETHmc())));
+    else if  (signalName=="T2qq")     fSamplesSig=((cfg.sigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1300, 1400, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1300, 1400, cfg.useETHmc())));
+    else if  (signalName=="T2bb")     fSamplesSig=((cfg.sigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1400, 1500, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1400, 1500, cfg.useETHmc())));
+    else if  (signalName=="T2tt")     fSamplesSig=((cfg.sigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1500, 1600, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1500, 1600, cfg.useETHmc())));
 
     if( fSamplesSig.size()==0 ) {
       std::cout << "No signal samples found, skipping." << std::endl;
@@ -278,11 +287,15 @@ int main( int argc, char* argv[] ) {
 
     // Read the samples and create the MT2Sample for data
     std::string samplesFileNameData = "../samples/samples_" + cfg.dataSamples() + ".dat";
-
+    std::string samplesMLscore;
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFileNameData << std::endl;
+    if(cfg.dataMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.dataMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
 
-    std::vector<MT2Sample> fSamplesData = MT2Sample::loadSamples(samplesFileNameData, "", -1, 100, cfg.useETHdata()); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
+    std::vector<MT2Sample> fSamplesData =((cfg.dataMLscore()!="")?(MT2Sample::loadSamples(samplesFileNameData,samplesMLscore,"", -1, 100, cfg.useETHdata())):(MT2Sample::loadSamples(samplesFileNameData,"", -1, 100, cfg.useETHdata()))); //instead of "", do e.g. "noDupl" to load only samples matching "noDupl" epxression
     if( fSamplesData.size()==0 ) {
       std::cout << "There must be an error: fSamplesData is empty!" << std::endl;
       exit(1209);
@@ -356,7 +369,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
   TTree* tree = (TTree*)file->Get(treeName);
-
+  if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());cout<<"use score: "<<sample.score<<endl;}
   MT2Tree myTree(tree, isETH);
 
   // number of gen events
@@ -367,8 +380,13 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   }
 
   int nentries = tree->GetEntries();
-
+  int nentries_MLtest=nentries;
+  if(cfg.isMLcut()&&tree->GetBranchStatus("MLtag")){
+    nentries_MLtest=tree->GetEntries("MLtag!=1");
+  }//if we choose not to use the samples used for ML training, the weight is recalculated
+  cout<<"total entries"<<nentries<<", entries used when considering ML training"<<nentries_MLtest<<endl;
   //for( int iEntry=0; iEntry<20000; ++iEntry ) {
+  int Entryremain1=0;int Entryremain2=0;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ){
@@ -382,7 +400,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // apply the filters
     // filters should be the same bw ETH and SnT
-    if(isData) {
+
+
+   if(isData) {
       if(!myTree.passFilters(cfg.year())) continue;
     }
     else {
@@ -429,8 +449,15 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
+    Entryremain1++;
+
+    // reject the mc events used by ML training
+    if ( !isData && cfg.isMLcut() && myTree.MLtag==1) continue;
 
 
+    //cut on ML score//MLoptimize
+    if ( tree->GetBranchStatus("score_V01")&&myTree.score_V01<cfg.MLcut()) continue;Entryremain2++;
+ //   std::cout<<"event "<<iEntry<<" in "<<sample.file<<", score "<<myTree.score_V01<<endl;
     // Selection is over, now apply the weights !
     //Double_t weight = (isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
     Double_t weight_syst = 1.;
@@ -445,7 +472,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       else {
 
         // main normalization weight
-        weight = myTree.evt_scale1fb;
+        weight = myTree.evt_scale1fb*nentries/nentries_MLtest;
         if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
 
         // lepton and btag scale factors
@@ -508,6 +535,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   } // for entries
 
+ cout<<"events after preselection "<<Entryremain2<<", before MLscore cut "<<Entryremain1<<endl;
   anaTree->finalize();
 
   delete tree;
@@ -543,7 +571,8 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     fileName = "squark.root";
     histoName = "sqsq";
   }
-  sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/NNLO_approx_NNLL_80X_compatible/" + fileName);
+//  sigXSFile = TFile::Open("/shome/mratti/SUSxsecs/NNLO_approx_NNLL_80X_compatible/" + fileName);
+  sigXSFile = TFile::Open("/work/mratti/SUSxsecs/NNLO_approx_NNLL_80X_compatible/" + fileName);
   TH1F* sigXS = (TH1F*) sigXSFile->Get(histoName);
 
 
@@ -569,7 +598,8 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   TFile* file = TFile::Open(sample.file.c_str());
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
   TTree* tree = (TTree*)file->Get(treeName);
-
+  if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());
+  std::cout<<"use score: "<<sample.score<<endl;}
   MT2Tree myTree(tree, isETH);
 
   std::cout << "-> Setting up MT2Analysis with name: " << sample.sname << std::endl;
@@ -577,7 +607,14 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
 
   //int nentries= 10000; //= tree->GetEntries();
   int nentries = tree->GetEntries();
-
+  int nentries_MLtest=nentries;
+  if(cfg.isMLcut()&&tree->GetBranchStatus("MLtag")){
+    nentries_MLtest=tree->GetEntries("MLtag!=1");
+  }//if we choose not to use the samples used for ML training, the weight is recalculated
+  cout<<"total entries"<<nentries<<", entries used when considering ML training"<<nentries_MLtest<<endl;
+  int Entryremain=0;
+  float MLreduce=1.;
+  if(cfg.isMLcut()) MLreduce=0.95;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
@@ -597,7 +634,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     if(!isETH && myTree.met_miniaodPt / myTree.met_caloPt > 5.0) continue;
 
 
-    //apply triggers on MC - currently disabled for signals
+   //apply triggers on MC - currently disabled for signals
     //if(!isData){
     //		if(!myTree.passTriggerSelection_forMC("SR", cfg.year(), isETH)) continue;
     //}
@@ -622,7 +659,17 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     // apply HEM veto
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
 
-    // Gen MET cut
+    // reject the mc events used by ML training
+    
+    if ( !isData && cfg.isMLcut() && myTree.MLtag==1) continue;
+    //cut on ML score//MLoptimize
+    if ( tree->GetBranchStatus("score_V01")&&myTree.score_V01<cfg.MLcut()) continue;
+    
+ //   std::cout<<"event "<<iEntry<<" in "<<sample.file<<", score "<<myTree.score_V01<<endl; 
+
+
+
+   // Gen MET cut
     bool passGenMET=false;
     if(dogenmet) passGenMET =true;
 
@@ -681,7 +728,7 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     // get the avg weights from the histograms
     int binx = h_nsig->GetXaxis()->FindBin( GenSusyMScan1 );
     int biny = h_nsig->GetYaxis()->FindBin( GenSusyMScan2 );
-    float nevts                        = h_nsig->GetBinContent( binx, biny );
+    float nevts                        = h_nsig->GetBinContent( binx, biny )*MLreduce;
     float weight_avg_isr               = h_avg_weight_isr->GetBinContent( binx, biny );
     float weight_avg_isr_UP            = h_avg_weight_isr_UP->GetBinContent( binx, biny );
     float weight_avg_isr_DN            = h_avg_weight_isr_DN->GetBinContent( binx, biny );
@@ -737,9 +784,9 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     if(dogenmet && passGenMET){
       thisEstimate->yield3d_genmet->Fill( mt2_genmet, GenSusyMScan1, GenSusyMScan2, weight );
     }
-
+  Entryremain++;
   } // for entries
-
+  cout<<"After selection "<<Entryremain<<" events"<<endl;
   //ofs.close();
 
   analysis->finalize();

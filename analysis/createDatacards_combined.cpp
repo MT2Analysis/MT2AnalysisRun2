@@ -35,7 +35,8 @@ bool doQCDEstimate = true; // add QCD background to datacards and tables, defaul
 
 // Edit these options
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
-bool doOnlySig = false; // set to true for signal scans on the batch, default false
+bool doOnlySig = true; // set to true for signal scans on the batch, default false
+bool do2016Sig = false;
 bool includeSignalUnc = true; // signal lep eff commented out till available, currently set to false because requires too much memory
 
 
@@ -142,6 +143,7 @@ int main( int argc, char* argv[] ) {
 
   // First create template datacards
   std::string path_templ = dir16 + "/datacard_templates_combined"; // writing in a different directory than before
+  if(do2016Sig) path_templ= dir16+ "/datacard_templates";
   system(Form("mkdir -p %s", path_templ.c_str()));
 
 
@@ -832,9 +834,10 @@ int main( int argc, char* argv[] ) {
   std::vector<MT2Analysis<MT2EstimateAllSigSyst>*> signals;
 
   std::string modelName = model;
-
+  std::string signal_path = "/analyses_signals_merged.root";
+  if (do2016Sig) signal_path = "/analyses.root";
   //signals       = MT2Analysis<MT2EstimateSigContSyst>::readAllSystFromFile( "/shome/mschoene/8_0_12_analysisPlayArea/src/mschoene_newBinning/analysis/signalScansFromDominick/"+modelName+"_eth.root", modelName, "isr" );
-  signals       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + "/analyses_signals_merged.root", modelName, "nominal" ); // the last string is just a nickname I assign to the analysis
+  signals       = MT2Analysis<MT2EstimateAllSigSyst>::readAllSystFromFile( dir16 + signal_path, modelName, "nominal" ); // the last string is just a nickname I assign to the analysis
 
   if (signals.size()==0) std::cout << "WARNING: Signal analysis is empty!" << std::endl;
 

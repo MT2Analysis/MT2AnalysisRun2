@@ -65,8 +65,8 @@ bool doSanityCheck = false; //the sanity check consists in confronting the estim
 bool doCombination; //creates the plots for the full Run2
 
 //set to true only oe of the two following flags:
-bool plotRatio = false; //down pad will show the ratio
-bool plotPull = true; // down pad will show residuals
+bool plotRatio = true; //down pad will show the ratio
+bool plotPull = false; // down pad will show residuals
 
 
 

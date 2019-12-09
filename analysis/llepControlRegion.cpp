@@ -30,7 +30,7 @@
 #include "interface/MT2LeptonSFTool.h"
 #include "interface/MT2BTagSFHelper.h"
 #include "interface/MT2PuReweightTool.h"
-
+#include <algorithm>
 #include "TRandom3.h"
 
 using namespace std;
@@ -112,11 +112,16 @@ int main( int argc, char* argv[] ) {
   // ********************
   if( cfg.useMC() && !onlyData && !onlySignal ) { // use MC BG estimates
 
-    std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
+    std::string samplesFileName = "../samples/samples_" + cfg.llepmcSamples() + ".dat";
+    std::string samplesMLscore="";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
+    if(cfg.llepmcMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.llepmcMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
     std::cout << "useETHMC()" << cfg.useETHmc() << std::endl;
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 300, 599, cfg.useETHmc()); // only top (tt, t, ttW, ttZ) and W+jets
+    std::vector<MT2Sample> fSamples = (cfg.llepmcMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 300, 599, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 300, 599, cfg.useETHmc())); // only top (tt, t, ttW, ttZ) and W+jets
     if( fSamples.size()==0 ) {
       std::cout << "There must be an error: samples is empty!" << std::endl;
       exit(1209);
@@ -142,13 +147,18 @@ int main( int argc, char* argv[] ) {
   // ********************
   std::vector< MT2Analysis< MT2EstimateAllSigSyst >* > signals;
 
-  if( cfg.sigSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData ) { // Take signals from a different sample file, compulsory, otherwise no signals analysis
+  if( cfg.llepsigSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData ) { // Take signals from a different sample file, compulsory, otherwise no signals analysis
 
-    std::string samplesFileName = "../samples/samples_" + cfg.sigSamples() + ".dat";
+    std::string samplesFileName = "../samples/samples_" + cfg.llepsigSamples() + ".dat";
+    std::string samplesMLscore="";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading signal samples from file: " << samplesFileName << std::endl;
+    if(cfg.llepsigMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.llepsigMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
 
-    std::vector<MT2Sample> fSamples = MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc()); // only signal (id>=1000)
+    std::vector<MT2Sample> fSamples = (cfg.llepsigMLscore()!="")?(MT2Sample::loadSamples(samplesFileName,samplesMLscore,"", 1000, -1, cfg.useETHmc())):(MT2Sample::loadSamples(samplesFileName, 1000, -1, cfg.useETHmc())); // only signal (id>=1000)
 
 
     if( fSamples.size()==0 ) {
@@ -176,13 +186,18 @@ int main( int argc, char* argv[] ) {
   // ********************
   if( !(cfg.dummyAnalysis()) && cfg.dataSamples()!="" && !onlyMC && !onlySignal) {
 
-    std::string samplesFile_data = "../samples/samples_" + cfg.dataSamples() + ".dat";
+    std::string samplesFile_data = "../samples/samples_" + cfg.llepdataSamples() + ".dat";
 
+    std::string samplesMLscore="";
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading data from file: " << samplesFile_data << std::endl;
+    if(cfg.llepdataMLscore()!="") {
+      samplesMLscore = "../samples/samples_" + cfg.llepdataMLscore() + ".dat";
+      std::cout << "-> Loading sample scores from file: " << samplesMLscore << std::endl;
+    }
     //std::cout << " cfg.useETHdata()" <<  cfg.useETHdata() << std::endl;
 
-    std::vector<MT2Sample> samples_data = MT2Sample::loadSamples(samplesFile_data, "", -1, 100, cfg.useETHdata() ); // only data samples
+    std::vector<MT2Sample> samples_data =(cfg.llepdataMLscore()!="")?(MT2Sample::loadSamples(samplesFile_data,samplesMLscore,"", -1, 100, cfg.useETHdata())):(MT2Sample::loadSamples(samplesFile_data, -1, 100, cfg.useETHdata())); // only data samples
 
     if( samples_data.size()==0 ) {
       std::cout << "There must be an error: samples_data is empty!" << std::endl;
@@ -237,7 +252,8 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   TString treeName = isETH ? "Events" : "mt2";
   TFile* file = TFile::Open(sample.file.c_str());
   TTree* tree = (TTree*)file->Get(treeName);
-
+  if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());
+  std::cout<<"use score: "<<sample.score<<endl;}
   MT2Tree myTree(tree, isETH);
   //MT2Tree myTree;
   //myTree.Init(tree);
@@ -255,13 +271,14 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   int nentries = tree->GetEntries();
 
   //for( int iEntry=0; iEntry<50000; ++iEntry ) {
+  int Entryremain=0;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if(iEntry % 50000 == 0){
       std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     }
 
     myTree.GetEntry(iEntry);
-
+//    cout<<iEntry<<endl;
     // Do the selection here: please try to keep a consistent order
     // between this script and similar scripts
 
@@ -288,7 +305,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     if(!isData) {
       if(!myTree.passTriggerSelection_forMC("llep", cfg.year(), isETH)) continue;
     }
-
     // apply good vertex cut once for all
     if (isETH) {
       if(myTree.PV_npvs <= 0) continue;
@@ -310,18 +326,17 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
     // apply the main kinematic selections here
     if( !myTree.passBaselineKinematic("",cfg.year(), isETH)) continue;
-
     // monojet id
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
-
     // apply HEM veto
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
-
     // apply specific analysis region cuts: we require strictly only one lepton in this CR
     if( myTree.nLepLowMT!=1 ) continue;
     //new cut: we ask specifically the number of leptons with high MT to be zero
     if(cfg.year()!=2016 && myTree.nLepHighMT!=0) continue; // FIXME: also apply on 2016 as soon as this quantity is available
-
+    if(cfg.MLcut()>0){
+      if ( myTree.score_V01<cfg.MLcut()) continue;
+    }//MLscore preselection
     // identify unique lepton a' la SnT
     //   -> needed due to the pointless definitions of lepton_* isoTrack_* collections and nPF* nLep* counters
     //   -> set candLep_* and foundlep
@@ -348,9 +363,11 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
     } // nlep>0
     // otherwise check PF leps that don't overlap with a reco lepton
-    int nIsoTrack_to_use = isETH ? myTree.nIsoTrack : myTree.nisoTrack;
+//    int nIsoTrack_to_use = isETH ? myTree.nIsoTrack : myTree.nisoTrack;
+    int nIsoTrack_to_use = isETH ? myTree.nIt : myTree.nisoTrack;
     if (!foundlep && myTree.nPFLep5LowMT > 0) {
       for (int itrk = 0; itrk < nIsoTrack_to_use; ++itrk) {
+//if(iEntry==1973) cout<<itrk<<endl;
         float pt = myTree.isoTrack_pt[itrk];
         float eta = myTree.isoTrack_eta[itrk];
         float phi = myTree.isoTrack_phi[itrk];
@@ -360,7 +377,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         if (myTree.isoTrack_absIso[itrk]/pt > 0.2) continue;
         float mt = sqrt( 2 * myTree.met_pt * pt * ( 1 - cos( myTree.met_phi - myTree.isoTrack_phi[itrk]) ) );
         if (mt > 100.) continue;
-
         // check overlap with reco leptons
         bool overlap = false;
         for(int ilep = 0; ilep < nlep_to_use; ilep++){
@@ -374,7 +390,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
           }
         } // loop over reco leps
         if (overlap) continue;
-
         // good candidate: save
         candLep_pt = pt;
         candLep_eta = eta;
@@ -384,7 +399,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         break;
       } // loop on isotracks
     }
-
 //FIXME    if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
 
     // HEM electron veto, can do it only after identifying candidate lepton
@@ -475,7 +489,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     //we add lepton kinematics parameters on the tree
 
     MT2EstimateTree* thisEstimate;
-
     //Note: for the regions with >=7j, only 1-2b are merged and fill all the regions with >=1b (reason why we will skip regions with >=3b)
 
     if(regionsSet=="zurich" || regionsSet=="zurichPlus" || regionsSet=="zurich2016"){ // To avoid signal contamination in 7j 2b and 7j 3b
@@ -509,8 +522,6 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
       }
     }
-
-
     else if(regionsSet == "Moriond2019"){
       if( ht>450. && njets>=7 && nbjets>2 ) continue; //to avoid contamination from >=3b regions
       else if( njets<7 ) { //this is the normal case, where we don't merge the CR
@@ -627,10 +638,9 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       thisEstimate->tree->Fill();
       thisEstimate->yield->Fill(mt2, weight );
     }
-
-
+  Entryremain++;
   } // for entries
-
+  cout<<"Entry remain= "<<Entryremain<<endl;
 
   //bTagSF.~MT2BTagSFHelper();
 
