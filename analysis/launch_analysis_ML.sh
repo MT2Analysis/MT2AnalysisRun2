@@ -14,11 +14,10 @@ doCombinedYears=true
 #If not, which year would you like to process?
 year=2017
 
-
 #--------------------------------------------------------------
 #      2. Do you want to run the full analysis?
 
-doFullAnalysis=true
+doFullAnalysis=false
 
 
 #--------------------------------------------------------------
@@ -26,7 +25,7 @@ doFullAnalysis=true
 
 doMakeClean=false #do you want to clean all the .o files?
 
-doCreationNtuples=false #do you want to create SR and CR ntuples?
+doCreationNtuples=true #do you want to create SR and CR ntuples?
 
 doComputationEstimates=true #do you want to compute the Lost Lepton and Z invisible estimates?
 
@@ -34,8 +33,12 @@ doDatacard=true #do you want to create the datacards?
 
 doSRplot=true #do you want to produce the SR plots?
 
-
-
+#cfg2016="config_MLoptimize_2016_ForT1bbbb_btagexclu_noMLcutallevents"
+cfg2016="config_MLoptimize_2016_ForT1bbbb_btagexclu"
+#cfg2017="config_MLoptimize_2017_ForT1bbbb_btagexclu_noMLcutallevents"
+cfg2017="config_MLoptimize_2017_ForT1bbbb_btagexclu"
+#cfg2018="config_MLoptimize_2018_ForT1bbbb_btagexclu_noMLcutallevents"
+cfg2018="config_MLoptimize_2018_ForT1bbbb_btagexclu"
 #################################################################
 
 
@@ -120,32 +123,32 @@ echo "-----------------------------------------------------------------------"
 if [ "$doCreationNtuples" = true ] ; then 
     echo "->Start of the single lepton CR ntuples creation process"
     if [ "$year" = 2016 ] || [ "$doCombinedYears" = true ] ; then
-	./llepControlRegion moriond2019_35p9ifb data >& logs/log_llepCR_data16.txt &
-	./llepControlRegion moriond2019_35p9ifb mc >& logs/log_llepCR_mc16.txt &
+	./llepControlRegion $cfg2016 data >& logs/log_llepCR_data16.txt &
+	./llepControlRegion $cfg2016 mc >& logs/log_llepCR_mc16.txt &
     fi
     if [ "$year" = 2017 ] || [ "$doCombinedYears" = true ] ; then
-	./llepControlRegion moriond2019_41p9ifb_2017 data >& logs/log_llepCR_data17.txt &
-	./llepControlRegion moriond2019_41p9ifb_2017 mc >& logs/log_llepCR_mc17.txt &
+	./llepControlRegion $cfg2017 data >& logs/log_llepCR_data17.txt &
+	./llepControlRegion $cfg2017 mc >& logs/log_llepCR_mc17.txt &
     fi
     if [ "$year" = 2018 ] || [ "$doCombinedYears" = true ] ; then
-	./llepControlRegion moriond2019_59p9ifb_2018 data >& logs/log_llepCR_data18.txt &
-	./llepControlRegion moriond2019_59p9ifb_2018 mc >& logs/log_llepCR_mc18.txt &
+	./llepControlRegion $cfg2018 data >& logs/log_llepCR_data18.txt &
+	./llepControlRegion $cfg2018 mc >& logs/log_llepCR_mc18.txt &
     fi
     
     echo "Launched creation of the single lepton CR ntuples"
     echo "->Start of the di-lepton CR ntuples creation process"
     
     if [ "$year" = 2016 ] || [ "$doCombinedYears" = true ] ; then
-	./zllControlRegion moriond2019_35p9ifb data >& logs/log_zllCR_data16.txt &
-	./zllControlRegion moriond2019_35p9ifb mc >& logs/log_zllCR_mc16.txt &
+	./zllControlRegion $cfg2016 data >& logs/log_zllCR_data16.txt &
+	./zllControlRegion $cfg2016 mc >& logs/log_zllCR_mc16.txt &
     fi
     if [ "$year" = 2017 ] || [ "$doCombinedYears" = true ] ; then
-	./zllControlRegion moriond2019_41p9ifb_2017 data >& logs/log_zllCR_data17.txt &
-	./zllControlRegion moriond2019_41p9ifb_2017 mc >& logs/log_zllCR_mc17.txt &
+	./zllControlRegion $cfg2017 data >& logs/log_zllCR_data17.txt &
+	./zllControlRegion $cfg2017 mc >& logs/log_zllCR_mc17.txt &
     fi
     if [ "$year" = 2018 ] || [ "$doCombinedYears" = true ] ; then
-	./zllControlRegion moriond2019_59p9ifb_2018 data >& logs/log_zllCR_data18.txt &
-	./zllControlRegion moriond2019_59p9ifb_2018 mc >& logs/log_zllCR_mc18.txt &
+	./zllControlRegion $cfg2018 data >& logs/log_zllCR_data18.txt &
+	./zllControlRegion $cfg2018 mc >& logs/log_zllCR_mc18.txt &
     fi
     
     echo "Launched the creation of the di-lepton CR ntuples"
@@ -153,29 +156,29 @@ if [ "$doCreationNtuples" = true ] ; then
     echo "->Creation of the SR ntuples"
     
     if [ "$year" = 2016 ] && [ "$doCombinedYears" = false ] ; then
-	./regionEventYields moriond2019_35p9ifb data >& logs/log_yields_data16.txt & 
+	./regionEventYields $cfg2016 data >& logs/log_yields_data16.txt & 
 	echo "work in progress ... takes some time (~1h)"
-	./regionEventYields moriond2019_35p9ifb mc >& logs/log_yields_mc16.txt 
+	./regionEventYields $cfg2016 mc >& logs/log_yields_mc16.txt 
     fi
     if [ "$year" = 2017 ] && [ "$doCombinedYears" = false ] ; then
-	./regionEventYields moriond2019_41p9ifb_2017 data >& logs/log_yields_data17.txt &
+	./regionEventYields $cfg2017 data >& logs/log_yields_data17.txt &
 	echo "work in progress ... takes some time (~1h)"
-	./regionEventYields moriond2019_41p9ifb_2017 mc >& logs/log_yields_mc17.txt
+	./regionEventYields $cfg2017 mc >& logs/log_yields_mc17.txt
     fi
     if [ "$year" = 2018 ] && [ "$doCombinedYears" = false ] ; then
-	./regionEventYields moriond2019_59p9ifb_2018 data >& logs/log_yields_data18.txt &
+	./regionEventYields $cfg2018 data >& logs/log_yields_data18.txt &
 	echo "work in progress ... takes some time (~1h)"
-	./regionEventYields moriond2019_59p9ifb_2018 mc >& logs/log_yields_mc18.txt 
+	./regionEventYields $cfg2018 mc >& logs/log_yields_mc18.txt 
     fi
     
     if [ "$doCombinedYears" = true ] ; then
-	./regionEventYields moriond2019_35p9ifb data >& logs/log_yields_data16.txt & 
-	./regionEventYields moriond2019_35p9ifb mc >& logs/log_yields_mc16.txt &
-	./regionEventYields moriond2019_41p9ifb_2017 data >& logs/log_yields_data17.txt &
-	./regionEventYields moriond2019_59p9ifb_2018 data >& logs/log_yields_data18.txt &
-	./regionEventYields moriond2019_59p9ifb_2018 mc >& logs/log_yields_mc18.txt &
+	./regionEventYields $cfg2016 data >& logs/log_yields_data16.txt & 
+	./regionEventYields $cfg2016 mc >& logs/log_yields_mc16.txt &
+	./regionEventYields $cfg2017 data >& logs/log_yields_data17.txt &
+	./regionEventYields $cfg2018 data >& logs/log_yields_data18.txt &
+	./regionEventYields $cfg2018 mc >& logs/log_yields_mc18.txt &
 	echo "work in progress ... takes some time (~1h)"
-	./regionEventYields moriond2019_41p9ifb_2017 mc >& logs/log_yields_mc17.txt
+	./regionEventYields $cfg2017 mc >& logs/log_yields_mc17.txt
     fi
     
     echo "Done with the creation of the SR ntuples"
@@ -185,34 +188,34 @@ if [ "$doComputationEstimates" = true ] ; then
     echo "->Starting the estimate computation"
 
     if [ "$year" = 2016 ] && [ "$doCombinedYears" = false ] ; then
-	./computeLostLepton moriond2019_35p9ifb > logs/log_llepEstimate_16.txt 
+	./computeLostLepton $cfg2016 > logs/log_llepEstimate_16.txt 
     fi
     if [ "$year" = 2017 ] && [ "$doCombinedYears" = false ] ; then
-	./computeLostLepton moriond2019_41p9ifb_2017 > logs/log_llepEstimate_17.txt 
+	./computeLostLepton $cfg2017 > logs/log_llepEstimate_17.txt 
     fi
     if [ "$year" = 2018 ] && [ "$doCombinedYears" = false ] ; then
-	./computeLostLepton moriond2019_59p9ifb_2018 > logs/log_llepEstimate_18.txt 
+	./computeLostLepton $cfg2018 > logs/log_llepEstimate_18.txt 
     fi
     if [ "$doCombinedYears" = true ] ; then
 	echo "work in progress - please wait"
-	./computeLostLepton_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 > logs/log_llepEstimate_combined.txt 
+	./computeLostLepton_combined $cfg2016 $cfg2017 $cfg2018 > logs/log_llepEstimate_combined.txt 
     fi
 
     echo "Done with the Lost Lepton estimate"
 
     echo "->Computation of the Z invisible estimate"
     if [ "$year" = 2016 ] && [ "$doCombinedYears" = false ] ; then
-	./computeZinvFromZll moriond2019_35p9ifb > logs/log_zinvEstimate_16.txt 
+	./computeZinvFromZll $cfg2016 > logs/log_zinvEstimate_16.txt 
     fi
     if [ "$year" = 2017 ] && [ "$doCombinedYears" = false ] ; then
-	./computeZinvFromZll moriond2019_41p9ifb_2017 > logs/log_zinvEstimate_17.txt 
+	./computeZinvFromZll $cfg2017 > logs/log_zinvEstimate_17.txt 
     fi
     if [ "$year" = 2018 ] && [ "$doCombinedYears" = false ] ; then
-	./computeZinvFromZll moriond2019_59p9ifb_2018 > logs/log_zinvEstimate_18.txt 
+	./computeZinvFromZll $cfg2018 > logs/log_zinvEstimate_18.txt 
     fi
     if [ "$doCombinedYears" = true ] ; then
 	echo "work in progress - please wait"
-	./computeZinvFromZll_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 > logs/log_zinvEstimate_combined.txt
+	./computeZinvFromZll_combined $cfg2016 $cfg2017 $cfg2018 > logs/log_zinvEstimate_combined.txt
     fi
     
     echo "Done with the Z invisible estimate"
@@ -224,16 +227,16 @@ if [ "$doDatacard" = true ] ; then
     echo "->Creation of the datacards"
 
     if [ "$year" = 2016 ] && [ "$doCombinedYears" = false ] ; then
-	./createDatacards moriond2019_35p9ifb T2bb 10 10 10 10 > logs/log_datacard_16.txt 
+	./createDatacards $cfg2016 T2bb 10 10 10 10 > logs/log_datacard_16.txt 
     fi
     if [ "$year" = 2017 ] && [ "$doCombinedYears" = false ] ; then
-	./createDatacards moriond2019_41p9ifb_2017 T2bb 10 10 10 10 > logs/log_datacard_17.txt 
+	./createDatacards $cfg2017 T2bb 10 10 10 10 > logs/log_datacard_17.txt 
     fi
     if [ "$year" = 2018 ] && [ "$doCombinedYears" = false ] ; then
-	./createDatacards moriond2019_59p9ifb_2018 T2bb 10 10 10 10 > logs/log_datacard_18.txt 
+	./createDatacards $cfg2018 T2bb 10 10 10 10 > logs/log_datacard_18.txt 
     fi   
     if [ "$doCombinedYears" = true ] ; then
-	./createDatacards_combined moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 T2bb 10 10 10 10 >& logs/log_datacard_combined.txt 
+	./createDatacards_combined $cfg2016 $cfg2017 $cfg2018 T2bb 10 10 10 10 >& logs/log_datacard_combined.txt 
     fi
 
     echo "-->Done with the creation of the datacards"
@@ -243,16 +246,16 @@ if [ "$doSRplot" = true ] ; then
     echo "->Making SR plots"
     
     if [ "$year" = 2016 ] && [ "$doCombinedYears" = false ] ; then
-	./compareYield_bins_all moriond2019_35p9ifb > logs/log_SRplot_16.txt 
+	./compareYield_bins_all $cfg2016 > logs/log_SRplot_16.txt 
     fi
     if [ "$year" = 2017 ] && [ "$doCombinedYears" = false ] ; then
-	./compareYield_bins_all moriond2019_41p9ifb_2017 > logs/log_SRplot_17.txt
+	./compareYield_bins_all $cfg2017 > logs/log_SRplot_17.txt
     fi
     if [ "$year" = 2018 ] && [ "$doCombinedYears" = false ] ; then 
-	./compareYield_bins_all moriond2019_59p9ifb_2018 > logs/log_SRplot_18.txt 
+	./compareYield_bins_all $cfg2018 > logs/log_SRplot_18.txt 
     fi
     if [ "$doCombinedYears" = true ] ; then
-	./compareYield_bins_all moriond2019_35p9ifb moriond2019_41p9ifb_2017 moriond2019_59p9ifb_2018 > logs/log_SRplot_combined.txt
+	./compareYield_bins_all $cfg2016 $cfg2017 $cfg2018 > logs/log_SRplot_combined.txt
     fi
 
     echo "Done with the SR plots"
