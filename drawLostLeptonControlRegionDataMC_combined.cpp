@@ -189,19 +189,21 @@ int main( int argc, char* argv[] ) {
   // std::string selection = "ht>250 && ht<450 && met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   std::string selection;
   if(plotElectron && !plotMuon){
-   selection = "abs(lepID)<12 && ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+//   selection = "abs(lepID)<12 && ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+   selection = "abs(lepID)<12 && ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200. && score_V01>0.5";
   }
   else if(plotMuon && !plotElectron){
-   selection = "abs(lepID)>12 && ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+//   selection = "abs(lepID)>12 && ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+   selection = "abs(lepID)>12 && ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200. && score_V01>0.5";
   }
   else{
-   selection = "ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+//   selection = "ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+   selection = "ht>" + ht_min + "&& met>250  && nJets>1 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200. && score_V01>0.5";
   }
   if(htMax != -1){
     selection += "&& ht<" + ht_max;
   }
 
-   
   // dt.drawRegionYields_fromTree("incl_nVert", "nVert", selection, 100, -0.5, 89.5, "Number of Vertices", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_mt2", "mt2", selection, 100, 200., 1200., "M_{T2}", "GeV", cutsLabel, jetCutsLabel);
   
@@ -232,7 +234,7 @@ int main( int argc, char* argv[] ) {
   dt.drawRegionYields_fromTree("incl_mht_phi", "mht_phi", selection, 40, -4, 4, "H_{T}^{miss} phi", "", cutsLabel, jetCutsLabel);
   dt.drawRegionYields_fromTree("incl_diffMetMht", "diffMetMht", selection, 50, 0, 250, "|E_{T}^{miss}-H_{T}^{miss}|", "GeV", cutsLabel, jetCutsLabel);
 
-  
+  dt.drawRegionYields_fromTree("incl_score_V01", "score_V01", selection, 20, -0.05, 1.05, "Score", "", cutsLabel, jetCutsLabel);  
 
   // +++++++++++++++++++++++++
   // +++      b-veto       +++
