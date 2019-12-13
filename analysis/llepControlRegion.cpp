@@ -331,7 +331,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     float candLep_eta = 0;
     float candLep_phi = 0;
 
-/*
+
     // if reco leps, check those
     int nlep_to_use = myTree.nlep;
     if (nlep_to_use > 0) {
@@ -349,7 +349,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       }
     } // nlep>0
     // otherwise check PF leps that don't overlap with a reco lepton
-    int nIsoTrack_to_use = isETH ? myTree.nIsoTrack : myTree.nisoTrack;
+    int nIsoTrack_to_use = isETH ? myTree.nit : myTree.nisoTrack;
     if (!foundlep && myTree.nPFLep5LowMT > 0) {
       for (int itrk = 0; itrk < nIsoTrack_to_use; ++itrk) {
         float pt = myTree.isoTrack_pt[itrk];
@@ -385,7 +385,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
         break;
       } // loop on isotracks
     }
-*/
+
 //FIXME    if (!foundlep) std::cout << "WARNING! didn't find a lepton candidate" << std::endl;
 
     // HEM electron veto, can do it only after identifying candidate lepton
