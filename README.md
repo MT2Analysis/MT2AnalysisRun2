@@ -237,7 +237,7 @@ Once in the correct folder, create a config file, in the same way as [here](http
 You are ready to create the plot:
 
 ```
-python python/makeSMSplots.py config/<config-file> <name>  
+python python/makeSMSplots.py config/SUS19005/<config-file> <name>  
 ```
 
 
@@ -259,8 +259,10 @@ sh readPLSignificance_Scan.sh <model> <label>
 python drawSMSsignificance.py <txt-file-just-created>
 ```
 
-
-For plotting the contours in SUSY CMS style see  [this link](https://github.com/MT2Analysis/PlotsSMS/blob/master/README)
+For the countours, it proceeds similarly as for the limits:
+```
+python python/makeSIGplots.py config/SUS19005/<config-file> <name>
+```
 
 
 ### Ranking of topological regions
