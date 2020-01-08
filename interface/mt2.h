@@ -487,6 +487,8 @@ public :
    Float_t         deltaPhiMin_genmet;
    Float_t         diffMetMht_genmet;
    Float_t         met_genPt;
+   Double_t        score_V01;//optimization of ML
+   Int_t           MLtag;
    //
 
 
@@ -956,6 +958,8 @@ public :
    TBranch         *b_diffMetMht_genmet; //!
    TBranch         *b_deltaPhiMin_genmet; //!
    TBranch         *b_met_genPt; //!
+   TBranch         *b_MLtag;//MLoptimization
+   TBranch         *b_score_V01;
    //
 
    MT2Tree(TTree *tree=0, bool isETH=true);
@@ -1145,6 +1149,8 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("Flag_badMuonFilter", &Flag_badMuonFilter_INT, &b_Flag_badMuonFilter_INT);
    fChain->SetBranchAddress("Flag_badChargedHadronFilterV2", &Flag_badChargedHadronFilterV2_INT, &b_Flag_badChargedHadronFilterV2_INT);
    }
+   if(fChain->GetBranchStatus("score_V01")) {fChain->SetBranchAddress("score_V01",&score_V01,&b_score_V01);cout<<"attach branch of score"<<endl;}
+   if(fChain->GetBranchStatus("MLtag")) fChain->SetBranchAddress("MLtag",&MLtag,&b_MLtag);
 //    fChain->SetBranchAddress("Flag_HBHENoiseFilter", &Flag_HBHENoiseFilter, &b_Flag_HBHENoiseFilter);
 //    fChain->SetBranchAddress("Flag_HBHENoiseIsoFilter", &Flag_HBHENoiseIsoFilter, &b_Flag_HBHENoiseIsoFilter);
 //    fChain->SetBranchAddress("Flag_CSCTightHaloFilter", &Flag_CSCTightHaloFilter, &b_Flag_CSCTightHaloFilter);
@@ -1215,6 +1221,7 @@ void MT2Tree::Init(TTree *tree, bool isETH)
    fChain->SetBranchAddress("lep_id", lep_id, &b_lep_id);
    fChain->SetBranchAddress("lep_mtw", lep_mtw, &b_lep_mtw);
    fChain->SetBranchAddress("nIt", &nIt, &b_nIt);
+   fChain->SetBranchAddress("nit", &nIt, &b_nIt);
    fChain->SetBranchAddress("isoTrack_pt", isoTrack_pt, &b_isoTrack_pt);
    fChain->SetBranchAddress("isoTrack_eta", isoTrack_eta, &b_isoTrack_eta);
    fChain->SetBranchAddress("isoTrack_phi", isoTrack_phi, &b_isoTrack_phi);

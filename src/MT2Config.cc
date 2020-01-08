@@ -35,13 +35,28 @@ MT2Config::MT2Config( const std::string& name ) {
   qcdMonoJetMCSamples_ = "";
   sigSamples_ = "";
   dataSamples_ = "";
+  zllmcSamples_="";
+  llepmcSamples_="";
+  zllsigSamples_="";
+  llepsigSamples_="";
+  zlldataSamples_="";
+  llepdataSamples_="";
   qcdDataSamples_ = "";
   qcdMonoJetDataSamples_ = "";
   additionalStuff_ = "";
+  dataMLscore_="";
+  mcMLscore_="";
+  zllmcMLscore_="";
+  llepmcMLscore_="";
+  zllsigMLscore_="";
+  llepsigMLscore_="";
+  zlldataMLscore_="";
+  llepdataMLscore_="";
   analysisType_ = "mt2";
   crRegionsSet_ = "13TeV_inclusive";
   qcdRegionsSet_ = "zurich_onlyHT";
-
+  MLcut_=-1;//default no cut on MLscore;
+  isMLcut_=0;
   gammaTemplateRegions_ = "13TeV_inclusive"; // default
   gammaTemplateType_    = "RC"; // default
   gammaIsoCut_    = 2.5; // default
@@ -98,6 +113,18 @@ MT2Config::MT2Config( const std::string& name ) {
       sigSamples_ = std::string(StringValue);
     else if( this_name=="dataSamples" )
       dataSamples_ = std::string(StringValue);
+    else if( this_name=="zllmcSamples" )
+      zllmcSamples_ = std::string(StringValue);
+    else if( this_name=="llepmcSamples" )
+      llepmcSamples_ = std::string(StringValue);
+    else if( this_name=="zllsigSamples" )
+      zllsigSamples_ = std::string(StringValue);
+    else if( this_name=="llepsigSamples" )
+      llepsigSamples_ = std::string(StringValue);
+    else if( this_name=="zlldataSamples" )
+      zlldataSamples_ = std::string(StringValue);
+    else if( this_name=="llepdataSamples" )
+      llepdataSamples_ = std::string(StringValue);
     else if( this_name=="qcdDataSamples" )
       qcdDataSamples_ = std::string(StringValue);
     else if( this_name=="qcdMonoJetDataSamples" )
@@ -120,7 +147,28 @@ MT2Config::MT2Config( const std::string& name ) {
       gamma2bMethod_ = std::string(StringValue);
     else if( this_name=="zllRegions" )
       zllRegions_ = std::string(StringValue);
-
+    else if( this_name=="mcMLscore" )
+      mcMLscore_ = std::string(StringValue);
+    else if( this_name=="dataMLscore" )
+      dataMLscore_ = std::string(StringValue);
+    else if( this_name=="sigMLscore")
+      sigMLscore_ = std::string(StringValue);
+    else if( this_name=="zllmcMLscore" )
+      zllmcMLscore_ = std::string(StringValue);
+    else if( this_name=="llepmcMLscore" )
+      llepmcMLscore_ = std::string(StringValue);
+    else if( this_name=="zllsigMLscore")
+      zllsigMLscore_ = std::string(StringValue);
+    else if( this_name=="llepsigMLscore")
+      llepsigMLscore_ = std::string(StringValue);
+    else if( this_name=="zlldataMLscore")
+      zlldataMLscore_ = std::string(StringValue);
+    else if( this_name=="llepdataMLscore")
+      llepdataMLscore_ = std::string(StringValue);
+    else if( this_name=="MLcut")
+      MLcut_ = atof(StringValue);
+    else if( this_name=="isMLcut")
+      isMLcut_ = atoi(StringValue);
   } // while getline
 
   std::cout << std::endl;
@@ -250,8 +298,19 @@ void MT2Config::saveAs( const std::string& filename ) const {
   if( mcSamples_!="" )       ofs << "mcSamples " << mcSamples_ << std::endl;
   if( sigSamples_!="" )      ofs << "sigSamples " << sigSamples_ << std::endl;
   if( dataSamples_!="" )     ofs << "dataSamples " << dataSamples_ << std::endl;
+  if( zllmcSamples_!="" )    ofs << "zllmcSamples " << zllmcSamples_ << std::endl;
+  if( llepmcSamples_!="" )    ofs << "llepmcSamples " << llepmcSamples_ << std::endl;
+  if( zllsigSamples_!="" )    ofs << "zllsigSamples " << zllsigSamples_ << std::endl;
+  if( llepsigSamples_!="" )    ofs << "llepsigSamples " << llepsigSamples_ << std::endl;
   if( additionalStuff_!="" ) ofs << "additionalStuff " << additionalStuff_ << std::endl;
-
+  if( mcMLscore_!="" )         ofs << "mcMLscore "<<mcMLscore_<<std::endl;
+  if( dataMLscore_!="" )         ofs << "dataMLscore "<<dataMLscore_<<std::endl;
+  if( zllmcMLscore_!="" )         ofs << "zllmcMLscore "<<zllmcMLscore_<<std::endl;
+  if( llepmcMLscore_!="" )         ofs << "llepmcMLscore "<<llepmcMLscore_<<std::endl;
+  if( zllsigMLscore_!="" )         ofs << "zllsigMLscore "<<zllsigMLscore_<<std::endl;
+  if( llepsigMLscore_!="" )         ofs << "llepsigMLscore "<<llepsigMLscore_<<std::endl;
+  if( MLcut_>0 )                    ofs<< "cut on ML score: >= "<<MLcut_<<std::endl; else ofs<< "do not apply cut on ML score "<<std::endl;
+  if( isMLcut_ )                   ofs<<"rejecting mc or signal events used for ML trainging and validation"<<std::endl; else ofs<<"not rejecting events used for ML training"<<std::endl;
   ofs << "gammaTemplateRegions " << gammaTemplateRegions_ << std::endl;
   ofs << "gammaTemplateType " << gammaTemplateType_ << std::endl;
   ofs << "gammaIsoCut " << gammaIsoCut_ << std::endl;

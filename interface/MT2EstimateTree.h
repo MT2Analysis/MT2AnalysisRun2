@@ -82,7 +82,7 @@ class MT2EstimateTree : public MT2Estimate {
   float isotrackPhi;
   float isotrackEta;
   int   isotrack_pdgId;
-
+  double score_V01;
 //  float GenSusyMScan1;
 //  float GenSusyMScan2;
 

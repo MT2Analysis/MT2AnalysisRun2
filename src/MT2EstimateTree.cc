@@ -92,7 +92,7 @@ void MT2EstimateTree::initTree( ) {
   tree->Branch( "isotrackEta", &isotrackEta, "isotrackEta/F");
   tree->Branch( "isotrackPhi", &isotrackPhi, "isotrackPhi/F");
   tree->Branch( "isotrack_pdgId", &isotrack_pdgId, "isotrack_pdgId/I");
-
+  tree->Branch("score_V01",&score_V01,"score_V01/D");
   //tree->Branch( "GenSusyMScan1", &GenSusyMScan1, "GenSusyMScan1/I");
   //tree->Branch( "GenSusyMScan2", &GenSusyMScan2, "GenSusyMScan2/I");
 
@@ -147,7 +147,7 @@ void MT2EstimateTree::initTree4read( ) {
   tree->SetBranchAddress( "isotrackEta"  , &isotrackEta  );
   tree->SetBranchAddress( "isotrackPhi"  , &isotrackPhi  );
   tree->SetBranchAddress( "isotrack_pdgId", &isotrack_pdgId);
-
+  if(tree->GetBranchStatus("score_V01")) tree->SetBranchAddress("score_V01", &score_V01);
   for (std::map< std::string, float* >::iterator i= extraVars.begin(); i!=extraVars.end(); i++)
     tree->SetBranchAddress(i->first.c_str(), (i->second));
 
@@ -492,7 +492,7 @@ void MT2EstimateTree::assignTree( const MT2Tree& mt2tree, float w  ) {
   isotrackEta   = mt2tree.isoTrack_eta[0];
   isotrackPhi   = mt2tree.isoTrack_phi[0];
   isotrack_pdgId = mt2tree.isoTrack_pdgId[0];
-    
+  if(mt2tree.fChain->GetBranchStatus("score_V01")) score_V01=mt2tree.score_V01; 
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;
   //GenSusyMScan2 = mt2tree.GenSusyMNeutralino;
  
@@ -542,7 +542,7 @@ void MT2EstimateTree::assignTree_zll( const MT2Tree& mt2tree, float w ) {
   nMuons        = mt2tree.nMuons10;
   nPFLep        = mt2tree.nPFLep5LowMT;
   nPFHad        = mt2tree.nPFHad10LowMT;
-
+  if(mt2tree.fChain->GetBranchStatus("score_V01")) score_V01=mt2tree.score_V01;
   //nJetHF = mt2tree.get_nJetHF();
 
   //GenSusyMScan1 = mt2tree.GenSusyMGluino;

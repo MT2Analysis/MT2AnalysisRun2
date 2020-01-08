@@ -27,6 +27,21 @@ class MT2Config {
   std::string qcdMCSamples()           const { return qcdMCSamples_; };
   std::string sigSamples()             const { return sigSamples_; };
   std::string dataSamples()            const { return dataSamples_; };
+  std::string mcMLscore()              const { return mcMLscore_;};
+  std::string dataMLscore()            const { return dataMLscore_;};
+  std::string sigMLscore()             const { return sigMLscore_;};
+  std::string zllmcSamples()           const { return zllmcSamples_; };
+  std::string llepmcSamples()          const { return llepmcSamples_; };
+  std::string zllsigSamples()          const { return zllsigSamples_; };
+  std::string llepsigSamples()         const { return llepsigSamples_; };
+  std::string zlldataSamples()         const { return zlldataSamples_; };
+  std::string llepdataSamples()        const { return llepdataSamples_; };
+  std::string zllmcMLscore()           const { return zllmcMLscore_;};
+  std::string llepmcMLscore()          const { return llepmcMLscore_;};
+  std::string zllsigMLscore()          const { return zllsigMLscore_;};
+  std::string llepsigMLscore()         const { return llepsigMLscore_; };
+  std::string zlldataMLscore()         const { return zlldataMLscore_; };
+  std::string llepdataMLscore()        const { return llepdataMLscore_; };
   std::string qcdDataSamples()         const { return qcdDataSamples_; };
   std::string qcdMonoJetMCSamples()    const { return qcdMonoJetMCSamples_; };
   std::string qcdMonoJetDataSamples()  const { return qcdMonoJetDataSamples_; };
@@ -53,6 +68,8 @@ class MT2Config {
   std::string getDiPhotonCRdir() const;
 
   void saveAs( const std::string& filename ) const;
+  float MLcut()    const{ return MLcut_;};
+  bool isMLcut()   const{ return isMLcut_;};
 
  private:
 
@@ -76,6 +93,21 @@ class MT2Config {
   std::string qcdMCSamples_;
   std::string sigSamples_;
   std::string dataSamples_;
+  std::string mcMLscore_;
+  std::string dataMLscore_;
+  std::string sigMLscore_;
+  std::string zllsigSamples_;
+  std::string zllmcSamples_;
+  std::string zlldataSamples_;
+  std::string llepsigSamples_;
+  std::string llepmcSamples_;
+  std::string llepdataSamples_;
+  std::string zllsigMLscore_;
+  std::string zllmcMLscore_;
+  std::string zlldataMLscore_;
+  std::string llepsigMLscore_;
+  std::string llepmcMLscore_;
+  std::string llepdataMLscore_;
   std::string qcdDataSamples_;
   std::string qcdMonoJetDataSamples_;
   std::string qcdMonoJetMCSamples_;
@@ -90,7 +122,8 @@ class MT2Config {
   std::string gamma2bMethod_;
 
   std::string zllRegions_;
-
+  float MLcut_;
+  bool isMLcut_;
 };
 
 
