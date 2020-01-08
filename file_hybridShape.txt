@@ -1,0 +1,5388 @@
+Notation: 
+[1] last bin + sufficient MC_cr statistics
+[2] not last bin + sufficient MC_cr statistics
+[3] not enough MC_cr statistics
+[above] bin above extrapolation bin
+[below] bin below extrapolation bin
+-----------------------------------------------
+
+
+
+--------------------------------------------------
+
+HT250to350_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 85466.7
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 85466.7
+[above] kMT2_zinv: 1
+[above] integralZinv: 85466.7
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 85466.7
+zllHybrid_shape_TR filled with (this_shape_data): 85466.7
+and error: 1806.49
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT350to450_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 23063.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23063.5
+[above] kMT2_zinv: 1
+[above] integralZinv: 23063.5
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 23063.5
+zllHybrid_shape_TR filled with (this_shape_data): 23063.5
+and error: 916.507
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT450to575_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 7448.19
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 7448.19
+[above] kMT2_zinv: 1
+[above] integralZinv: 7448.19
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 7448.19
+zllHybrid_shape_TR filled with (this_shape_data): 7448.19
+and error: 519.791
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT575to700_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 2093.11
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2093.11
+[above] kMT2_zinv: 1
+[above] integralZinv: 2093.11
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2093.11
+zllHybrid_shape_TR filled with (this_shape_data): 2093.11
+and error: 281.212
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT700to1000_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 983.341
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 983.341
+[above] kMT2_zinv: 1
+[above] integralZinv: 983.341
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 983.341
+zllHybrid_shape_TR filled with (this_shape_data): 983.341
+and error: 194.671
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT1000to1200_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 99.2747
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 99.2747
+[above] kMT2_zinv: 1
+[above] integralZinv: 99.2747
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 99.2747
+zllHybrid_shape_TR filled with (this_shape_data): 99.2747
+and error: 75.6304
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT1200toInf_j1_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 38.1219
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 38.1219
+[above] kMT2_zinv: 1
+[above] integralZinv: 38.1219
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 38.1219
+zllHybrid_shape_TR filled with (this_shape_data): 38.1219
+and error: 46.5699
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT250to350_j1_b1toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 5161.36
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 5161.36
+[above] kMT2_zinv: 1
+[above] integralZinv: 5161.36
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5161.36
+zllHybrid_shape_TR filled with (this_shape_data): 5161.36
+and error: 466.211
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT350to450_j1_b1toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 1296.08
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1296.08
+[above] kMT2_zinv: 1
+[above] integralZinv: 1296.08
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1296.08
+zllHybrid_shape_TR filled with (this_shape_data): 1296.08
+and error: 222.701
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT450to575_j1_b1toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 398.926
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 398.926
+[above] kMT2_zinv: 1
+[above] integralZinv: 398.926
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 398.926
+zllHybrid_shape_TR filled with (this_shape_data): 398.926
+and error: 120.519
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT575to700_j1_b1toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 99.738
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 99.738
+[above] kMT2_zinv: 1
+[above] integralZinv: 99.738
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 99.738
+zllHybrid_shape_TR filled with (this_shape_data): 99.738
+and error: 64.9412
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT700toInf_j1_b1toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 43.8283
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 43.8283
+[above] kMT2_zinv: 1
+[above] integralZinv: 43.8283
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 43.8283
+zllHybrid_shape_TR filled with (this_shape_data): 43.8283
+and error: 40.9469
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT250to450_j2to3_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.828012
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.826787
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 79587.6
+zllHybrid_shape_TR filled with (this_shape_data): 79587.6
+and error: 1315.67
+
+Bin 2:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.163883
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.165274
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 15752.3
+zllHybrid_shape_TR filled with (this_shape_data): 15752.3
+and error: 260.403
+
+Bin 3:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.00810523
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.00793892
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 779.066
+zllHybrid_shape_TR filled with (this_shape_data): 779.066
+and error: 12.8788
+
+In bin 1, normalized hybrid_shape is: 0.828012
+In bin 2, normalized hybrid_shape is: 0.163883
+In bin 3, normalized hybrid_shape is: 0.00810523
+
+--------------------------------------------------
+
+HT250to450_j2to3_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.828012
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.826787
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 79587.6
+zllHybrid_shape_TR filled with (this_shape_data): 79587.6
+and error: 1315.67
+
+Bin 2:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.163883
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.165274
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 15752.3
+zllHybrid_shape_TR filled with (this_shape_data): 15752.3
+and error: 260.403
+
+Bin 3:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.00810523
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.00793892
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 779.066
+zllHybrid_shape_TR filled with (this_shape_data): 779.066
+and error: 12.8788
+
+In bin 1, normalized hybrid_shape is: 0.828012
+In bin 2, normalized hybrid_shape is: 0.163883
+In bin 3, normalized hybrid_shape is: 0.00810523
+
+--------------------------------------------------
+
+HT250to450_j2to3_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.828012
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.826787
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 79587.6
+zllHybrid_shape_TR filled with (this_shape_data): 79587.6
+and error: 1315.67
+
+Bin 2:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.163883
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.165274
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 15752.3
+zllHybrid_shape_TR filled with (this_shape_data): 15752.3
+and error: 260.403
+
+Bin 3:
+[above] MC_sr_cont: 96119
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 96119
+[above] kMT2_zinv: 0.00810523
+[above] integralZinv: 96119
+[above] this_shape_data avant: 0.00793892
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 779.066
+zllHybrid_shape_TR filled with (this_shape_data): 779.066
+and error: 12.8788
+
+In bin 1, normalized hybrid_shape is: 0.828012
+In bin 2, normalized hybrid_shape is: 0.163883
+In bin 3, normalized hybrid_shape is: 0.00810523
+
+--------------------------------------------------
+
+HT250to450_j4to6_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.81071
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.813526
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10029.1
+zllHybrid_shape_TR filled with (this_shape_data): 10029.1
+and error: 446.57
+
+Bin 2:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.183203
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.181185
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2266.37
+zllHybrid_shape_TR filled with (this_shape_data): 2266.37
+and error: 100.915
+
+Bin 3:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.0060872
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.00528901
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 75.3037
+zllHybrid_shape_TR filled with (this_shape_data): 75.3037
+and error: 3.35306
+
+In bin 1, normalized hybrid_shape is: 0.81071
+In bin 2, normalized hybrid_shape is: 0.183203
+In bin 3, normalized hybrid_shape is: 0.0060872
+
+--------------------------------------------------
+
+HT250to450_j4to6_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.81071
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.813526
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10029.1
+zllHybrid_shape_TR filled with (this_shape_data): 10029.1
+and error: 446.57
+
+Bin 2:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.183203
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.181185
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2266.37
+zllHybrid_shape_TR filled with (this_shape_data): 2266.37
+and error: 100.915
+
+Bin 3:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.0060872
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.00528901
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 75.3037
+zllHybrid_shape_TR filled with (this_shape_data): 75.3037
+and error: 3.35306
+
+In bin 1, normalized hybrid_shape is: 0.81071
+In bin 2, normalized hybrid_shape is: 0.183203
+In bin 3, normalized hybrid_shape is: 0.0060872
+
+--------------------------------------------------
+
+HT250to450_j4to6_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.81071
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.813526
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10029.1
+zllHybrid_shape_TR filled with (this_shape_data): 10029.1
+and error: 446.57
+
+Bin 2:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.183203
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.181185
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2266.37
+zllHybrid_shape_TR filled with (this_shape_data): 2266.37
+and error: 100.915
+
+Bin 3:
+[above] MC_sr_cont: 12370.8
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 12370.8
+[above] kMT2_zinv: 0.0060872
+[above] integralZinv: 12370.8
+[above] this_shape_data avant: 0.00528901
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 75.3037
+zllHybrid_shape_TR filled with (this_shape_data): 75.3037
+and error: 3.35306
+
+In bin 1, normalized hybrid_shape is: 0.81071
+In bin 2, normalized hybrid_shape is: 0.183203
+In bin 3, normalized hybrid_shape is: 0.0060872
+
+--------------------------------------------------
+
+HT250to450_j7toInf_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.901785
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.895183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.9605
+zllHybrid_shape_TR filled with (this_shape_data): 14.9605
+and error: 15.4408
+
+Bin 2:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.0982152
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.104817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.62938
+zllHybrid_shape_TR filled with (this_shape_data): 1.62938
+and error: 1.68168
+
+Bin 3:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0
+zllHybrid_shape_TR filled with (this_shape_data): 0
+and error: 0
+
+In bin 1, normalized hybrid_shape is: 0.901785
+In bin 2, normalized hybrid_shape is: 0.0982152
+In bin 3, normalized hybrid_shape is: 0
+
+--------------------------------------------------
+
+HT250to450_j7toInf_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.901785
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.895183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.9605
+zllHybrid_shape_TR filled with (this_shape_data): 14.9605
+and error: 15.4408
+
+Bin 2:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.0982152
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.104817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.62938
+zllHybrid_shape_TR filled with (this_shape_data): 1.62938
+and error: 1.68168
+
+In bin 1, normalized hybrid_shape is: 0.901785
+In bin 2, normalized hybrid_shape is: 0.0982152
+
+--------------------------------------------------
+
+HT250to450_j7toInf_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.901785
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.895183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.9605
+zllHybrid_shape_TR filled with (this_shape_data): 14.9605
+and error: 15.4408
+
+Bin 2:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.0982152
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.104817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.62938
+zllHybrid_shape_TR filled with (this_shape_data): 1.62938
+and error: 1.68168
+
+In bin 1, normalized hybrid_shape is: 0.901785
+In bin 2, normalized hybrid_shape is: 0.0982152
+
+--------------------------------------------------
+
+HT250to450_j2to6_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 45207.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 45207.5
+[above] kMT2_zinv: 0.810096
+[above] integralZinv: 45207.5
+[above] this_shape_data avant: 0.808253
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 36622.4
+zllHybrid_shape_TR filled with (this_shape_data): 36622.4
+and error: 856.868
+
+Bin 2:
+[above] MC_sr_cont: 45207.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 45207.5
+[above] kMT2_zinv: 0.182579
+[above] integralZinv: 45207.5
+[above] this_shape_data avant: 0.184855
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 8253.92
+zllHybrid_shape_TR filled with (this_shape_data): 8253.92
+and error: 193.12
+
+Bin 3:
+[above] MC_sr_cont: 45207.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 45207.5
+[above] kMT2_zinv: 0.0073254
+[above] integralZinv: 45207.5
+[above] this_shape_data avant: 0.00689167
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 331.163
+zllHybrid_shape_TR filled with (this_shape_data): 331.163
+and error: 7.74834
+
+In bin 1, normalized hybrid_shape is: 0.810096
+In bin 2, normalized hybrid_shape is: 0.182579
+In bin 3, normalized hybrid_shape is: 0.0073254
+
+--------------------------------------------------
+
+HT250to450_j7toInf_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.901785
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.895183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.9605
+zllHybrid_shape_TR filled with (this_shape_data): 14.9605
+and error: 15.4408
+
+Bin 2:
+[above] MC_sr_cont: 16.5899
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 16.5899
+[above] kMT2_zinv: 0.0982152
+[above] integralZinv: 16.5899
+[above] this_shape_data avant: 0.104817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.62938
+zllHybrid_shape_TR filled with (this_shape_data): 1.62938
+and error: 1.68168
+
+In bin 1, normalized hybrid_shape is: 0.901785
+In bin 2, normalized hybrid_shape is: 0.0982152
+
+--------------------------------------------------
+
+HT450to575_j2to3_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.543689
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.544852
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 12525.3
+zllHybrid_shape_TR filled with (this_shape_data): 12525.3
+and error: 326.904
+
+Bin 2:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.306763
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.307683
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 7067.1
+zllHybrid_shape_TR filled with (this_shape_data): 7067.1
+and error: 184.448
+
+Bin 3:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.133569
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.13174
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3077.11
+zllHybrid_shape_TR filled with (this_shape_data): 3077.11
+and error: 80.3109
+
+Bin 4:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.015979
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.0157255
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 368.118
+zllHybrid_shape_TR filled with (this_shape_data): 368.118
+and error: 9.60767
+
+In bin 1, normalized hybrid_shape is: 0.543689
+In bin 2, normalized hybrid_shape is: 0.306763
+In bin 3, normalized hybrid_shape is: 0.133569
+In bin 4, normalized hybrid_shape is: 0.015979
+
+--------------------------------------------------
+
+HT450to575_j2to3_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.543689
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.544852
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 12525.3
+zllHybrid_shape_TR filled with (this_shape_data): 12525.3
+and error: 326.904
+
+Bin 2:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.306763
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.307683
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 7067.1
+zllHybrid_shape_TR filled with (this_shape_data): 7067.1
+and error: 184.448
+
+Bin 3:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.133569
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.13174
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3077.11
+zllHybrid_shape_TR filled with (this_shape_data): 3077.11
+and error: 80.3109
+
+Bin 4:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.015979
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.0157255
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 368.118
+zllHybrid_shape_TR filled with (this_shape_data): 368.118
+and error: 9.60767
+
+In bin 1, normalized hybrid_shape is: 0.543689
+In bin 2, normalized hybrid_shape is: 0.306763
+In bin 3, normalized hybrid_shape is: 0.133569
+In bin 4, normalized hybrid_shape is: 0.015979
+
+--------------------------------------------------
+
+HT450to575_j2to3_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.543689
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.544852
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 12525.3
+zllHybrid_shape_TR filled with (this_shape_data): 12525.3
+and error: 326.904
+
+Bin 2:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.306763
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.307683
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 7067.1
+zllHybrid_shape_TR filled with (this_shape_data): 7067.1
+and error: 184.448
+
+Bin 3:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.133569
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.13174
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3077.11
+zllHybrid_shape_TR filled with (this_shape_data): 3077.11
+and error: 80.3109
+
+Bin 4:
+[above] MC_sr_cont: 23037.6
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 23037.6
+[above] kMT2_zinv: 0.015979
+[above] integralZinv: 23037.6
+[above] this_shape_data avant: 0.0157255
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 368.118
+zllHybrid_shape_TR filled with (this_shape_data): 368.118
+and error: 9.60767
+
+In bin 1, normalized hybrid_shape is: 0.543689
+In bin 2, normalized hybrid_shape is: 0.306763
+In bin 3, normalized hybrid_shape is: 0.133569
+In bin 4, normalized hybrid_shape is: 0.015979
+
+--------------------------------------------------
+
+HT450to575_j4to6_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.589614
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.592606
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 4871.53
+zllHybrid_shape_TR filled with (this_shape_data): 4871.53
+and error: 216.912
+
+Bin 2:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.317266
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.315525
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2621.33
+zllHybrid_shape_TR filled with (this_shape_data): 2621.33
+and error: 116.718
+
+Bin 3:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.0870561
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.0868808
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 719.279
+zllHybrid_shape_TR filled with (this_shape_data): 719.279
+and error: 32.0269
+
+Bin 4:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.00606442
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.00498811
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 50.1057
+zllHybrid_shape_TR filled with (this_shape_data): 50.1057
+and error: 2.23103
+
+In bin 1, normalized hybrid_shape is: 0.589614
+In bin 2, normalized hybrid_shape is: 0.317266
+In bin 3, normalized hybrid_shape is: 0.0870561
+In bin 4, normalized hybrid_shape is: 0.00606442
+
+--------------------------------------------------
+
+HT450to575_j4to6_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.589614
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.592606
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 4871.53
+zllHybrid_shape_TR filled with (this_shape_data): 4871.53
+and error: 216.912
+
+Bin 2:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.317266
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.315525
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2621.33
+zllHybrid_shape_TR filled with (this_shape_data): 2621.33
+and error: 116.718
+
+Bin 3:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.0870561
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.0868808
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 719.279
+zllHybrid_shape_TR filled with (this_shape_data): 719.279
+and error: 32.0269
+
+Bin 4:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.00606442
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.00498811
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 50.1057
+zllHybrid_shape_TR filled with (this_shape_data): 50.1057
+and error: 2.23103
+
+In bin 1, normalized hybrid_shape is: 0.589614
+In bin 2, normalized hybrid_shape is: 0.317266
+In bin 3, normalized hybrid_shape is: 0.0870561
+In bin 4, normalized hybrid_shape is: 0.00606442
+
+--------------------------------------------------
+
+HT450to575_j4to6_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.589614
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.592606
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 4871.53
+zllHybrid_shape_TR filled with (this_shape_data): 4871.53
+and error: 216.912
+
+Bin 2:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.317266
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.315525
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2621.33
+zllHybrid_shape_TR filled with (this_shape_data): 2621.33
+and error: 116.718
+
+Bin 3:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.0870561
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.0868808
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 719.279
+zllHybrid_shape_TR filled with (this_shape_data): 719.279
+and error: 32.0269
+
+Bin 4:
+[above] MC_sr_cont: 8262.25
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 8262.25
+[above] kMT2_zinv: 0.00606442
+[above] integralZinv: 8262.25
+[above] this_shape_data avant: 0.00498811
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 50.1057
+zllHybrid_shape_TR filled with (this_shape_data): 50.1057
+and error: 2.23103
+
+In bin 1, normalized hybrid_shape is: 0.589614
+In bin 2, normalized hybrid_shape is: 0.317266
+In bin 3, normalized hybrid_shape is: 0.0870561
+In bin 4, normalized hybrid_shape is: 0.00606442
+
+--------------------------------------------------
+
+HT450to575_j7toInf_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.685384
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.693642
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 52.178
+zllHybrid_shape_TR filled with (this_shape_data): 52.178
+and error: 21.0596
+
+Bin 2:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.276938
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.272921
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 21.0831
+zllHybrid_shape_TR filled with (this_shape_data): 21.0831
+and error: 8.50938
+
+Bin 3:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.0376781
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.033437
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.86842
+zllHybrid_shape_TR filled with (this_shape_data): 2.86842
+and error: 1.15772
+
+In bin 1, normalized hybrid_shape is: 0.685384
+In bin 2, normalized hybrid_shape is: 0.276938
+In bin 3, normalized hybrid_shape is: 0.0376781
+
+--------------------------------------------------
+
+HT450to575_j7toInf_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.685384
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.693642
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 52.178
+zllHybrid_shape_TR filled with (this_shape_data): 52.178
+and error: 21.0596
+
+Bin 2:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.276938
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.272921
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 21.0831
+zllHybrid_shape_TR filled with (this_shape_data): 21.0831
+and error: 8.50938
+
+Bin 3:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.0376781
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.033437
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.86842
+zllHybrid_shape_TR filled with (this_shape_data): 2.86842
+and error: 1.15772
+
+In bin 1, normalized hybrid_shape is: 0.685384
+In bin 2, normalized hybrid_shape is: 0.276938
+In bin 3, normalized hybrid_shape is: 0.0376781
+
+--------------------------------------------------
+
+HT450to575_j7toInf_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.685384
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.693642
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 52.178
+zllHybrid_shape_TR filled with (this_shape_data): 52.178
+and error: 21.0596
+
+Bin 2:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.276938
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.272921
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 21.0831
+zllHybrid_shape_TR filled with (this_shape_data): 21.0831
+and error: 8.50938
+
+Bin 3:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.0376781
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.033437
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.86842
+zllHybrid_shape_TR filled with (this_shape_data): 2.86842
+and error: 1.15772
+
+In bin 1, normalized hybrid_shape is: 0.685384
+In bin 2, normalized hybrid_shape is: 0.276938
+In bin 3, normalized hybrid_shape is: 0.0376781
+
+--------------------------------------------------
+
+HT450to575_j2to6_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 19082.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 19082.2
+[above] kMT2_zinv: 0.556109
+[above] integralZinv: 19082.2
+[above] this_shape_data avant: 0.559207
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10611.8
+zllHybrid_shape_TR filled with (this_shape_data): 10611.8
+and error: 305.395
+
+Bin 2:
+[above] MC_sr_cont: 19082.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 19082.2
+[above] kMT2_zinv: 0.32231
+[above] integralZinv: 19082.2
+[above] this_shape_data avant: 0.321128
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 6150.4
+zllHybrid_shape_TR filled with (this_shape_data): 6150.4
+and error: 177.001
+
+Bin 3:
+[above] MC_sr_cont: 19082.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 19082.2
+[above] kMT2_zinv: 0.111833
+[above] integralZinv: 19082.2
+[above] this_shape_data avant: 0.110196
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2134.03
+zllHybrid_shape_TR filled with (this_shape_data): 2134.03
+and error: 61.4148
+
+Bin 4:
+[above] MC_sr_cont: 19082.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 19082.2
+[above] kMT2_zinv: 0.0097472
+[above] integralZinv: 19082.2
+[above] this_shape_data avant: 0.00946838
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 185.998
+zllHybrid_shape_TR filled with (this_shape_data): 185.998
+and error: 5.35281
+
+In bin 1, normalized hybrid_shape is: 0.556109
+In bin 2, normalized hybrid_shape is: 0.32231
+In bin 3, normalized hybrid_shape is: 0.111833
+In bin 4, normalized hybrid_shape is: 0.0097472
+
+--------------------------------------------------
+
+HT450to575_j7toInf_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.685384
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.693642
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 52.178
+zllHybrid_shape_TR filled with (this_shape_data): 52.178
+and error: 21.0596
+
+Bin 2:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.276938
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.272921
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 21.0831
+zllHybrid_shape_TR filled with (this_shape_data): 21.0831
+and error: 8.50938
+
+Bin 3:
+[above] MC_sr_cont: 76.1295
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 76.1295
+[above] kMT2_zinv: 0.0376781
+[above] integralZinv: 76.1295
+[above] this_shape_data avant: 0.033437
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.86842
+zllHybrid_shape_TR filled with (this_shape_data): 2.86842
+and error: 1.15772
+
+In bin 1, normalized hybrid_shape is: 0.685384
+In bin 2, normalized hybrid_shape is: 0.276938
+In bin 3, normalized hybrid_shape is: 0.0376781
+
+--------------------------------------------------
+
+HT575to1200_j2to3_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 10
+
+Bin 1:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.435579
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.438213
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 8193.71
+zllHybrid_shape_TR filled with (this_shape_data): 8193.71
+and error: 206.479
+
+Bin 2:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.276257
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.276147
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5196.68
+zllHybrid_shape_TR filled with (this_shape_data): 5196.68
+and error: 130.955
+
+Bin 3:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.149102
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.147769
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2804.76
+zllHybrid_shape_TR filled with (this_shape_data): 2804.76
+and error: 70.6792
+
+Bin 4:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.0842383
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.0843102
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1584.61
+zllHybrid_shape_TR filled with (this_shape_data): 1584.61
+and error: 39.9317
+
+Bin 5:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.0346775
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.0340033
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 652.321
+zllHybrid_shape_TR filled with (this_shape_data): 652.321
+and error: 16.4383
+
+Bin 6:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.0127098
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.0122212
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 239.086
+zllHybrid_shape_TR filled with (this_shape_data): 239.086
+and error: 6.02488
+
+Bin 7:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.00496262
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.00480863
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 93.3522
+zllHybrid_shape_TR filled with (this_shape_data): 93.3522
+and error: 2.35245
+
+Bin 8:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.00175624
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.00184621
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 33.0367
+zllHybrid_shape_TR filled with (this_shape_data): 33.0367
+and error: 0.832516
+
+Bin 9:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.000588952
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.00059569
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 11.0788
+zllHybrid_shape_TR filled with (this_shape_data): 11.0788
+and error: 0.279183
+
+Bin 10:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.000128815
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 8.58248e-05
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.42315
+zllHybrid_shape_TR filled with (this_shape_data): 2.42315
+and error: 0.0610627
+
+In bin 1, normalized hybrid_shape is: 0.435579
+In bin 2, normalized hybrid_shape is: 0.276257
+In bin 3, normalized hybrid_shape is: 0.149102
+In bin 4, normalized hybrid_shape is: 0.0842383
+In bin 5, normalized hybrid_shape is: 0.0346775
+In bin 6, normalized hybrid_shape is: 0.0127098
+In bin 7, normalized hybrid_shape is: 0.00496262
+In bin 8, normalized hybrid_shape is: 0.00175624
+In bin 9, normalized hybrid_shape is: 0.000588952
+In bin 10, normalized hybrid_shape is: 0.000128815
+
+--------------------------------------------------
+
+HT575to1200_j2to3_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.435579
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.438213
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 8193.71
+zllHybrid_shape_TR filled with (this_shape_data): 8193.71
+and error: 214.013
+
+Bin 2:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.276257
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.276147
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5196.68
+zllHybrid_shape_TR filled with (this_shape_data): 5196.68
+and error: 135.733
+
+Bin 3:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.23334
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.232079
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 4389.37
+zllHybrid_shape_TR filled with (this_shape_data): 4389.37
+and error: 114.647
+
+Bin 4:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.0473873
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.0462245
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 891.406
+zllHybrid_shape_TR filled with (this_shape_data): 891.406
+and error: 23.2829
+
+Bin 5:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.00671886
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.00665485
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 126.389
+zllHybrid_shape_TR filled with (this_shape_data): 126.389
+and error: 3.30118
+
+Bin 6:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.000717767
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.000681515
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 13.502
+zllHybrid_shape_TR filled with (this_shape_data): 13.502
+and error: 0.352661
+
+In bin 1, normalized hybrid_shape is: 0.435579
+In bin 2, normalized hybrid_shape is: 0.276257
+In bin 3, normalized hybrid_shape is: 0.23334
+In bin 4, normalized hybrid_shape is: 0.0473873
+In bin 5, normalized hybrid_shape is: 0.00671886
+In bin 6, normalized hybrid_shape is: 0.000717767
+
+--------------------------------------------------
+
+HT575to1200_j2to3_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.435579
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.438213
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 8193.71
+zllHybrid_shape_TR filled with (this_shape_data): 8193.71
+and error: 213.971
+
+Bin 2:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.276257
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.276147
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5196.68
+zllHybrid_shape_TR filled with (this_shape_data): 5196.68
+and error: 135.706
+
+Bin 3:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.23334
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.232079
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 4389.37
+zllHybrid_shape_TR filled with (this_shape_data): 4389.37
+and error: 114.624
+
+Bin 4:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.0473873
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.0462245
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 891.406
+zllHybrid_shape_TR filled with (this_shape_data): 891.406
+and error: 23.2782
+
+Bin 5:
+[above] MC_sr_cont: 18811.1
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 18811.1
+[above] kMT2_zinv: 0.00743663
+[above] integralZinv: 18811.1
+[above] this_shape_data avant: 0.00733636
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 139.891
+zllHybrid_shape_TR filled with (this_shape_data): 139.891
+and error: 3.65311
+
+In bin 1, normalized hybrid_shape is: 0.435579
+In bin 2, normalized hybrid_shape is: 0.276257
+In bin 3, normalized hybrid_shape is: 0.23334
+In bin 4, normalized hybrid_shape is: 0.0473873
+In bin 5, normalized hybrid_shape is: 0.00743663
+
+--------------------------------------------------
+
+HT575to1200_j4to6_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 10
+
+Bin 1:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.476714
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.477432
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5582.58
+zllHybrid_shape_TR filled with (this_shape_data): 5582.58
+and error: 178.732
+
+Bin 2:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.280369
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.280072
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3283.27
+zllHybrid_shape_TR filled with (this_shape_data): 3283.27
+and error: 105.117
+
+Bin 3:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.139119
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.138897
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1629.16
+zllHybrid_shape_TR filled with (this_shape_data): 1629.16
+and error: 52.1594
+
+Bin 4:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.0641396
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.0644064
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 751.108
+zllHybrid_shape_TR filled with (this_shape_data): 751.108
+and error: 24.0476
+
+Bin 5:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.0252028
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.0248722
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 295.138
+zllHybrid_shape_TR filled with (this_shape_data): 295.138
+and error: 9.44918
+
+Bin 6:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.00932007
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.00921084
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 109.143
+zllHybrid_shape_TR filled with (this_shape_data): 109.143
+and error: 3.49433
+
+Bin 7:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.00351116
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.00345921
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 41.1175
+zllHybrid_shape_TR filled with (this_shape_data): 41.1175
+and error: 1.31642
+
+Bin 8:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.00128499
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.00124124
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 15.0479
+zllHybrid_shape_TR filled with (this_shape_data): 15.0479
+and error: 0.481775
+
+Bin 9:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.000317312
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.000344374
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3.71588
+zllHybrid_shape_TR filled with (this_shape_data): 3.71588
+and error: 0.118968
+
+Bin 10:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 2.14503e-05
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 6.48314e-05
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.251194
+zllHybrid_shape_TR filled with (this_shape_data): 0.251194
+and error: 0.00804226
+
+In bin 1, normalized hybrid_shape is: 0.476714
+In bin 2, normalized hybrid_shape is: 0.280369
+In bin 3, normalized hybrid_shape is: 0.139119
+In bin 4, normalized hybrid_shape is: 0.0641396
+In bin 5, normalized hybrid_shape is: 0.0252028
+In bin 6, normalized hybrid_shape is: 0.00932007
+In bin 7, normalized hybrid_shape is: 0.00351116
+In bin 8, normalized hybrid_shape is: 0.00128499
+In bin 9, normalized hybrid_shape is: 0.000317312
+In bin 10, normalized hybrid_shape is: 2.14503e-05
+
+--------------------------------------------------
+
+HT575to1200_j4to6_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.476714
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.477432
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5582.58
+zllHybrid_shape_TR filled with (this_shape_data): 5582.58
+and error: 183.127
+
+Bin 2:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.280369
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.280072
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3283.27
+zllHybrid_shape_TR filled with (this_shape_data): 3283.27
+and error: 107.702
+
+Bin 3:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.203259
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.203303
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2380.27
+zllHybrid_shape_TR filled with (this_shape_data): 2380.27
+and error: 78.0807
+
+Bin 4:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.0345229
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.0340831
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 404.281
+zllHybrid_shape_TR filled with (this_shape_data): 404.281
+and error: 13.2618
+
+Bin 5:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.00479615
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.00470046
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 56.1654
+zllHybrid_shape_TR filled with (this_shape_data): 56.1654
+and error: 1.84241
+
+Bin 6:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.000338762
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.000409206
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3.96708
+zllHybrid_shape_TR filled with (this_shape_data): 3.96708
+and error: 0.130133
+
+In bin 1, normalized hybrid_shape is: 0.476714
+In bin 2, normalized hybrid_shape is: 0.280369
+In bin 3, normalized hybrid_shape is: 0.203259
+In bin 4, normalized hybrid_shape is: 0.0345229
+In bin 5, normalized hybrid_shape is: 0.00479615
+In bin 6, normalized hybrid_shape is: 0.000338762
+
+--------------------------------------------------
+
+HT575to1200_j4to6_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.476714
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.477432
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5582.58
+zllHybrid_shape_TR filled with (this_shape_data): 5582.58
+and error: 183.136
+
+Bin 2:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.280369
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.280072
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3283.27
+zllHybrid_shape_TR filled with (this_shape_data): 3283.27
+and error: 107.707
+
+Bin 3:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.203259
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.203303
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2380.27
+zllHybrid_shape_TR filled with (this_shape_data): 2380.27
+and error: 78.0846
+
+Bin 4:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.0345229
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.0340831
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 404.281
+zllHybrid_shape_TR filled with (this_shape_data): 404.281
+and error: 13.2624
+
+Bin 5:
+[above] MC_sr_cont: 11710.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 11710.5
+[above] kMT2_zinv: 0.00513491
+[above] integralZinv: 11710.5
+[above] this_shape_data avant: 0.00510966
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.1325
+zllHybrid_shape_TR filled with (this_shape_data): 60.1325
+and error: 1.97264
+
+In bin 1, normalized hybrid_shape is: 0.476714
+In bin 2, normalized hybrid_shape is: 0.280369
+In bin 3, normalized hybrid_shape is: 0.203259
+In bin 4, normalized hybrid_shape is: 0.0345229
+In bin 5, normalized hybrid_shape is: 0.00513491
+
+--------------------------------------------------
+
+HT575to1200_j7to9_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.527361
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.524674
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 237.472
+zllHybrid_shape_TR filled with (this_shape_data): 237.472
+and error: 36.699
+
+Bin 2:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.282477
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.286005
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 127.2
+zllHybrid_shape_TR filled with (this_shape_data): 127.2
+and error: 19.6575
+
+Bin 3:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.163828
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.16119
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 73.7724
+zllHybrid_shape_TR filled with (this_shape_data): 73.7724
+and error: 11.4008
+
+Bin 4:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.0228863
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.025023
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10.3058
+zllHybrid_shape_TR filled with (this_shape_data): 10.3058
+and error: 1.59266
+
+Bin 5:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.00344768
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.0031072
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.5525
+zllHybrid_shape_TR filled with (this_shape_data): 1.5525
+and error: 0.239924
+
+In bin 1, normalized hybrid_shape is: 0.527361
+In bin 2, normalized hybrid_shape is: 0.282477
+In bin 3, normalized hybrid_shape is: 0.163828
+In bin 4, normalized hybrid_shape is: 0.0228863
+In bin 5, normalized hybrid_shape is: 0.00344768
+
+--------------------------------------------------
+
+HT575to1200_j7to9_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.527361
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.524674
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 237.472
+zllHybrid_shape_TR filled with (this_shape_data): 237.472
+and error: 36.699
+
+Bin 2:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.282477
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.286005
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 127.2
+zllHybrid_shape_TR filled with (this_shape_data): 127.2
+and error: 19.6575
+
+Bin 3:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.163828
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.16119
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 73.7724
+zllHybrid_shape_TR filled with (this_shape_data): 73.7724
+and error: 11.4008
+
+Bin 4:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.0228863
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.025023
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10.3058
+zllHybrid_shape_TR filled with (this_shape_data): 10.3058
+and error: 1.59266
+
+Bin 5:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.00344768
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.0031072
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.5525
+zllHybrid_shape_TR filled with (this_shape_data): 1.5525
+and error: 0.239924
+
+In bin 1, normalized hybrid_shape is: 0.527361
+In bin 2, normalized hybrid_shape is: 0.282477
+In bin 3, normalized hybrid_shape is: 0.163828
+In bin 4, normalized hybrid_shape is: 0.0228863
+In bin 5, normalized hybrid_shape is: 0.00344768
+
+--------------------------------------------------
+
+HT575to1200_j7to9_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.527361
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.524674
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 237.472
+zllHybrid_shape_TR filled with (this_shape_data): 237.472
+and error: 36.699
+
+Bin 2:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.282477
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.286005
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 127.2
+zllHybrid_shape_TR filled with (this_shape_data): 127.2
+and error: 19.6575
+
+Bin 3:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.163828
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.16119
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 73.7724
+zllHybrid_shape_TR filled with (this_shape_data): 73.7724
+and error: 11.4008
+
+Bin 4:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.0228863
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.025023
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10.3058
+zllHybrid_shape_TR filled with (this_shape_data): 10.3058
+and error: 1.59266
+
+Bin 5:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.00344768
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.0031072
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.5525
+zllHybrid_shape_TR filled with (this_shape_data): 1.5525
+and error: 0.239924
+
+In bin 1, normalized hybrid_shape is: 0.527361
+In bin 2, normalized hybrid_shape is: 0.282477
+In bin 3, normalized hybrid_shape is: 0.163828
+In bin 4, normalized hybrid_shape is: 0.0228863
+In bin 5, normalized hybrid_shape is: 0.00344768
+
+--------------------------------------------------
+
+HT575to1200_j7to9_b3
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.527361
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.524674
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 237.472
+zllHybrid_shape_TR filled with (this_shape_data): 237.472
+and error: 36.7089
+
+Bin 2:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.282477
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.286005
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 127.2
+zllHybrid_shape_TR filled with (this_shape_data): 127.2
+and error: 19.6628
+
+Bin 3:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.163828
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.16119
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 73.7724
+zllHybrid_shape_TR filled with (this_shape_data): 73.7724
+and error: 11.4039
+
+Bin 4:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.026334
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.0281302
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 11.8583
+zllHybrid_shape_TR filled with (this_shape_data): 11.8583
+and error: 1.83307
+
+In bin 1, normalized hybrid_shape is: 0.527361
+In bin 2, normalized hybrid_shape is: 0.282477
+In bin 3, normalized hybrid_shape is: 0.163828
+In bin 4, normalized hybrid_shape is: 0.026334
+
+--------------------------------------------------
+
+HT575to1200_j10toInf_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.558292
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.496348
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.56275
+zllHybrid_shape_TR filled with (this_shape_data): 1.56275
+and error: 2.51684
+
+Bin 2:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.37884
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.428022
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.06043
+zllHybrid_shape_TR filled with (this_shape_data): 1.06043
+and error: 1.70785
+
+Bin 3:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.0628676
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.07563
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.175976
+zllHybrid_shape_TR filled with (this_shape_data): 0.175976
+and error: 0.283414
+
+In bin 1, normalized hybrid_shape is: 0.558292
+In bin 2, normalized hybrid_shape is: 0.37884
+In bin 3, normalized hybrid_shape is: 0.0628676
+
+--------------------------------------------------
+
+HT575to1200_j10toInf_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.558292
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.496348
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.56275
+zllHybrid_shape_TR filled with (this_shape_data): 1.56275
+and error: 2.51684
+
+Bin 2:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.37884
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.428022
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.06043
+zllHybrid_shape_TR filled with (this_shape_data): 1.06043
+and error: 1.70785
+
+Bin 3:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.0628676
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.07563
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.175976
+zllHybrid_shape_TR filled with (this_shape_data): 0.175976
+and error: 0.283414
+
+In bin 1, normalized hybrid_shape is: 0.558292
+In bin 2, normalized hybrid_shape is: 0.37884
+In bin 3, normalized hybrid_shape is: 0.0628676
+
+--------------------------------------------------
+
+HT575to1200_j10toInf_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.558292
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.496348
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.56275
+zllHybrid_shape_TR filled with (this_shape_data): 1.56275
+and error: 2.51684
+
+Bin 2:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.37884
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.428022
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.06043
+zllHybrid_shape_TR filled with (this_shape_data): 1.06043
+and error: 1.70785
+
+Bin 3:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.0628676
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.07563
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.175976
+zllHybrid_shape_TR filled with (this_shape_data): 0.175976
+and error: 0.283414
+
+In bin 1, normalized hybrid_shape is: 0.558292
+In bin 2, normalized hybrid_shape is: 0.37884
+In bin 3, normalized hybrid_shape is: 0.0628676
+
+--------------------------------------------------
+
+HT575to1200_j10toInf_b3
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.558292
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.496348
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.56275
+zllHybrid_shape_TR filled with (this_shape_data): 1.56275
+and error: 2.69163
+
+Bin 2:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 0.441708
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 0.503652
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.23641
+zllHybrid_shape_TR filled with (this_shape_data): 1.23641
+and error: 2.12956
+
+In bin 1, normalized hybrid_shape is: 0.558292
+In bin 2, normalized hybrid_shape is: 0.441708
+
+--------------------------------------------------
+
+HT575to1200_j2to6_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 21764.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 21764.5
+[above] kMT2_zinv: 0.459427
+[above] integralZinv: 21764.5
+[above] this_shape_data avant: 0.461247
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 9999.22
+zllHybrid_shape_TR filled with (this_shape_data): 9999.22
+and error: 240.627
+
+Bin 2:
+[above] MC_sr_cont: 21764.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 21764.5
+[above] kMT2_zinv: 0.275939
+[above] integralZinv: 21764.5
+[above] this_shape_data avant: 0.275401
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 6005.68
+zllHybrid_shape_TR filled with (this_shape_data): 6005.68
+and error: 144.524
+
+Bin 3:
+[above] MC_sr_cont: 21764.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 21764.5
+[above] kMT2_zinv: 0.218408
+[above] integralZinv: 21764.5
+[above] this_shape_data avant: 0.218276
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 4753.54
+zllHybrid_shape_TR filled with (this_shape_data): 4753.54
+and error: 114.392
+
+Bin 4:
+[above] MC_sr_cont: 21764.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 21764.5
+[above] kMT2_zinv: 0.0400848
+[above] integralZinv: 21764.5
+[above] this_shape_data avant: 0.03907
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 872.428
+zllHybrid_shape_TR filled with (this_shape_data): 872.428
+and error: 20.9946
+
+Bin 5:
+[above] MC_sr_cont: 21764.5
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 21764.5
+[above] kMT2_zinv: 0.00614211
+[above] integralZinv: 21764.5
+[above] this_shape_data avant: 0.00600647
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 133.68
+zllHybrid_shape_TR filled with (this_shape_data): 133.68
+and error: 3.21696
+
+In bin 1, normalized hybrid_shape is: 0.459427
+In bin 2, normalized hybrid_shape is: 0.275939
+In bin 3, normalized hybrid_shape is: 0.218408
+In bin 4, normalized hybrid_shape is: 0.0400848
+In bin 5, normalized hybrid_shape is: 0.00614211
+
+--------------------------------------------------
+
+HT575to1200_j7to9_b4toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.527361
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.524674
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 237.472
+zllHybrid_shape_TR filled with (this_shape_data): 237.472
+and error: 37.313
+
+Bin 2:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.282477
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.286005
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 127.2
+zllHybrid_shape_TR filled with (this_shape_data): 127.2
+and error: 19.9864
+
+Bin 3:
+[above] MC_sr_cont: 450.303
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 450.303
+[above] kMT2_zinv: 0.190162
+[above] integralZinv: 450.303
+[above] this_shape_data avant: 0.189321
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 85.6306
+zllHybrid_shape_TR filled with (this_shape_data): 85.6306
+and error: 13.4548
+
+In bin 1, normalized hybrid_shape is: 0.527361
+In bin 2, normalized hybrid_shape is: 0.282477
+In bin 3, normalized hybrid_shape is: 0.190162
+
+--------------------------------------------------
+
+HT575to1200_j10toInf_b4toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 2.79915
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.79915
+[above] kMT2_zinv: 1
+[above] integralZinv: 2.79915
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.79915
+zllHybrid_shape_TR filled with (this_shape_data): 2.79915
+and error: 8.00565
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT1200to1500_j2to3_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.674099
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.672814
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 519.92
+zllHybrid_shape_TR filled with (this_shape_data): 519.92
+and error: 79.5496
+
+Bin 2:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.191983
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.191213
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 148.073
+zllHybrid_shape_TR filled with (this_shape_data): 148.073
+and error: 22.6556
+
+Bin 3:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0716041
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0736688
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 55.2269
+zllHybrid_shape_TR filled with (this_shape_data): 55.2269
+and error: 8.44991
+
+Bin 4:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0376771
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0361718
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0597
+zllHybrid_shape_TR filled with (this_shape_data): 29.0597
+and error: 4.44623
+
+Bin 5:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0176291
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0196369
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 13.597
+zllHybrid_shape_TR filled with (this_shape_data): 13.597
+and error: 2.08039
+
+Bin 6:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.00700857
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.00649569
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.40559
+zllHybrid_shape_TR filled with (this_shape_data): 5.40559
+and error: 0.827073
+
+In bin 1, normalized hybrid_shape is: 0.674099
+In bin 2, normalized hybrid_shape is: 0.191983
+In bin 3, normalized hybrid_shape is: 0.0716041
+In bin 4, normalized hybrid_shape is: 0.0376771
+In bin 5, normalized hybrid_shape is: 0.0176291
+In bin 6, normalized hybrid_shape is: 0.00700857
+
+--------------------------------------------------
+
+HT1200to1500_j2to3_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.674099
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.672814
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 519.92
+zllHybrid_shape_TR filled with (this_shape_data): 519.92
+and error: 79.5496
+
+Bin 2:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.191983
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.191213
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 148.073
+zllHybrid_shape_TR filled with (this_shape_data): 148.073
+and error: 22.6556
+
+Bin 3:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0716041
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0736688
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 55.2269
+zllHybrid_shape_TR filled with (this_shape_data): 55.2269
+and error: 8.44991
+
+Bin 4:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0376771
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0361718
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0597
+zllHybrid_shape_TR filled with (this_shape_data): 29.0597
+and error: 4.44623
+
+Bin 5:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0176291
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0196369
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 13.597
+zllHybrid_shape_TR filled with (this_shape_data): 13.597
+and error: 2.08039
+
+Bin 6:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.00700857
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.00649569
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.40559
+zllHybrid_shape_TR filled with (this_shape_data): 5.40559
+and error: 0.827073
+
+In bin 1, normalized hybrid_shape is: 0.674099
+In bin 2, normalized hybrid_shape is: 0.191983
+In bin 3, normalized hybrid_shape is: 0.0716041
+In bin 4, normalized hybrid_shape is: 0.0376771
+In bin 5, normalized hybrid_shape is: 0.0176291
+In bin 6, normalized hybrid_shape is: 0.00700857
+
+--------------------------------------------------
+
+HT1200to1500_j2to3_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.674099
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.672814
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 519.92
+zllHybrid_shape_TR filled with (this_shape_data): 519.92
+and error: 79.6531
+
+Bin 2:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.191983
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.191213
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 148.073
+zllHybrid_shape_TR filled with (this_shape_data): 148.073
+and error: 22.6851
+
+Bin 3:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0716041
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0736688
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 55.2269
+zllHybrid_shape_TR filled with (this_shape_data): 55.2269
+and error: 8.46091
+
+Bin 4:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0376771
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0361718
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0597
+zllHybrid_shape_TR filled with (this_shape_data): 29.0597
+and error: 4.45202
+
+Bin 5:
+[above] MC_sr_cont: 771.282
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 771.282
+[above] kMT2_zinv: 0.0246377
+[above] integralZinv: 771.282
+[above] this_shape_data avant: 0.0261326
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 19.0026
+zllHybrid_shape_TR filled with (this_shape_data): 19.0026
+and error: 2.91125
+
+In bin 1, normalized hybrid_shape is: 0.674099
+In bin 2, normalized hybrid_shape is: 0.191983
+In bin 3, normalized hybrid_shape is: 0.0716041
+In bin 4, normalized hybrid_shape is: 0.0376771
+In bin 5, normalized hybrid_shape is: 0.0246377
+
+--------------------------------------------------
+
+HT1200to1500_j4to6_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.694988
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.705686
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 570.361
+zllHybrid_shape_TR filled with (this_shape_data): 570.361
+and error: 84.3078
+
+Bin 2:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.178171
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.177189
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 146.221
+zllHybrid_shape_TR filled with (this_shape_data): 146.221
+and error: 21.6136
+
+Bin 3:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.07403
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.0703573
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7548
+zllHybrid_shape_TR filled with (this_shape_data): 60.7548
+and error: 8.98045
+
+Bin 4:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.0366893
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.031082
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 30.1101
+zllHybrid_shape_TR filled with (this_shape_data): 30.1101
+and error: 4.45072
+
+Bin 5:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.0129049
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.0131078
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10.5908
+zllHybrid_shape_TR filled with (this_shape_data): 10.5908
+and error: 1.56547
+
+Bin 6:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.00321735
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.00257788
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.64041
+zllHybrid_shape_TR filled with (this_shape_data): 2.64041
+and error: 0.390291
+
+In bin 1, normalized hybrid_shape is: 0.694988
+In bin 2, normalized hybrid_shape is: 0.178171
+In bin 3, normalized hybrid_shape is: 0.07403
+In bin 4, normalized hybrid_shape is: 0.0366893
+In bin 5, normalized hybrid_shape is: 0.0129049
+In bin 6, normalized hybrid_shape is: 0.00321735
+
+--------------------------------------------------
+
+HT1200to1500_j4to6_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.694988
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.705686
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 570.361
+zllHybrid_shape_TR filled with (this_shape_data): 570.361
+and error: 84.3078
+
+Bin 2:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.178171
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.177189
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 146.221
+zllHybrid_shape_TR filled with (this_shape_data): 146.221
+and error: 21.6136
+
+Bin 3:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.07403
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.0703573
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7548
+zllHybrid_shape_TR filled with (this_shape_data): 60.7548
+and error: 8.98045
+
+Bin 4:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.0366893
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.031082
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 30.1101
+zllHybrid_shape_TR filled with (this_shape_data): 30.1101
+and error: 4.45072
+
+Bin 5:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.0129049
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.0131078
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 10.5908
+zllHybrid_shape_TR filled with (this_shape_data): 10.5908
+and error: 1.56547
+
+Bin 6:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.00321735
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.00257788
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.64041
+zllHybrid_shape_TR filled with (this_shape_data): 2.64041
+and error: 0.390291
+
+In bin 1, normalized hybrid_shape is: 0.694988
+In bin 2, normalized hybrid_shape is: 0.178171
+In bin 3, normalized hybrid_shape is: 0.07403
+In bin 4, normalized hybrid_shape is: 0.0366893
+In bin 5, normalized hybrid_shape is: 0.0129049
+In bin 6, normalized hybrid_shape is: 0.00321735
+
+--------------------------------------------------
+
+HT1200to1500_j4to6_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.694988
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.705686
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 570.361
+zllHybrid_shape_TR filled with (this_shape_data): 570.361
+and error: 84.3336
+
+Bin 2:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.178171
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.177189
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 146.221
+zllHybrid_shape_TR filled with (this_shape_data): 146.221
+and error: 21.6202
+
+Bin 3:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.07403
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.0703573
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7548
+zllHybrid_shape_TR filled with (this_shape_data): 60.7548
+and error: 8.9832
+
+Bin 4:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.0366893
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.031082
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 30.1101
+zllHybrid_shape_TR filled with (this_shape_data): 30.1101
+and error: 4.45208
+
+Bin 5:
+[above] MC_sr_cont: 820.678
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 820.678
+[above] kMT2_zinv: 0.0161223
+[above] integralZinv: 820.678
+[above] this_shape_data avant: 0.0156856
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 13.2312
+zllHybrid_shape_TR filled with (this_shape_data): 13.2312
+and error: 1.95636
+
+In bin 1, normalized hybrid_shape is: 0.694988
+In bin 2, normalized hybrid_shape is: 0.178171
+In bin 3, normalized hybrid_shape is: 0.07403
+In bin 4, normalized hybrid_shape is: 0.0366893
+In bin 5, normalized hybrid_shape is: 0.0161223
+
+--------------------------------------------------
+
+HT1200to1500_j7to9_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.719904
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.76335
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 59.704
+zllHybrid_shape_TR filled with (this_shape_data): 59.704
+and error: 24.6714
+
+Bin 2:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.178507
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.16116
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.8042
+zllHybrid_shape_TR filled with (this_shape_data): 14.8042
+and error: 6.11748
+
+Bin 3:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.0655647
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.0489668
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.4375
+zllHybrid_shape_TR filled with (this_shape_data): 5.4375
+and error: 2.24692
+
+Bin 4:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.0262332
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.0201505
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.17561
+zllHybrid_shape_TR filled with (this_shape_data): 2.17561
+and error: 0.899021
+
+Bin 5:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.00979093
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.00637249
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.811994
+zllHybrid_shape_TR filled with (this_shape_data): 0.811994
+and error: 0.335538
+
+In bin 1, normalized hybrid_shape is: 0.719904
+In bin 2, normalized hybrid_shape is: 0.178507
+In bin 3, normalized hybrid_shape is: 0.0655647
+In bin 4, normalized hybrid_shape is: 0.0262332
+In bin 5, normalized hybrid_shape is: 0.00979093
+
+--------------------------------------------------
+
+HT1200to1500_j7to9_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 5
+
+Bin 1:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.719904
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.76335
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 59.704
+zllHybrid_shape_TR filled with (this_shape_data): 59.704
+and error: 24.6714
+
+Bin 2:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.178507
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.16116
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.8042
+zllHybrid_shape_TR filled with (this_shape_data): 14.8042
+and error: 6.11748
+
+Bin 3:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.0655647
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.0489668
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.4375
+zllHybrid_shape_TR filled with (this_shape_data): 5.4375
+and error: 2.24692
+
+Bin 4:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.0262332
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.0201505
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.17561
+zllHybrid_shape_TR filled with (this_shape_data): 2.17561
+and error: 0.899021
+
+Bin 5:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.00979093
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.00637249
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.811994
+zllHybrid_shape_TR filled with (this_shape_data): 0.811994
+and error: 0.335538
+
+In bin 1, normalized hybrid_shape is: 0.719904
+In bin 2, normalized hybrid_shape is: 0.178507
+In bin 3, normalized hybrid_shape is: 0.0655647
+In bin 4, normalized hybrid_shape is: 0.0262332
+In bin 5, normalized hybrid_shape is: 0.00979093
+
+--------------------------------------------------
+
+HT1200to1500_j7to9_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.719904
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.76335
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 59.704
+zllHybrid_shape_TR filled with (this_shape_data): 59.704
+and error: 24.6779
+
+Bin 2:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.178507
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.16116
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.8042
+zllHybrid_shape_TR filled with (this_shape_data): 14.8042
+and error: 6.1191
+
+Bin 3:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.0655647
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.0489668
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.4375
+zllHybrid_shape_TR filled with (this_shape_data): 5.4375
+and error: 2.24752
+
+Bin 4:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.0360242
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.026523
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.9876
+zllHybrid_shape_TR filled with (this_shape_data): 2.9876
+and error: 1.23489
+
+In bin 1, normalized hybrid_shape is: 0.719904
+In bin 2, normalized hybrid_shape is: 0.178507
+In bin 3, normalized hybrid_shape is: 0.0655647
+In bin 4, normalized hybrid_shape is: 0.0360242
+
+--------------------------------------------------
+
+HT1200to1500_j7to9_b3
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.719904
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.76335
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 59.704
+zllHybrid_shape_TR filled with (this_shape_data): 59.704
+and error: 24.7541
+
+Bin 2:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.178507
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.16116
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.8042
+zllHybrid_shape_TR filled with (this_shape_data): 14.8042
+and error: 6.138
+
+Bin 3:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.101589
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.0754898
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 8.4251
+zllHybrid_shape_TR filled with (this_shape_data): 8.4251
+and error: 3.49316
+
+In bin 1, normalized hybrid_shape is: 0.719904
+In bin 2, normalized hybrid_shape is: 0.178507
+In bin 3, normalized hybrid_shape is: 0.101589
+
+--------------------------------------------------
+
+HT1200to1500_j10toInf_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.840537
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.80183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.72329
+zllHybrid_shape_TR filled with (this_shape_data): 1.72329
+and error: 4.74201
+
+Bin 2:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.141157
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.19817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.289405
+zllHybrid_shape_TR filled with (this_shape_data): 0.289405
+and error: 0.79636
+
+Bin 3:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.018306
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.0375316
+zllHybrid_shape_TR filled with (this_shape_data): 0.0375316
+and error: 0.103276
+
+In bin 1, normalized hybrid_shape is: 0.840537
+In bin 2, normalized hybrid_shape is: 0.141157
+In bin 3, normalized hybrid_shape is: 0.018306
+
+--------------------------------------------------
+
+HT1200to1500_j10toInf_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.840537
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.80183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.72329
+zllHybrid_shape_TR filled with (this_shape_data): 1.72329
+and error: 4.74201
+
+Bin 2:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.141157
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.19817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.289405
+zllHybrid_shape_TR filled with (this_shape_data): 0.289405
+and error: 0.79636
+
+Bin 3:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.018306
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.0375316
+zllHybrid_shape_TR filled with (this_shape_data): 0.0375316
+and error: 0.103276
+
+In bin 1, normalized hybrid_shape is: 0.840537
+In bin 2, normalized hybrid_shape is: 0.141157
+In bin 3, normalized hybrid_shape is: 0.018306
+
+--------------------------------------------------
+
+HT1200to1500_j10toInf_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.840537
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.80183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.72329
+zllHybrid_shape_TR filled with (this_shape_data): 1.72329
+and error: 4.74201
+
+Bin 2:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.141157
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.19817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.289405
+zllHybrid_shape_TR filled with (this_shape_data): 0.289405
+and error: 0.79636
+
+Bin 3:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.018306
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.0375316
+zllHybrid_shape_TR filled with (this_shape_data): 0.0375316
+and error: 0.103276
+
+In bin 1, normalized hybrid_shape is: 0.840537
+In bin 2, normalized hybrid_shape is: 0.141157
+In bin 3, normalized hybrid_shape is: 0.018306
+
+--------------------------------------------------
+
+HT1200to1500_j10toInf_b3
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.840537
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.80183
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.72329
+zllHybrid_shape_TR filled with (this_shape_data): 1.72329
+and error: 4.7969
+
+Bin 2:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 0.159463
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 0.19817
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0.326937
+zllHybrid_shape_TR filled with (this_shape_data): 0.326937
+and error: 0.910049
+
+In bin 1, normalized hybrid_shape is: 0.840537
+In bin 2, normalized hybrid_shape is: 0.159463
+
+--------------------------------------------------
+
+HT1200to1500_j2to6_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 1283.08
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1283.08
+[above] kMT2_zinv: 0.691479
+[above] integralZinv: 1283.08
+[above] this_shape_data avant: 0.695755
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 887.226
+zllHybrid_shape_TR filled with (this_shape_data): 887.226
+and error: 107.215
+
+Bin 2:
+[above] MC_sr_cont: 1283.08
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1283.08
+[above] kMT2_zinv: 0.17965
+[above] integralZinv: 1283.08
+[above] this_shape_data avant: 0.179404
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 230.507
+zllHybrid_shape_TR filled with (this_shape_data): 230.507
+and error: 27.8552
+
+Bin 3:
+[above] MC_sr_cont: 1283.08
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1283.08
+[above] kMT2_zinv: 0.128871
+[above] integralZinv: 1283.08
+[above] this_shape_data avant: 0.124841
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 165.352
+zllHybrid_shape_TR filled with (this_shape_data): 165.352
+and error: 19.9817
+
+In bin 1, normalized hybrid_shape is: 0.691479
+In bin 2, normalized hybrid_shape is: 0.17965
+In bin 3, normalized hybrid_shape is: 0.128871
+
+--------------------------------------------------
+
+HT1200to1500_j7to9_b4toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.719904
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.76335
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 59.704
+zllHybrid_shape_TR filled with (this_shape_data): 59.704
+and error: 25.5844
+
+Bin 2:
+[above] MC_sr_cont: 82.9333
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 82.9333
+[above] kMT2_zinv: 0.280096
+[above] integralZinv: 82.9333
+[above] this_shape_data avant: 0.23665
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 23.2293
+zllHybrid_shape_TR filled with (this_shape_data): 23.2293
+and error: 9.9542
+
+In bin 1, normalized hybrid_shape is: 0.719904
+In bin 2, normalized hybrid_shape is: 0.280096
+
+--------------------------------------------------
+
+HT1200to1500_j10toInf_b4toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 1
+
+Bin 1:
+[above] MC_sr_cont: 2.05023
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 2.05023
+[above] kMT2_zinv: 1
+[above] integralZinv: 2.05023
+[above] this_shape_data avant: 1
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 2.05023
+zllHybrid_shape_TR filled with (this_shape_data): 2.05023
+and error: 7.87412
+
+In bin 1, normalized hybrid_shape is: 1
+
+--------------------------------------------------
+
+HT1500toInf_j2to3_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 8
+
+Bin 1:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.696529
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.691405
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 92.1794
+
+Bin 2:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.175436
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.182584
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.2174
+
+Bin 3:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.06995
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.0656082
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.25726
+
+Bin 4:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.0286242
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.0329975
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0594
+zllHybrid_shape_TR filled with (this_shape_data): 29.0594
+and error: 3.78816
+
+Bin 5:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.0167498
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.014793
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 17.0044
+zllHybrid_shape_TR filled with (this_shape_data): 17.0044
+and error: 2.21669
+
+Bin 6:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.00913441
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.00845561
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 9.27328
+zllHybrid_shape_TR filled with (this_shape_data): 9.27328
+and error: 1.20886
+
+Bin 7:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0.0035768
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0.00415671
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3.63118
+zllHybrid_shape_TR filled with (this_shape_data): 3.63118
+and error: 0.473357
+
+Bin 8:
+[above] MC_sr_cont: 1015.2
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1015.2
+[above] kMT2_zinv: 0
+[above] integralZinv: 1015.2
+[above] this_shape_data avant: 0
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 0
+zllHybrid_shape_TR filled with (this_shape_data): 0
+and error: 0
+
+In bin 1, normalized hybrid_shape is: 0.696529
+In bin 2, normalized hybrid_shape is: 0.175436
+In bin 3, normalized hybrid_shape is: 0.06995
+In bin 4, normalized hybrid_shape is: 0.0286242
+In bin 5, normalized hybrid_shape is: 0.0167498
+In bin 6, normalized hybrid_shape is: 0.00913441
+In bin 7, normalized hybrid_shape is: 0.0035768
+In bin 8, normalized hybrid_shape is: 0
+
+--------------------------------------------------
+
+HT1500toInf_j2to3_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 91.933
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.1554
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.23251
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0285754
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0329541
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0594
+zllHybrid_shape_TR filled with (this_shape_data): 29.0594
+and error: 3.77803
+
+Bin 5:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0167212
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0147735
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 17.0044
+zllHybrid_shape_TR filled with (this_shape_data): 17.0044
+and error: 2.21076
+
+Bin 6:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0143943
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0139103
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 14.6381
+zllHybrid_shape_TR filled with (this_shape_data): 14.6381
+and error: 1.9031
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0285754
+In bin 5, normalized hybrid_shape is: 0.0167212
+In bin 6, normalized hybrid_shape is: 0.0143943
+
+--------------------------------------------------
+
+HT1500toInf_j2to3_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 98.1768
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.304659
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.309504
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 309.819
+zllHybrid_shape_TR filled with (this_shape_data): 309.819
+and error: 43.0154
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.304659
+
+--------------------------------------------------
+
+HT1500toInf_j4to6_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 8
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 91.8897
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.1445
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.22816
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0285754
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0329541
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0594
+zllHybrid_shape_TR filled with (this_shape_data): 29.0594
+and error: 3.77625
+
+Bin 5:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0167212
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0147735
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 17.0044
+zllHybrid_shape_TR filled with (this_shape_data): 17.0044
+and error: 2.20972
+
+Bin 6:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.00911884
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.00844449
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 9.27328
+zllHybrid_shape_TR filled with (this_shape_data): 9.27328
+and error: 1.20506
+
+Bin 7:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0035707
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.00415124
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 3.63118
+zllHybrid_shape_TR filled with (this_shape_data): 3.63118
+and error: 0.471869
+
+Bin 8:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.00170472
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.00131452
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 1.73359
+zllHybrid_shape_TR filled with (this_shape_data): 1.73359
+and error: 0.225279
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0285754
+In bin 5, normalized hybrid_shape is: 0.0167212
+In bin 6, normalized hybrid_shape is: 0.00911884
+In bin 7, normalized hybrid_shape is: 0.0035707
+In bin 8, normalized hybrid_shape is: 0.00170472
+
+--------------------------------------------------
+
+HT1500toInf_j4to6_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 91.9831
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.168
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.23755
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0285754
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0329541
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0594
+zllHybrid_shape_TR filled with (this_shape_data): 29.0594
+and error: 3.78009
+
+Bin 5:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0258401
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.023218
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 26.2777
+zllHybrid_shape_TR filled with (this_shape_data): 26.2777
+and error: 3.41825
+
+Bin 6:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.00527542
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.00546576
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.36477
+zllHybrid_shape_TR filled with (this_shape_data): 5.36477
+and error: 0.697857
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0285754
+In bin 5, normalized hybrid_shape is: 0.0258401
+In bin 6, normalized hybrid_shape is: 0.00527542
+
+--------------------------------------------------
+
+HT1500toInf_j4to6_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 92.7397
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.3585
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.31353
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0596909
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0616379
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7019
+zllHybrid_shape_TR filled with (this_shape_data): 60.7019
+and error: 7.96114
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0596909
+
+--------------------------------------------------
+
+HT1500toInf_j7to9_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 6
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 91.9831
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.168
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.23755
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0285754
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0329541
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 29.0594
+zllHybrid_shape_TR filled with (this_shape_data): 29.0594
+and error: 3.78009
+
+Bin 5:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0258401
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.023218
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 26.2777
+zllHybrid_shape_TR filled with (this_shape_data): 26.2777
+and error: 3.41825
+
+Bin 6:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.00527542
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.00546576
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 5.36477
+zllHybrid_shape_TR filled with (this_shape_data): 5.36477
+and error: 0.697857
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0285754
+In bin 5, normalized hybrid_shape is: 0.0258401
+In bin 6, normalized hybrid_shape is: 0.00527542
+
+--------------------------------------------------
+
+HT1500toInf_j7to9_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 92.7397
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.3585
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.31353
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0596909
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0616379
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7019
+zllHybrid_shape_TR filled with (this_shape_data): 60.7019
+and error: 7.96114
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0596909
+
+--------------------------------------------------
+
+HT1500toInf_j7to9_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 4
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 92.7397
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.3585
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0698307
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.065522
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 71.0135
+zllHybrid_shape_TR filled with (this_shape_data): 71.0135
+and error: 9.31353
+
+Bin 4:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0596909
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0616379
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7019
+zllHybrid_shape_TR filled with (this_shape_data): 60.7019
+and error: 7.96114
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.0698307
+In bin 4, normalized hybrid_shape is: 0.0596909
+
+--------------------------------------------------
+
+HT1500toInf_j7to9_b3
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 94.7911
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.244968
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.247866
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 249.117
+zllHybrid_shape_TR filled with (this_shape_data): 249.117
+and error: 33.3948
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0596909
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0616379
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7019
+zllHybrid_shape_TR filled with (this_shape_data): 60.7019
+and error: 8.13725
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.244968
+In bin 3, normalized hybrid_shape is: 0.0596909
+
+--------------------------------------------------
+
+HT1500toInf_j10toInf_b0
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 94.7911
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.244968
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.247866
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 249.117
+zllHybrid_shape_TR filled with (this_shape_data): 249.117
+and error: 33.3948
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0596909
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0616379
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7019
+zllHybrid_shape_TR filled with (this_shape_data): 60.7019
+and error: 8.13725
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.244968
+In bin 3, normalized hybrid_shape is: 0.0596909
+
+--------------------------------------------------
+
+HT1500toInf_j10toInf_b1
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 94.7911
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.244968
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.247866
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 249.117
+zllHybrid_shape_TR filled with (this_shape_data): 249.117
+and error: 33.3948
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.0596909
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.0616379
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 60.7019
+zllHybrid_shape_TR filled with (this_shape_data): 60.7019
+and error: 8.13725
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.244968
+In bin 3, normalized hybrid_shape is: 0.0596909
+
+--------------------------------------------------
+
+HT1500toInf_j10toInf_b2
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 98.1768
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.304659
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.309504
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 309.819
+zllHybrid_shape_TR filled with (this_shape_data): 309.819
+and error: 43.0154
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.304659
+
+--------------------------------------------------
+
+HT1500toInf_j10toInf_b3
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 98.1768
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.304659
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.309504
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 309.819
+zllHybrid_shape_TR filled with (this_shape_data): 309.819
+and error: 43.0154
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.304659
+
+--------------------------------------------------
+
+HT1500toInf_j2to6_b3toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 3
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 94.5922
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.175137
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.182344
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 178.103
+zllHybrid_shape_TR filled with (this_shape_data): 178.103
+and error: 23.8251
+
+Bin 3:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.129522
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.12716
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 131.715
+zllHybrid_shape_TR filled with (this_shape_data): 131.715
+and error: 17.6197
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.175137
+In bin 3, normalized hybrid_shape is: 0.129522
+
+--------------------------------------------------
+
+HT1500toInf_j7to9_b4toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 98.1768
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.304659
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.309504
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 309.819
+zllHybrid_shape_TR filled with (this_shape_data): 309.819
+and error: 43.0154
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.304659
+
+--------------------------------------------------
+
+HT1500toInf_j10toInf_b4toInf
+Maximum number of events in MC CR: 1
+[3] integral: 1
+[3] integralMC: 1
+[3] integral: 1
+[3] integralMC: 1
+bin_extrapol / nBins :  1 / 2
+
+Bin 1:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.695341
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.690496
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 707.118
+zllHybrid_shape_TR filled with (this_shape_data): 707.118
+and error: 98.1768
+
+Bin 2:
+[above] MC_sr_cont: 1016.94
+[above] MC_cr_cont: 1
+[above] integral: 1
+[above] ratioMC_cont: 1016.94
+[above] kMT2_zinv: 0.304659
+[above] integralZinv: 1016.94
+[above] this_shape_data avant: 0.309504
+Then this_shape_data computed as this_shape_data<-integral*ratioMC_cont*kMT2_zinv
+[above] this_shape_data apres: 309.819
+zllHybrid_shape_TR filled with (this_shape_data): 309.819
+and error: 43.0154
+
+In bin 1, normalized hybrid_shape is: 0.695341
+In bin 2, normalized hybrid_shape is: 0.304659

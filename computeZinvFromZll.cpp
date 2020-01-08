@@ -812,7 +812,7 @@ void buildHybrid( MT2Analysis<MT2Estimate>* shape_hybrid, MT2Analysis<MT2Estimat
     double errMC = 0.;
  
    
-    bool getExtrapolBin = 0;
+    bool getExtrapolBin = 1;
 
     if(getExtrapolBin){
 

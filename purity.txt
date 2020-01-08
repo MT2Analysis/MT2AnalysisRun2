@@ -1,0 +1,1779 @@
+contentSF = 27224
+contentOF = 52
+R(SF/OF) = 1.06
+purity = (27224 - 1.06 * 52)/ 27224
+purity = 0.997975
+
+contentSF = 7928
+contentOF = 32
+R(SF/OF) = 1.06
+purity = (7928 - 1.06 * 32)/ 7928
+purity = 0.995722
+
+contentSF = 2402
+contentOF = 13
+R(SF/OF) = 1.06
+purity = (2402 - 1.06 * 13)/ 2402
+purity = 0.994263
+
+contentSF = 602
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (602 - 1.06 * 7)/ 602
+purity = 0.987674
+
+contentSF = 269
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (269 - 1.06 * 2)/ 269
+purity = 0.992119
+
+contentSF = 21
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (21 - 1.06 * 0)/ 21
+purity = 1
+
+contentSF = 8
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (8 - 1.06 * 0)/ 8
+purity = 1
+
+contentSF = 1605
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (1605 - 1.06 * 4)/ 1605
+purity = 0.997358
+
+contentSF = 453
+contentOF = 5
+R(SF/OF) = 1.06
+purity = (453 - 1.06 * 5)/ 453
+purity = 0.9883
+
+contentSF = 155
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 2)/ 155
+purity = 0.986323
+
+contentSF = 42
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (42 - 1.06 * 0)/ 42
+purity = 1
+
+contentSF = 21
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (21 - 1.06 * 1)/ 21
+purity = 0.949524
+
+contentSF = 32367
+contentOF = 136
+R(SF/OF) = 1.06
+purity = (32367 - 1.06 * 136)/ 32367
+purity = 0.995546
+
+contentSF = 32367
+contentOF = 136
+R(SF/OF) = 1.06
+purity = (32367 - 1.06 * 136)/ 32367
+purity = 0.995546
+
+contentSF = 32367
+contentOF = 136
+R(SF/OF) = 1.06
+purity = (32367 - 1.06 * 136)/ 32367
+purity = 0.995546
+
+contentSF = 4139
+contentOF = 63
+R(SF/OF) = 1.06
+purity = (4139 - 1.06 * 63)/ 4139
+purity = 0.983866
+
+contentSF = 4139
+contentOF = 63
+R(SF/OF) = 1.06
+purity = (4139 - 1.06 * 63)/ 4139
+purity = 0.983866
+
+contentSF = 4139
+contentOF = 63
+R(SF/OF) = 1.06
+purity = (4139 - 1.06 * 63)/ 4139
+purity = 0.983866
+
+contentSF = 543
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (543 - 1.06 * 9)/ 543
+purity = 0.982431
+
+contentSF = 543
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (543 - 1.06 * 9)/ 543
+purity = 0.982431
+
+contentSF = 543
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (543 - 1.06 * 9)/ 543
+purity = 0.982431
+
+contentSF = 4271
+contentOF = 18
+R(SF/OF) = 1.06
+purity = (4271 - 1.06 * 18)/ 4271
+purity = 0.995533
+
+contentSF = 4271
+contentOF = 18
+R(SF/OF) = 1.06
+purity = (4271 - 1.06 * 18)/ 4271
+purity = 0.995533
+
+contentSF = 4271
+contentOF = 18
+R(SF/OF) = 1.06
+purity = (4271 - 1.06 * 18)/ 4271
+purity = 0.995533
+
+contentSF = 883
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (883 - 1.06 * 29)/ 883
+purity = 0.965187
+
+contentSF = 883
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (883 - 1.06 * 29)/ 883
+purity = 0.965187
+
+contentSF = 883
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (883 - 1.06 * 29)/ 883
+purity = 0.965187
+
+contentSF = 216
+contentOF = 14
+R(SF/OF) = 1.06
+purity = (216 - 1.06 * 14)/ 216
+purity = 0.931296
+
+contentSF = 216
+contentOF = 14
+R(SF/OF) = 1.06
+purity = (216 - 1.06 * 14)/ 216
+purity = 0.931296
+
+contentSF = 216
+contentOF = 14
+R(SF/OF) = 1.06
+purity = (216 - 1.06 * 14)/ 216
+purity = 0.931296
+
+contentSF = 12
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (12 - 1.06 * 1)/ 12
+purity = 0.911667
+
+contentSF = 12
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (12 - 1.06 * 1)/ 12
+purity = 0.911667
+
+contentSF = 12
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (12 - 1.06 * 1)/ 12
+purity = 0.911667
+
+contentSF = 3
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (3 - 1.06 * 0)/ 3
+purity = 1
+
+contentSF = 3
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (3 - 1.06 * 0)/ 3
+purity = 1
+
+contentSF = 3
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (3 - 1.06 * 0)/ 3
+purity = 1
+
+contentSF = 3
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (3 - 1.06 * 0)/ 3
+purity = 1
+
+contentSF = 36
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (36 - 1.06 * 2)/ 36
+purity = 0.941111
+
+contentSF = 36
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (36 - 1.06 * 2)/ 36
+purity = 0.941111
+
+contentSF = 36
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (36 - 1.06 * 2)/ 36
+purity = 0.941111
+
+contentSF = 3
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (3 - 1.06 * 0)/ 3
+purity = 1
+
+contentSF = 3
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (3 - 1.06 * 0)/ 3
+purity = 1
+
+contentSF = 7498
+contentOF = 34
+R(SF/OF) = 1.06
+purity = (7498 - 1.06 * 34)/ 7498
+purity = 0.995193
+
+contentSF = 7498
+contentOF = 34
+R(SF/OF) = 1.06
+purity = (7498 - 1.06 * 34)/ 7498
+purity = 0.995193
+
+contentSF = 7498
+contentOF = 34
+R(SF/OF) = 1.06
+purity = (7498 - 1.06 * 34)/ 7498
+purity = 0.995193
+
+contentSF = 7498
+contentOF = 34
+R(SF/OF) = 1.06
+purity = (7498 - 1.06 * 34)/ 7498
+purity = 0.995193
+
+contentSF = 969
+contentOF = 24
+R(SF/OF) = 1.06
+purity = (969 - 1.06 * 24)/ 969
+purity = 0.973746
+
+contentSF = 969
+contentOF = 24
+R(SF/OF) = 1.06
+purity = (969 - 1.06 * 24)/ 969
+purity = 0.973746
+
+contentSF = 969
+contentOF = 24
+R(SF/OF) = 1.06
+purity = (969 - 1.06 * 24)/ 969
+purity = 0.973746
+
+contentSF = 969
+contentOF = 24
+R(SF/OF) = 1.06
+purity = (969 - 1.06 * 24)/ 969
+purity = 0.973746
+
+contentSF = 129
+contentOF = 6
+R(SF/OF) = 1.06
+purity = (129 - 1.06 * 6)/ 129
+purity = 0.950698
+
+contentSF = 129
+contentOF = 6
+R(SF/OF) = 1.06
+purity = (129 - 1.06 * 6)/ 129
+purity = 0.950698
+
+contentSF = 129
+contentOF = 6
+R(SF/OF) = 1.06
+purity = (129 - 1.06 * 6)/ 129
+purity = 0.950698
+
+contentSF = 129
+contentOF = 6
+R(SF/OF) = 1.06
+purity = (129 - 1.06 * 6)/ 129
+purity = 0.950698
+
+contentSF = 2672
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (2672 - 1.06 * 20)/ 2672
+purity = 0.992066
+
+contentSF = 2672
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (2672 - 1.06 * 20)/ 2672
+purity = 0.992066
+
+contentSF = 2672
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (2672 - 1.06 * 20)/ 2672
+purity = 0.992066
+
+contentSF = 2672
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (2672 - 1.06 * 20)/ 2672
+purity = 0.992066
+
+contentSF = 610
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (610 - 1.06 * 20)/ 610
+purity = 0.965246
+
+contentSF = 610
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (610 - 1.06 * 20)/ 610
+purity = 0.965246
+
+contentSF = 610
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (610 - 1.06 * 20)/ 610
+purity = 0.965246
+
+contentSF = 610
+contentOF = 20
+R(SF/OF) = 1.06
+purity = (610 - 1.06 * 20)/ 610
+purity = 0.965246
+
+contentSF = 140
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (140 - 1.06 * 9)/ 140
+purity = 0.931857
+
+contentSF = 140
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (140 - 1.06 * 9)/ 140
+purity = 0.931857
+
+contentSF = 140
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (140 - 1.06 * 9)/ 140
+purity = 0.931857
+
+contentSF = 140
+contentOF = 9
+R(SF/OF) = 1.06
+purity = (140 - 1.06 * 9)/ 140
+purity = 0.931857
+
+contentSF = 41
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (41 - 1.06 * 0)/ 41
+purity = 1
+
+contentSF = 41
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (41 - 1.06 * 0)/ 41
+purity = 1
+
+contentSF = 41
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (41 - 1.06 * 0)/ 41
+purity = 1
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 2)/ 19
+purity = 0.888421
+
+contentSF = 19
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 2)/ 19
+purity = 0.888421
+
+contentSF = 19
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 2)/ 19
+purity = 0.888421
+
+contentSF = 19
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 2)/ 19
+purity = 0.888421
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 19
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (19 - 1.06 * 1)/ 19
+purity = 0.944211
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 5601
+contentOF = 42
+R(SF/OF) = 1.06
+purity = (5601 - 1.06 * 42)/ 5601
+purity = 0.992051
+
+contentSF = 743
+contentOF = 25
+R(SF/OF) = 1.06
+purity = (743 - 1.06 * 25)/ 743
+purity = 0.964334
+
+contentSF = 743
+contentOF = 25
+R(SF/OF) = 1.06
+purity = (743 - 1.06 * 25)/ 743
+purity = 0.964334
+
+contentSF = 743
+contentOF = 25
+R(SF/OF) = 1.06
+purity = (743 - 1.06 * 25)/ 743
+purity = 0.964334
+
+contentSF = 743
+contentOF = 25
+R(SF/OF) = 1.06
+purity = (743 - 1.06 * 25)/ 743
+purity = 0.964334
+
+contentSF = 743
+contentOF = 25
+R(SF/OF) = 1.06
+purity = (743 - 1.06 * 25)/ 743
+purity = 0.964334
+
+contentSF = 743
+contentOF = 25
+R(SF/OF) = 1.06
+purity = (743 - 1.06 * 25)/ 743
+purity = 0.964334
+
+contentSF = 97
+contentOF = 10
+R(SF/OF) = 1.06
+purity = (97 - 1.06 * 10)/ 97
+purity = 0.890722
+
+contentSF = 97
+contentOF = 10
+R(SF/OF) = 1.06
+purity = (97 - 1.06 * 10)/ 97
+purity = 0.890722
+
+contentSF = 97
+contentOF = 10
+R(SF/OF) = 1.06
+purity = (97 - 1.06 * 10)/ 97
+purity = 0.890722
+
+contentSF = 97
+contentOF = 10
+R(SF/OF) = 1.06
+purity = (97 - 1.06 * 10)/ 97
+purity = 0.890722
+
+contentSF = 97
+contentOF = 10
+R(SF/OF) = 1.06
+purity = (97 - 1.06 * 10)/ 97
+purity = 0.890722
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 3676
+contentOF = 29
+R(SF/OF) = 1.06
+purity = (3676 - 1.06 * 29)/ 3676
+purity = 0.991638
+
+contentSF = 907
+contentOF = 37
+R(SF/OF) = 1.06
+purity = (907 - 1.06 * 37)/ 907
+purity = 0.956759
+
+contentSF = 907
+contentOF = 37
+R(SF/OF) = 1.06
+purity = (907 - 1.06 * 37)/ 907
+purity = 0.956759
+
+contentSF = 907
+contentOF = 37
+R(SF/OF) = 1.06
+purity = (907 - 1.06 * 37)/ 907
+purity = 0.956759
+
+contentSF = 907
+contentOF = 37
+R(SF/OF) = 1.06
+purity = (907 - 1.06 * 37)/ 907
+purity = 0.956759
+
+contentSF = 907
+contentOF = 37
+R(SF/OF) = 1.06
+purity = (907 - 1.06 * 37)/ 907
+purity = 0.956759
+
+contentSF = 907
+contentOF = 37
+R(SF/OF) = 1.06
+purity = (907 - 1.06 * 37)/ 907
+purity = 0.956759
+
+contentSF = 200
+contentOF = 17
+R(SF/OF) = 1.06
+purity = (200 - 1.06 * 17)/ 200
+purity = 0.9099
+
+contentSF = 200
+contentOF = 17
+R(SF/OF) = 1.06
+purity = (200 - 1.06 * 17)/ 200
+purity = 0.9099
+
+contentSF = 200
+contentOF = 17
+R(SF/OF) = 1.06
+purity = (200 - 1.06 * 17)/ 200
+purity = 0.9099
+
+contentSF = 200
+contentOF = 17
+R(SF/OF) = 1.06
+purity = (200 - 1.06 * 17)/ 200
+purity = 0.9099
+
+contentSF = 200
+contentOF = 17
+R(SF/OF) = 1.06
+purity = (200 - 1.06 * 17)/ 200
+purity = 0.9099
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 177
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (177 - 1.06 * 1)/ 177
+purity = 0.994011
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 35
+contentOF = 5
+R(SF/OF) = 1.06
+purity = (35 - 1.06 * 5)/ 35
+purity = 0.848571
+
+contentSF = 35
+contentOF = 5
+R(SF/OF) = 1.06
+purity = (35 - 1.06 * 5)/ 35
+purity = 0.848571
+
+contentSF = 35
+contentOF = 5
+R(SF/OF) = 1.06
+purity = (35 - 1.06 * 5)/ 35
+purity = 0.848571
+
+contentSF = 35
+contentOF = 5
+R(SF/OF) = 1.06
+purity = (35 - 1.06 * 5)/ 35
+purity = 0.848571
+
+contentSF = 35
+contentOF = 5
+R(SF/OF) = 1.06
+purity = (35 - 1.06 * 5)/ 35
+purity = 0.848571
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 120
+contentOF = 7
+R(SF/OF) = 1.06
+purity = (120 - 1.06 * 7)/ 120
+purity = 0.938167
+
+contentSF = 201
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (201 - 1.06 * 2)/ 201
+purity = 0.989453
+
+contentSF = 201
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (201 - 1.06 * 2)/ 201
+purity = 0.989453
+
+contentSF = 201
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (201 - 1.06 * 2)/ 201
+purity = 0.989453
+
+contentSF = 201
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (201 - 1.06 * 2)/ 201
+purity = 0.989453
+
+contentSF = 201
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (201 - 1.06 * 2)/ 201
+purity = 0.989453
+
+contentSF = 201
+contentOF = 2
+R(SF/OF) = 1.06
+purity = (201 - 1.06 * 2)/ 201
+purity = 0.989453
+
+contentSF = 25
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 1)/ 25
+purity = 0.9576
+
+contentSF = 25
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 1)/ 25
+purity = 0.9576
+
+contentSF = 25
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 1)/ 25
+purity = 0.9576
+
+contentSF = 25
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 1)/ 25
+purity = 0.9576
+
+contentSF = 25
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 1)/ 25
+purity = 0.9576
+
+contentSF = 25
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 1)/ 25
+purity = 0.9576
+
+contentSF = 2
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (2 - 1.06 * 0)/ 2
+purity = 1
+
+contentSF = 2
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (2 - 1.06 * 0)/ 2
+purity = 1
+
+contentSF = 2
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (2 - 1.06 * 0)/ 2
+purity = 1
+
+contentSF = 2
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (2 - 1.06 * 0)/ 2
+purity = 1
+
+contentSF = 2
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (2 - 1.06 * 0)/ 2
+purity = 1
+
+contentSF = 237
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (237 - 1.06 * 3)/ 237
+purity = 0.986582
+
+contentSF = 237
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (237 - 1.06 * 3)/ 237
+purity = 0.986582
+
+contentSF = 237
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (237 - 1.06 * 3)/ 237
+purity = 0.986582
+
+contentSF = 237
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (237 - 1.06 * 3)/ 237
+purity = 0.986582
+
+contentSF = 237
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (237 - 1.06 * 3)/ 237
+purity = 0.986582
+
+contentSF = 237
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (237 - 1.06 * 3)/ 237
+purity = 0.986582
+
+contentSF = 75
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (75 - 1.06 * 4)/ 75
+purity = 0.943467
+
+contentSF = 75
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (75 - 1.06 * 4)/ 75
+purity = 0.943467
+
+contentSF = 75
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (75 - 1.06 * 4)/ 75
+purity = 0.943467
+
+contentSF = 75
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (75 - 1.06 * 4)/ 75
+purity = 0.943467
+
+contentSF = 75
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (75 - 1.06 * 4)/ 75
+purity = 0.943467
+
+contentSF = 75
+contentOF = 4
+R(SF/OF) = 1.06
+purity = (75 - 1.06 * 4)/ 75
+purity = 0.943467
+
+contentSF = 11
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (11 - 1.06 * 0)/ 11
+purity = 1
+
+contentSF = 11
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (11 - 1.06 * 0)/ 11
+purity = 1
+
+contentSF = 11
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (11 - 1.06 * 0)/ 11
+purity = 1
+
+contentSF = 11
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (11 - 1.06 * 0)/ 11
+purity = 1
+
+contentSF = 11
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (11 - 1.06 * 0)/ 11
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 25
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (25 - 1.06 * 0)/ 25
+purity = 1
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 0
+contentOF = 0
+R(SF/OF) = 1.06
+contentSF = 0
+contentOF = 0
+R(SF/OF) = 1.06
+contentSF = 0
+contentOF = 0
+R(SF/OF) = 1.06
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 14
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 1)/ 14
+purity = 0.924286
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 138
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (138 - 1.06 * 0)/ 138
+purity = 1
+
+contentSF = 14
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 0)/ 14
+purity = 1
+
+contentSF = 14
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 0)/ 14
+purity = 1
+
+contentSF = 14
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 0)/ 14
+purity = 1
+
+contentSF = 14
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 0)/ 14
+purity = 1
+
+contentSF = 14
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 0)/ 14
+purity = 1
+
+contentSF = 14
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (14 - 1.06 * 0)/ 14
+purity = 1
+
+contentSF = 0
+contentOF = 0
+R(SF/OF) = 1.06
+contentSF = 0
+contentOF = 0
+R(SF/OF) = 1.06
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 155
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (155 - 1.06 * 1)/ 155
+purity = 0.993161
+
+contentSF = 32
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (32 - 1.06 * 3)/ 32
+purity = 0.900625
+
+contentSF = 32
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (32 - 1.06 * 3)/ 32
+purity = 0.900625
+
+contentSF = 32
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (32 - 1.06 * 3)/ 32
+purity = 0.900625
+
+contentSF = 32
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (32 - 1.06 * 3)/ 32
+purity = 0.900625
+
+contentSF = 32
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (32 - 1.06 * 3)/ 32
+purity = 0.900625
+
+contentSF = 32
+contentOF = 3
+R(SF/OF) = 1.06
+purity = (32 - 1.06 * 3)/ 32
+purity = 0.900625
+
+contentSF = 5
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (5 - 1.06 * 1)/ 5
+purity = 0.788
+
+contentSF = 5
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (5 - 1.06 * 1)/ 5
+purity = 0.788
+
+contentSF = 5
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (5 - 1.06 * 1)/ 5
+purity = 0.788
+
+contentSF = 5
+contentOF = 1
+R(SF/OF) = 1.06
+purity = (5 - 1.06 * 1)/ 5
+purity = 0.788
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 27
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (27 - 1.06 * 0)/ 27
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 1
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (1 - 1.06 * 0)/ 1
+purity = 1
+
+contentSF = 1
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (1 - 1.06 * 0)/ 1
+purity = 1
+
+contentSF = 1
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (1 - 1.06 * 0)/ 1
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
+contentSF = 9
+contentOF = 0
+R(SF/OF) = 1.06
+purity = (9 - 1.06 * 0)/ 9
+purity = 1
+
