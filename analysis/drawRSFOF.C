@@ -107,18 +107,18 @@ int main(){
 
   TString parentDir = "./";
   TString crDir = "/zllControlRegion/";
-  TString fileName1 = parentDir    + "EventYields_moriond2019_35p9ifb_incl"      + crDir + "data.root";
-  TString fileName2 = parentDir    + "EventYields_moriond2019_41p9ifb_incl_2017" + crDir + "data.root";
-  TString fileName3 = parentDir    + "EventYields_moriond2019_59p9ifb_incl_2018" + crDir + "data.root";
-  TString fileName1_OF = parentDir + "EventYields_moriond2019_35p9ifb_incl"      + crDir + "data_of.root";
-  TString fileName2_OF = parentDir + "EventYields_moriond2019_41p9ifb_incl_2017" + crDir + "data_of.root";
-  TString fileName3_OF = parentDir + "EventYields_moriond2019_59p9ifb_incl_2018" + crDir + "data_of.root";
+  TString fileName1 = parentDir    + "EventYields_moriond2019_35p9ifb"      + crDir + "data.root";
+  TString fileName2 = parentDir    + "EventYields_moriond2019_41p9ifb_2017" + crDir + "data.root";
+  TString fileName3 = parentDir    + "EventYields_moriond2019_59p9ifb_2018" + crDir + "data.root";
+  TString fileName1_OF = parentDir + "EventYields_moriond2019_35p9ifb"      + crDir + "data_of.root";
+  TString fileName2_OF = parentDir + "EventYields_moriond2019_41p9ifb_2017" + crDir + "data_of.root";
+  TString fileName3_OF = parentDir + "EventYields_moriond2019_59p9ifb_2018" + crDir + "data_of.root";
 
   TString directoryName;
   if (year=="2016") directoryName = "ratio2016/";
   else if (year=="2017") directoryName = "ratio2017/";
   else if (year=="2018") directoryName = "ratio2018/";
-  else if (year=="all") directoryName = "EventYields_moriond2019_35p9ifb_incl/plotsZinvisible/ratioCombined/";
+  else if (year=="all") directoryName = "EventYields_moriond2019_35p9ifb/plotsZinvisible/ratioCombined/";
  
   TChain *SF = new TChain("SF");
   if (year=="2016" or year=="all") SF->Add( fileName1 +  "/data/HT250toInf_j1toInf_b0toInf/tree_data_HT250toInf_j1toInf_b0toInf");
@@ -509,8 +509,8 @@ int main(){
   mygraph2d->Draw("colz");
  
   e->SetRightMargin(0.15);
-  e->SaveAs("EventYields_moriond2019_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_"+year+".pdf");
-  e->SaveAs("EventYields_moriond2019_35p9ifb_incl/zllControlRegion/RSFOF_data/uncertainty_study/2D_"+year+".png");
+  e->SaveAs("EventYields_moriond2019_35p9ifb/zllControlRegion/RSFOF_data/uncertainty_study/2D_"+year+".pdf");
+  e->SaveAs("EventYields_moriond2019_35p9ifb/zllControlRegion/RSFOF_data/uncertainty_study/2D_"+year+".png");
 
 
  

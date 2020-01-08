@@ -394,8 +394,8 @@ int main(int argc, char* argv[]){
   // +++     inclusive     +++
   // +++++++++++++++++++++++++
   // selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20)";
-  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20 && lep_pt0>100 && lep_pt1>30)";
-
+//  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20 && lep_pt0>100 && lep_pt1>30)";
+  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20 && lep_pt0>100 && lep_pt1>30)&& score_V01>0.5";
   dt.drawRegionYields_fromTree( "incl_mt2"   , "mt2"   , selection, 40, 200., 1000., "M_{T2}", "GeV", cutsLabel, "#geq1j, #geq0b");
   dt.drawRegionYields_fromTree( "incl_met"   , "met"   , selection, 40, 200, 1000, "ME_{T}", "GeV", cutsLabel, "#geq1j, #geq0b");
   dt.drawRegionYields_fromTree( "incl_raw_met"   , "raw_met"   , selection, 40, 0, 400, "ME_{T}", "GeV", cutsLabel, "#geq1j, #geq0b");
@@ -415,7 +415,7 @@ int main(int argc, char* argv[]){
   dt.drawRegionYields_fromTree("incl_zll_met_phi", "zll_met_phi", selection, 40, -4, 4, "E_{T}^{miss} #Phi", "", cutsLabel, "#geq1j, #geq0b");
   dt.drawRegionYields_fromTree("incl_zll_mht_pt", "zll_mht_pt", selection, 140, 0, 1400, "H_{T}^{miss} p_{T}", "GeV", cutsLabel, "#geq1j, #geq0b");
   dt.drawRegionYields_fromTree("incl_zll_mht_phi", "zll_mht_phi", selection, 40, -4, 4, "H_{T}^{miss} #Phi", "", cutsLabel, "#geq1j, #geq0b");
-
+  dt.drawRegionYields_fromTree("incl_score_V01", "score_V01", selection, 20, -0.05, 1.05, "Score", "", cutsLabel, "#geq1j, #geq0b");
   //MLL 
   selection_mass = "(ht>250. && nJets>=1 && mt2>200. )";
   dt.drawRegionYields_fromTree( "incl_mll"   , "Z_mass"   , selection_mass, 50, 50., 150., "M_{ll}", "GeV", cutsLabel ,"#geq1j, #geq0b");
@@ -830,7 +830,8 @@ int main(int argc, char* argv[]){
   // +++++++++++++++++++++++++
   // +++     inclusive     +++
   // +++++++++++++++++++++++++
-  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20)";
+//  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20)";
+  selection = "(ht>250. &&nJets>=1 && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && fabs(Z_mass-91.19)<=20)&& score_V01>0.5";
   //  selection = "(ht>200. &&nJets>=1 && met>200. && mt2>200. && deltaPhiMin>0.3 && diffMetMht<0.5*met && abs(Z_mass-91.19)<20)";
 
   dt_of.drawRegionYields_fromTree( "incl_mt2"   , "mt2"   , selection, 40, 200., 1000., "M_{T2}", "GeV", cutsLabel, "#geq1j, #geq0b");
@@ -852,7 +853,7 @@ int main(int argc, char* argv[]){
   dt_of.drawRegionYields_fromTree("incl_zll_met_phi", "zll_met_phi", selection, 40, -4, 4, "E_{T}^{miss} #Phi", "", cutsLabel, "#geq1j, #geq0b");
   dt_of.drawRegionYields_fromTree("incl_zll_mht_pt", "zll_mht_pt", selection, 200, 0, 1400, "H_{T}^{miss} p_{T}", "", cutsLabel, "#geq1j, #geq0b");
   dt_of.drawRegionYields_fromTree("incl_zll_mht_phi", "zll_mht_phi", selection, 40, -4, 4, "H_{T}^{miss} #Phi", "", cutsLabel, "#geq1j, #geq0b");
-
+  dt_of.drawRegionYields_fromTree("incl_score_V01", "score_V01", selection, 20, -0.05, 1.05, "Score", "", cutsLabel, "#geq1j, #geq0b");
   //MLL 
   selection_mass = "(ht>250. && nJets>=1 && mt2>200. )";
   dt_of.drawRegionYields_fromTree( "incl_mll"   , "Z_mass"   , selection_mass, 50, 50., 150., "M_{ll}", "GeV", cutsLabel ,"#geq1j, #geq0b");
