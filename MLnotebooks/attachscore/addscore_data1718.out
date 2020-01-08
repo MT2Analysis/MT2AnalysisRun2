@@ -1,0 +1,408 @@
+2019-12-06 18:50:21.428928: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-06 18:50:21.451119: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Using TensorFlow backend.
+Reading branch= b'deltaPhiMin'
+Reading branch= b'diffMetMht'
+Reading branch= b'jet1_eta'
+Reading branch= b'jet1_phi'
+Reading branch= b'jet2_eta'
+Reading branch= b'jet2_phi'
+Reading branch= b'jet3_eta'
+Reading branch= b'jet3_phi'
+Reading branch= b'jet4_eta'
+Reading branch= b'jet4_phi'
+Reading branch= b'jet5_eta'
+Reading branch= b'jet5_phi'
+Reading branch= b'jet6_eta'
+Reading branch= b'jet6_phi'
+Reading branch= b'jet7_eta'
+Reading branch= b'jet7_phi'
+Reading branch= b'jet8_eta'
+Reading branch= b'jet8_phi'
+Reading branch= b'jet9_eta'
+Reading branch= b'jet9_phi'
+Reading branch= b'jet10_eta'
+Reading branch= b'jet10_phi'
+Reading branch= b'jet11_eta'
+Reading branch= b'jet11_phi'
+Reading branch= b'jet12_eta'
+Reading branch= b'jet12_phi'
+Reading branch= b'jet13_eta'
+Reading branch= b'jet13_phi'
+Reading branch= b'jet14_eta'
+Reading branch= b'jet14_phi'
+Reading branch= b'jet15_eta'
+Reading branch= b'jet15_phi'
+Reading branch= b'jet1_pt'
+Reading branch= b'jet2_pt'
+Reading branch= b'jet3_pt'
+Reading branch= b'jet4_pt'
+Reading branch= b'jet5_pt'
+Reading branch= b'jet6_pt'
+Reading branch= b'jet7_pt'
+Reading branch= b'jet8_pt'
+Reading branch= b'jet9_pt'
+Reading branch= b'jet10_pt'
+Reading branch= b'jet11_pt'
+Reading branch= b'jet12_pt'
+Reading branch= b'jet13_pt'
+Reading branch= b'jet14_pt'
+Reading branch= b'jet15_pt'
+X= [[ 5.4272461e-01  5.5591976e+01  5.3417969e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 8.7084961e-01  2.7750286e+01  1.6425781e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 7.0727539e-01  2.2538803e+01  1.1447754e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ ...
+ [ 3.1232910e+00  7.9894951e+01 -1.4291992e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 3.1405029e+00  3.1702559e+01 -1.0202026e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 6.2481689e-01  1.0891782e+02 -3.6193848e-02 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]]
+shape= (929023, 47)
+
+Loading model
+shape= (929023,)
+/scratch/wjin/featurereduced4/datasigregion_score/score1_forT1bbbb_2017_superMerged_noDupl_btagDeepCSV_excluded.npy  saved
+2019-12-06 18:51:45.929604: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-06 18:51:45.959208: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Using TensorFlow backend.
+Reading branch= b'deltaPhiMin'
+Reading branch= b'diffMetMht'
+Reading branch= b'jet1_eta'
+Reading branch= b'jet1_phi'
+Reading branch= b'jet2_eta'
+Reading branch= b'jet2_phi'
+Reading branch= b'jet3_eta'
+Reading branch= b'jet3_phi'
+Reading branch= b'jet4_eta'
+Reading branch= b'jet4_phi'
+Reading branch= b'jet5_eta'
+Reading branch= b'jet5_phi'
+Reading branch= b'jet6_eta'
+Reading branch= b'jet6_phi'
+Reading branch= b'jet7_eta'
+Reading branch= b'jet7_phi'
+Reading branch= b'jet8_eta'
+Reading branch= b'jet8_phi'
+Reading branch= b'jet9_eta'
+Reading branch= b'jet9_phi'
+Reading branch= b'jet10_eta'
+Reading branch= b'jet10_phi'
+Reading branch= b'jet11_eta'
+Reading branch= b'jet11_phi'
+Reading branch= b'jet12_eta'
+Reading branch= b'jet12_phi'
+Reading branch= b'jet13_eta'
+Reading branch= b'jet13_phi'
+Reading branch= b'jet14_eta'
+Reading branch= b'jet14_phi'
+Reading branch= b'jet15_eta'
+Reading branch= b'jet15_phi'
+Reading branch= b'jet1_pt'
+Reading branch= b'jet2_pt'
+Reading branch= b'jet3_pt'
+Reading branch= b'jet4_pt'
+Reading branch= b'jet5_pt'
+Reading branch= b'jet6_pt'
+Reading branch= b'jet7_pt'
+Reading branch= b'jet8_pt'
+Reading branch= b'jet9_pt'
+Reading branch= b'jet10_pt'
+Reading branch= b'jet11_pt'
+Reading branch= b'jet12_pt'
+Reading branch= b'jet13_pt'
+Reading branch= b'jet14_pt'
+Reading branch= b'jet15_pt'
+X= [[ 1.20849609e-01  3.05804920e+01 -1.31408691e-01 ...  0.00000000e+00
+   0.00000000e+00  0.00000000e+00]
+ [ 1.19140625e-01  6.29217300e+01 -3.94363403e-02 ...  0.00000000e+00
+   0.00000000e+00  0.00000000e+00]
+ [ 2.72949219e-01  2.18777962e+01 -2.16992188e+00 ...  0.00000000e+00
+   0.00000000e+00  0.00000000e+00]
+ ...
+ [ 7.67822266e-02  7.48277054e+01  1.26318359e+00 ...  0.00000000e+00
+   0.00000000e+00  0.00000000e+00]
+ [ 3.61328125e-02  1.35453171e+02  1.04003906e+00 ...  0.00000000e+00
+   0.00000000e+00  0.00000000e+00]
+ [ 3.70117188e-01  3.45422363e+01  3.20251465e-01 ...  0.00000000e+00
+   0.00000000e+00  0.00000000e+00]]
+shape= (49083, 47)
+
+Loading model
+shape= (49083,)
+/scratch/wjin/featurereduced4/zinvcontrol_score/score1_forT1bbbb_2017_superMerged_noDupl_btagDeepCSV_excluded.npy  saved
+2019-12-06 18:52:00.534882: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-06 18:52:00.551441: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Using TensorFlow backend.
+Reading branch= b'deltaPhiMin'
+Reading branch= b'diffMetMht'
+Reading branch= b'jet1_eta'
+Reading branch= b'jet1_phi'
+Reading branch= b'jet2_eta'
+Reading branch= b'jet2_phi'
+Reading branch= b'jet3_eta'
+Reading branch= b'jet3_phi'
+Reading branch= b'jet4_eta'
+Reading branch= b'jet4_phi'
+Reading branch= b'jet5_eta'
+Reading branch= b'jet5_phi'
+Reading branch= b'jet6_eta'
+Reading branch= b'jet6_phi'
+Reading branch= b'jet7_eta'
+Reading branch= b'jet7_phi'
+Reading branch= b'jet8_eta'
+Reading branch= b'jet8_phi'
+Reading branch= b'jet9_eta'
+Reading branch= b'jet9_phi'
+Reading branch= b'jet10_eta'
+Reading branch= b'jet10_phi'
+Reading branch= b'jet11_eta'
+Reading branch= b'jet11_phi'
+Reading branch= b'jet12_eta'
+Reading branch= b'jet12_phi'
+Reading branch= b'jet13_eta'
+Reading branch= b'jet13_phi'
+Reading branch= b'jet14_eta'
+Reading branch= b'jet14_phi'
+Reading branch= b'jet15_eta'
+Reading branch= b'jet15_phi'
+Reading branch= b'jet1_pt'
+Reading branch= b'jet2_pt'
+Reading branch= b'jet3_pt'
+Reading branch= b'jet4_pt'
+Reading branch= b'jet5_pt'
+Reading branch= b'jet6_pt'
+Reading branch= b'jet7_pt'
+Reading branch= b'jet8_pt'
+Reading branch= b'jet9_pt'
+Reading branch= b'jet10_pt'
+Reading branch= b'jet11_pt'
+Reading branch= b'jet12_pt'
+Reading branch= b'jet13_pt'
+Reading branch= b'jet14_pt'
+Reading branch= b'jet15_pt'
+X= [[ 6.1132812e-01  3.2230358e+01 -1.7944336e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 1.2117004e+00  1.4727745e+01  1.7609863e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 9.0673828e-01  1.2798349e+01 -1.1108398e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ ...
+ [ 1.0947189e+00  9.0766983e+01 -7.4249268e-02 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 3.3642578e-01  6.2809067e+01  1.1499023e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 5.6396484e-01  7.7085648e+01 -1.3957520e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]]
+shape= (96720, 47)
+
+Loading model
+shape= (96720,)
+/scratch/wjin/featurereduced4/llcontrol_score/score1_forT1bbbb_2017_superMerged_noDupl_btagDeepCSV_excluded.npy  saved
+2019-12-06 18:52:27.478661: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-06 18:52:27.501462: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Using TensorFlow backend.
+Reading branch= b'deltaPhiMin'
+Reading branch= b'diffMetMht'
+Reading branch= b'jet1_eta'
+Reading branch= b'jet1_phi'
+Reading branch= b'jet2_eta'
+Reading branch= b'jet2_phi'
+Reading branch= b'jet3_eta'
+Reading branch= b'jet3_phi'
+Reading branch= b'jet4_eta'
+Reading branch= b'jet4_phi'
+Reading branch= b'jet5_eta'
+Reading branch= b'jet5_phi'
+Reading branch= b'jet6_eta'
+Reading branch= b'jet6_phi'
+Reading branch= b'jet7_eta'
+Reading branch= b'jet7_phi'
+Reading branch= b'jet8_eta'
+Reading branch= b'jet8_phi'
+Reading branch= b'jet9_eta'
+Reading branch= b'jet9_phi'
+Reading branch= b'jet10_eta'
+Reading branch= b'jet10_phi'
+Reading branch= b'jet11_eta'
+Reading branch= b'jet11_phi'
+Reading branch= b'jet12_eta'
+Reading branch= b'jet12_phi'
+Reading branch= b'jet13_eta'
+Reading branch= b'jet13_phi'
+Reading branch= b'jet14_eta'
+Reading branch= b'jet14_phi'
+Reading branch= b'jet15_eta'
+Reading branch= b'jet15_phi'
+Reading branch= b'jet1_pt'
+Reading branch= b'jet2_pt'
+Reading branch= b'jet3_pt'
+Reading branch= b'jet4_pt'
+Reading branch= b'jet5_pt'
+Reading branch= b'jet6_pt'
+Reading branch= b'jet7_pt'
+Reading branch= b'jet8_pt'
+Reading branch= b'jet9_pt'
+Reading branch= b'jet10_pt'
+Reading branch= b'jet11_pt'
+Reading branch= b'jet12_pt'
+Reading branch= b'jet13_pt'
+Reading branch= b'jet14_pt'
+Reading branch= b'jet15_pt'
+X= [[ 0.30200195 13.796421    1.4692383  ...  0.          0.
+   0.        ]
+ [ 2.4761963  67.18249     0.5789795  ...  0.          0.
+   0.        ]
+ [ 0.88952637 14.136716    0.15255737 ...  0.          0.
+   0.        ]
+ ...
+ [ 0.5710449  40.55452     0.58740234 ...  0.          0.
+   0.        ]
+ [ 0.66186523  9.898207   -0.5548096  ...  0.          0.
+   0.        ]
+ [ 0.69506836 26.167562   -0.06738281 ...  0.          0.
+   0.        ]]
+shape= (1205238, 47)
+
+Loading model
+shape= (1205238,)
+/scratch/wjin/featurereduced4/datasigregion_score/score1_forT1bbbb_2018_superMerged_noDupl_btagDeepCSV_excluded.npy  saved
+2019-12-06 18:55:03.268328: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-06 18:55:03.295382: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Using TensorFlow backend.
+Reading branch= b'deltaPhiMin'
+Reading branch= b'diffMetMht'
+Reading branch= b'jet1_eta'
+Reading branch= b'jet1_phi'
+Reading branch= b'jet2_eta'
+Reading branch= b'jet2_phi'
+Reading branch= b'jet3_eta'
+Reading branch= b'jet3_phi'
+Reading branch= b'jet4_eta'
+Reading branch= b'jet4_phi'
+Reading branch= b'jet5_eta'
+Reading branch= b'jet5_phi'
+Reading branch= b'jet6_eta'
+Reading branch= b'jet6_phi'
+Reading branch= b'jet7_eta'
+Reading branch= b'jet7_phi'
+Reading branch= b'jet8_eta'
+Reading branch= b'jet8_phi'
+Reading branch= b'jet9_eta'
+Reading branch= b'jet9_phi'
+Reading branch= b'jet10_eta'
+Reading branch= b'jet10_phi'
+Reading branch= b'jet11_eta'
+Reading branch= b'jet11_phi'
+Reading branch= b'jet12_eta'
+Reading branch= b'jet12_phi'
+Reading branch= b'jet13_eta'
+Reading branch= b'jet13_phi'
+Reading branch= b'jet14_eta'
+Reading branch= b'jet14_phi'
+Reading branch= b'jet15_eta'
+Reading branch= b'jet15_phi'
+Reading branch= b'jet1_pt'
+Reading branch= b'jet2_pt'
+Reading branch= b'jet3_pt'
+Reading branch= b'jet4_pt'
+Reading branch= b'jet5_pt'
+Reading branch= b'jet6_pt'
+Reading branch= b'jet7_pt'
+Reading branch= b'jet8_pt'
+Reading branch= b'jet9_pt'
+Reading branch= b'jet10_pt'
+Reading branch= b'jet11_pt'
+Reading branch= b'jet12_pt'
+Reading branch= b'jet13_pt'
+Reading branch= b'jet14_pt'
+Reading branch= b'jet15_pt'
+X= [[ 1.5917969e-01  5.4927078e+01 -7.4475098e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 1.3183365e+00  4.4421684e+01  3.7304688e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 4.2944336e-01  4.3647949e+01  1.5705566e+00 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ ...
+ [ 1.3696289e-01  6.5556709e+01 -6.4672852e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 5.7617188e-02  1.3125751e+02 -3.1018066e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]
+ [ 8.8964844e-01  3.8071480e+01 -3.1689453e-01 ...  0.0000000e+00
+   0.0000000e+00  0.0000000e+00]]
+shape= (77922, 47)
+
+Loading model
+shape= (77922,)
+/scratch/wjin/featurereduced4/zinvcontrol_score/score1_forT1bbbb_2018_superMerged_noDupl_btagDeepCSV_excluded.npy  saved
+2019-12-06 18:55:19.508484: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-06 18:55:19.530063: I tensorflow/core/common_runtime/process_util.cc:69] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+Using TensorFlow backend.
+Reading branch= b'deltaPhiMin'
+Reading branch= b'diffMetMht'
+Reading branch= b'jet1_eta'
+Reading branch= b'jet1_phi'
+Reading branch= b'jet2_eta'
+Reading branch= b'jet2_phi'
+Reading branch= b'jet3_eta'
+Reading branch= b'jet3_phi'
+Reading branch= b'jet4_eta'
+Reading branch= b'jet4_phi'
+Reading branch= b'jet5_eta'
+Reading branch= b'jet5_phi'
+Reading branch= b'jet6_eta'
+Reading branch= b'jet6_phi'
+Reading branch= b'jet7_eta'
+Reading branch= b'jet7_phi'
+Reading branch= b'jet8_eta'
+Reading branch= b'jet8_phi'
+Reading branch= b'jet9_eta'
+Reading branch= b'jet9_phi'
+Reading branch= b'jet10_eta'
+Reading branch= b'jet10_phi'
+Reading branch= b'jet11_eta'
+Reading branch= b'jet11_phi'
+Reading branch= b'jet12_eta'
+Reading branch= b'jet12_phi'
+Reading branch= b'jet13_eta'
+Reading branch= b'jet13_phi'
+Reading branch= b'jet14_eta'
+Reading branch= b'jet14_phi'
+Reading branch= b'jet15_eta'
+Reading branch= b'jet15_phi'
+Reading branch= b'jet1_pt'
+Reading branch= b'jet2_pt'
+Reading branch= b'jet3_pt'
+Reading branch= b'jet4_pt'
+Reading branch= b'jet5_pt'
+Reading branch= b'jet6_pt'
+Reading branch= b'jet7_pt'
+Reading branch= b'jet8_pt'
+Reading branch= b'jet9_pt'
+Reading branch= b'jet10_pt'
+Reading branch= b'jet11_pt'
+Reading branch= b'jet12_pt'
+Reading branch= b'jet13_pt'
+Reading branch= b'jet14_pt'
+Reading branch= b'jet15_pt'
+X= [[ 0.78172046 60.5672      0.8182373  ...  0.          0.
+   0.        ]
+ [ 1.0124512   7.3052125  -0.53356934 ...  0.          0.
+   0.        ]
+ [ 0.7402344  42.869972   -2.3769531  ...  0.          0.
+   0.        ]
+ ...
+ [ 0.40161133 27.90454    -1.986084   ...  0.          0.
+   0.        ]
+ [ 0.38256836 72.06842     1.9499512  ...  0.          0.
+   0.        ]
+ [ 0.6008301  34.35896    -1.5695801  ...  0.          0.
+   0.        ]]
+shape= (136851, 47)
+
+Loading model
+shape= (136851,)
+/scratch/wjin/featurereduced4/llcontrol_score/score1_forT1bbbb_2018_superMerged_noDupl_btagDeepCSV_excluded.npy  saved
