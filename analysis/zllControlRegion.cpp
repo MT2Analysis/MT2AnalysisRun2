@@ -27,7 +27,7 @@
 #include "TLegend.h"
 #include "TPaveText.h"
 #include "TLorentzVector.h"
-
+#include "../interface/MT2Cut.h"
 using namespace std;
 
 int Round(float d) {
@@ -464,7 +464,18 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   bool electronHist = leptonSF.setElHist("zll"); //checks if all the electron sf files can be loaded
   bool muonHist = leptonSF.setMuHist(); //checks if all the muon sf files can be loaded
   bool diLepTrigEffHist = leptonSF.setDiLepTriggerHist(cfg.year());
-
+  std::string binMLcutname="";
+  MT2Cut binMLcutmap;
+  if(cfg.usebinMLcut()){
+    if (cfg.binMLcutinf()!="") {
+      binMLcutname="cfgs/"+cfg.binMLcutinf()+".txt";
+      binMLcutmap.fillmap(binMLcutname);
+      std::cout << "filling binned ML cut map"<<endl;
+    }
+    else{std::cout<<"binned ML cut turned on but unable to find config file"<<endl;}
+  }
+  MT2Analysis<MT2Estimate>* analysis_for_region_structure=new MT2Analysis<MT2Estimate>("regionset", cfg.regionsSet());
+  std::set<MT2Region> regions = analysis_for_region_structure->getRegions();
   // initialization of pu weight tool
   MT2PuReweightTool puReweight;
   bool puHist = puReweight.setPuWeightHist(cfg.year());
@@ -489,6 +500,15 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
   TTree* tree = (TTree*)file->Get(treeName);
   if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());
   std::cout<<"use score: "<<sample.score<<endl;}
+  std::vector<double> *scorelist;
+  std::map<std::string,double*> scorevaluemap;
+  if(cfg.usebinMLcut()&&cfg.binMLcutinf()!=""){
+    scorelist=new vector<double>(binMLcutmap.regionnames.size());
+    for(int i=0;i<binMLcutmap.regionnames.size();i++){
+      scorevaluemap[(binMLcutmap.regionnames)[i]]=&((*scorelist)[i]);
+      tree->SetBranchAddress(binMLcutmap.scorebranchname[(binMLcutmap.regionnames)[i]].c_str(),&((*scorelist)[i]));
+    }
+  }
   MT2Tree myTree(tree, isETH);
   //myTree.Init(tree, isETH);
 
@@ -502,14 +522,14 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
   int nentries = tree->GetEntries();
   //for( int iEntry=0; iEntry<30000; ++iEntry ) {
-  int Entryremain=0;
+  int Entryremain1=0;int Entryremain2=0;int Entryremain3=0;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
     if( iEntry % 5000 == 0 ){
       std::cout << "   Entry: " << iEntry << " / " << nentries << std::endl;
     }
 
     myTree.GetEntry(iEntry);
-
+    tree->GetEntry(iEntry);
     // fix for Lep pdg id
     int lep0_pdgId_to_use = -1;
     int lep1_pdgId_to_use = -1;
@@ -566,11 +586,25 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
     if(!( nLep_to_be_used==2 )) continue;
     if(myTree.lep_pt[0]<100) continue;
     if(myTree.lep_pt[1]<35) continue; //updated value (before <30) due to new trigger efficiency
-    if(cfg.MLcut()>0){
+    Entryremain1++;
+    if(tree->GetBranchStatus("score_V01")&&cfg.MLcut()>0){
       if ( myTree.score_V01<cfg.MLcut()) continue; 
     }
-
-
+    std::string found_region = "";
+    MT2Region my_region = MT2Region(myTree.ht, myTree.ht, myTree.nJet30, myTree.nJet30 , myTree.nBJet20, myTree.nBJet20);
+    for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) {
+       if (my_region.isIncluded( &*iR)) {
+         found_region = iR->getName();
+         break;
+       }
+    }
+    if ( cfg.usebinMLcut()){
+      if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
+        if (iEntry<10)cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<" , MLtag"<<myTree.MLtag<<endl;
+        if (*(scorevaluemap[found_region]) < binMLcutmap.cuts[found_region]) continue;
+      }
+    }
+    Entryremain2++;
     if( cfg.analysisType() == "mt2"){
       if( regionsSet!="13TeV_noCut" )
         if( !myTree.passSelection("zll", cfg.year(), isETH) ) continue;
@@ -1120,9 +1154,9 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 
       }
     }// else continue;
-Entryremain++;
+  Entryremain3++;
   } // for entries
-  cout<<"Entry remain= "<<Entryremain<<endl;
+ cout<<"events after the whole preselection "<<Entryremain3<<", after MLcut "<<Entryremain2<<", before MLcut  "<<Entryremain1<<endl;
   anaTree->finalize();
   anaTree_of->finalize();
 

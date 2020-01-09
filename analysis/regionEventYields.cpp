@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <algorithm>
 //#include <cmath>
 
 
@@ -29,6 +30,7 @@
 #include "interface/MT2Config.h"
 #include "interface/MT2BTagSFHelper.h"
 #include "interface/MT2PuReweightTool.h"
+#include "interface/MT2Cut.h"
 //#include "interface/MT2GoodrunClass.h"
 
 #include "TRandom3.h"
@@ -302,7 +304,7 @@ int main( int argc, char* argv[] ) {
     }
 
     // Compute the yields
-    MT2Analysis<MT2EstimateTree> *dataSR = new MT2Analysis<MT2EstimateTree> ( "data", cfg.regionsSet() );;
+    MT2Analysis<MT2EstimateTree> *dataSR = new MT2Analysis<MT2EstimateTree> ( "data", cfg.regionsSet() );
 
     for (auto fSample : fSamplesData){
       //MT2BTagSFHelper* bTagSF_data = new MT2BTagSFHelper();
@@ -348,7 +350,18 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   if(otherRegion != ""){
     regionsSet = otherRegion;
   }
-
+  std::string binMLcutname="";
+  MT2Cut binMLcutmap;
+  if(cfg.usebinMLcut()){
+    if (cfg.binMLcutinf()!="") {
+      binMLcutname="cfgs/"+cfg.binMLcutinf()+".txt";
+      binMLcutmap.fillmap(binMLcutname);
+      std::cout << "filling binned ML cut map"<<endl;
+    }
+    else{std::cout<<"binned ML cut turned on but unable to find config file"<<endl;}
+  }
+  MT2Analysis<MT2Estimate>* analysis_for_region_structure=new MT2Analysis<MT2Estimate>("regionset", cfg.regionsSet());
+  std::set<MT2Region> regions = analysis_for_region_structure->getRegions();
   // initialization of pu weight tool
   MT2PuReweightTool puReweight;
   bool puHist = puReweight.setPuWeightHist(cfg.year());
@@ -370,6 +383,15 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
   TTree* tree = (TTree*)file->Get(treeName);
   if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());cout<<"use score: "<<sample.score<<endl;}
+  std::vector<double> *scorelist;
+  std::map<std::string,double*> scorevaluemap;
+  if(cfg.usebinMLcut()&&cfg.binMLcutinf()!=""){
+    scorelist=new vector<double>(binMLcutmap.regionnames.size());
+    for(int i=0;i<binMLcutmap.regionnames.size();i++){
+      scorevaluemap[(binMLcutmap.regionnames)[i]]=&((*scorelist)[i]);
+      tree->SetBranchAddress(binMLcutmap.scorebranchname[(binMLcutmap.regionnames)[i]].c_str(),&((*scorelist)[i]));
+    }
+  }
   MT2Tree myTree(tree, isETH);
 
   // number of gen events
@@ -381,12 +403,12 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   int nentries = tree->GetEntries();
   int nentries_MLtest=nentries;
-  if(cfg.isMLcut()&&tree->GetBranchStatus("MLtag")){
-    nentries_MLtest=tree->GetEntries("MLtag!=1");
-  }//if we choose not to use the samples used for ML training, the weight is recalculated
-  cout<<"total entries"<<nentries<<", entries used when considering ML training"<<nentries_MLtest<<endl;
+//  if(cfg.isMLcut()&&tree->GetBranchStatus("MLtag")){
+//    nentries_MLtest=tree->GetEntries("MLtag!=1");
+//  }//if we choose not to use the samples used for ML training, the weight is recalculated
+//  cout<<"total entries"<<nentries<<", entries used when considering ML training"<<nentries_MLtest<<endl;
   //for( int iEntry=0; iEntry<20000; ++iEntry ) {
-  int Entryremain1=0;int Entryremain2=0;
+  int Entryremain1=0;int Entryremain2=0; int Entryremain3=0;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ){
@@ -394,7 +416,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     }
 
     myTree.GetEntry(iEntry);
-
+    tree->GetEntry(iEntry);
     //if( myTree.isData && !myTree.isGolden ) continue;
     //if(isData && !myTree.isGolden ) continue;
 
@@ -451,15 +473,38 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
     if ( myTree.nJet30==1 && !myTree.passMonoJetId(0) ) continue;
     Entryremain1++;
 
-    // reject the mc events used by ML training
-    if ( !isData && cfg.isMLcut() && myTree.MLtag==1) continue;
+    float MLreduce=1.;
+    // reject the mc events used by ML training(inclusive)
+    if ( !isData && cfg.isMLcut() && !(cfg.usebinMLcut()) && myTree.MLtag==1) continue;
+    if ( !isData && cfg.isMLcut() && !(cfg.usebinMLcut())) MLreduce=0.95;
 
-
-    //cut on ML score//MLoptimize
-    if ( tree->GetBranchStatus("score_V01")&&myTree.score_V01<cfg.MLcut()) continue;Entryremain2++;
+    //cut on ML score//MLoptimize(inclusive)
+    if ( tree->GetBranchStatus("score_V01")&&myTree.score_V01<cfg.MLcut()) continue;
  //   std::cout<<"event "<<iEntry<<" in "<<sample.file<<", score "<<myTree.score_V01<<endl;
     // Selection is over, now apply the weights !
     //Double_t weight = (isData) ? 1. : myTree.evt_scale1fb;//*cfg.lumi();
+
+    std::string found_region = "";
+    MT2Region my_region = MT2Region(myTree.ht, myTree.ht, myTree.nJet30, myTree.nJet30 , myTree.nBJet20, myTree.nBJet20);
+    for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) { // loop over topological regions
+       if (my_region.isIncluded( &*iR)) { 
+         found_region = iR->getName();
+         break;
+       }
+    }
+    Entryremain2++;
+    if ( cfg.usebinMLcut()){
+      if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
+        Entryremain2--;
+        if (iEntry<10)cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<" , MLtag"<<myTree.MLtag<<endl;
+        if (!isData && binMLcutmap.istrain_bkg(myTree.MLtag,found_region)) continue;//if its background and used for training,we exclude it
+        Entryremain2++;
+        if (*(scorevaluemap[found_region]) < binMLcutmap.cuts[found_region]) continue;//perform cut on MLscore, and do the reweight
+        MLreduce=1.0-binMLcutmap.bkgtrainfraction[found_region];
+      }
+
+    }
+    Entryremain3++;
     Double_t weight_syst = 1.;
     Double_t weight(1.);
 
@@ -472,7 +517,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
       else {
 
         // main normalization weight
-        weight = myTree.evt_scale1fb*nentries/nentries_MLtest;
+        weight = myTree.evt_scale1fb/MLreduce;
         if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
 
         // lepton and btag scale factors
@@ -535,7 +580,7 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
   } // for entries
 
- cout<<"events after preselection "<<Entryremain2<<", before MLscore cut "<<Entryremain1<<endl;
+ cout<<"events after preselection with ML score "<<Entryremain3<<", after excluding samples for training "<<Entryremain2<<", after previous preselection "<<Entryremain1<<endl;
   anaTree->finalize();
 
   delete tree;
@@ -547,8 +592,20 @@ void computeYield( const MT2Sample& sample, const MT2Config& cfg, MT2Analysis<MT
 
 template <class T>
 MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg ) {
-
-	 // initialization of pu weight tool
+  std::string binMLcutname="";
+  MT2Cut binMLcutmap;
+  if(cfg.usebinMLcut()){
+    if (cfg.binMLcutinf()!="") {
+      binMLcutname="cfgs/"+cfg.binMLcutinf()+".txt";
+      binMLcutmap.fillmap(binMLcutname);
+      std::cout << "filling binned ML cut map"<<endl;
+      //for(int i=0;i<binMLcutmap.regionnames.size();i++){cout<<(binMLcutmap.regionnames)[i]<<endl;}
+    }
+      else{std::cout<<"binned ML cut turned on but unable to find config file"<<endl;}
+  }
+  MT2Analysis<MT2Estimate>* analysis_for_region_structure=new MT2Analysis<MT2Estimate>("regionset", cfg.regionsSet());
+  std::set<MT2Region> regions = analysis_for_region_structure->getRegions();
+	 //initialization of pu weight tool
 	 MT2PuReweightTool puReweight;
 	 bool puHist = puReweight.setPuWeightHist(cfg.year());
 
@@ -600,6 +657,15 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   TTree* tree = (TTree*)file->Get(treeName);
   if(sample.score!=""){tree->AddFriend("mt2_friend",sample.score.c_str());
   std::cout<<"use score: "<<sample.score<<endl;}
+  std::vector<double> *scorelist;
+  std::map<std::string,double*> scorevaluemap;
+  if(cfg.usebinMLcut()&&cfg.binMLcutinf()!=""){
+    scorelist=new vector<double>(binMLcutmap.regionnames.size());
+    for(int i=0;i<binMLcutmap.regionnames.size();i++){
+      scorevaluemap[(binMLcutmap.regionnames)[i]]=&((*scorelist)[i]);
+      tree->SetBranchAddress(binMLcutmap.scorebranchname[(binMLcutmap.regionnames)[i]].c_str(),&((*scorelist)[i]));
+    }
+  }
   MT2Tree myTree(tree, isETH);
 
   std::cout << "-> Setting up MT2Analysis with name: " << sample.sname << std::endl;
@@ -611,15 +677,15 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
   if(cfg.isMLcut()&&tree->GetBranchStatus("MLtag")){
     nentries_MLtest=tree->GetEntries("MLtag!=1");
   }//if we choose not to use the samples used for ML training, the weight is recalculated
-  cout<<"total entries"<<nentries<<", entries used when considering ML training"<<nentries_MLtest<<endl;
-  int Entryremain=0;
-  float MLreduce=1.;
-  if(cfg.isMLcut()) MLreduce=0.95;
+  //cout<<"total entries"<<nentries<<", entries used when considering ML training"<<nentries_MLtest<<endl;
+  int Entryremain1=0;int Entryremain2=0; int Entryremain3=0;
+//  float MLreduce=1.;
+//  if(cfg.isMLcut()) MLreduce=0.95;
   for( int iEntry=0; iEntry<nentries; ++iEntry ) {
 
     if( iEntry % 50000 == 0 ) std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
     myTree.GetEntry(iEntry);
-
+    tree->GetEntry(iEntry);
     // apply the filters
     // filters should be the same bw ETH and SnT
     if(isData) {
@@ -660,15 +726,33 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     if (!myTree.passHEMFailVeto(cfg.year(), isETH, isData)) continue;
 
     // reject the mc events used by ML training
-    
+    Entryremain1++;
     if ( !isData && cfg.isMLcut() && myTree.MLtag==1) continue;
     //cut on ML score//MLoptimize
     if ( tree->GetBranchStatus("score_V01")&&myTree.score_V01<cfg.MLcut()) continue;
-    
+    float MLreduce=1.;    
+    if ( !isData && cfg.isMLcut() && !(cfg.usebinMLcut())) MLreduce=0.95;
  //   std::cout<<"event "<<iEntry<<" in "<<sample.file<<", score "<<myTree.score_V01<<endl; 
-
-
-
+    std::string found_region = "";
+    MT2Region my_region = MT2Region(myTree.ht, myTree.ht, myTree.nJet30, myTree.nJet30 , myTree.nBJet20, myTree.nBJet20);
+    for( std::set<MT2Region>::iterator iR=regions.begin(); iR!=regions.end(); ++iR ) { 
+       if (my_region.isIncluded( &*iR)) {
+         found_region = iR->getName();
+         break;
+       }
+    }
+    Entryremain2++;
+    if ( cfg.usebinMLcut()){
+      if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
+        Entryremain2--;
+        if (iEntry<10)cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<" , MLtag"<<myTree.MLtag<<endl;
+        if (!isData && binMLcutmap.istrain_bkg(myTree.MLtag,found_region)) continue;
+        Entryremain2++;
+        if (*(scorevaluemap[found_region]) < binMLcutmap.cuts[found_region]) continue;
+        MLreduce=1.0-binMLcutmap.bkgtrainfraction[found_region];
+      }
+    }
+    Entryremain3++;
    // Gen MET cut
     bool passGenMET=false;
     if(dogenmet) passGenMET =true;
@@ -784,9 +868,8 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
     if(dogenmet && passGenMET){
       thisEstimate->yield3d_genmet->Fill( mt2_genmet, GenSusyMScan1, GenSusyMScan2, weight );
     }
-  Entryremain++;
   } // for entries
-  cout<<"After selection "<<Entryremain<<" events"<<endl;
+ cout<<"events after preselection with ML score "<<Entryremain3<<", after excluding samples for training "<<Entryremain2<<", after previous preselection "<<Entryremain1<<endl;
   //ofs.close();
 
   analysis->finalize();
