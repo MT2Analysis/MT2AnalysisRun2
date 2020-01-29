@@ -960,18 +960,19 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
     TH1D* h1_data3 = 0;
 
     std::vector<TH1D*> h1_data_sep = {h1_data1, h1_data2, h1_data3};
-   
+   int countdataentries=0;
     for(unsigned int i(0); i<h1_data_sep.size(); ++i){ //we loop on the years 
       TString index = to_string(i+1);
       if( tree_data[i] ) {
 	h1_data_sep[i] = new TH1D("h1_data_sep" + index, "", nBins, xMin, xMax );
 	tree_data[i]->Project( "h1_data_sep" + index, varName.c_str(), selection.c_str() );
 	//tree_data->Project( "h1_data", varName.c_str(), Form("%f*(%s)", data_->getWeight(), selection.c_str()) );
+        countdataentries+=tree_data[i]->GetEntries(selection.c_str());
 	if( addOverflow_ )
 	  MT2DrawTools::addOverflowSingleHisto(h1_data_sep[i]);
       }
     }
-
+cout<<"data entries : "<<countdataentries<<endl;
   
     TH1D* h1_data = 0;
     //if there is only one year
@@ -997,7 +998,7 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 
     //std::vector<vector<TH1D*>> histos_mc = {histos_mc1, histos_mc2, histos_mc3};
     std::vector<TH1D*> histos_mc_sep;
-
+int countentries=0;
     for( unsigned i=0; i<mc1_->size(); ++i ) {//loop on the different contributions of the background 
       TTree* tree_mc1 = (mc1_) ? (mc1_->at(i)->get(thisRegion)->tree) : 0;
       TTree* tree_mc2 = (mc2_) ? (mc2_->at(i)->get(thisRegion)->tree) : 0;
@@ -1030,12 +1031,15 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 	if( selection!="" ){
 	  if(tree_mc[j]){
 	    tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight*(%s)", lumi[j], selection.c_str()) );
+            cout<<"lumi: "<<lumi[j]<<endl;
+            countentries+=tree_mc[j]->GetEntries(selection.c_str());
 	    //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f*(%s)", lumi_*mc_->at(i)->getWeight(), selection.c_str()) );
 	  }
 	}
 	else{
 	  if(tree_mc[j]){
 	    tree_mc[j]->Project( thisName[j].c_str(), varName.c_str(), Form("%f*weight", lumi[j]) );
+            cout<<"lumi: "<<lumi[j]<<endl;
 	    //tree_mc->Project( thisName.c_str(), varName.c_str(), Form("%f", lumi_*mc_->at(i)->getWeight()) );
 	  }
 	}
@@ -1050,10 +1054,9 @@ std::vector<TCanvas*> MT2DrawTools::drawRegionYields_fromTree( const std::string
 	//}}
 
       }
-     
     }
   
-   
+   cout<<"mc entries: "<<countentries<<endl;
     std::vector<TH1D*> histos_mc(2);
 
     if(!mc2_ && !mc3_){ //only one year

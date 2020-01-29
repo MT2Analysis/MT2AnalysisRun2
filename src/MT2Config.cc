@@ -57,6 +57,8 @@ MT2Config::MT2Config( const std::string& name ) {
   qcdRegionsSet_ = "zurich_onlyHT";
   MLcut_=-1;//default no cut on MLscore;
   isMLcut_=0;
+  usebinMLcut_=0;
+  binMLcutinf_="";
   gammaTemplateRegions_ = "13TeV_inclusive"; // default
   gammaTemplateType_    = "RC"; // default
   gammaIsoCut_    = 2.5; // default
@@ -169,6 +171,10 @@ MT2Config::MT2Config( const std::string& name ) {
       MLcut_ = atof(StringValue);
     else if( this_name=="isMLcut")
       isMLcut_ = atoi(StringValue);
+    else if (this_name=="usebinMLcut")
+      usebinMLcut_=atoi(StringValue);
+    else if (this_name=="binMLcutinf")
+      binMLcutinf_=std::string(StringValue);
   } // while getline
 
   std::cout << std::endl;
@@ -309,8 +315,9 @@ void MT2Config::saveAs( const std::string& filename ) const {
   if( llepmcMLscore_!="" )         ofs << "llepmcMLscore "<<llepmcMLscore_<<std::endl;
   if( zllsigMLscore_!="" )         ofs << "zllsigMLscore "<<zllsigMLscore_<<std::endl;
   if( llepsigMLscore_!="" )         ofs << "llepsigMLscore "<<llepsigMLscore_<<std::endl;
-  if( MLcut_>0 )                    ofs<< "cut on ML score: >= "<<MLcut_<<std::endl; else ofs<< "do not apply cut on ML score "<<std::endl;
+  if( MLcut_>0 )                    ofs<< "cut on ML score: >= "<<MLcut_<<std::endl; else ofs<< "do not apply cut on ML score inclusively"<<std::endl;
   if( isMLcut_ )                   ofs<<"rejecting mc or signal events used for ML trainging and validation"<<std::endl; else ofs<<"not rejecting events used for ML training"<<std::endl;
+  if( usebinMLcut_ )            ofs<<"use binned ML training and cut"<<std::endl;
   ofs << "gammaTemplateRegions " << gammaTemplateRegions_ << std::endl;
   ofs << "gammaTemplateType " << gammaTemplateType_ << std::endl;
   ofs << "gammaIsoCut " << gammaIsoCut_ << std::endl;

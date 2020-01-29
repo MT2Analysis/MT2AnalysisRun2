@@ -919,9 +919,10 @@ std::vector<TCanvas*> MT2DrawTools_ForRatios::drawRegionYields_fromTree( const s
         histos_mc[i]->Sumw2();
         if( selection2!="" )
           tree_mc->Project( h_mc_name, varName.c_str(), Form("%f*weight*(%s)", lumi_[i], selection2.c_str()) );
+          cout<<"lumi: "<<lumi_[i]<<endl;
         else
           tree_mc->Project( h_mc_name, varName.c_str(), Form("%f*weight", lumi_[i]) );
-
+          cout<<"lumi: "<<lumi_[i]<<endl;
         if( addOverflow_ ) MT2DrawTools_ForRatios::addOverflowSingleHisto(histos_mc[i]);
         std::cout << "debug mc,  i=" << i << " mc=" << histos_mc[i]->GetBinContent(1) << std::endl;
         //histos_mc.push_back(h1_mc);

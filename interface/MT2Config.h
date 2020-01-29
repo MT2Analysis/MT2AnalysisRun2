@@ -70,7 +70,8 @@ class MT2Config {
   void saveAs( const std::string& filename ) const;
   float MLcut()    const{ return MLcut_;};
   bool isMLcut()   const{ return isMLcut_;};
-
+  bool usebinMLcut() const{return usebinMLcut_;};
+  std::string binMLcutinf() const{return binMLcutinf_;};
  private:
 
   float defaultLumi( float lumi) const;
@@ -124,6 +125,8 @@ class MT2Config {
   std::string zllRegions_;
   float MLcut_;
   bool isMLcut_;
+  bool usebinMLcut_;
+  std::string binMLcutinf_;
 };
 
 

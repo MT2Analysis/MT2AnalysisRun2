@@ -49,7 +49,7 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename,const 
   std::vector<TString> scorefilenamelist;
   std::vector<TString> scorefilefullnamelist;
   if (scorefilename!=""){
-    while( INscore.getline(buffer, 500, '\n') ) {
+    while( INscore.getline(buffer, 1500, '\n') ) {
       if (buffer[0] == '#') {
         continue; // Skip lines commented with '#'                                                                                                                                                                                 
       }
@@ -74,13 +74,13 @@ std::vector<MT2Sample> MT2Sample::loadSamples(const std::string& filename,const 
     }
   }
 
-  while( IN.getline(buffer, 500, '\n') ) {
+  while( IN.getline(buffer, 1500, '\n') ) {
     if (buffer[0] == '#') {
       continue; // Skip lines commented with '#'                                                                                                                                                                                 
     }
     std::string sampleFilePath(buffer);
     TString sampleFilePath_tstr(sampleFilePath);
-    if( !(sampleFilePath_tstr.EndsWith(".root")) ) continue;
+    if( !(sampleFilePath_tstr.EndsWith(".root")) ) {cout<<"may be this file name is too long: "<<sampleFilePath<<", please change the buffer length"<<endl;continue;}
     MT2Sample s;
     s.file = sampleFilePath;
     sampleFilePath_tstr.ReplaceAll( "/", " " );

@@ -4,8 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
-MT2Cut::fillmap(std::string& cutsetcfgname)const{
-  std::ifstream IN(configFileName.c_str());
+#include <map>
+void MT2Cut::fillmap(std::string& cutsetcfgname) {
+  std::cout << std::endl;
+  std::cout << "-> Reading cut config file: " << cutsetcfgname << std::endl;
+  std::cout << std::endl;
+  std::ifstream IN(cutsetcfgname.c_str());
+ // std::cout << IN.rdbuf();
   char buffer[200];
   char StringValue_cuts[200];
   char StringValue_bkgtrainfraction[200];
@@ -15,9 +20,10 @@ MT2Cut::fillmap(std::string& cutsetcfgname)const{
     if (buffer[0] == '#') {
       continue; // Skip lines commented with '#'                                                                                                                                                                                 
     }
+  cout<<buffer<<endl;
   char this_name_c[200];
   sscanf(buffer, "%s %s %s %s %s", this_name_c, StringValue_cuts, StringValue_bkgtrainfraction, StringValue_sigtrainfraction, StringValue_scorebranchname);
-  std::string this_name(this_name_c);
+  std::string this_name(this_name_c); //cout<<this_name<<endl;
   regionnames.push_back(this_name);
   cuts[this_name]=atof(StringValue_cuts);
   bkgtrainfraction[this_name]=atof(StringValue_bkgtrainfraction);
@@ -26,3 +32,12 @@ MT2Cut::fillmap(std::string& cutsetcfgname)const{
   }
 
 }
+bool MT2Cut::istrain_bkg(int MLtag, std::string& regionname) {
+  if(MLtag<20*bkgtrainfraction[regionname]) return 1;
+  else return 0;
+}
+bool MT2Cut::istrain_sig(int MLtag, std::string& regionname) {
+  if(MLtag<20*sigtrainfraction[regionname]) return 1;
+  else return 0;
+}
+
