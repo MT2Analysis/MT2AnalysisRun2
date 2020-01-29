@@ -247,6 +247,17 @@ int main( int argc, char* argv[] ) {
   bMin=0, bMax=0;
   jetCutsLabel = getJetCutLabel(jetMin, jetMax, bMin, bMax);
 
+  selection="ht>575.&&ht<=1200.&& met>250  && nJets>=2&&nJets<=6 && nBJets>=3 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
+dt.drawRegionYields_fromTree("bin20_mt2", "mt2", selection, 100, 200., 1200., "M_{T2}", "GeV");
+cout<<"draw completed"<<endl;
+
+  selection="ht>575.&&ht<=1200. && nJets>=2&&nJets<=6 && nBJets>=3 && mt2>200.";
+dt.drawRegionYields_fromTree("bin20_compare1_mt2", "mt2", selection, 100, 200., 1200., "M_{T2}", "GeV");
+cout<<"draw completed"<<endl;
+
+selection="ht>575.&&ht<=1200.&& nJets>=2&&nJets<=6 && nBJets>=3";
+dt.drawRegionYields_fromTree("bin20_compare_mt2", "mt2", selection, 100, 200., 1200., "M_{T2}", "GeV");
+cout<<"draw completed"<<endl;
   //selection = "ht>200 && met>200. && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // selection = "ht>250 && met>250. && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";
   // selection = "ht>" + ht_min + "&& ht<" + ht_max + "&& met>250  && nJets>1 && nBJets==0 && deltaPhiMin>0.3 && diffMetMht<0.5*met && mt2>200.";

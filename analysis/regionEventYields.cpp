@@ -746,10 +746,10 @@ MT2Analysis<T>* computeSigYield( const MT2Sample& sample, const MT2Config& cfg )
       if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
         Entryremain2--;
         if (iEntry<10)cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<" , MLtag"<<myTree.MLtag<<endl;
-        if (!isData && binMLcutmap.istrain_bkg(myTree.MLtag,found_region)) continue;
+        if (!isData && binMLcutmap.istrain_sig(myTree.MLtag,found_region)) continue;
         Entryremain2++;
         if (*(scorevaluemap[found_region]) < binMLcutmap.cuts[found_region]) continue;
-        MLreduce=1.0-binMLcutmap.bkgtrainfraction[found_region];
+        MLreduce=1.0-binMLcutmap.sigtrainfraction[found_region];
       }
     }
     Entryremain3++;

@@ -28,6 +28,7 @@
 #include "interface/MT2Config.h"
 #include "interface/MT2BTagSFHelper.h"
 #include "interface/MT2PuReweightTool.h"
+#include "../interface/MT2LeptonSFTool.h"
 //#include "interface/MT2GoodrunClass.h"
 //
 #include "TRandom3.h"
@@ -38,6 +39,7 @@
 #include "interface/mt2.h"
 void addweight_bkg(const MT2Sample& sample, const MT2Config& cfg);
 void addweight_sig(const MT2Sample& sample, const MT2Config& cfg);
+void addweight_zll(const MT2Sample& sample, const MT2Config& cfg);
 TH2D* h_nsig;
 TH2D* h_avg_weight_btagsf ;
 TH2D* h_avg_weight_btagsf_heavy_UP ;
@@ -49,7 +51,7 @@ TH2D* h_avg_weight_isr_UP;
 TH2D* h_avg_weight_isr_DN;
 int main(int argc, char* argv[]){
   if( argc<2 ) {
-    std::cout << "USAGE: ./addweight [configFileName] [data/MC]" << std::endl;
+    std::cout << "USAGE: ./addweight [configFileName] [data/MC/zllCR/llepCR]" << std::endl;
     std::cout << "Exiting." << std::endl;
     exit(11);
   }
@@ -65,13 +67,17 @@ int main(int argc, char* argv[]){
   bool onlyData = false;
   bool onlyMC   = false;
   bool onlySignal = false;
+  bool onlyzllCR = false;
+  bool onlyllepCR = false;
   if( argc > 2 ) {
     std::string dataMC(argv[2]);
     if( dataMC=="data" ) onlyData = true;
     else if( dataMC=="MC" || dataMC=="mc" ) onlyMC = true;
     else if( dataMC=="signal" ) onlySignal = true;
+    else if( dataMC=="zllCR") onlyzllCR = true;
+    else if( dataMC=="llepCR") onlyllepCR = true;
     else {
-      std::cout << "-> You passed a second argument that isn't 'data', nor 'mc', nor 'signal', so I don't know what to do about it." << std::endl;
+      std::cout << "-> You passed a second argument that isn't 'data', nor 'mc', nor 'signal', nor 'zllCR', nor 'llepCR', so I don't know what to do about it." << std::endl;
     }
   }
 
@@ -112,13 +118,11 @@ int main(int argc, char* argv[]){
     f_avWeights->Close();
     delete f_avWeights;
   }
+    std::map<std::string, MT2Analysis<MT2EstimateTree>*> mcSRMap;
 
-std::vector<std::string> sampleNames = {"Top", "WJets", "QCD", "ZJets"};  // group of bkg mc samples
-  std::map<std::string, MT2Analysis<MT2EstimateTree>*> mcSRMap;
-
-  if( cfg.useMC() && !onlyData && !onlySignal ) {
+  if( cfg.useMC() && !onlyData && !onlySignal && onlyMC) {
     std::string samplesFileName = "../samples/samples_" + cfg.mcSamples() + ".dat";
-    std::string samplesMLscore;
+    std::vector<std::string> sampleNames = {"Top", "WJets", "QCD", "ZJets"};
     std::cout << std::endl << std::endl;
     std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
     std::map<TString, std::vector<MT2Sample>> fSamplesMap;
@@ -130,7 +134,6 @@ std::vector<std::string> sampleNames = {"Top", "WJets", "QCD", "ZJets"};  // gro
     fSamplesMap["QCD"] =(MT2Sample::loadSamples(samplesFileName, 100, 199, cfg.useETHmc()));
     std::cout << "-> Creating sample list for ZJets " << std::endl;
     fSamplesMap["ZJets"] =(MT2Sample::loadSamples(samplesFileName, 600, 699, cfg.useETHmc()));
-
     for(auto sampleName : sampleNames){
       std::cout << "-> Considering group " << sampleName << std::endl;
       for (auto fSample : fSamplesMap[sampleName]){
@@ -140,9 +143,42 @@ std::vector<std::string> sampleNames = {"Top", "WJets", "QCD", "ZJets"};  // gro
     }
   }
 
+  if(cfg.useMC() && !onlyData && !onlySignal && onlyllepCR){
+    std::string samplesFileName = "../samples/samples_" + cfg.llepmcSamples() + ".dat";
+    std::cout << std::endl << std::endl;
+    std::vector<std::string> sampleNames = {"ll"};
+    std::cout << "-> Creating sample list for ll control " << std::endl;
+    std::map<TString, std::vector<MT2Sample>> fSamplesMap;
+    fSamplesMap["ll"] =(MT2Sample::loadSamples(samplesFileName, 300, 599, cfg.useETHmc()));
+    std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
+    for(auto sampleName : sampleNames){
+      std::cout << "-> Considering group " << sampleName << std::endl;
+      for (auto fSample : fSamplesMap[sampleName]){
+          addweight_bkg(fSample,cfg);
+      }
+      std::cout << "-> Done looping on samples for this group" << std::endl;
+    }
+  }
+  
+  if(cfg.useMC() && !onlyData && !onlySignal && onlyzllCR){
+    std::string samplesFileName = "../samples/samples_" + cfg.zllmcSamples() + ".dat";
+    std::cout << std::endl << std::endl;
+    std::vector<std::string> sampleNames = {"DY"};
+    std::cout << "-> Creating sample list for zll control " << std::endl;
+    std::map<TString, std::vector<MT2Sample>> fSamplesMap;
+    fSamplesMap["DY"] =(MT2Sample::loadSamples(samplesFileName, 700, 799, cfg.useETHmc()));
+    std::cout << "-> Loading samples from file: " << samplesFileName << std::endl;
+    for(auto sampleName : sampleNames){
+      std::cout << "-> Considering group " << sampleName << std::endl;
+      for (auto fSample : fSamplesMap[sampleName]){
+          addweight_zll(fSample,cfg);
+      }
+      std::cout << "-> Done looping on samples for this group" << std::endl;
+    }
+  }
 
 
-  if( cfg.sigSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData ) {
+  if( cfg.sigSamples()!="" && cfg.additionalStuff()!="noSignals" && !onlyData && onlySignal) {
     std::string samplesFileName = "../samples/samples_" + cfg.sigSamples() + ".dat";
     std::string samplesMLscore;
     std::cout << std::endl << std::endl;
@@ -180,7 +216,6 @@ void addweight_bkg(const MT2Sample& sample, const MT2Config& cfg){
 
   bool isETH = (isData and cfg.useETHdata()) || (!isData and cfg.useETHmc());
   TString treeName = isETH ? "Events" : "mt2";
-//  TFile* file = TFile::Open(sample.file.c_str());
   TFile* file=new TFile(sample.file.c_str(),"update");
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
   TTree* tree = (TTree*)file->Get(treeName);
@@ -214,7 +249,7 @@ void addweight_bkg(const MT2Sample& sample, const MT2Config& cfg){
         weight = myTree.evt_scale1fb;
         if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
 
-        weight *= myTree.weight_lepsf * myTree.weight_btagsf;
+        weight *= myTree.weight_lepsf * myTree.weight_btagsf*cfg.lumi();
 
         if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt);
 
@@ -230,7 +265,6 @@ void addweight_bkg(const MT2Sample& sample, const MT2Config& cfg){
   }
   tree->Write("", TObject::kOverwrite);
   file->Close();
-//  delete tree;
   delete file;
 }
 
@@ -265,7 +299,6 @@ void addweight_sig(const MT2Sample& sample, const MT2Config& cfg){
   bool  isData = (sample.id >= -1 && sample.id < 100 );
   bool isETH = (isData and cfg.useETHdata()) || (!isData and cfg.useETHmc());
   TString treeName = isETH ? "Events" : "mt2";
-//  TFile* file = TFile::Open(sample.file.c_str());
   TFile* file=new TFile(sample.file.c_str(),"update");
   std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
   TTree* tree = (TTree*)file->Get(treeName);
@@ -328,7 +361,7 @@ void addweight_sig(const MT2Sample& sample, const MT2Config& cfg){
         weight *= sig_xs;
       }
       else{
-        weight *= sig_xs*myTree.evt_filter*1000*cfg.lumi(); // NOTE: now normalized to lumi of the year
+        weight *= sig_xs*myTree.evt_filter*1000*cfg.lumi();
         if(cfg.year()==2016 || cfg.year()==2017) weight *= myTree.weight_L1prefire;
         if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt);
       }
@@ -339,6 +372,71 @@ void addweight_sig(const MT2Sample& sample, const MT2Config& cfg){
   }
   tree->Write("", TObject::kOverwrite);
   file->Close();
-//  delete tree;
+  delete file;
+}
+
+void addweight_zll(const MT2Sample& sample, const MT2Config& cfg){
+  MT2PuReweightTool puReweight;
+  bool puHist = puReweight.setPuWeightHist(cfg.year());
+  bool  isData = (sample.id >= -1 && sample.id < 100 );
+  MT2LeptonSFTool leptonSF;
+  bool electronHist = leptonSF.setElHist("zll");
+  bool muonHist = leptonSF.setMuHist();
+  bool diLepTrigEffHist = leptonSF.setDiLepTriggerHist(cfg.year());
+  bool isETH = (isData and cfg.useETHdata()) || (!isData and cfg.useETHmc());
+  TString treeName = isETH ? "Events" : "mt2";
+  TFile* file=new TFile(sample.file.c_str(),"update");
+  std::cout << "-> Getting mt2 tree from file: " << sample.file << std::endl;
+  TTree* tree = (TTree*)file->Get(treeName);
+  MT2Tree myTree(tree, isETH);
+  double nGen=-9999; double nGenWeighted=-9999;
+  if(!isData and isETH){
+    nGen = getNgen(sample.file, "genEventCount");
+    nGenWeighted = getNgen(sample.file, "genEventSumw");
+  }
+  int nentries = tree->GetEntries();
+  double absweight;
+  TBranch *newBranch=tree->Branch("absweight",&absweight,"absweight/D");
+  for( int iEntry=0; iEntry<nentries; ++iEntry ) {
+    if( iEntry % 50000 == 0 ){
+      std::cout << "    Entry: " << iEntry << " / " << nentries << std::endl;
+    }
+    myTree.GetEntry(iEntry);
+    tree->GetEntry(iEntry);
+    int ID = myTree.evt_id;
+    int lep0_pdgId_to_use = -1;
+    int lep1_pdgId_to_use = -1;
+    lep0_pdgId_to_use = myTree.lep_pdgId[0];
+    lep1_pdgId_to_use = myTree.lep_pdgId[1];
+    Double_t weight_syst = 1.;
+    Double_t weight(1.);
+    if(isData){
+      weight = 1.;
+    }
+    else{
+      if (isETH) weight =  myTree.evt_xsec * myTree.evt_kfactor * myTree.evt_filter * 1000/nGen;
+      else {
+        weight = myTree.evt_scale1fb;
+        if(myTree.genWeight < 0 && weight > 0) weight *= -1.0;
+        weight *= myTree.weight_lepsf * myTree.weight_btagsf*cfg.lumi();
+        if(puHist) weight *= puReweight.getPuWeight(myTree.nTrueInt);
+        if (cfg.year()==2017 || cfg.year()==2016) weight *= myTree.weight_L1prefire;
+        if ((sample.id==301 || sample.id==302 || sample.id==303) && cfg.year()==2016) weight *= myTree.weight_isr / myTree.getAverageISRWeight(sample.id,cfg.year(),0);
+        weight *= myTree.getTTHFWeight(sample.id);
+      }
+    }
+    if(ID >999)
+      weight = 1000.*myTree.evt_xsec / nentries;
+    float HLT_weight=1.;
+    if (!isData && diLepTrigEffHist) {
+      lepSF diLepTrigEffSF = leptonSF.getDiLepTriggerSF(myTree.lep_pt[0],lep0_pdgId_to_use,myTree.lep_pt[1],lep0_pdgId_to_use);
+      HLT_weight = diLepTrigEffSF.sf;
+      weight *= HLT_weight;
+    }
+    absweight=weight;
+    newBranch->Fill();
+  }
+  tree->Write("", TObject::kOverwrite);
+  file->Close();
   delete file;
 }

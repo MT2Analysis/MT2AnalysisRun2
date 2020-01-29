@@ -35,7 +35,7 @@ bool doQCDEstimate = true; // add QCD background to datacards and tables, defaul
 
 // Edit these options
 bool doBlind = false; // if true will write sum of prediction instead of observed number of events in data
-bool doOnlySig = true; // set to true for signal scans on the batch, default false
+bool doOnlySig = false; // set to true for signal scans on the batch, default false
 bool do2016Sig = false;
 bool includeSignalUnc = true; // signal lep eff commented out till available, currently set to false because requires too much memory
 
@@ -208,12 +208,12 @@ int main( int argc, char* argv[] ) {
   MT2Analysis<MT2Estimate>* qcd_syst_sigmasoft;
 
   if(doQCDEstimate){
-    qcd_nominal = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "nominal" );
-    qcd_syst_jer = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_jer" );
-    qcd_syst_nbjetshape = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_nbjetshape" );
-    qcd_syst_njetshape = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_njetshape" );
-    qcd_syst_sigmasoft = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_sigmasoft" );
-    qcd_syst_tail = MT2Analysis<MT2Estimate>::readFromFile( "/shome/mratti/QCD/qcdEstimate_V0.root", "syst_tail" );
+    qcd_nominal = MT2Analysis<MT2Estimate>::readFromFile( "/work/mratti/QCD/qcdEstimate_V0.root", "nominal" );
+    qcd_syst_jer = MT2Analysis<MT2Estimate>::readFromFile( "/work/mratti/QCD/qcdEstimate_V0.root", "syst_jer" );
+    qcd_syst_nbjetshape = MT2Analysis<MT2Estimate>::readFromFile( "/work/mratti/QCD/qcdEstimate_V0.root", "syst_nbjetshape" );
+    qcd_syst_njetshape = MT2Analysis<MT2Estimate>::readFromFile( "/work/mratti/QCD/qcdEstimate_V0.root", "syst_njetshape" );
+    qcd_syst_sigmasoft = MT2Analysis<MT2Estimate>::readFromFile( "/work/mratti/QCD/qcdEstimate_V0.root", "syst_sigmasoft" );
+    qcd_syst_tail = MT2Analysis<MT2Estimate>::readFromFile( "/work/mratti/QCD/qcdEstimate_V0.root", "syst_tail" );
   }
 
 
@@ -330,6 +330,16 @@ int main( int argc, char* argv[] ) {
       shapeErr_zinv+=relativeErr*fabs(this_zinv_zll->GetBinContent(iBin));
       //std::cout << shapeErr_zinv << std::endl;
     }
+    int extrapol_bin = ( use_hybrid ) ?  zinv_zll_hybridBin : 1;
+    int flag_fixshapeerr_zinv=0;
+    if(shapeErr_zinv>fabs(this_zinv_zll->GetBinContent(extrapol_bin))){
+      if(shapeErr_zinv<=fabs(this_zinv_zll->GetBinContent(extrapol_bin))+fabs(this_zinv_zll->GetBinContent(extrapol_bin+1)))
+        flag_fixshapeerr_zinv=1;
+      else if(shapeErr_zinv<=fabs(this_zinv_zll->GetBinContent(extrapol_bin))+fabs(this_zinv_zll->GetBinContent(extrapol_bin+1))+fabs(this_zinv_zll->GetBinContent(extrapol_bin+2)))flag_fixshapeerr_zinv=2;
+      else if(shapeErr_zinv<=fabs(this_zinv_zll->GetBinContent(extrapol_bin))+fabs(this_zinv_zll->GetBinContent(extrapol_bin+1))+fabs(this_zinv_zll->GetBinContent(extrapol_bin+2))+fabs(this_zinv_zll->GetBinContent(extrapol_bin+3)))flag_fixshapeerr_zinv=3;
+      else flag_fixshapeerr_zinv=4;
+    }
+     
 
     // Calculating shape uncertainty for lost lepton (default: linear extrapolation)
     // for the moment will assume same uncertainty for all three years (fully correlated)
@@ -344,6 +354,16 @@ int main( int argc, char* argv[] ) {
           relativeErr = err_llep_shape / (nBins-extrapol_bin) * (iBin-extrapol_bin);
 
       shapeErr_llep+=relativeErr*this_llep->GetBinContent(iBin);
+    }
+
+    extrapol_bin = ( use_hybrid ) ?  llep_hybridBin : 1;
+    int flag_fixshapeerr_llep=0;
+    if(shapeErr_llep>fabs(this_llep->GetBinContent(extrapol_bin))){
+      if(shapeErr_llep<=fabs(this_llep->GetBinContent(extrapol_bin))+fabs(this_llep->GetBinContent(extrapol_bin+1)))
+        flag_fixshapeerr_llep=1;
+      else if (shapeErr_llep<=fabs(this_llep->GetBinContent(extrapol_bin))+fabs(this_llep->GetBinContent(extrapol_bin+1))+fabs(this_llep->GetBinContent(extrapol_bin+2)))flag_fixshapeerr_llep=2;
+      else if (shapeErr_llep<=fabs(this_llep->GetBinContent(extrapol_bin))+fabs(this_llep->GetBinContent(extrapol_bin+1))+fabs(this_llep->GetBinContent(extrapol_bin+2))+fabs(this_llep->GetBinContent(extrapol_bin+3)))flag_fixshapeerr_llep=3;
+      else flag_fixshapeerr_llep=4;
     }
 
     float lastR_zinvZll; //To keep information on last non-zero ratio. Will use last non-zero ratio if ratio for one bin is zero.
@@ -596,15 +616,98 @@ int main( int argc, char* argv[] ) {
         datacard << "zinvDY_CRstat_" << std::setprecision(3) << gammaConventionCombined( yield_zinv_zll16, yield_zinv_zll17, yield_zinv_zll18, Nzll, 1, zinvCR_name, binName, testAlphaZll16, testAlphaZll17, testAlphaZll18 ) << std::setprecision(3) << std::endl;
 
         if( nBins>1 ){
-          if( iBin==extrapol_bin && fabs(yield_zinv_zll)>0 ){ //For shape uncertainty on 1st extrapolated MT2 bin, take 1-tot. unc. form other bins (PIVOT at second bin)
-            datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " - - - - " << std::endl;
-            zinvZll_systUp += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
-            zinvZll_systDn += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
+          if( iBin==extrapol_bin && fabs(yield_zinv_zll)>0 ){
+            if(!flag_fixshapeerr_zinv){
+              datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " " << 1.-shapeErr_zinv/fabs(yield_zinv_zll) << " - - - - " << std::endl;
+              zinvZll_systUp += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
+              zinvZll_systDn += (shapeErr_zinv/fabs(yield_zinv_zll))*(shapeErr_zinv/fabs(yield_zinv_zll));
+            }
+            else{
+              cout<<"zinv: region "<<binName<<", shapeErr_zinv "<<shapeErr_zinv<<", yield_zinv_zll "<<yield_zinv_zll<<", need to correct this case in extrapol bin and next"<<endl;
+              zinvZll_systUp += 1.0;
+              zinvZll_systDn += 1.0;
+            }
+
+
           }else{
             if( iBin > extrapol_bin ){ //for hybrid (made such that is works also for pure extrapolation
-              datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " " << 1.+relativeErr_zll << " "  << 1.+relativeErr_zll  << " - - - - " << std::endl;
-              zinvZll_systUp += relativeErr_zll*relativeErr_zll;
-              zinvZll_systDn += relativeErr_zll*relativeErr_zll;
+
+              if(iBin>extrapol_bin+4||!flag_fixshapeerr_zinv){
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " " << 1.+relativeErr_zll << " "  << 1.+relativeErr_zll  << " - - - - " << std::endl;
+                zinvZll_systUp += relativeErr_zll*relativeErr_zll;
+                zinvZll_systDn += relativeErr_zll*relativeErr_zll;
+              }
+              else if( iBin==extrapol_bin+1 &&flag_fixshapeerr_zinv==1){
+
+                float compen_res=shapeErr_zinv-fabs(this_zinv_zll->GetBinContent(extrapol_bin));
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " "  << 1.+relativeErr_zll-compen_res/yield_zinv_zll  << " - - - - " << std::endl;
+                zinvZll_systUp += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+                zinvZll_systDn += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+                cout<<"region "<<binName<<", zinv corrected relative error "<<relativeErr_zll-compen_res/yield_zinv_zll<<endl;
+                cout<<"zinv: corrected the bin next to extrapolbin"<<endl;
+
+              }
+              else if ( iBin==extrapol_bin+1 && flag_fixshapeerr_zinv>=2){
+                zinvZll_systUp += 1.0;
+                zinvZll_systDn += 1.0;
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << relativeErr_zll << " " << relativeErr_zll << " "  << relativeErr_zll  << " - - - - " << std::endl;
+                cout<<"zinv: still need to correct in the second bin next to extropolbin"<<endl;
+              }
+              else if (iBin==extrapol_bin+2 && flag_fixshapeerr_zinv<2 ){
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " " << 1.+relativeErr_zll << " "  << 1.+relativeErr_zll  << " - - - - " << std::endl;
+                zinvZll_systUp += relativeErr_zll*relativeErr_zll;
+                zinvZll_systDn += relativeErr_zll*relativeErr_zll;
+              }
+              else if (iBin==extrapol_bin+2 && flag_fixshapeerr_zinv==2){
+                float compen_res=shapeErr_zinv-fabs(this_zinv_zll->GetBinContent(extrapol_bin))-fabs(this_zinv_zll->GetBinContent(extrapol_bin+1));
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " "  << 1.+relativeErr_zll-compen_res/yield_zinv_zll  << " - - - - " << std::endl;
+               zinvZll_systUp += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+               zinvZll_systDn += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+               cout<<"region "<<binName<<", zinv corrected relative error "<<(relativeErr_zll-compen_res/yield_zinv_zll)<<endl; 
+               cout<<"zinv: corrected the second bin next to extrapolbin"<<endl;
+              }
+              else if ( iBin==extrapol_bin+2 && flag_fixshapeerr_zinv>2){
+                zinvZll_systUp += 1.0;
+                zinvZll_systDn += 1.0;
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << relativeErr_zll << " " << relativeErr_zll << " "  << relativeErr_zll  << " - - - - " << std::endl;
+                cout<<"zinv: still need to correct in the third bin next to extropolbin"<<endl;
+              }
+              else if(iBin==extrapol_bin+3 && flag_fixshapeerr_zinv<3){
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " " << 1.+relativeErr_zll << " "  << 1.+relativeErr_zll  << " - - - - " << std::endl;
+                zinvZll_systUp += relativeErr_zll*relativeErr_zll;
+                zinvZll_systDn += relativeErr_zll*relativeErr_zll;
+              }
+              else if(iBin==extrapol_bin+3 && flag_fixshapeerr_zinv==3){
+                float compen_res=shapeErr_zinv-fabs(this_zinv_zll->GetBinContent(extrapol_bin))-fabs(this_zinv_zll->GetBinContent(extrapol_bin+1))-fabs(this_zinv_zll->GetBinContent(extrapol_bin+2));
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " "  << 1.+relativeErr_zll-compen_res/yield_zinv_zll  << " - - - - " << std::endl;
+               zinvZll_systUp += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+               zinvZll_systDn += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+               cout<<"region "<<binName<<", zinv corrected relative error "<<(relativeErr_zll-compen_res/yield_zinv_zll)<<endl;
+               cout<<"zinv: corrected the third bin next to extrapolbin"<<endl;
+              }
+              else if (iBin==extrapol_bin+3 && flag_fixshapeerr_zinv>3){
+
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << relativeErr_zll << " " << relativeErr_zll << " "  << relativeErr_zll  << " - - - - " << std::endl;
+                cout<<"zinv: still need to correct in the fourth bin next to extropolbin"<<endl;
+
+              }
+
+              else if(iBin==extrapol_bin+4 && flag_fixshapeerr_zinv<4){
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll << " " << 1.+relativeErr_zll << " "  << 1.+relativeErr_zll  << " - - - - " << std::endl;
+                zinvZll_systUp += relativeErr_zll*relativeErr_zll;
+                zinvZll_systDn += relativeErr_zll*relativeErr_zll;
+              }
+
+              else if(iBin==extrapol_bin+4 && flag_fixshapeerr_zinv==4){
+                float compen_res=shapeErr_zinv-fabs(this_zinv_zll->GetBinContent(extrapol_bin))-fabs(this_zinv_zll->GetBinContent(extrapol_bin+1))-fabs(this_zinv_zll->GetBinContent(extrapol_bin+2))-fabs(this_zinv_zll->GetBinContent(extrapol_bin+3));
+                datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " " << 1.+relativeErr_zll-compen_res/yield_zinv_zll << " "  << 1.+relativeErr_zll-compen_res/yield_zinv_zll  << " - - - - " << std::endl;
+               zinvZll_systUp += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+               zinvZll_systDn += (relativeErr_zll-compen_res/yield_zinv_zll)*(relativeErr_zll-compen_res/yield_zinv_zll);
+               cout<<"region "<<binName<<", zinv corrected relative error "<<(relativeErr_zll-compen_res/yield_zinv_zll)<<endl;
+               cout<<"zinv: corrected the fourth bin next to extrapolbin"<<endl;
+               if (1.+relativeErr_zll-compen_res/yield_zinv_zll<0) cout<<"zinvDY_shape still negative:"<< 1.+relativeErr_zll-compen_res/yield_zinv_zll<<", need to correct the fifth bin next to extrapolbin, please check"<<endl;
+              }
+              else{cout<<"still something wrong, please check"<<endl;}
             }
           }
         }
@@ -722,16 +825,97 @@ int main( int argc, char* argv[] ) {
 
         // Shape uncertainty
         if( nBins > 1 ){
-          if( iBin==extrapol_bin_llep && yield_llep>0 ){
-            datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.-shapeErr_llep/yield_llep << " " << 1.-shapeErr_llep/yield_llep << " " << 1.-shapeErr_llep/yield_llep << " - " << std::endl;
-            llep_systUp += (shapeErr_llep/yield_llep)*(shapeErr_llep/yield_llep);
-            llep_systDn += (shapeErr_llep/yield_llep)*(shapeErr_llep/yield_llep);
+          if( iBin==extrapol_bin_llep && fabs(yield_llep)>0 ){ 
+            if(!flag_fixshapeerr_llep){
+              datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.-shapeErr_llep/fabs(yield_llep) << " " << 1.-shapeErr_llep/fabs(yield_llep) << " " << 1.-shapeErr_llep/fabs(yield_llep) << " - " << std::endl;
+              llep_systUp += (shapeErr_llep/fabs(yield_llep))*(shapeErr_llep/fabs(yield_llep));
+              llep_systDn += (shapeErr_llep/fabs(yield_llep))*(shapeErr_llep/fabs(yield_llep));
+            }
+            else{
+              cout<<"llep: region "<<binName<<", shapeErr_llep "<<shapeErr_llep<<", yield_llep "<<yield_llep<<", need to correct this case in extrapol bin and next"<<endl;
+              llep_systUp += 1.0;
+              llep_systDn += 1.0;
+            }
           }
           else{
             if( iBin > extrapol_bin_llep ){ //for hybrid (made such that is works also for pure extrapolation
-              datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1+relativeErr_llep << " " << 1+relativeErr_llep << " " << 1+relativeErr_llep << " - " << std::endl;
-              llep_systUp += relativeErr_llep*relativeErr_llep;
-              llep_systDn += relativeErr_llep*relativeErr_llep;
+
+              if(iBin>extrapol_bin_llep+4||!flag_fixshapeerr_llep){
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep << " " << 1.+relativeErr_llep << " "  << 1.+relativeErr_llep  << " - " << std::endl;
+                llep_systUp += relativeErr_llep*relativeErr_llep;
+                llep_systDn += relativeErr_llep*relativeErr_llep;
+              }
+              else if( iBin==extrapol_bin_llep+1 &&flag_fixshapeerr_llep==1){
+                float compen_res=shapeErr_llep-fabs(this_llep->GetBinContent(extrapol_bin_llep));
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep-compen_res/yield_llep << " " << 1.+relativeErr_llep-compen_res/yield_llep << " "  << 1.+relativeErr_llep-compen_res/yield_llep  << " - " << std::endl;
+                llep_systUp += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                llep_systDn += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                cout<<"region "<<binName<<", llep corrected relative error "<<relativeErr_llep-compen_res/yield_llep<<endl;
+                cout<<"zinv: corrected the bin next to extrapolbin"<<endl;
+
+              }
+              else if ( iBin==extrapol_bin_llep+1 && flag_fixshapeerr_llep>=2){
+                llep_systUp += 1.0;
+                llep_systDn += 1.0;
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << relativeErr_llep << " " << relativeErr_llep << " "  << relativeErr_llep  << " - " << std::endl;
+                cout<<"llep: still need to correct in the second bin next to extropolbin"<<endl;
+              }
+              else if (iBin==extrapol_bin_llep+2 && flag_fixshapeerr_llep<2 ){
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep << " " << 1.+relativeErr_llep << " "  << 1.+relativeErr_llep  << " - " << std::endl;
+                llep_systUp += relativeErr_llep*relativeErr_llep;
+                llep_systDn += relativeErr_llep*relativeErr_llep;
+              }
+              else if (iBin==extrapol_bin_llep+2 && flag_fixshapeerr_llep==2){
+                float compen_res=shapeErr_llep-fabs(this_llep->GetBinContent(extrapol_bin_llep))-fabs(this_llep->GetBinContent(extrapol_bin_llep+1));
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep-compen_res/yield_llep << " " << 1.+relativeErr_llep-compen_res/yield_llep << " "  << 1.+relativeErr_llep-compen_res/yield_llep  << " - " << std::endl;
+                llep_systUp += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                llep_systDn += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+               cout<<"region "<<binName<<", llep corrected relative error "<<(relativeErr_llep-(shapeErr_llep-fabs(this_llep->GetBinContent(extrapol_bin_llep))-fabs(this_llep->GetBinContent(extrapol_bin_llep+1)))/yield_llep)<<endl;
+               cout<<"llep: corrected the second bin next to extrapolbin"<<endl;
+
+              }
+
+              else if(iBin==extrapol_bin_llep+2 && flag_fixshapeerr_llep>2){
+                llep_systUp += 1.0;
+                llep_systDn += 1.0;
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << relativeErr_llep << " " << relativeErr_llep << " "  << relativeErr_llep  << " - " << std::endl;
+                cout<<"llep: still need to correct in the third bin next to extropolbin"<<endl;
+              }
+
+              else if(iBin==extrapol_bin_llep+3 && flag_fixshapeerr_llep<3){
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep << " " << 1.+relativeErr_llep << " "  << 1.+relativeErr_llep  << " - " << std::endl;
+                llep_systUp += relativeErr_llep*relativeErr_llep;
+                llep_systDn += relativeErr_llep*relativeErr_llep;
+              }
+              else if(iBin==extrapol_bin_llep+3 && flag_fixshapeerr_llep==3){
+                float compen_res=shapeErr_llep-fabs(this_llep->GetBinContent(extrapol_bin_llep))-fabs(this_llep->GetBinContent(extrapol_bin_llep+1))-fabs(this_llep->GetBinContent(extrapol_bin_llep+2));
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep-compen_res/yield_llep << " " << 1.+relativeErr_llep-compen_res/yield_llep << " "  << 1.+relativeErr_llep-compen_res/yield_llep  << " - " << std::endl;
+                llep_systUp += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                llep_systDn += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                cout<<"region "<<binName<<", llep corrected relative error "<<(relativeErr_llep-compen_res/yield_llep)<<endl;
+                cout<<"llep: corrected the third bin next to extrapolbin"<<endl;
+              }
+              else if(iBin==extrapol_bin_llep+3 && flag_fixshapeerr_llep>3){
+                llep_systUp += 1.0;
+                llep_systDn += 1.0;
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << relativeErr_llep << " " << relativeErr_llep << " "  << relativeErr_llep  << " - " << std::endl;
+                cout<<"llep: still need to correct in the fourth bin next to extropolbin"<<endl;
+              }
+              else if(iBin==extrapol_bin_llep+4 && flag_fixshapeerr_llep<4){
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep << " " << 1.+relativeErr_llep << " "  << 1.+relativeErr_llep  << " - " << std::endl;
+                llep_systUp += relativeErr_llep*relativeErr_llep;
+                llep_systDn += relativeErr_llep*relativeErr_llep;
+              }
+              else if(iBin==extrapol_bin_llep+4 && flag_fixshapeerr_llep==4){
+                float compen_res=shapeErr_llep-fabs(this_llep->GetBinContent(extrapol_bin_llep))-fabs(this_llep->GetBinContent(extrapol_bin_llep+1))-fabs(this_llep->GetBinContent(extrapol_bin_llep+2))-fabs(this_llep->GetBinContent(extrapol_bin_llep+3));
+                datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << 1.+relativeErr_llep-compen_res/yield_llep << " " << 1.+relativeErr_llep-compen_res/yield_llep << " "  << 1.+relativeErr_llep-compen_res/yield_llep  << " - " << std::endl;
+                llep_systUp += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                llep_systDn += (relativeErr_llep-compen_res/yield_llep)*(relativeErr_llep-compen_res/yield_llep);
+                cout<<"region "<<binName<<", llep corrected relative error "<<(relativeErr_llep-compen_res/yield_llep)<<endl;
+                cout<<"llep: corrected the fourth bin next to extrapolbin"<<endl;
+               if (1.+relativeErr_llep-compen_res/yield_llep<0) cout<<"llep_shape still negative:"<< 1.+relativeErr_llep-compen_res/yield_llep<<", need to correct the fifth bin next to extrapolbin, please check"<<endl;
+              }
+              else{cout<<"llep:still something wrong, please check"<<endl;}
             }
           }
         } // end shape uncertainty
