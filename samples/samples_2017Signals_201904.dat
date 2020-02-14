@@ -1,20 +1,20 @@
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_2.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_ext1_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_ext1_2.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_ext1_3.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_ext1_4.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb_ext1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1bbbb.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_1.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_2.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_ext1_1.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_ext1_2.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_ext1_3.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_ext1_4.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb_ext1.root
+/scratch/mratti/NEWSnTtrees/2017/T1bbbb.root
 
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_2.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_2.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_3.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_4.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_2.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_2.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_3.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1_4.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq_ext1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T1qqqq.root
 
 #/scratch/mratti/NEWSnTtrees/2017/signal/T1tttt_1.root
 #/scratch/mratti/NEWSnTtrees/2017/signal/T1tttt_2.root
@@ -31,13 +31,13 @@
 #/scratch/mratti/NEWSnTtrees/2017/signal/T1tttt_ext1.root
 #/scratch/mratti/NEWSnTtrees/2017/signal/T1tttt.root
 
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_ext1_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_ext1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_mSbot1650to2600_ext1_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_mSbot1650to2600_ext1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_mSbot1650to2600.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2bb.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_ext1_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_ext1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_mSbot1650to2600_ext1_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_mSbot1650to2600_ext1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb_mSbot1650to2600.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2bb.root
 
 #/scratch/mratti/NEWSnTtrees/2017/signal/T2bt_1.root
 #/scratch/mratti/NEWSnTtrees/2017/signal/T2bt_2.root
@@ -47,15 +47,15 @@
 #/scratch/mratti/NEWSnTtrees/2017/signal/T2cc_1.root
 #/scratch/mratti/NEWSnTtrees/2017/signal/T2cc.root
 
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_2.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1_1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1_2.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1_3.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_mSq_1850to2600_ext1.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_mSq_1850to2600.root
-/scratch/mratti/NEWSnTtrees/2017/signal/T2qq.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_2.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1_1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1_2.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1_3.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_ext1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_mSq_1850to2600_ext1.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq_mSq_1850to2600.root
+#/scratch/mratti/NEWSnTtrees/2017/signal/T2qq.root
 
 #/scratch/mratti/NEWSnTtrees/2017/signal/T2tt_mStop1200to2000_1.root
 #/scratch/mratti/NEWSnTtrees/2017/signal/T2tt_mStop1200to2000_ext1_1.root

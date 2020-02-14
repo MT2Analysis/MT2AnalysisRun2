@@ -598,7 +598,7 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
          break;
        }
     }
-    if ( cfg.usebinMLcut()){
+    if ( cfg.usebinMLcut() && !cfg.dozllmergecut()){
       if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
         if (iEntry<10)cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<" , MLtag"<<myTree.MLtag<<endl;
         if (*(scorevaluemap[found_region]) < binMLcutmap.cuts[found_region]) continue;
@@ -795,9 +795,30 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	if( njets<7 ) {//Fill it the normal way     	   
 	  thisTree = anaTree->get( ht, njets, nbjets, minMTBmet, mt2 ); 		
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
+              if (iEntry<100)
+                cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<endl;
+              if (*(scorevaluemap[found_region]) >= binMLcutmap.cuts[found_region]){
+                if (iEntry<100) cout<<"keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+              }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+          }
 	}
 	else if( ht<=575 && njets>=7 && nbjets==0 ) { //for the VL and L regions, we keep >=7j 0b separate
 	  //outFileSF << "[merged] CR A-1" << endl << endl;
@@ -805,107 +826,590 @@ void computeYieldSnO( const MT2Sample& sample, const MT2Config& cfg,
 	  thisTree = anaTree->get( ht, njets, 0, minMTBmet, mt2 );
 
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
+
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if(std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),found_region)!= binMLcutmap.regionnames.end()){
+              if (iEntry<100)
+                cout<<"Entry "<<iEntry<<", score "<<*(scorevaluemap[found_region])<<", region "<<found_region<<" ,cut "<<binMLcutmap.cuts[found_region]<<endl;
+              if (*(scorevaluemap[found_region]) >= binMLcutmap.cuts[found_region]){
+                if (iEntry<100) cout<<"keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+              }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+            if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	    assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	    thisTree->fillTree_zll(myTree, weight );
+	    thisTree->yield->Fill( mt2, weight );
+          }
 	}
 	else if( ht<=575 && njets>=7 && nbjets!=0 ) { //for the VL and L regions, we merge >=7j 1,2,3b together
 	  //outFileSF << "[merged] CR B-1" << endl << endl;
-
+          if (iEntry<100)
+              cout<<"Entry "<<iEntry<<", region "<<found_region<<endl;
 	  thisTree = anaTree->get( ht, njets, 1, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	   
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=450 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT250to450_j7toInf_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT250to450_j7toInf_b1"<<", score "<<*(scorevaluemap["HT250to450_j7toInf_b1"])<<", cut on "<<binMLcutmap.cuts["HT250to450_j7toInf_b1"]<<endl;
+                if (*(scorevaluemap["HT250to450_j7toInf_b1"]) >= binMLcutmap.cuts["HT250to450_j7toInf_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>450 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT450to575_j7toInf_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT450to575_j7toInf_b1"<<", score "<<*(scorevaluemap["HT450to575_j7toInf_b1"])<<", cut on "<<binMLcutmap.cuts["HT450to575_j7toInf_b1"]<<endl;
+                if (*(scorevaluemap["HT450to575_j7toInf_b1"]) >= binMLcutmap.cuts["HT450to575_j7toInf_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on VL-L njet>=7 nbjet=1, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 	
 	  thisTree = anaTree->get( ht, njets, 2, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=450 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT250to450_j7toInf_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT250to450_j7toInf_b2"<<", score "<<*(scorevaluemap["HT250to450_j7toInf_b2"])<<", cut on "<<binMLcutmap.cuts["HT250to450_j7toInf_b2"]<<endl;
+                if (*(scorevaluemap["HT250to450_j7toInf_b2"]) >= binMLcutmap.cuts["HT250to450_j7toInf_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>450 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT450to575_j7toInf_b2")!= binMLcutmap.regionnames.end()){
+             if (iEntry<100) cout<<"merged region cut on "<<"HT450to575_j7toInf_b2"<<", score "<<*(scorevaluemap["HT450to575_j7toInf_b2"])<<", cut on "<<binMLcutmap.cuts["HT450to575_j7toInf_b2"]<<endl;   
+             if (*(scorevaluemap["HT450to575_j7toInf_b2"]) >= binMLcutmap.cuts["HT450to575_j7toInf_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on VL-L njet>=7 nbjet=2, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+          }	  
 	  thisTree = anaTree->get( ht, njets, 3, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=450 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT250to450_j7toInf_b3toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT250to450_j7toInf_b3toInf"<<", score "<<*(scorevaluemap["HT250to450_j7toInf_b3toInf"])<<", cut on "<<binMLcutmap.cuts["HT250to450_j7toInf_b3toInf"]<<endl;
+                if (*(scorevaluemap["HT250to450_j7toInf_b3toInf"]) >= binMLcutmap.cuts["HT250to450_j7toInf_b3toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>450 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT450to575_j7toInf_b3toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT450to575_j7toInf_b3toInf"<<", score "<<*(scorevaluemap["HT450to575_j7toInf_b3toInf"])<<", cut on "<<binMLcutmap.cuts["HT450to575_j7toInf_b3toInf"]<<endl;
+                if (*(scorevaluemap["HT450to575_j7toInf_b3toInf"]) >= binMLcutmap.cuts["HT450to575_j7toInf_b3toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on VL-L njet>=7 nbjet>=3, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 	}
 	else if( ht>575 && njets>=7 && nbjets==0 ) { //for the M to UH regions, we merge >=7j 0b together
 	  //outFileSF << "[merged] CR A-2" << endl << endl;
 
 	  thisTree = anaTree->get( ht, 7, 0, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+          if (iEntry<100)
+                cout<<"Entry "<<iEntry<<", region "<<found_region<<endl;
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j7to9_b0")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j7to9_b0"<<", score "<<*(scorevaluemap["HT575to1200_j7to9_b0"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j7to9_b0"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j7to9_b0"]) >= binMLcutmap.cuts["HT575to1200_j7to9_b0"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j7to9_b0")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j7to9_b0"<<", score "<<*(scorevaluemap["HT1200to1500_j7to9_b0"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j7to9_b0"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j7to9_b0"]) >= binMLcutmap.cuts["HT1200to1500_j7to9_b0"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j7to9_b0")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j7to9_b0"<<", score "<<*(scorevaluemap["HT1500toInf_j7to9_b0"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j7to9_b0"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j7to9_b0"]) >= binMLcutmap.cuts["HT1500toInf_j7to9_b0"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet7-9 nbjet=0, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 	
 	  thisTree = anaTree->get( ht, 10, 0, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j10toInf_b0")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j10toInf_b0"<<", score "<<*(scorevaluemap["HT575to1200_j10toInf_b0"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j10toInf_b0"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j10toInf_b0"]) >= binMLcutmap.cuts["HT575to1200_j10toInf_b0"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j10toInf_b0")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j10toInf_b0"<<", score "<<*(scorevaluemap["HT1200to1500_j10toInf_b0"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j10toInf_b0"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j10toInf_b0"]) >= binMLcutmap.cuts["HT1200to1500_j10toInf_b0"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j10toInf_b0")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j10toInf_b0"<<", score "<<*(scorevaluemap["HT1500toInf_j10toInf_b0"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j10toInf_b0"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j10toInf_b0"]) >= binMLcutmap.cuts["HT1500toInf_j10toInf_b0"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet>=10 nbjet=0, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+          }
 	}
 	else if( ht>575 && njets>=7 && nbjets!=0 ) { //for the M to UH regions, we merge >=7j 1,2,3,4b together
 	  //outFileSF << "[merged] CR B-2" << endl << endl;
 
 	  thisTree = anaTree->get( ht, 7, 1, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+          if (iEntry<100)
+                cout<<"Entry "<<iEntry<<", region "<<found_region<<endl;
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j7to9_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j7to9_b1"<<", score "<<*(scorevaluemap["HT575to1200_j7to9_b1"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j7to9_b1"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j7to9_b1"]) >= binMLcutmap.cuts["HT575to1200_j7to9_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j7to9_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j7to9_b1"<<", score "<<*(scorevaluemap["HT1200to1500_j7to9_b1"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j7to9_b1"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j7to9_b1"]) >= binMLcutmap.cuts["HT1200to1500_j7to9_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j7to9_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j7to9_b1"<<", score "<<*(scorevaluemap["HT1500toInf_j7to9_b1"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j7to9_b1"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j7to9_b1"]) >= binMLcutmap.cuts["HT1500toInf_j7to9_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet7-9 nbjet=1, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged region cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 	
 	  thisTree = anaTree->get( ht, 7, 2, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	   
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j7to9_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j7to9_b2"<<", score "<<*(scorevaluemap["HT575to1200_j7to9_b2"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j7to9_b2"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j7to9_b2"]) >= binMLcutmap.cuts["HT575to1200_j7to9_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j7to9_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j7to9_b2"<<", score "<<*(scorevaluemap["HT1200to1500_j7to9_b2"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j7to9_b2"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j7to9_b2"]) >= binMLcutmap.cuts["HT1200to1500_j7to9_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j7to9_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j7to9_b2"<<", score "<<*(scorevaluemap["HT1500toInf_j7to9_b2"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j7to9_b2"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j7to9_b2"]) >= binMLcutmap.cuts["HT1500toInf_j7to9_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet7-9 nbjet=2, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 
 	  thisTree = anaTree->get( ht, 7, 3, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	 
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j7to9_b3")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j7to9_b3"<<", score "<<*(scorevaluemap["HT575to1200_j7to9_b3"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j7to9_b3"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j7to9_b3"]) >= binMLcutmap.cuts["HT575to1200_j7to9_b3"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j7to9_b3")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j7to9_b3"<<", score "<<*(scorevaluemap["HT1200to1500_j7to9_b3"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j7to9_b3"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j7to9_b3"]) >= binMLcutmap.cuts["HT1200to1500_j7to9_b3"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j7to9_b3")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j7to9_b3"<<", score "<<*(scorevaluemap["HT1500toInf_j7to9_b3"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j7to9_b3"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j7to9_b3"]) >= binMLcutmap.cuts["HT1500toInf_j7to9_b3"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet7-9 nbjet=3, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 
 	  thisTree = anaTree->get( ht, 7, 4, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );	  
-
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j7to9_b4toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j7to9_b4toInf"<<", score "<<*(scorevaluemap["HT575to1200_j7to9_b4toInf"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j7to9_b4toInf"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j7to9_b4toInf"]) >= binMLcutmap.cuts["HT575to1200_j7to9_b4toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j7to9_b4toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j7to9_b4toInf"<<", score "<<*(scorevaluemap["HT1200to1500_j7to9_b4toInf"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j7to9_b4toInf"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j7to9_b4toInf"]) >= binMLcutmap.cuts["HT1200to1500_j7to9_b4toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j7to9_b4toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j7to9_b4toInf"<<", score "<<*(scorevaluemap["HT1500toInf_j7to9_b4toInf"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j7to9_b4toInf"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j7to9_b4toInf"]) >= binMLcutmap.cuts["HT1500toInf_j7to9_b4toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet7-9 nbjet>=4, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );	  
+          }
       
 	  thisTree = anaTree->get( ht, 10, 1, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j10toInf_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j10toInf_b1"<<", score "<<*(scorevaluemap["HT575to1200_j10toInf_b1"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j10toInf_b1"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j10toInf_b1"]) >= binMLcutmap.cuts["HT575to1200_j10toInf_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j10toInf_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j10toInf_b1"<<", score "<<*(scorevaluemap["HT1200to1500_j10toInf_b1"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j10toInf_b1"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j10toInf_b1"]) >= binMLcutmap.cuts["HT1200to1500_j10toInf_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j10toInf_b1")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j10toInf_b1"<<", score "<<*(scorevaluemap["HT1500toInf_j10toInf_b1"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j10toInf_b1"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j10toInf_b1"]) >= binMLcutmap.cuts["HT1500toInf_j10toInf_b1"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet>=10 nbjet=1, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 	
 	  thisTree = anaTree->get( ht, 10, 2, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j10toInf_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j10toInf_b2"<<", score "<<*(scorevaluemap["HT575to1200_j10toInf_b2"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j10toInf_b2"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j10toInf_b2"]) >= binMLcutmap.cuts["HT575to1200_j10toInf_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j10toInf_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j10toInf_b2"<<", score "<<*(scorevaluemap["HT1200to1500_j10toInf_b2"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j10toInf_b2"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j10toInf_b2"]) >= binMLcutmap.cuts["HT1200to1500_j10toInf_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j10toInf_b2")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j10toInf_b2"<<", score "<<*(scorevaluemap["HT1500toInf_j10toInf_b2"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j10toInf_b2"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j10toInf_b2"]) >= binMLcutmap.cuts["HT1500toInf_j10toInf_b2"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet>=10 nbjet=2, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 
 	  thisTree = anaTree->get( ht, 10, 3, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	  
+          if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j10toInf_b3")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j10toInf_b3"<<", score "<<*(scorevaluemap["HT575to1200_j10toInf_b3"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j10toInf_b3"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j10toInf_b3"]) >= binMLcutmap.cuts["HT575to1200_j10toInf_b3"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j10toInf_b3")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j10toInf_b3"<<", score "<<*(scorevaluemap["HT1200to1500_j10toInf_b3"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j10toInf_b3"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j10toInf_b3"]) >= binMLcutmap.cuts["HT1200to1500_j10toInf_b3"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j10toInf_b3")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j10toInf_b3"<<", score "<<*(scorevaluemap["HT1500toInf_j10toInf_b3"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j10toInf_b3"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j10toInf_b3"]) >= binMLcutmap.cuts["HT1500toInf_j10toInf_b3"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet>=10 nbjet=3, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 
 	  thisTree = anaTree->get( ht, 10, 4, minMTBmet, mt2 );
 	  if( thisTree==0 ) continue;
-	  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
-	  thisTree->fillTree_zll(myTree, weight );
-	  thisTree->yield->Fill( mt2, weight );
-	   
+            if ( cfg.usebinMLcut() && cfg.dozllmergecut()){
+            if (ht<=1200 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT575to1200_j10toInf_b4toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT575to1200_j10toInf_b4toInf"<<", score "<<*(scorevaluemap["HT575to1200_j10toInf_b4toInf"])<<", cut on "<<binMLcutmap.cuts["HT575to1200_j10toInf_b4toInf"]<<endl;
+                if (*(scorevaluemap["HT575to1200_j10toInf_b4toInf"]) >= binMLcutmap.cuts["HT575to1200_j10toInf_b4toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1200 && ht<=1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1200to1500_j10toInf_b4toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1200to1500_j10toInf_b4toInf"<<", score "<<*(scorevaluemap["HT1200to1500_j10toInf_b4toInf"])<<", cut on "<<binMLcutmap.cuts["HT1200to1500_j10toInf_b4toInf"]<<endl;
+                if (*(scorevaluemap["HT1200to1500_j10toInf_b4toInf"]) >= binMLcutmap.cuts["HT1200to1500_j10toInf_b4toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else if(ht>1500 && std::find(binMLcutmap.regionnames.begin(),binMLcutmap.regionnames.end(),"HT1500toInf_j10toInf_b4toInf")!= binMLcutmap.regionnames.end()){
+                if (iEntry<100) cout<<"merged region cut on "<<"HT1500toInf_j10toInf_b4toInf"<<", score "<<*(scorevaluemap["HT1500toInf_j10toInf_b4toInf"])<<", cut on "<<binMLcutmap.cuts["HT1500toInf_j10toInf_b4toInf"]<<endl;
+                if (*(scorevaluemap["HT1500toInf_j10toInf_b4toInf"]) >= binMLcutmap.cuts["HT1500toInf_j10toInf_b4toInf"]){
+                  if (iEntry<100) cout<<"keep this event"<<endl;
+                  assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                  thisTree->fillTree_zll(myTree, weight );
+                  thisTree->yield->Fill( mt2, weight );
+                }
+            }
+            else{
+                if (iEntry<100) cout<<"apply no cut on M-UH njet>=10 nbjet>=4, keep this event"<<endl;
+                assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+                thisTree->fillTree_zll(myTree, weight );
+                thisTree->yield->Fill( mt2, weight );
+            }
+          }
+          else{
+                if (iEntry<100) cout<<"not merged cut, keep this event"<<endl;
+	        assignVariablesToTree(thisTree, myTree, Zvec, HLT_weight, lep0_pdgId_to_use, lep1_pdgId_to_use, nLep_to_be_used, ID, nJetHF30_);
+	        thisTree->fillTree_zll(myTree, weight );
+	        thisTree->yield->Fill( mt2, weight );
+	  }
 	}
 	else {
 	  //outFileSF << "I filled no region" << endl;

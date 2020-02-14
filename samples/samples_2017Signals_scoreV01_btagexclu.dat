@@ -1,0 +1,10 @@
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_1_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_2_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_ext1_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_ext1_1_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_ext1_2_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_ext1_3_btagDeepCSV_excluded.root
+/scratch/wjin/featurereduced4/sig_score/score1_forT1bbbb_2017_T1bbbb_ext1_4_btagDeepCSV_excluded.root
+
+#note:if one names is totaly contained in another, it should always be put in front of the other one, or the reading of score will be wrong.

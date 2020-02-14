@@ -1,0 +1,44 @@
+lumi 35.9 
+year 2016
+regionsSet Moriond2019
+useETHdata 1
+useETHmc 0
+#isMLcut 1
+#MLcut 0.5
+usebinMLcut 1
+binMLcutinf cutinfV3
+
+
+gammaTemplateRegions 13TeV_2016_inclusive
+crRegionsSet 13TeV_2016_inclusive
+qcdRegionsSet zurich2016_noMonojet
+
+mcSamples 2016MC_MLoptimize
+dataSamples 2016data_MLoptimize
+sigSamples 2016Signals_MLoptimize
+zllmcSamples 2016zllMC_MLoptimize
+llepmcSamples 2016llepMC_MLoptimize
+#zllsigSamples 2016zllSignals_MLoptimize
+#llepsigSamples 2016llepSignals_MLoptimize
+zlldataSamples 2016zlldata_MLoptimize
+llepdataSamples 2016llepdata_MLoptimize
+
+mcMLscore 2016MC_scoreV03
+dataMLscore 2016data_scoreV03
+sigMLscore 2016Signals_scoreV03
+zllmcMLscore 2016zllMC_scoreV03
+llepmcMLscore 2016llepMC_scoreV03
+#zllsigMLscore 2016zllSignals_scoreV03
+#llepsigMLscore 2016llepSignals_scoreV03
+zlldataMLscore 2016zlldata_scoreV03
+llepdataMLscore 2016llepdata_scoreV03
+
+qcdMCSamples Summer16_SnT_06Mar_forQCD
+qcdDataSamples Run2016_35p9ifb_06Mar_forQCD
+
+qcdMonoJetMCSamples 2016MC_201904
+qcdMonoJetDataSamples Run2016_35p9ifb_06Mar_forMonoJet
+
+#additionalStuff noSignals
+#qcdMCSamples Spring16_SnT_Dec02
+#qcdDataSamples Run2016_12p9ifb_qcdSkim

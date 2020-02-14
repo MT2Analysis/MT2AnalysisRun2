@@ -648,8 +648,8 @@ int main( int argc, char* argv[] ) {
 
               }
               else if ( iBin==extrapol_bin+1 && flag_fixshapeerr_zinv>=2){
-                zinvZll_systUp += 1.0;
-                zinvZll_systDn += 1.0;
+                zinvZll_systUp += (1.0-relativeErr_zll)*(1.0-relativeErr_zll);
+                zinvZll_systDn += (1.0-relativeErr_zll)*(1.0-relativeErr_zll);
                 datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << relativeErr_zll << " " << relativeErr_zll << " "  << relativeErr_zll  << " - - - - " << std::endl;
                 cout<<"zinv: still need to correct in the second bin next to extropolbin"<<endl;
               }
@@ -667,8 +667,8 @@ int main( int argc, char* argv[] ) {
                cout<<"zinv: corrected the second bin next to extrapolbin"<<endl;
               }
               else if ( iBin==extrapol_bin+2 && flag_fixshapeerr_zinv>2){
-                zinvZll_systUp += 1.0;
-                zinvZll_systDn += 1.0;
+                zinvZll_systUp += (1.0-relativeErr_zll)*(1.0-relativeErr_zll);
+                zinvZll_systDn += (1.0-relativeErr_zll)*(1.0-relativeErr_zll);
                 datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << relativeErr_zll << " " << relativeErr_zll << " "  << relativeErr_zll  << " - - - - " << std::endl;
                 cout<<"zinv: still need to correct in the third bin next to extropolbin"<<endl;
               }
@@ -686,7 +686,8 @@ int main( int argc, char* argv[] ) {
                cout<<"zinv: corrected the third bin next to extrapolbin"<<endl;
               }
               else if (iBin==extrapol_bin+3 && flag_fixshapeerr_zinv>3){
-
+                zinvZll_systUp += (1.0-relativeErr_zll)*(1.0-relativeErr_zll);
+                zinvZll_systDn += (1.0-relativeErr_zll)*(1.0-relativeErr_zll);
                 datacard << "zinvDY_shape_" << zinvCR_name << " lnN  - " << relativeErr_zll << " " << relativeErr_zll << " "  << relativeErr_zll  << " - - - - " << std::endl;
                 cout<<"zinv: still need to correct in the fourth bin next to extropolbin"<<endl;
 
@@ -855,8 +856,8 @@ int main( int argc, char* argv[] ) {
 
               }
               else if ( iBin==extrapol_bin_llep+1 && flag_fixshapeerr_llep>=2){
-                llep_systUp += 1.0;
-                llep_systDn += 1.0;
+                llep_systUp += (1.0-relativeErr_llep)*(1.0-relativeErr_llep);
+                llep_systDn += (1.0-relativeErr_llep)*(1.0-relativeErr_llep);
                 datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << relativeErr_llep << " " << relativeErr_llep << " "  << relativeErr_llep  << " - " << std::endl;
                 cout<<"llep: still need to correct in the second bin next to extropolbin"<<endl;
               }
@@ -876,8 +877,8 @@ int main( int argc, char* argv[] ) {
               }
 
               else if(iBin==extrapol_bin_llep+2 && flag_fixshapeerr_llep>2){
-                llep_systUp += 1.0;
-                llep_systDn += 1.0;
+                llep_systUp += (1.0-relativeErr_llep)*(1.0-relativeErr_llep);
+                llep_systDn += (1.0-relativeErr_llep)*(1.0-relativeErr_llep);
                 datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << relativeErr_llep << " " << relativeErr_llep << " "  << relativeErr_llep  << " - " << std::endl;
                 cout<<"llep: still need to correct in the third bin next to extropolbin"<<endl;
               }
@@ -896,8 +897,8 @@ int main( int argc, char* argv[] ) {
                 cout<<"llep: corrected the third bin next to extrapolbin"<<endl;
               }
               else if(iBin==extrapol_bin_llep+3 && flag_fixshapeerr_llep>3){
-                llep_systUp += 1.0;
-                llep_systDn += 1.0;
+                llep_systUp += (1.0-relativeErr_llep)*(1.0-relativeErr_llep);
+                llep_systDn += (1.0-relativeErr_llep)*(1.0-relativeErr_llep);
                 datacard << "llep_shape_" << llepCR_name << " lnN - - - - " << relativeErr_llep << " " << relativeErr_llep << " "  << relativeErr_llep  << " - " << std::endl;
                 cout<<"llep: still need to correct in the fourth bin next to extropolbin"<<endl;
               }
@@ -1118,12 +1119,12 @@ int main( int argc, char* argv[] ) {
         TH1D* this_signalLSP = this_signal3d_central->ProjectionZ("mLSP", 0, -1, iBinY, iBinY);
 
         // Start loop over LSP masses
-        for( int iBinZ=1; iBinZ < iBinY; ++iBinZ ) {
+        for( int iBinZ=1; iBinZ < this_signalLSP->GetNbinsX() ; ++iBinZ ) {
 
           float mLSP = this_signalLSP->GetBinLowEdge(iBinZ);
-
+          cout<<"mLSP= "<<mLSP<<", m11="<< m11<<", m22="<<m22<<endl;
           if( !(mLSP >= m11-1 && mLSP < m22-1) ) {
-            //std::cout << "      Skipping data card creation for mLSP=" <<  mLSP << " since outside requested boundaries" << std::endl;
+            std::cout << "      Skipping data card creation for mLSP=" <<  mLSP << " since outside requested boundaries" << std::endl;
             continue;
           }
           std::cout << "      Working on mLSP=" << mLSP << std::endl;
@@ -1197,7 +1198,7 @@ int main( int argc, char* argv[] ) {
                   bTagErr_light = this_signal3d_bTagLight_Up->GetBinContent(iBin, iBinY, iBinZ);
                   bTagErr_light = bTagErr_light/sig_reco;// before without the 1+
                   //bTagErr_light = 1. + bTagErr_light/sig;// before without the 1+
-
+cout<<"isrErr="<<isrErr<<", bTagErr_heavy="<<bTagErr_heavy<<", bTagErr_light="<<bTagErr_light<<endl;
                   if( addSigLepSF && (( model == "T2tt" || model == "T1tttt" || model == "T2bt" || model == "T2bW"))){
                     lepEffErr = this_signal3d_lepEff_Up->GetBinContent(iBin, iBinY, iBinZ);
                     lepEffErr = lepEffErr/sig_reco;
@@ -1215,7 +1216,7 @@ int main( int argc, char* argv[] ) {
 
               float totUncorrErr = 1.+sqrt(sigErr*sigErr+0.05*0.05+0.05*0.05); // MC stat + scales (5%) + JEC (5%)
               //float totUncorrErrCont = 1.+sqrt(sigContErr*sigContErr+0.05*0.05+0.05*0.05); // MC stat + scales (5%) + JEC (5%)
-
+cout<<"sigErr="<<sigErr<<endl;
               if(sig<0.) sig=0.;
 
               // only at the end multiply by lumi the yield
