@@ -1,0 +1,20 @@
+4
+4
+4
+2020-02-01 12:42:15.593489: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100160000 Hz
+2020-02-01 12:42:15.595274: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5577ab90e290 executing computations on platform Host. Devices:
+2020-02-01 12:42:15.595305: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2020-02-01 12:42:15.599252: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100160000 Hz
+2020-02-01 12:42:15.599541: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x555f24466320 executing computations on platform Host. Devices:
+2020-02-01 12:42:15.599575: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2020-02-01 12:42:15.626714: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100160000 Hz
+2020-02-01 12:42:15.627001: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55907747ee10 executing computations on platform Host. Devices:
+2020-02-01 12:42:15.627034: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2020-02-01 12:42:15.651905: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100160000 Hz
+2020-02-01 12:42:15.652244: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x555ca8af5520 executing computations on platform Host. Devices:
+2020-02-01 12:42:15.652279: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+slurmstepd: error: *** JOB 526119 ON t3wn33 CANCELLED AT 2020-02-01T13:16:02 DUE TO NODE FAILURE, SEE SLURMCTLD LOG FOR DETAILS ***
+slurmstepd: error: get_exit_code task 0 died by signal: 9
+slurmstepd: error: get_exit_code task 0 died by signal: 9
+slurmstepd: error: get_exit_code task 0 died by signal: 9
+slurmstepd: error: get_exit_code task 0 died by signal: 9

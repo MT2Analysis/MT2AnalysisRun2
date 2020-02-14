@@ -1,0 +1,384 @@
+4
+2020-02-13 09:37:20.232401: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-02-13 09:37:20.238469: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2199860000 Hz
+2020-02-13 09:37:20.238622: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55d3bcffb360 executing computations on platform Host. Devices:
+2020-02-13 09:37:20.238646: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+/work/wjin/anaconda3/envs/tensorflow_cpu/lib/python3.6/site-packages/sklearn/base.py:318: UserWarning: Trying to unpickle estimator StandardScaler from version 0.22.1 when using version 0.22. This might lead to breaking code or invalid results. Use at your own risk.
+  UserWarning)
+bin 17
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  17 , mass  1400   1300
+shape= (2614,)
+bin 18
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  18 , mass  1800   1200
+shape= (2614,)
+bin 24
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  24 , mass  1400   1300
+shape= (2614,)
+bin 25
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  25 , mass  1400   1300
+shape= (2614,)
+bin 26
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  26 , mass  1800   1200
+shape= (2614,)
+bin 28
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  2.4612470e+00
+   4.1505260e+01  5.9149753e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -4.7582355e-01
+   2.3795441e+02  6.5291248e-02]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ... -8.3711028e-01
+   1.6814282e+02  9.4562829e-02]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  7.3367941e-01
+   1.9191151e+02  1.1253538e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  6.7912631e-02]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  1.9651586e+00
+   2.7004602e+02  3.4843780e-02]]
+shape= (2614, 18)
+
+Loading model
+find scaler of bin  28 , mass  2200   200
+shape= (2614,)
+bin 31
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  31 , mass  1400   1300
+shape= (2614,)
+bin 32
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  32 , mass  1400   1300
+shape= (2614,)
+bin 33
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ... -1.5665635e+00
+   1.0843010e+02  3.2819077e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  5.5695865e-02
+   3.2095474e+01  1.6977432e-01]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5344762e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  2.3600061e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ... -9.8040617e-01
+   5.8590672e+01  2.0399301e-01]]
+shape= (2614, 30)
+
+Loading model
+find scaler of bin  33 , mass  2200   200
+shape= (2614,)
+bin 43
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  43 , mass  1400   1300
+shape= (2614,)
+bin 44
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  44 , mass  1400   1300
+shape= (2614,)
+bin 48
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  7.9871118e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  8.9305624e-02]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.4814970e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  5.4814970e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  5.4814970e-01]]
+shape= (2614, 66)
+
+Loading model
+find scaler of bin  48 , mass  1400   1300
+shape= (2614,)
+bin 53
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  53 , mass  1400   1300
+shape= (2614,)
+bin 54
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  54 , mass  1400   1300
+shape= (2614,)
+bin 63
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  63 , mass  1400   1300
+shape= (2614,)
+bin 64
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  64 , mass  1400   1300
+shape= (2614,)
+bin 65
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  6.9204114e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  1.6911651e-01]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.7089727e-02]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  1.3081504e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  1.1435380e-01]]
+shape= (2614, 42)
+
+Loading model
+find scaler of bin  65 , mass  2200   200
+shape= (2614,)
+bin 68
+X= [[ 1.6473608e+00  8.8775780e+01  6.8009021e+02 ...  0.0000000e+00
+   0.0000000e+00  7.9871118e-02]
+ [ 1.6870049e+00  3.9026783e+01  1.2527399e+03 ...  0.0000000e+00
+   0.0000000e+00  8.9305624e-02]
+ [ 1.7329530e+00  8.6697136e+01  5.6699402e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 9.0496284e-01  9.5734200e+01  5.6557672e+02 ...  0.0000000e+00
+   0.0000000e+00  5.4814970e-01]
+ [ 2.1409843e+00  2.0785193e+02  9.8707068e+02 ...  0.0000000e+00
+   0.0000000e+00  5.4814970e-01]
+ [ 8.2942808e-01  8.7352692e+01  4.5843103e+02 ...  0.0000000e+00
+   0.0000000e+00  5.4814970e-01]]
+shape= (2614, 66)
+
+Loading model
+find scaler of bin  68 , mass  1400   1300
+shape= (2614,)
+/work/wjin/featurereduced4/zinvcontrol_score/score1_forT1qqqq_2016_wjets_ht1200to2500_bin10.npy  saved

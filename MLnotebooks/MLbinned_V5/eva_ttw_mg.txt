@@ -1,0 +1,15 @@
+4
+2020-02-01 13:09:06.885635: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-02-01 13:09:06.895543: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2294760000 Hz
+2020-02-01 13:09:06.896038: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x561eddc7e2e0 executing computations on platform Host. Devices:
+2020-02-01 13:09:06.896070: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2020-02-01 13:09:07.640037: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-02-01 13:09:07.648729: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2294760000 Hz
+2020-02-01 13:09:07.648891: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f399efa2b0 executing computations on platform Host. Devices:
+2020-02-01 13:09:07.648918: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2020-02-01 13:13:11.922946: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2593615000 Hz
+2020-02-01 13:13:11.935550: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x563d01344cd0 executing computations on platform Host. Devices:
+2020-02-01 13:13:11.935596: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+/var/spool/slurmd/job526712/slurm_script: line 11: 100327 Killed                  python addMLscore_V05.py ${INPUT} ${OUTPUT} ${TREENAME} ${SIGNAL}
+slurmstepd: error: get_exit_code task 0 died by signal: 9
+/var/spool/slurmd/job526917/slurm_script: line 11: 191066 Killed                  python addMLscore_V05.py ${INPUT} ${OUTPUT} ${TREENAME} ${SIGNAL}

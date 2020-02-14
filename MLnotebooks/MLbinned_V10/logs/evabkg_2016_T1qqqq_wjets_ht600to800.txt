@@ -1,0 +1,379 @@
+4
+2020-02-12 23:06:28.632728: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-02-12 23:06:32.171006: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:04:00.0
+2020-02-12 23:06:32.175706: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-12 23:06:32.206813: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-12 23:06:32.249813: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-12 23:06:32.320648: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-12 23:06:32.367705: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-12 23:06:32.403687: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-12 23:06:32.493881: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-12 23:06:32.496621: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-02-12 23:06:32.497157: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2020-02-12 23:06:32.508036: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2199860000 Hz
+2020-02-12 23:06:32.508243: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56155e7327f0 executing computations on platform Host. Devices:
+2020-02-12 23:06:32.508279: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2020-02-12 23:06:32.509690: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:04:00.0
+2020-02-12 23:06:32.509740: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-12 23:06:32.509771: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2020-02-12 23:06:32.509797: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2020-02-12 23:06:32.509823: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2020-02-12 23:06:32.509848: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2020-02-12 23:06:32.509874: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2020-02-12 23:06:32.509900: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-02-12 23:06:32.512268: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2020-02-12 23:06:32.512321: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2020-02-12 23:06:32.636735: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-02-12 23:06:32.636788: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-02-12 23:06:32.636803: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2020-02-12 23:06:32.641111: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10481 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2020-02-12 23:06:32.643769: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56155ee62c50 executing computations on platform CUDA. Devices:
+2020-02-12 23:06:32.643796: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): GeForce GTX 1080 Ti, Compute Capability 6.1
+2020-02-12 23:06:36.472583: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+bin 17
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  17 , mass  1400   1300
+shape= (145914,)
+bin 18
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  18 , mass  1800   1200
+shape= (145914,)
+bin 24
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  24 , mass  1400   1300
+shape= (145914,)
+bin 25
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  25 , mass  1400   1300
+shape= (145914,)
+bin 26
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  26 , mass  1800   1200
+shape= (145914,)
+bin 28
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ... -3.0371501e+00
+   1.4821548e+02  3.3772931e-02]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ... -1.0934002e+00
+   2.1549793e+01 -2.0000000e+00]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  2.1587934e+00
+   4.0285782e+01  4.4404283e-02]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ... -3.6869156e-01
+   4.4926022e+01  1.8882491e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ... -5.9834152e-01
+   3.2866001e+01  1.2355133e-01]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ... -2.6937995e+00
+   1.5236916e+02  5.9269078e-02]]
+shape= (145914, 18)
+
+Loading model
+find scaler of bin  28 , mass  2200   200
+shape= (145914,)
+bin 31
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  31 , mass  1400   1300
+shape= (145914,)
+bin 32
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  32 , mass  1400   1300
+shape= (145914,)
+bin 33
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00  6.8648204e-02]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00  3.5573748e-01]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  7.2730929e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  2.6188681e+00
+   2.2668371e+01 -2.0000000e+00]]
+shape= (145914, 30)
+
+Loading model
+find scaler of bin  33 , mass  2200   200
+shape= (145914,)
+bin 43
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  43 , mass  1400   1300
+shape= (145914,)
+bin 44
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  44 , mass  1400   1300
+shape= (145914,)
+bin 48
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  9.0127304e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  9.0127304e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  0.0000000e+00
+   0.0000000e+00  9.0127304e-02]]
+shape= (145914, 66)
+
+Loading model
+find scaler of bin  48 , mass  1400   1300
+shape= (145914,)
+bin 53
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  53 , mass  1400   1300
+shape= (145914,)
+bin 54
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  54 , mass  1400   1300
+shape= (145914,)
+bin 63
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  63 , mass  1400   1300
+shape= (145914,)
+bin 64
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  64 , mass  1400   1300
+shape= (145914,)
+bin 65
+X= [[  0.89722615  80.697685   211.40378    ...   0.           0.
+   -2.        ]
+ [  1.3908887   24.480658   559.4193     ...   0.           0.
+   -2.        ]
+ [  1.345631    59.7223     631.93524    ...   0.           0.
+   -2.        ]
+ ...
+ [  1.7348388   53.1526     378.00812    ...   0.           0.
+   -2.        ]
+ [  1.8206657   33.078037   462.5822     ...   0.           0.
+   -2.        ]
+ [  0.95851165  16.205183   318.30945    ...   0.           0.
+   -2.        ]]
+shape= (145914, 42)
+
+Loading model
+find scaler of bin  65 , mass  2200   200
+shape= (145914,)
+bin 68
+X= [[ 8.9722615e-01  8.0697685e+01  2.1140378e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3908887e+00  2.4480658e+01  5.5941931e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ [ 1.3456310e+00  5.9722301e+01  6.3193524e+02 ...  0.0000000e+00
+   0.0000000e+00 -2.0000000e+00]
+ ...
+ [ 1.7348388e+00  5.3152599e+01  3.7800812e+02 ...  0.0000000e+00
+   0.0000000e+00  9.0127304e-02]
+ [ 1.8206657e+00  3.3078037e+01  4.6258221e+02 ...  0.0000000e+00
+   0.0000000e+00  9.0127304e-02]
+ [ 9.5851165e-01  1.6205183e+01  3.1830945e+02 ...  0.0000000e+00
+   0.0000000e+00  9.0127304e-02]]
+shape= (145914, 66)
+
+Loading model
+find scaler of bin  68 , mass  1400   1300
+shape= (145914,)
+/work/wjin/featurereduced4/bkg_score/score1_forT1qqqq_2016_wjets_ht600to800_bin10.npy  saved

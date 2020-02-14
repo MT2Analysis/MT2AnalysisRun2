@@ -1,0 +1,353 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def significance(bkgtest,sigtest,zllCR_MC,llepCR_MC,zllCR_data,llepCR_data,m1,m2,bkgfra,sigfra,cut=0.5,weight=b'absweight',score=b'MLscore'):
+    b_zinv_SR=np.sum(bkgtest[(bkgtest[b'bkgtype']==3)&(bkgtest[score]>cut)][weight])/bkgfra #signal region MC bkg
+    nenv_b_zinv_SR=bkgtest[(bkgtest[b'bkgtype']==3)&(bkgtest[score]>cut)].shape[0]
+    b_llep_SR=np.sum(bkgtest[(bkgtest[b'bkgtype']<3)&(bkgtest[score]>cut)][weight])/bkgfra
+    nenv_b_llep_SR=bkgtest[(bkgtest[b'bkgtype']<3)&(bkgtest[score]>cut)].shape[0]
+
+    b_zll_CRMC=np.sum(zllCR_MC[zllCR_MC[score]>cut][weight])        #control region MC bkg
+    nenv_b_zll_CRMC=zllCR_MC[zllCR_MC[score]>cut].shape[0]
+    b_llep_CRMC=np.sum(llepCR_MC[llepCR_MC[score]>cut][weight])
+    nenv_b_llep_CRMC=llepCR_MC[llepCR_MC[score]>cut].shape[0]
+
+    b_zll_CRdata=zllCR_data[zllCR_data[score]>cut].shape[0]    #control region data
+    b_llep_CRdata=llepCR_data[llepCR_data[score]>cut].shape[0]
+
+    b_zinv_estimate=0.0
+    std_b_zinv_estimate=0.0
+    if b_zll_CRMC!=0:
+        b_zinv_estimate=b_zll_CRdata*b_zinv_SR/b_zll_CRMC
+        if b_zinv_estimate!=0:
+            std_b_zinv_estimate=b_zinv_estimate*np.sqrt(1.0/b_zll_CRdata+1.0/nenv_b_zinv_SR+1.0/nenv_b_zll_CRMC)
+        else:
+            return 0
+    else:
+        return 0
+
+    b_llep_estimate=0.0
+    std_b_llep_estimate=0.0
+    if b_llep_CRMC!=0:
+        b_llep_estimate=b_llep_CRdata*b_llep_SR/b_llep_CRMC
+        if b_llep_estimate!=0:
+            std_b_llep_estimate=b_llep_estimate*np.sqrt(1.0/b_llep_CRdata+1.0/nenv_b_llep_SR+1.0/nenv_b_llep_CRMC)
+        else:
+            return 0
+    else:
+        return 0
+
+    b=b_zinv_estimate+b_llep_estimate
+    sigma2_b=np.square(std_b_zinv_estimate)+np.square(std_b_llep_estimate)
+    if b==0 or sigma2_b==0:
+        return 0
+
+    s=np.sum(sigtest[(sigtest[b'GenSusyMScan1']==m1)
+            &(sigtest[b'GenSusyMScan2']==m2)&(sigtest[score]>cut)][weight])/sigfra
+    Z=np.sqrt(2*((s+b)*np.log((s+b)*(b+sigma2_b)/(np.square(b)+(s+b)*sigma2_b)) - np.square(b)/sigma2_b*np.log(1+sigma2_b*s/b/(b+sigma2_b))))
+    return Z
+
+def computesignificance(bkgtest,sigtest,zllCR_MC,llepCR_MC,zllCR_data,llepCR_data,m1,m2,bkgfra,sigfra,interval=0.005):
+    midsig=[]
+    for cut in np.arange(0, 1.+interval,interval):
+        midsig.append(significance(bkgtest,sigtest,zllCR_MC,llepCR_MC,zllCR_data,llepCR_data,m1,m2,bkgfra,sigfra,cut,weight=b'absweight',score=b'MLscore'))
+    return midsig
+
+def plot_significance(midsig,title):
+    fig=plt.figure(figsize=(16,10))
+    ax = fig.add_subplot(111)
+    interval=1./(len(midsig)-1)
+    ax.plot(np.arange(0, 1.+interval,interval),midsig)
+    ax.set_title(title,size=22)
+    ax.set_xlabel('Score cut',fontsize=18)
+    ax.set_ylabel('approximate median significance',fontsize=18)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    return fig
+
+def plot_metrics(history,title):
+    metrics =  ['loss','auc','recall','accuracy']
+    colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    fig=plt.figure(figsize=(12,10))
+    fig.suptitle(title, fontsize=20)
+    for n, metric in enumerate(metrics):
+        name = metric.replace("_"," ").capitalize()
+        ax=fig.add_subplot(2,2,n+1)
+        ax.plot(history.epoch,  history.history[metric], color=colors[0], label='Train')
+        ax.plot(history.epoch, history.history['val_'+metric],
+             color=colors[0], linestyle="--", label='Validation')
+        ax.set_xlabel('Epoch')
+        ax.set_ylabel(name)
+        ax.legend(loc='best',prop={'size': 14})
+    return fig
+
+def plot_train_val_compare(train_bkg,train_sig,val_bkg,val_sig,title):
+    bins=np.arange(0,1.025,0.025)
+    fig = plt.figure(figsize=(20,10))
+    ax = fig.add_subplot(111)
+    hist_train_bkg,binEdges = np.histogram(train_bkg[b'MLscore'],bins=bins,weights=train_bkg[b'absweight'])
+    hist_train_sig,_=np.histogram(train_sig[b'MLscore'],bins=bins,weights=train_sig[b'absweight'])
+    hist_val_bkg,_=np.histogram(val_bkg[b'MLscore'],bins=bins,weights=val_bkg[b'absweight'])
+    hist_val_sig,_=np.histogram(val_sig[b'MLscore'],bins=bins,weights=val_sig[b'absweight'])
+
+    err2_train_bkg,_=np.histogram(train_bkg[b'MLscore'],bins=bins,weights=train_bkg[b'w2'])
+    err2_train_sig,_=np.histogram(train_sig[b'MLscore'],bins=bins,weights=train_sig[b'w2'])
+    err2_val_bkg,_=np.histogram(val_bkg[b'MLscore'],bins=bins,weights=val_bkg[b'w2'])
+    err2_val_sig,_=np.histogram(val_sig[b'MLscore'],bins=bins,weights=val_sig[b'w2'])
+
+    bincenters = 0.5*(binEdges[1:]+binEdges[:-1])
+    width      = binEdges[1]-binEdges[0]
+
+    sum_train_bkg=np.sum(hist_train_bkg)
+    sum_train_sig=np.sum(hist_train_sig)
+    sum_val_bkg=np.sum(hist_val_bkg)
+    sum_val_sig=np.sum(hist_val_sig)
+
+    hist_train_bkg=np.divide(hist_train_bkg,sum_train_bkg*width)
+    err_train_bkg=np.divide(np.sqrt(err2_train_bkg),sum_train_bkg*width)
+    hist_train_sig=np.divide(hist_train_sig,sum_train_sig*width)
+    err_train_sig=np.divide(np.sqrt(err2_train_sig),sum_train_sig*width)
+    hist_val_bkg=np.divide(hist_val_bkg,sum_val_bkg*width)
+    err_val_bkg=np.divide(np.sqrt(err2_val_bkg),sum_val_bkg*width)
+    hist_val_sig=np.divide(hist_val_sig,sum_val_sig*width)
+    err_val_sig=np.divide(np.sqrt(err2_val_sig),sum_val_sig*width)
+
+    ax.bar(bincenters,hist_train_bkg,width=width,color='blue',yerr=err_train_bkg,ecolor='black',alpha=0.5,label="train background in SR",capsize=10)
+    ax.bar(bincenters,hist_train_sig,width=width,color='red',yerr=err_train_sig,ecolor='black',alpha=0.5,label="train inclusive signal",capsize=10)
+
+    ax.errorbar(bincenters,hist_val_bkg,yerr=err_val_bkg,xerr=None,ecolor='blue',c='blue',fmt='o',label='validation background in SR')
+    ax.errorbar(bincenters,hist_val_sig,yerr=err_val_sig,xerr=None,ecolor='red',c='red',fmt='o',label='validation inclusive signal')
+
+    ax.legend(loc='best',prop={'size': 16})
+    ax.set_xlabel("score",fontsize=20)
+    ax.set_ylabel("normalized distribution",fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    ax.set_title(title,size=22)
+    return fig
+
+
+def plot_sig_bkg_compare(sig,bkg,mass1,mass2,title):
+    bins=np.arange(0,1.025,0.025)
+    fig = plt.figure(figsize=(20,10))
+    ax = fig.add_subplot(111)
+
+    bkg_top=bkg[(bkg[b'bkgtype']==0)|(bkg[b'bkgtype']==1)]
+    bkg_wjets=bkg[bkg[b'bkgtype']==2]
+    bkg_zinv=bkg[bkg[b'bkgtype']==3]
+
+    sig_exclu=sig[(sig[b'GenSusyMScan1']==mass1)&(sig[b'GenSusyMScan2']==mass2)]
+
+    err2_bkg,binEdges=np.histogram(bkg[b'MLscore'],bins=bins,weights=bkg[b'w2'])
+    err2_sig_exclu,_=np.histogram(sig_exclu[b'MLscore'],bins=bins,weights=sig_exclu[b'w2'])
+    err2_sig,_=np.histogram(sig[b'MLscore'],bins=bins,weights=sig[b'w2'])
+    bincenters = 0.5*(binEdges[1:]+binEdges[:-1])
+    width      = binEdges[1]-binEdges[0]
+
+    hist_bkg_top,_=np.histogram(bkg_top[b'MLscore'],bins=bins,weights=bkg_top[b'absweight'])
+    hist_bkg_wjets,_=np.histogram(bkg_wjets[b'MLscore'],bins=bins,weights=bkg_wjets[b'absweight'])
+    hist_bkg_zinv,_=np.histogram(bkg_zinv[b'MLscore'],bins=bins,weights=bkg_zinv[b'absweight'])
+    sum_bkg=np.sum(hist_bkg_top)+np.sum(hist_bkg_wjets)+np.sum(hist_bkg_zinv)
+    hist_bkg_top=np.divide(hist_bkg_top,sum_bkg*width)
+    hist_bkg_wjets=np.divide(hist_bkg_wjets,sum_bkg*width)
+    hist_bkg_zinv=np.divide(hist_bkg_zinv,sum_bkg*width)
+    err_bkg=np.divide(np.sqrt(err2_bkg),sum_bkg*width)
+
+    hist_sig_exclu,_=np.histogram(sig_exclu[b'MLscore'],bins=bins,weights=sig_exclu[b'absweight'])
+    sum_sig_exclu=np.sum(hist_sig_exclu)
+    hist_sig_exclu=np.divide(hist_sig_exclu,sum_sig_exclu*width)
+    err_sig_exclu=np.divide(np.sqrt(err2_sig_exclu),sum_sig_exclu*width)
+    hist_sig,_=np.histogram(sig[b'MLscore'],bins=bins,weights=sig[b'absweight'])
+    sum_sig=np.sum(hist_sig)
+    hist_sig=np.divide(hist_sig,sum_sig*width)
+    err_sig=np.divide(np.sqrt(err2_sig),sum_sig*width)
+
+    ax.bar(bincenters,hist_bkg_top,width=width,color='lightskyblue',alpha=0.7,label="top background in SR")
+    ax.bar(bincenters,hist_bkg_wjets,bottom=hist_bkg_top,width=width,color='tan',alpha=0.7,label="wjets background in SR")
+    ax.bar(bincenters,hist_bkg_zinv,bottom=hist_bkg_top+hist_bkg_wjets,width=width,color='thistle',yerr=err_bkg,alpha=0.7,label="zinv background in SR",capsize=5)
+
+    ax.bar(bincenters,hist_sig,width=width,linewidth=0,capsize=5,ecolor='blue',yerr=err_sig,fill=False)
+    ax.bar(bincenters,hist_sig_exclu,width=width,linewidth=0,capsize=5,ecolor='red',yerr=err_sig_exclu,fill=False)
+
+    ax.step(bincenters[0:len(bincenters)],hist_sig,where='mid',linewidth=2,linestyle='dashed',color='blue',label='inclusive signal')
+    ax.step(bincenters[0:len(bincenters)],hist_sig_exclu,where='mid',linewidth=2,linestyle='solid',color='red',label='signal gluino '+str(mass1)+'GeV \n neutralino '+str(mass2)+'GeV')
+#    ax.hist(sig[b'MLscore'],bins=bins,alpha=1,label='inclusive signal',density=True,histtype='step',linewidth=2,color='blue',linestyle='dashed')
+#    ax.hist(sig_exclu[b'MLscore'],bins=bins,alpha=1,label='signal gluino '+str(mass1)+'GeV \n neutralino '+str(mass2)+'GeV',density=True,histtype='step',linewidth=2,color='red',linestyle='solid')
+    ax.legend(loc='best',prop={'size': 16})
+    ax.set_xlabel('score',fontsize=20)
+    ax.set_ylabel("normalized distribution",fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    ax.set_title(title,size=22)
+    return fig
+
+def plot_data_MC_compare(MC,data,MCtrainfra,title):
+    bins=np.arange(0,1.025,0.025)
+    fig = plt.figure(figsize=(20,10))
+    ax = fig.add_subplot(111)
+
+    err2_MC,binEdges=np.histogram(MC[b'MLscore'],bins=bins,weights=MC[b'w2'])
+    hist_MC,_ = np.histogram(MC[b'MLscore'],bins=bins,weights=MC[b'absweight'])
+    bincenters = 0.5*(binEdges[1:]+binEdges[:-1])
+    width      = binEdges[1]-binEdges[0]
+    hist_MC = np.divide(hist_MC,1.0-MCtrainfra)
+    err_MC  = np.sqrt(err2_MC)
+    err_MC = np.divide(err_MC,1.0-MCtrainfra)
+    hist_data,_=np.histogram(data[b'MLscore'],bins=bins)
+    err_data=np.sqrt(hist_data)
+
+    ax.bar(bincenters,hist_MC,width=width,color='blue',yerr=err_MC,ecolor='black',alpha=0.5,label="MC background in SR(test set)",capsize=10)
+    ax.errorbar(bincenters,hist_data,yerr=err_data,xerr=None,ecolor='red',c='red',fmt='o',label='data in SR')
+    ax.legend(loc='best',prop={'size': 16})
+    ax.set_xlabel('score',fontsize=20)
+    ax.set_ylabel("Events distribution",fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    ax.set_title(title,size=22)
+    return fig
+
+
+def plot_CR_llep(MC,data,title):
+    bins=np.arange(0,1.025,0.025)
+    fig = plt.figure(figsize=(20,10))
+    ax = fig.add_subplot(111)
+
+    MC_top=MC[(MC[b'bkgtype']==0)|(MC[b'bkgtype']==1)]
+    MC_wjets=MC[MC[b'bkgtype']==2]
+
+    err2_MC,binEdges=np.histogram(MC[b'MLscore'],bins=bins,weights=MC[b'w2'])
+    bincenters = 0.5*(binEdges[1:]+binEdges[:-1])
+    width      = binEdges[1]-binEdges[0]
+
+    hist_MC_top,_=np.histogram(MC_top[b'MLscore'],bins=bins,weights=MC_top[b'absweight'])
+    hist_MC_wjets,_=np.histogram(MC_wjets[b'MLscore'],bins=bins,weights=MC_wjets[b'absweight'])
+
+#    sum_MC=np.sum(hist_MC_top)+np.sum(hist_MC_wjets)
+#    hist_MC_top=np.divide(hist_MC_top,sum_MC*width)
+#    hist_MC_wjets=np.divide(hist_MC_wjets,sum_MC*width)
+#    err_MC=np.divide(np.sqrt(err2_MC),sum_MC*width)
+    err_MC=np.sqrt(err2_MC)
+
+    hist_data,_=np.histogram(data[b'MLscore'],bins=bins)
+#    sum_data=np.sum(hist_data)
+#    err_data=np.divide(np.sqrt(hist_data),sum_data*width)
+#    hist_data=np.divide(hist_data,sum_data*width)
+    err_data=np.sqrt(hist_data)
+
+    ax.bar(bincenters,hist_MC_top,width=width,color='lightskyblue',alpha=0.7,label="top(MC) in llep CR")
+    ax.bar(bincenters,hist_MC_wjets,bottom=hist_MC_top,width=width,color='tan',yerr=err_MC,alpha=0.7,label="wjets(MC) in llep CR",capsize=10)
+
+    ax.errorbar(bincenters,hist_data,yerr=err_data,xerr=None,ecolor='red',c='red',fmt='o',label='data in llep CR')
+
+    ax.legend(loc='best',prop={'size': 16})
+    ax.set_xlabel('score',fontsize=20)
+#    ax.set_ylabel("normalized distribution",fontsize=20)
+    ax.set_ylabel("Events distribution",fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    ax.set_title(title,size=22)
+    return fig
+
+def plot_CR_zll(MC,data,title):
+    bins=np.arange(0,1.025,0.025)
+    fig = plt.figure(figsize=(20,10))
+    ax = fig.add_subplot(111)
+
+    err2_MC,binEdges=np.histogram(MC[b'MLscore'],bins=bins,weights=MC[b'w2'])
+    bincenters = 0.5*(binEdges[1:]+binEdges[:-1])
+    width      = binEdges[1]-binEdges[0]
+
+    hist_MC,_=np.histogram(MC[b'MLscore'],bins=bins,weights=MC[b'absweight'])
+#    sum_MC=np.sum(hist_MC)
+#    hist_MC=np.divide(hist_MC,sum_MC*width)
+#    err_MC=np.divide(np.sqrt(err2_MC),sum_MC*width)
+    err_MC=np.sqrt(err2_MC)
+
+
+    hist_data,_=np.histogram(data[b'MLscore'],bins=bins)
+#    sum_data=np.sum(hist_data)
+#    err_data=np.divide(np.sqrt(hist_data),sum_data*width)
+#    hist_data=np.divide(hist_data,sum_data*width)
+    err_data=np.sqrt(hist_data)
+
+    ax.bar(bincenters,hist_MC,width=width,color='thistle',yerr=err_MC,alpha=0.7,label="dyjetsll(MC) in zll CR",capsize=10)
+    ax.errorbar(bincenters,hist_data,yerr=err_data,xerr=None,ecolor='red',c='red',fmt='o',label='data in zll CR')
+
+    ax.legend(loc='best',prop={'size': 16})
+    ax.set_xlabel('score',fontsize=20)
+#    ax.set_ylabel("normalized distribution",fontsize=20)
+    ax.set_ylabel("Events distribution",fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    ax.set_title(title,size=22)
+    return fig
+
+def plot_score_mt2_corr(sig,bkg,title):
+    fig = plt.figure(figsize=(10,10))
+    ax = fig.add_subplot(111)
+    dataset=(sig,bkg)
+    colors=('blue','red')
+    groups=('inclusive signal','background')
+    for data,color,group in zip(dataset,colors,groups):
+        if data.shape[0]>100000:
+            ax.scatter(data[b'mt2'], data[b'MLscore'], alpha=0.8, c=color, edgecolors='none', s=0.5, label=group)
+        elif data.shape[0]>10000:
+            ax.scatter(data[b'mt2'], data[b'MLscore'], alpha=0.8, c=color, edgecolors='none', s=1, label=group)
+        elif data.shape[0]>1000:
+            ax.scatter(data[b'mt2'], data[b'MLscore'], alpha=0.8, c=color, edgecolors='none', s=3, label=group)
+        else:
+            ax.scatter(data[b'mt2'], data[b'MLscore'], alpha=0.8, c=color, edgecolors='none', s=10, label=group)
+    ax.legend(loc='best',prop={'size': 16})
+    ax.set_xlabel('MT2',fontsize=20)
+    ax.set_ylabel("MLscore",fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=16)
+    ax.tick_params(axis='both', which='minor', labelsize=16)
+    ax.set_title(title,size=22)
+    return fig
+
+def feature_choice(njet):
+    features_pre=[[b'jet1_eta',b'jet1_phi',b'jet1_pt',b'jet1_btagDeepCSV'],
+             [b'jet2_eta',b'jet2_phi',b'jet2_pt',b'jet2_btagDeepCSV'],
+             [b'jet3_eta',b'jet3_phi',b'jet3_pt',b'jet3_btagDeepCSV'],
+             [b'jet4_eta',b'jet4_phi',b'jet4_pt',b'jet4_btagDeepCSV'],
+             [b'jet5_eta',b'jet5_phi',b'jet5_pt',b'jet5_btagDeepCSV'],
+             [b'jet6_eta',b'jet6_phi',b'jet6_pt',b'jet6_btagDeepCSV'],
+             [b'jet7_eta',b'jet7_phi',b'jet7_pt',b'jet7_btagDeepCSV'],
+             [b'jet8_eta',b'jet8_phi',b'jet8_pt',b'jet8_btagDeepCSV'],
+             [b'jet9_eta',b'jet9_phi',b'jet9_pt',b'jet9_btagDeepCSV'],
+             [b'jet10_eta',b'jet10_phi',b'jet10_pt',b'jet10_btagDeepCSV'],
+             [b'jet11_eta',b'jet11_phi',b'jet11_pt',b'jet11_btagDeepCSV'],
+             [b'jet12_eta',b'jet12_phi',b'jet12_pt',b'jet12_btagDeepCSV'],
+             [b'jet13_eta',b'jet13_phi',b'jet13_pt',b'jet13_btagDeepCSV'],
+             [b'jet14_eta',b'jet14_phi',b'jet14_pt',b'jet14_btagDeepCSV'],
+             [b'jet15_eta',b'jet15_phi',b'jet15_pt',b'jet15_btagDeepCSV']]
+    features_train=[b'deltaPhiMin',b'diffMetMht',b'mht_pt',b'met_pt',b'mht_phi',b'met_phi']
+    for i in range(njet):
+        features_train=features_train+features_pre[i]
+    return features_train
+
+
+def feature_choice_zll(njet):
+    features_pre=[[b'jet1_eta',b'jet1_phi',b'jet1_pt',b'jet1_btagDeepCSV'],
+             [b'jet2_eta',b'jet2_phi',b'jet2_pt',b'jet2_btagDeepCSV'],
+             [b'jet3_eta',b'jet3_phi',b'jet3_pt',b'jet3_btagDeepCSV'],
+             [b'jet4_eta',b'jet4_phi',b'jet4_pt',b'jet4_btagDeepCSV'],
+             [b'jet5_eta',b'jet5_phi',b'jet5_pt',b'jet5_btagDeepCSV'],
+             [b'jet6_eta',b'jet6_phi',b'jet6_pt',b'jet6_btagDeepCSV'],
+             [b'jet7_eta',b'jet7_phi',b'jet7_pt',b'jet7_btagDeepCSV'],
+             [b'jet8_eta',b'jet8_phi',b'jet8_pt',b'jet8_btagDeepCSV'],
+             [b'jet9_eta',b'jet9_phi',b'jet9_pt',b'jet9_btagDeepCSV'],
+             [b'jet10_eta',b'jet10_phi',b'jet10_pt',b'jet10_btagDeepCSV'],
+             [b'jet11_eta',b'jet11_phi',b'jet11_pt',b'jet11_btagDeepCSV'],
+             [b'jet12_eta',b'jet12_phi',b'jet12_pt',b'jet12_btagDeepCSV'],
+             [b'jet13_eta',b'jet13_phi',b'jet13_pt',b'jet13_btagDeepCSV'],
+             [b'jet14_eta',b'jet14_phi',b'jet14_pt',b'jet14_btagDeepCSV'],
+             [b'jet15_eta',b'jet15_phi',b'jet15_pt',b'jet15_btagDeepCSV']]
+    features_train=[b'zll_deltaPhiMin',b'zll_diffMetMht',b'zll_mht_pt',b'zll_met_pt',b'zll_mht_phi',b'zll_met_phi']
+    for i in range(njet):
+        features_train=features_train+features_pre[i]
+    return features_train
+
+
+

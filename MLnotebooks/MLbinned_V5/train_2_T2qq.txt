@@ -1,0 +1,5470 @@
+2020-01-31 10:06:50.628256: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-01-31 10:06:50.651470: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2294685000 Hz
+2020-01-31 10:06:50.660553: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x559397181f30 executing computations on platform Host. Devices:
+2020-01-31 10:06:50.660621: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+WARNING:tensorflow:Falling back from v2 loop because of error: Failed to find data adapter that can handle input: <class 'pandas.core.frame.DataFrame'>, <class 'NoneType'>
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:72: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(12,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:87: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:133: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:287: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(10,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:213: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:254: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig = plt.figure(figsize=(20,10))
+/work/wjin/CMSSW_8_0_12/src/CMSSW_8_0_12/src/myMT2Analysis/MLnotebooks/MLbinned_V5/methods.py:58: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig=plt.figure(figsize=(16,10))
+Background set prepared
+Now binning
+signal set prepared
+Now binning
+control set MC prepared
+Now binning
+control set MC prepared
+Now binning
+data  llep 182353
+control set data prepared
+Now binning
+data  zll 110140
+control set data prepared
+Now binning
+dataset prepared
+dataset sampled
+for mass1=  1900 , mass2=  200
+for mass1=  1900 , mass2=  600
+for mass1=  1500 , mass2=  900
+for mass1=  1100 , mass2=  900
+train on  286  background 495  signals, validate on  32 background 55 signals
+1485 1485 165 165
+start training on bin  48
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy did not improve from 0.50000
+
+Epoch 00066: val_accuracy did not improve from 0.50000
+
+Epoch 00067: val_accuracy did not improve from 0.50000
+
+Epoch 00068: val_accuracy did not improve from 0.50000
+
+Epoch 00069: val_accuracy did not improve from 0.50000
+
+Epoch 00070: val_accuracy did not improve from 0.50000
+
+Epoch 00071: val_accuracy did not improve from 0.50000
+
+Epoch 00072: val_accuracy did not improve from 0.50000
+
+Epoch 00073: val_accuracy did not improve from 0.50000
+
+Epoch 00074: val_accuracy did not improve from 0.50000
+
+Epoch 00075: val_accuracy did not improve from 0.50000
+
+Epoch 00076: val_accuracy did not improve from 0.50000
+
+Epoch 00077: val_accuracy did not improve from 0.50000
+
+Epoch 00078: val_accuracy did not improve from 0.50000
+
+Epoch 00079: val_accuracy did not improve from 0.50000
+
+Epoch 00080: val_accuracy did not improve from 0.50000
+
+Epoch 00081: val_accuracy did not improve from 0.50000
+
+Epoch 00082: val_accuracy did not improve from 0.50000
+
+Epoch 00083: val_accuracy did not improve from 0.50000
+
+Epoch 00084: val_accuracy did not improve from 0.50000
+
+Epoch 00085: val_accuracy did not improve from 0.50000
+
+Epoch 00086: val_accuracy did not improve from 0.50000
+
+Epoch 00087: val_accuracy did not improve from 0.50000
+
+Epoch 00088: val_accuracy did not improve from 0.50000
+
+Epoch 00089: val_accuracy did not improve from 0.50000
+
+Epoch 00090: val_accuracy did not improve from 0.50000
+
+Epoch 00091: val_accuracy did not improve from 0.50000
+
+Epoch 00092: val_accuracy did not improve from 0.50000
+
+Epoch 00093: val_accuracy did not improve from 0.50000
+
+Epoch 00094: val_accuracy did not improve from 0.50000
+
+Epoch 00095: val_accuracy did not improve from 0.50000
+
+Epoch 00096: val_accuracy did not improve from 0.50000
+
+Epoch 00097: val_accuracy did not improve from 0.50000
+
+Epoch 00098: val_accuracy did not improve from 0.50000
+
+Epoch 00099: val_accuracy did not improve from 0.50000
+
+Epoch 00100: val_accuracy did not improve from 0.50000
+
+Epoch 00101: val_accuracy did not improve from 0.50000
+
+Epoch 00102: val_accuracy did not improve from 0.50000
+
+Epoch 00103: val_accuracy did not improve from 0.50000
+
+Epoch 00104: val_accuracy did not improve from 0.50000
+
+Epoch 00105: val_accuracy did not improve from 0.50000
+
+Epoch 00106: val_accuracy did not improve from 0.50000
+
+Epoch 00107: val_accuracy did not improve from 0.50000
+
+Epoch 00108: val_accuracy did not improve from 0.50000
+
+Epoch 00109: val_accuracy did not improve from 0.50000
+
+Epoch 00110: val_accuracy did not improve from 0.50000
+
+Epoch 00111: val_accuracy did not improve from 0.50000
+
+Epoch 00112: val_accuracy did not improve from 0.50000
+
+Epoch 00113: val_accuracy did not improve from 0.50000
+
+Epoch 00114: val_accuracy did not improve from 0.50000
+
+Epoch 00115: val_accuracy did not improve from 0.50000
+
+Epoch 00116: val_accuracy did not improve from 0.50000
+
+Epoch 00117: val_accuracy did not improve from 0.50000
+
+Epoch 00118: val_accuracy did not improve from 0.50000
+
+Epoch 00119: val_accuracy did not improve from 0.50000
+
+Epoch 00120: val_accuracy did not improve from 0.50000
+
+Epoch 00121: val_accuracy did not improve from 0.50000
+
+Epoch 00122: val_accuracy did not improve from 0.50000
+
+Epoch 00123: val_accuracy improved from 0.50000 to 0.50909, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00124: val_accuracy did not improve from 0.50909
+
+Epoch 00125: val_accuracy improved from 0.50909 to 0.51515, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00126: val_accuracy did not improve from 0.51515
+
+Epoch 00127: val_accuracy improved from 0.51515 to 0.53030, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00128: val_accuracy did not improve from 0.53030
+
+Epoch 00129: val_accuracy improved from 0.53030 to 0.53939, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00130: val_accuracy did not improve from 0.53939
+
+Epoch 00131: val_accuracy improved from 0.53939 to 0.55455, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00132: val_accuracy did not improve from 0.55455
+
+Epoch 00133: val_accuracy did not improve from 0.55455
+
+Epoch 00134: val_accuracy improved from 0.55455 to 0.60303, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00135: val_accuracy improved from 0.60303 to 0.61212, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00136: val_accuracy improved from 0.61212 to 0.63030, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00137: val_accuracy improved from 0.63030 to 0.65152, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00138: val_accuracy improved from 0.65152 to 0.66667, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00139: val_accuracy improved from 0.66667 to 0.67273, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00140: val_accuracy improved from 0.67273 to 0.68485, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00141: val_accuracy improved from 0.68485 to 0.70606, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00142: val_accuracy improved from 0.70606 to 0.71212, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00143: val_accuracy improved from 0.71212 to 0.71818, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00144: val_accuracy did not improve from 0.71818
+
+Epoch 00145: val_accuracy improved from 0.71818 to 0.72121, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00146: val_accuracy did not improve from 0.72121
+
+Epoch 00147: val_accuracy did not improve from 0.72121
+
+Epoch 00148: val_accuracy improved from 0.72121 to 0.73030, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00149: val_accuracy did not improve from 0.73030
+
+Epoch 00150: val_accuracy improved from 0.73030 to 0.73636, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00151: val_accuracy improved from 0.73636 to 0.74242, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00152: val_accuracy did not improve from 0.74242
+
+Epoch 00153: val_accuracy improved from 0.74242 to 0.75758, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00154: val_accuracy improved from 0.75758 to 0.76667, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00155: val_accuracy improved from 0.76667 to 0.77576, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00156: val_accuracy improved from 0.77576 to 0.79091, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00157: val_accuracy did not improve from 0.79091
+
+Epoch 00158: val_accuracy did not improve from 0.79091
+
+Epoch 00159: val_accuracy improved from 0.79091 to 0.79697, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00160: val_accuracy improved from 0.79697 to 0.82121, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00161: val_accuracy did not improve from 0.82121
+
+Epoch 00162: val_accuracy did not improve from 0.82121
+
+Epoch 00163: val_accuracy did not improve from 0.82121
+
+Epoch 00164: val_accuracy did not improve from 0.82121
+
+Epoch 00165: val_accuracy did not improve from 0.82121
+
+Epoch 00166: val_accuracy did not improve from 0.82121
+
+Epoch 00167: val_accuracy did not improve from 0.82121
+
+Epoch 00168: val_accuracy did not improve from 0.82121
+
+Epoch 00169: val_accuracy did not improve from 0.82121
+
+Epoch 00170: val_accuracy did not improve from 0.82121
+
+Epoch 00171: val_accuracy did not improve from 0.82121
+
+Epoch 00172: val_accuracy did not improve from 0.82121
+
+Epoch 00173: val_accuracy did not improve from 0.82121
+
+Epoch 00174: val_accuracy did not improve from 0.82121
+
+Epoch 00175: val_accuracy improved from 0.82121 to 0.82424, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00176: val_accuracy did not improve from 0.82424
+
+Epoch 00177: val_accuracy did not improve from 0.82424
+
+Epoch 00178: val_accuracy improved from 0.82424 to 0.84242, saving model to weights_T2qq_bin_48_s.best.hdf5
+
+Epoch 00179: val_accuracy did not improve from 0.84242
+
+Epoch 00180: val_accuracy did not improve from 0.84242
+
+Epoch 00181: val_accuracy did not improve from 0.84242
+
+Epoch 00182: val_accuracy did not improve from 0.84242
+
+Epoch 00183: val_accuracy did not improve from 0.84242
+
+Epoch 00184: val_accuracy did not improve from 0.84242
+
+Epoch 00185: val_accuracy did not improve from 0.84242
+
+Epoch 00186: val_accuracy did not improve from 0.84242
+
+Epoch 00187: val_accuracy did not improve from 0.84242
+
+Epoch 00188: val_accuracy did not improve from 0.84242
+
+Epoch 00189: val_accuracy did not improve from 0.84242
+
+Epoch 00190: val_accuracy did not improve from 0.84242
+
+Epoch 00191: val_accuracy did not improve from 0.84242
+
+Epoch 00192: val_accuracy did not improve from 0.84242
+
+Epoch 00193: val_accuracy did not improve from 0.84242
+
+Epoch 00194: val_accuracy did not improve from 0.84242
+
+Epoch 00195: val_accuracy did not improve from 0.84242
+
+Epoch 00196: val_accuracy did not improve from 0.84242
+
+Epoch 00197: val_accuracy did not improve from 0.84242
+
+Epoch 00198: val_accuracy did not improve from 0.84242
+
+Epoch 00199: val_accuracy did not improve from 0.84242
+
+Epoch 00200: val_accuracy did not improve from 0.84242
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  9164  background 2234  signals, validate on  1019 background 249 signals
+27492 27492 3057 3057
+start training on bin  11
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy improved from 0.50000 to 0.50229, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00065: val_accuracy improved from 0.50229 to 0.51243, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00066: val_accuracy improved from 0.51243 to 0.51668, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00067: val_accuracy improved from 0.51668 to 0.53451, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00068: val_accuracy improved from 0.53451 to 0.54678, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00069: val_accuracy improved from 0.54678 to 0.56461, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00070: val_accuracy improved from 0.56461 to 0.57556, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00071: val_accuracy improved from 0.57556 to 0.59110, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00072: val_accuracy improved from 0.59110 to 0.59503, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00073: val_accuracy improved from 0.59503 to 0.59650, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00074: val_accuracy improved from 0.59650 to 0.60451, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00075: val_accuracy improved from 0.60451 to 0.61433, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00076: val_accuracy did not improve from 0.61433
+
+Epoch 00077: val_accuracy improved from 0.61433 to 0.62627, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00078: val_accuracy improved from 0.62627 to 0.62709, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00079: val_accuracy improved from 0.62709 to 0.64279, saving model to weights_T2qq_bin_11_s.best.hdf5
+
+Epoch 00080: val_accuracy did not improve from 0.64279
+
+Epoch 00081: val_accuracy did not improve from 0.64279
+
+Epoch 00082: val_accuracy did not improve from 0.64279
+
+Epoch 00083: val_accuracy did not improve from 0.64279
+
+Epoch 00084: val_accuracy did not improve from 0.64279
+
+Epoch 00085: val_accuracy did not improve from 0.64279
+
+Epoch 00086: val_accuracy did not improve from 0.64279
+
+Epoch 00087: val_accuracy did not improve from 0.64279
+
+Epoch 00088: val_accuracy did not improve from 0.64279
+
+Epoch 00089: val_accuracy did not improve from 0.64279
+
+Epoch 00090: val_accuracy did not improve from 0.64279
+
+Epoch 00091: val_accuracy did not improve from 0.64279
+
+Epoch 00092: val_accuracy did not improve from 0.64279
+
+Epoch 00093: val_accuracy did not improve from 0.64279
+
+Epoch 00094: val_accuracy did not improve from 0.64279
+
+Epoch 00095: val_accuracy did not improve from 0.64279
+
+Epoch 00096: val_accuracy did not improve from 0.64279
+
+Epoch 00097: val_accuracy did not improve from 0.64279
+
+Epoch 00098: val_accuracy did not improve from 0.64279
+
+Epoch 00099: val_accuracy did not improve from 0.64279
+
+Epoch 00100: val_accuracy did not improve from 0.64279
+
+Epoch 00101: val_accuracy did not improve from 0.64279
+
+Epoch 00102: val_accuracy did not improve from 0.64279
+
+Epoch 00103: val_accuracy did not improve from 0.64279
+
+Epoch 00104: val_accuracy did not improve from 0.64279
+
+Epoch 00105: val_accuracy did not improve from 0.64279
+
+Epoch 00106: val_accuracy did not improve from 0.64279
+
+Epoch 00107: val_accuracy did not improve from 0.64279
+
+Epoch 00108: val_accuracy did not improve from 0.64279
+
+Epoch 00109: val_accuracy did not improve from 0.64279
+
+Epoch 00110: val_accuracy did not improve from 0.64279
+
+Epoch 00111: val_accuracy did not improve from 0.64279
+
+Epoch 00112: val_accuracy did not improve from 0.64279
+
+Epoch 00113: val_accuracy did not improve from 0.64279
+
+Epoch 00114: val_accuracy did not improve from 0.64279
+
+Epoch 00115: val_accuracy did not improve from 0.64279
+
+Epoch 00116: val_accuracy did not improve from 0.64279
+
+Epoch 00117: val_accuracy did not improve from 0.64279
+
+Epoch 00118: val_accuracy did not improve from 0.64279
+
+Epoch 00119: val_accuracy did not improve from 0.64279
+
+Epoch 00120: val_accuracy did not improve from 0.64279
+
+Epoch 00121: val_accuracy did not improve from 0.64279
+
+Epoch 00122: val_accuracy did not improve from 0.64279
+
+Epoch 00123: val_accuracy did not improve from 0.64279
+
+Epoch 00124: val_accuracy did not improve from 0.64279
+
+Epoch 00125: val_accuracy did not improve from 0.64279
+
+Epoch 00126: val_accuracy did not improve from 0.64279
+
+Epoch 00127: val_accuracy did not improve from 0.64279
+
+Epoch 00128: val_accuracy did not improve from 0.64279
+
+Epoch 00129: val_accuracy did not improve from 0.64279
+
+Epoch 00130: val_accuracy did not improve from 0.64279
+
+Epoch 00131: val_accuracy did not improve from 0.64279
+
+Epoch 00132: val_accuracy did not improve from 0.64279
+
+Epoch 00133: val_accuracy did not improve from 0.64279
+
+Epoch 00134: val_accuracy did not improve from 0.64279
+
+Epoch 00135: val_accuracy did not improve from 0.64279
+
+Epoch 00136: val_accuracy did not improve from 0.64279
+
+Epoch 00137: val_accuracy did not improve from 0.64279
+
+Epoch 00138: val_accuracy did not improve from 0.64279
+
+Epoch 00139: val_accuracy did not improve from 0.64279
+
+Epoch 00140: val_accuracy did not improve from 0.64279
+
+Epoch 00141: val_accuracy did not improve from 0.64279
+
+Epoch 00142: val_accuracy did not improve from 0.64279
+
+Epoch 00143: val_accuracy did not improve from 0.64279
+
+Epoch 00144: val_accuracy did not improve from 0.64279
+
+Epoch 00145: val_accuracy did not improve from 0.64279
+
+Epoch 00146: val_accuracy did not improve from 0.64279
+
+Epoch 00147: val_accuracy did not improve from 0.64279
+
+Epoch 00148: val_accuracy did not improve from 0.64279
+
+Epoch 00149: val_accuracy did not improve from 0.64279
+
+Epoch 00150: val_accuracy did not improve from 0.64279
+
+Epoch 00151: val_accuracy did not improve from 0.64279
+
+Epoch 00152: val_accuracy did not improve from 0.64279
+
+Epoch 00153: val_accuracy did not improve from 0.64279
+
+Epoch 00154: val_accuracy did not improve from 0.64279
+
+Epoch 00155: val_accuracy did not improve from 0.64279
+
+Epoch 00156: val_accuracy did not improve from 0.64279
+
+Epoch 00157: val_accuracy did not improve from 0.64279
+
+Epoch 00158: val_accuracy did not improve from 0.64279
+
+Epoch 00159: val_accuracy did not improve from 0.64279
+
+Epoch 00160: val_accuracy did not improve from 0.64279
+
+Epoch 00161: val_accuracy did not improve from 0.64279
+
+Epoch 00162: val_accuracy did not improve from 0.64279
+
+Epoch 00163: val_accuracy did not improve from 0.64279
+
+Epoch 00164: val_accuracy did not improve from 0.64279
+
+Epoch 00165: val_accuracy did not improve from 0.64279
+
+Epoch 00166: val_accuracy did not improve from 0.64279
+
+Epoch 00167: val_accuracy did not improve from 0.64279
+
+Epoch 00168: val_accuracy did not improve from 0.64279
+
+Epoch 00169: val_accuracy did not improve from 0.64279
+
+Epoch 00170: val_accuracy did not improve from 0.64279
+
+Epoch 00171: val_accuracy did not improve from 0.64279
+
+Epoch 00172: val_accuracy did not improve from 0.64279
+
+Epoch 00173: val_accuracy did not improve from 0.64279
+
+Epoch 00174: val_accuracy did not improve from 0.64279
+
+Epoch 00175: val_accuracy did not improve from 0.64279
+
+Epoch 00176: val_accuracy did not improve from 0.64279
+
+Epoch 00177: val_accuracy did not improve from 0.64279
+
+Epoch 00178: val_accuracy did not improve from 0.64279
+
+Epoch 00179: val_accuracy did not improve from 0.64279
+
+Epoch 00180: val_accuracy did not improve from 0.64279
+
+Epoch 00181: val_accuracy did not improve from 0.64279
+
+Epoch 00182: val_accuracy did not improve from 0.64279
+
+Epoch 00183: val_accuracy did not improve from 0.64279
+
+Epoch 00184: val_accuracy did not improve from 0.64279
+
+Epoch 00185: val_accuracy did not improve from 0.64279
+
+Epoch 00186: val_accuracy did not improve from 0.64279
+
+Epoch 00187: val_accuracy did not improve from 0.64279
+
+Epoch 00188: val_accuracy did not improve from 0.64279
+
+Epoch 00189: val_accuracy did not improve from 0.64279
+
+Epoch 00190: val_accuracy did not improve from 0.64279
+
+Epoch 00191: val_accuracy did not improve from 0.64279
+
+Epoch 00192: val_accuracy did not improve from 0.64279
+
+Epoch 00193: val_accuracy did not improve from 0.64279
+
+Epoch 00194: val_accuracy did not improve from 0.64279
+
+Epoch 00195: val_accuracy did not improve from 0.64279
+
+Epoch 00196: val_accuracy did not improve from 0.64279
+
+Epoch 00197: val_accuracy did not improve from 0.64279
+
+Epoch 00198: val_accuracy did not improve from 0.64279
+
+Epoch 00199: val_accuracy did not improve from 0.64279
+
+Epoch 00200: val_accuracy did not improve from 0.64279
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  26227  background 9149  signals, validate on  2915 background 1017 signals
+78681 78681 8745 8745
+start training on bin  10
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy improved from 0.50000 to 0.50074, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00023: val_accuracy improved from 0.50074 to 0.52590, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00024: val_accuracy improved from 0.52590 to 0.56244, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00025: val_accuracy improved from 0.56244 to 0.59474, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00026: val_accuracy improved from 0.59474 to 0.61161, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00027: val_accuracy did not improve from 0.61161
+
+Epoch 00028: val_accuracy did not improve from 0.61161
+
+Epoch 00029: val_accuracy did not improve from 0.61161
+
+Epoch 00030: val_accuracy did not improve from 0.61161
+
+Epoch 00031: val_accuracy did not improve from 0.61161
+
+Epoch 00032: val_accuracy did not improve from 0.61161
+
+Epoch 00033: val_accuracy did not improve from 0.61161
+
+Epoch 00034: val_accuracy did not improve from 0.61161
+
+Epoch 00035: val_accuracy did not improve from 0.61161
+
+Epoch 00036: val_accuracy did not improve from 0.61161
+
+Epoch 00037: val_accuracy did not improve from 0.61161
+
+Epoch 00038: val_accuracy did not improve from 0.61161
+
+Epoch 00039: val_accuracy did not improve from 0.61161
+
+Epoch 00040: val_accuracy did not improve from 0.61161
+
+Epoch 00041: val_accuracy did not improve from 0.61161
+
+Epoch 00042: val_accuracy did not improve from 0.61161
+
+Epoch 00043: val_accuracy did not improve from 0.61161
+
+Epoch 00044: val_accuracy did not improve from 0.61161
+
+Epoch 00045: val_accuracy did not improve from 0.61161
+
+Epoch 00046: val_accuracy did not improve from 0.61161
+
+Epoch 00047: val_accuracy did not improve from 0.61161
+
+Epoch 00048: val_accuracy did not improve from 0.61161
+
+Epoch 00049: val_accuracy did not improve from 0.61161
+
+Epoch 00050: val_accuracy did not improve from 0.61161
+
+Epoch 00051: val_accuracy did not improve from 0.61161
+
+Epoch 00052: val_accuracy did not improve from 0.61161
+
+Epoch 00053: val_accuracy did not improve from 0.61161
+
+Epoch 00054: val_accuracy did not improve from 0.61161
+
+Epoch 00055: val_accuracy did not improve from 0.61161
+
+Epoch 00056: val_accuracy did not improve from 0.61161
+
+Epoch 00057: val_accuracy did not improve from 0.61161
+
+Epoch 00058: val_accuracy did not improve from 0.61161
+
+Epoch 00059: val_accuracy did not improve from 0.61161
+
+Epoch 00060: val_accuracy did not improve from 0.61161
+
+Epoch 00061: val_accuracy did not improve from 0.61161
+
+Epoch 00062: val_accuracy did not improve from 0.61161
+
+Epoch 00063: val_accuracy did not improve from 0.61161
+
+Epoch 00064: val_accuracy did not improve from 0.61161
+
+Epoch 00065: val_accuracy did not improve from 0.61161
+
+Epoch 00066: val_accuracy did not improve from 0.61161
+
+Epoch 00067: val_accuracy did not improve from 0.61161
+
+Epoch 00068: val_accuracy did not improve from 0.61161
+
+Epoch 00069: val_accuracy did not improve from 0.61161
+
+Epoch 00070: val_accuracy did not improve from 0.61161
+
+Epoch 00071: val_accuracy did not improve from 0.61161
+
+Epoch 00072: val_accuracy did not improve from 0.61161
+
+Epoch 00073: val_accuracy did not improve from 0.61161
+
+Epoch 00074: val_accuracy did not improve from 0.61161
+
+Epoch 00075: val_accuracy did not improve from 0.61161
+
+Epoch 00076: val_accuracy did not improve from 0.61161
+
+Epoch 00077: val_accuracy did not improve from 0.61161
+
+Epoch 00078: val_accuracy did not improve from 0.61161
+
+Epoch 00079: val_accuracy did not improve from 0.61161
+
+Epoch 00080: val_accuracy did not improve from 0.61161
+
+Epoch 00081: val_accuracy did not improve from 0.61161
+
+Epoch 00082: val_accuracy did not improve from 0.61161
+
+Epoch 00083: val_accuracy did not improve from 0.61161
+
+Epoch 00084: val_accuracy did not improve from 0.61161
+
+Epoch 00085: val_accuracy did not improve from 0.61161
+
+Epoch 00086: val_accuracy did not improve from 0.61161
+
+Epoch 00087: val_accuracy did not improve from 0.61161
+
+Epoch 00088: val_accuracy did not improve from 0.61161
+
+Epoch 00089: val_accuracy did not improve from 0.61161
+
+Epoch 00090: val_accuracy did not improve from 0.61161
+
+Epoch 00091: val_accuracy did not improve from 0.61161
+
+Epoch 00092: val_accuracy did not improve from 0.61161
+
+Epoch 00093: val_accuracy did not improve from 0.61161
+
+Epoch 00094: val_accuracy did not improve from 0.61161
+
+Epoch 00095: val_accuracy did not improve from 0.61161
+
+Epoch 00096: val_accuracy did not improve from 0.61161
+
+Epoch 00097: val_accuracy did not improve from 0.61161
+
+Epoch 00098: val_accuracy did not improve from 0.61161
+
+Epoch 00099: val_accuracy did not improve from 0.61161
+
+Epoch 00100: val_accuracy did not improve from 0.61161
+
+Epoch 00101: val_accuracy did not improve from 0.61161
+
+Epoch 00102: val_accuracy did not improve from 0.61161
+
+Epoch 00103: val_accuracy did not improve from 0.61161
+
+Epoch 00104: val_accuracy did not improve from 0.61161
+
+Epoch 00105: val_accuracy did not improve from 0.61161
+
+Epoch 00106: val_accuracy did not improve from 0.61161
+
+Epoch 00107: val_accuracy did not improve from 0.61161
+
+Epoch 00108: val_accuracy did not improve from 0.61161
+
+Epoch 00109: val_accuracy did not improve from 0.61161
+
+Epoch 00110: val_accuracy did not improve from 0.61161
+
+Epoch 00111: val_accuracy did not improve from 0.61161
+
+Epoch 00112: val_accuracy did not improve from 0.61161
+
+Epoch 00113: val_accuracy did not improve from 0.61161
+
+Epoch 00114: val_accuracy did not improve from 0.61161
+
+Epoch 00115: val_accuracy did not improve from 0.61161
+
+Epoch 00116: val_accuracy did not improve from 0.61161
+
+Epoch 00117: val_accuracy did not improve from 0.61161
+
+Epoch 00118: val_accuracy did not improve from 0.61161
+
+Epoch 00119: val_accuracy improved from 0.61161 to 0.61246, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00120: val_accuracy did not improve from 0.61246
+
+Epoch 00121: val_accuracy improved from 0.61246 to 0.61544, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00122: val_accuracy improved from 0.61544 to 0.61641, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00123: val_accuracy did not improve from 0.61641
+
+Epoch 00124: val_accuracy improved from 0.61641 to 0.61904, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00125: val_accuracy improved from 0.61904 to 0.61961, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00126: val_accuracy improved from 0.61961 to 0.62127, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00127: val_accuracy did not improve from 0.62127
+
+Epoch 00128: val_accuracy did not improve from 0.62127
+
+Epoch 00129: val_accuracy improved from 0.62127 to 0.62487, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00130: val_accuracy did not improve from 0.62487
+
+Epoch 00131: val_accuracy improved from 0.62487 to 0.62561, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00132: val_accuracy improved from 0.62561 to 0.62682, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00133: val_accuracy improved from 0.62682 to 0.62716, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00134: val_accuracy did not improve from 0.62716
+
+Epoch 00135: val_accuracy did not improve from 0.62716
+
+Epoch 00136: val_accuracy did not improve from 0.62716
+
+Epoch 00137: val_accuracy did not improve from 0.62716
+
+Epoch 00138: val_accuracy did not improve from 0.62716
+
+Epoch 00139: val_accuracy did not improve from 0.62716
+
+Epoch 00140: val_accuracy did not improve from 0.62716
+
+Epoch 00141: val_accuracy did not improve from 0.62716
+
+Epoch 00142: val_accuracy did not improve from 0.62716
+
+Epoch 00143: val_accuracy did not improve from 0.62716
+
+Epoch 00144: val_accuracy did not improve from 0.62716
+
+Epoch 00145: val_accuracy improved from 0.62716 to 0.62727, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00146: val_accuracy did not improve from 0.62727
+
+Epoch 00147: val_accuracy did not improve from 0.62727
+
+Epoch 00148: val_accuracy did not improve from 0.62727
+
+Epoch 00149: val_accuracy did not improve from 0.62727
+
+Epoch 00150: val_accuracy improved from 0.62727 to 0.62802, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00151: val_accuracy did not improve from 0.62802
+
+Epoch 00152: val_accuracy improved from 0.62802 to 0.62870, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00153: val_accuracy did not improve from 0.62870
+
+Epoch 00154: val_accuracy did not improve from 0.62870
+
+Epoch 00155: val_accuracy did not improve from 0.62870
+
+Epoch 00156: val_accuracy did not improve from 0.62870
+
+Epoch 00157: val_accuracy did not improve from 0.62870
+
+Epoch 00158: val_accuracy did not improve from 0.62870
+
+Epoch 00159: val_accuracy improved from 0.62870 to 0.63013, saving model to weights_T2qq_bin_10_s.best.hdf5
+
+Epoch 00160: val_accuracy did not improve from 0.63013
+
+Epoch 00161: val_accuracy did not improve from 0.63013
+
+Epoch 00162: val_accuracy did not improve from 0.63013
+
+Epoch 00163: val_accuracy did not improve from 0.63013
+
+Epoch 00164: val_accuracy did not improve from 0.63013
+
+Epoch 00165: val_accuracy did not improve from 0.63013
+
+Epoch 00166: val_accuracy did not improve from 0.63013
+
+Epoch 00167: val_accuracy did not improve from 0.63013
+
+Epoch 00168: val_accuracy did not improve from 0.63013
+
+Epoch 00169: val_accuracy did not improve from 0.63013
+
+Epoch 00170: val_accuracy did not improve from 0.63013
+
+Epoch 00171: val_accuracy did not improve from 0.63013
+
+Epoch 00172: val_accuracy did not improve from 0.63013
+
+Epoch 00173: val_accuracy did not improve from 0.63013
+
+Epoch 00174: val_accuracy did not improve from 0.63013
+
+Epoch 00175: val_accuracy did not improve from 0.63013
+
+Epoch 00176: val_accuracy did not improve from 0.63013
+
+Epoch 00177: val_accuracy did not improve from 0.63013
+
+Epoch 00178: val_accuracy did not improve from 0.63013
+
+Epoch 00179: val_accuracy did not improve from 0.63013
+
+Epoch 00180: val_accuracy did not improve from 0.63013
+
+Epoch 00181: val_accuracy did not improve from 0.63013
+
+Epoch 00182: val_accuracy did not improve from 0.63013
+
+Epoch 00183: val_accuracy did not improve from 0.63013
+
+Epoch 00184: val_accuracy did not improve from 0.63013
+
+Epoch 00185: val_accuracy did not improve from 0.63013
+
+Epoch 00186: val_accuracy did not improve from 0.63013
+
+Epoch 00187: val_accuracy did not improve from 0.63013
+
+Epoch 00188: val_accuracy did not improve from 0.63013
+
+Epoch 00189: val_accuracy did not improve from 0.63013
+
+Epoch 00190: val_accuracy did not improve from 0.63013
+
+Epoch 00191: val_accuracy did not improve from 0.63013
+
+Epoch 00192: val_accuracy did not improve from 0.63013
+
+Epoch 00193: val_accuracy did not improve from 0.63013
+
+Epoch 00194: val_accuracy did not improve from 0.63013
+
+Epoch 00195: val_accuracy did not improve from 0.63013
+
+Epoch 00196: val_accuracy did not improve from 0.63013
+
+Epoch 00197: val_accuracy did not improve from 0.63013
+
+Epoch 00198: val_accuracy did not improve from 0.63013
+
+Epoch 00199: val_accuracy did not improve from 0.63013
+
+Epoch 00200: val_accuracy did not improve from 0.63013
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  5557  background 1676  signals, validate on  618 background 187 signals
+16671 16671 1854 1854
+start training on bin  44
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy did not improve from 0.50000
+
+Epoch 00066: val_accuracy did not improve from 0.50000
+
+Epoch 00067: val_accuracy did not improve from 0.50000
+
+Epoch 00068: val_accuracy did not improve from 0.50000
+
+Epoch 00069: val_accuracy did not improve from 0.50000
+
+Epoch 00070: val_accuracy did not improve from 0.50000
+
+Epoch 00071: val_accuracy did not improve from 0.50000
+
+Epoch 00072: val_accuracy did not improve from 0.50000
+
+Epoch 00073: val_accuracy improved from 0.50000 to 0.50944, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00074: val_accuracy did not improve from 0.50944
+
+Epoch 00075: val_accuracy improved from 0.50944 to 0.51268, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00076: val_accuracy improved from 0.51268 to 0.52400, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00077: val_accuracy improved from 0.52400 to 0.54072, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00078: val_accuracy improved from 0.54072 to 0.55070, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00079: val_accuracy improved from 0.55070 to 0.56041, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00080: val_accuracy improved from 0.56041 to 0.56580, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00081: val_accuracy improved from 0.56580 to 0.58603, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00082: val_accuracy improved from 0.58603 to 0.59898, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00083: val_accuracy improved from 0.59898 to 0.60383, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00084: val_accuracy improved from 0.60383 to 0.61920, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00085: val_accuracy improved from 0.61920 to 0.62567, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00086: val_accuracy improved from 0.62567 to 0.63889, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00087: val_accuracy improved from 0.63889 to 0.65129, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00088: val_accuracy improved from 0.65129 to 0.65264, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00089: val_accuracy improved from 0.65264 to 0.65588, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00090: val_accuracy improved from 0.65588 to 0.65885, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00091: val_accuracy improved from 0.65885 to 0.66667, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00092: val_accuracy did not improve from 0.66667
+
+Epoch 00093: val_accuracy did not improve from 0.66667
+
+Epoch 00094: val_accuracy did not improve from 0.66667
+
+Epoch 00095: val_accuracy did not improve from 0.66667
+
+Epoch 00096: val_accuracy did not improve from 0.66667
+
+Epoch 00097: val_accuracy did not improve from 0.66667
+
+Epoch 00098: val_accuracy did not improve from 0.66667
+
+Epoch 00099: val_accuracy did not improve from 0.66667
+
+Epoch 00100: val_accuracy did not improve from 0.66667
+
+Epoch 00101: val_accuracy improved from 0.66667 to 0.67179, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00102: val_accuracy improved from 0.67179 to 0.67233, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00103: val_accuracy improved from 0.67233 to 0.67368, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00104: val_accuracy improved from 0.67368 to 0.67476, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00105: val_accuracy did not improve from 0.67476
+
+Epoch 00106: val_accuracy did not improve from 0.67476
+
+Epoch 00107: val_accuracy improved from 0.67476 to 0.67799, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00108: val_accuracy did not improve from 0.67799
+
+Epoch 00109: val_accuracy did not improve from 0.67799
+
+Epoch 00110: val_accuracy improved from 0.67799 to 0.67907, saving model to weights_T2qq_bin_44_s.best.hdf5
+
+Epoch 00111: val_accuracy did not improve from 0.67907
+
+Epoch 00112: val_accuracy did not improve from 0.67907
+
+Epoch 00113: val_accuracy did not improve from 0.67907
+
+Epoch 00114: val_accuracy did not improve from 0.67907
+
+Epoch 00115: val_accuracy did not improve from 0.67907
+
+Epoch 00116: val_accuracy did not improve from 0.67907
+
+Epoch 00117: val_accuracy did not improve from 0.67907
+
+Epoch 00118: val_accuracy did not improve from 0.67907
+
+Epoch 00119: val_accuracy did not improve from 0.67907
+
+Epoch 00120: val_accuracy did not improve from 0.67907
+
+Epoch 00121: val_accuracy did not improve from 0.67907
+
+Epoch 00122: val_accuracy did not improve from 0.67907
+
+Epoch 00123: val_accuracy did not improve from 0.67907
+
+Epoch 00124: val_accuracy did not improve from 0.67907
+
+Epoch 00125: val_accuracy did not improve from 0.67907
+
+Epoch 00126: val_accuracy did not improve from 0.67907
+
+Epoch 00127: val_accuracy did not improve from 0.67907
+
+Epoch 00128: val_accuracy did not improve from 0.67907
+
+Epoch 00129: val_accuracy did not improve from 0.67907
+
+Epoch 00130: val_accuracy did not improve from 0.67907
+
+Epoch 00131: val_accuracy did not improve from 0.67907
+
+Epoch 00132: val_accuracy did not improve from 0.67907
+
+Epoch 00133: val_accuracy did not improve from 0.67907
+
+Epoch 00134: val_accuracy did not improve from 0.67907
+
+Epoch 00135: val_accuracy did not improve from 0.67907
+
+Epoch 00136: val_accuracy did not improve from 0.67907
+
+Epoch 00137: val_accuracy did not improve from 0.67907
+
+Epoch 00138: val_accuracy did not improve from 0.67907
+
+Epoch 00139: val_accuracy did not improve from 0.67907
+
+Epoch 00140: val_accuracy did not improve from 0.67907
+
+Epoch 00141: val_accuracy did not improve from 0.67907
+
+Epoch 00142: val_accuracy did not improve from 0.67907
+
+Epoch 00143: val_accuracy did not improve from 0.67907
+
+Epoch 00144: val_accuracy did not improve from 0.67907
+
+Epoch 00145: val_accuracy did not improve from 0.67907
+
+Epoch 00146: val_accuracy did not improve from 0.67907
+
+Epoch 00147: val_accuracy did not improve from 0.67907
+
+Epoch 00148: val_accuracy did not improve from 0.67907
+
+Epoch 00149: val_accuracy did not improve from 0.67907
+
+Epoch 00150: val_accuracy did not improve from 0.67907
+
+Epoch 00151: val_accuracy did not improve from 0.67907
+
+Epoch 00152: val_accuracy did not improve from 0.67907
+
+Epoch 00153: val_accuracy did not improve from 0.67907
+
+Epoch 00154: val_accuracy did not improve from 0.67907
+
+Epoch 00155: val_accuracy did not improve from 0.67907
+
+Epoch 00156: val_accuracy did not improve from 0.67907
+
+Epoch 00157: val_accuracy did not improve from 0.67907
+
+Epoch 00158: val_accuracy did not improve from 0.67907
+
+Epoch 00159: val_accuracy did not improve from 0.67907
+
+Epoch 00160: val_accuracy did not improve from 0.67907
+
+Epoch 00161: val_accuracy did not improve from 0.67907
+
+Epoch 00162: val_accuracy did not improve from 0.67907
+
+Epoch 00163: val_accuracy did not improve from 0.67907
+
+Epoch 00164: val_accuracy did not improve from 0.67907
+
+Epoch 00165: val_accuracy did not improve from 0.67907
+
+Epoch 00166: val_accuracy did not improve from 0.67907
+
+Epoch 00167: val_accuracy did not improve from 0.67907
+
+Epoch 00168: val_accuracy did not improve from 0.67907
+
+Epoch 00169: val_accuracy did not improve from 0.67907
+
+Epoch 00170: val_accuracy did not improve from 0.67907
+
+Epoch 00171: val_accuracy did not improve from 0.67907
+
+Epoch 00172: val_accuracy did not improve from 0.67907
+
+Epoch 00173: val_accuracy did not improve from 0.67907
+
+Epoch 00174: val_accuracy did not improve from 0.67907
+
+Epoch 00175: val_accuracy did not improve from 0.67907
+
+Epoch 00176: val_accuracy did not improve from 0.67907
+
+Epoch 00177: val_accuracy did not improve from 0.67907
+
+Epoch 00178: val_accuracy did not improve from 0.67907
+
+Epoch 00179: val_accuracy did not improve from 0.67907
+
+Epoch 00180: val_accuracy did not improve from 0.67907
+
+Epoch 00181: val_accuracy did not improve from 0.67907
+
+Epoch 00182: val_accuracy did not improve from 0.67907
+
+Epoch 00183: val_accuracy did not improve from 0.67907
+
+Epoch 00184: val_accuracy did not improve from 0.67907
+
+Epoch 00185: val_accuracy did not improve from 0.67907
+
+Epoch 00186: val_accuracy did not improve from 0.67907
+
+Epoch 00187: val_accuracy did not improve from 0.67907
+
+Epoch 00188: val_accuracy did not improve from 0.67907
+
+Epoch 00189: val_accuracy did not improve from 0.67907
+
+Epoch 00190: val_accuracy did not improve from 0.67907
+
+Epoch 00191: val_accuracy did not improve from 0.67907
+
+Epoch 00192: val_accuracy did not improve from 0.67907
+
+Epoch 00193: val_accuracy did not improve from 0.67907
+
+Epoch 00194: val_accuracy did not improve from 0.67907
+
+Epoch 00195: val_accuracy did not improve from 0.67907
+
+Epoch 00196: val_accuracy did not improve from 0.67907
+
+Epoch 00197: val_accuracy did not improve from 0.67907
+
+Epoch 00198: val_accuracy did not improve from 0.67907
+
+Epoch 00199: val_accuracy did not improve from 0.67907
+
+Epoch 00200: val_accuracy did not improve from 0.67907
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  69157  background 12751  signals, validate on  7685 background 1417 signals
+207471 207471 23055 23055
+start training on bin  7
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_7_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy improved from 0.50000 to 0.50247, saving model to weights_T2qq_bin_7_s.best.hdf5
+
+Epoch 00010: val_accuracy improved from 0.50247 to 0.58302, saving model to weights_T2qq_bin_7_s.best.hdf5
+
+Epoch 00011: val_accuracy improved from 0.58302 to 0.62112, saving model to weights_T2qq_bin_7_s.best.hdf5
+
+Epoch 00012: val_accuracy did not improve from 0.62112
+
+Epoch 00013: val_accuracy did not improve from 0.62112
+
+Epoch 00014: val_accuracy did not improve from 0.62112
+
+Epoch 00015: val_accuracy did not improve from 0.62112
+
+Epoch 00016: val_accuracy did not improve from 0.62112
+
+Epoch 00017: val_accuracy did not improve from 0.62112
+
+Epoch 00018: val_accuracy did not improve from 0.62112
+
+Epoch 00019: val_accuracy did not improve from 0.62112
+
+Epoch 00020: val_accuracy did not improve from 0.62112
+
+Epoch 00021: val_accuracy did not improve from 0.62112
+
+Epoch 00022: val_accuracy did not improve from 0.62112
+
+Epoch 00023: val_accuracy did not improve from 0.62112
+
+Epoch 00024: val_accuracy did not improve from 0.62112
+
+Epoch 00025: val_accuracy did not improve from 0.62112
+
+Epoch 00026: val_accuracy did not improve from 0.62112
+
+Epoch 00027: val_accuracy did not improve from 0.62112
+
+Epoch 00028: val_accuracy did not improve from 0.62112
+
+Epoch 00029: val_accuracy did not improve from 0.62112
+
+Epoch 00030: val_accuracy did not improve from 0.62112
+
+Epoch 00031: val_accuracy did not improve from 0.62112
+
+Epoch 00032: val_accuracy did not improve from 0.62112
+
+Epoch 00033: val_accuracy did not improve from 0.62112
+
+Epoch 00034: val_accuracy did not improve from 0.62112
+
+Epoch 00035: val_accuracy did not improve from 0.62112
+
+Epoch 00036: val_accuracy did not improve from 0.62112
+
+Epoch 00037: val_accuracy did not improve from 0.62112
+
+Epoch 00038: val_accuracy did not improve from 0.62112
+
+Epoch 00039: val_accuracy did not improve from 0.62112
+
+Epoch 00040: val_accuracy did not improve from 0.62112
+
+Epoch 00041: val_accuracy did not improve from 0.62112
+
+Epoch 00042: val_accuracy did not improve from 0.62112
+
+Epoch 00043: val_accuracy did not improve from 0.62112
+
+Epoch 00044: val_accuracy did not improve from 0.62112
+
+Epoch 00045: val_accuracy did not improve from 0.62112
+
+Epoch 00046: val_accuracy did not improve from 0.62112
+
+Epoch 00047: val_accuracy did not improve from 0.62112
+
+Epoch 00048: val_accuracy did not improve from 0.62112
+
+Epoch 00049: val_accuracy did not improve from 0.62112
+
+Epoch 00050: val_accuracy did not improve from 0.62112
+
+Epoch 00051: val_accuracy did not improve from 0.62112
+
+Epoch 00052: val_accuracy did not improve from 0.62112
+
+Epoch 00053: val_accuracy did not improve from 0.62112
+
+Epoch 00054: val_accuracy did not improve from 0.62112
+
+Epoch 00055: val_accuracy did not improve from 0.62112
+
+Epoch 00056: val_accuracy did not improve from 0.62112
+
+Epoch 00057: val_accuracy did not improve from 0.62112
+
+Epoch 00058: val_accuracy did not improve from 0.62112
+
+Epoch 00059: val_accuracy did not improve from 0.62112
+
+Epoch 00060: val_accuracy did not improve from 0.62112
+
+Epoch 00061: val_accuracy did not improve from 0.62112
+
+Epoch 00062: val_accuracy did not improve from 0.62112
+
+Epoch 00063: val_accuracy did not improve from 0.62112
+
+Epoch 00064: val_accuracy did not improve from 0.62112
+
+Epoch 00065: val_accuracy did not improve from 0.62112
+
+Epoch 00066: val_accuracy did not improve from 0.62112
+
+Epoch 00067: val_accuracy did not improve from 0.62112
+
+Epoch 00068: val_accuracy did not improve from 0.62112
+
+Epoch 00069: val_accuracy did not improve from 0.62112
+
+Epoch 00070: val_accuracy did not improve from 0.62112
+
+Epoch 00071: val_accuracy did not improve from 0.62112
+
+Epoch 00072: val_accuracy did not improve from 0.62112
+
+Epoch 00073: val_accuracy did not improve from 0.62112
+
+Epoch 00074: val_accuracy did not improve from 0.62112
+
+Epoch 00075: val_accuracy did not improve from 0.62112
+
+Epoch 00076: val_accuracy did not improve from 0.62112
+
+Epoch 00077: val_accuracy did not improve from 0.62112
+
+Epoch 00078: val_accuracy did not improve from 0.62112
+
+Epoch 00079: val_accuracy did not improve from 0.62112
+
+Epoch 00080: val_accuracy did not improve from 0.62112
+
+Epoch 00081: val_accuracy did not improve from 0.62112
+
+Epoch 00082: val_accuracy did not improve from 0.62112
+
+Epoch 00083: val_accuracy did not improve from 0.62112
+
+Epoch 00084: val_accuracy did not improve from 0.62112
+
+Epoch 00085: val_accuracy did not improve from 0.62112
+
+Epoch 00086: val_accuracy did not improve from 0.62112
+
+Epoch 00087: val_accuracy did not improve from 0.62112
+
+Epoch 00088: val_accuracy did not improve from 0.62112
+
+Epoch 00089: val_accuracy did not improve from 0.62112
+
+Epoch 00090: val_accuracy did not improve from 0.62112
+
+Epoch 00091: val_accuracy did not improve from 0.62112
+
+Epoch 00092: val_accuracy did not improve from 0.62112
+
+Epoch 00093: val_accuracy did not improve from 0.62112
+
+Epoch 00094: val_accuracy did not improve from 0.62112
+
+Epoch 00095: val_accuracy did not improve from 0.62112
+
+Epoch 00096: val_accuracy did not improve from 0.62112
+
+Epoch 00097: val_accuracy did not improve from 0.62112
+
+Epoch 00098: val_accuracy did not improve from 0.62112
+
+Epoch 00099: val_accuracy did not improve from 0.62112
+
+Epoch 00100: val_accuracy did not improve from 0.62112
+
+Epoch 00101: val_accuracy did not improve from 0.62112
+
+Epoch 00102: val_accuracy did not improve from 0.62112
+
+Epoch 00103: val_accuracy did not improve from 0.62112
+
+Epoch 00104: val_accuracy did not improve from 0.62112
+
+Epoch 00105: val_accuracy did not improve from 0.62112
+
+Epoch 00106: val_accuracy did not improve from 0.62112
+
+Epoch 00107: val_accuracy did not improve from 0.62112
+
+Epoch 00108: val_accuracy did not improve from 0.62112
+
+Epoch 00109: val_accuracy did not improve from 0.62112
+
+Epoch 00110: val_accuracy did not improve from 0.62112
+
+Epoch 00111: val_accuracy did not improve from 0.62112
+
+Epoch 00112: val_accuracy did not improve from 0.62112
+
+Epoch 00113: val_accuracy did not improve from 0.62112
+
+Epoch 00114: val_accuracy did not improve from 0.62112
+
+Epoch 00115: val_accuracy did not improve from 0.62112
+
+Epoch 00116: val_accuracy did not improve from 0.62112
+
+Epoch 00117: val_accuracy did not improve from 0.62112
+
+Epoch 00118: val_accuracy did not improve from 0.62112
+
+Epoch 00119: val_accuracy did not improve from 0.62112
+
+Epoch 00120: val_accuracy did not improve from 0.62112
+
+Epoch 00121: val_accuracy did not improve from 0.62112
+
+Epoch 00122: val_accuracy did not improve from 0.62112
+
+Epoch 00123: val_accuracy did not improve from 0.62112
+
+Epoch 00124: val_accuracy did not improve from 0.62112
+
+Epoch 00125: val_accuracy did not improve from 0.62112
+
+Epoch 00126: val_accuracy did not improve from 0.62112
+
+Epoch 00127: val_accuracy did not improve from 0.62112
+
+Epoch 00128: val_accuracy did not improve from 0.62112
+
+Epoch 00129: val_accuracy did not improve from 0.62112
+
+Epoch 00130: val_accuracy did not improve from 0.62112
+
+Epoch 00131: val_accuracy did not improve from 0.62112
+
+Epoch 00132: val_accuracy did not improve from 0.62112
+
+Epoch 00133: val_accuracy did not improve from 0.62112
+
+Epoch 00134: val_accuracy did not improve from 0.62112
+
+Epoch 00135: val_accuracy did not improve from 0.62112
+
+Epoch 00136: val_accuracy did not improve from 0.62112
+
+Epoch 00137: val_accuracy did not improve from 0.62112
+
+Epoch 00138: val_accuracy did not improve from 0.62112
+
+Epoch 00139: val_accuracy did not improve from 0.62112
+
+Epoch 00140: val_accuracy did not improve from 0.62112
+
+Epoch 00141: val_accuracy did not improve from 0.62112
+
+Epoch 00142: val_accuracy did not improve from 0.62112
+
+Epoch 00143: val_accuracy did not improve from 0.62112
+
+Epoch 00144: val_accuracy did not improve from 0.62112
+
+Epoch 00145: val_accuracy did not improve from 0.62112
+
+Epoch 00146: val_accuracy did not improve from 0.62112
+
+Epoch 00147: val_accuracy did not improve from 0.62112
+
+Epoch 00148: val_accuracy did not improve from 0.62112
+
+Epoch 00149: val_accuracy did not improve from 0.62112
+
+Epoch 00150: val_accuracy did not improve from 0.62112
+
+Epoch 00151: val_accuracy did not improve from 0.62112
+
+Epoch 00152: val_accuracy did not improve from 0.62112
+
+Epoch 00153: val_accuracy did not improve from 0.62112
+
+Epoch 00154: val_accuracy did not improve from 0.62112
+
+Epoch 00155: val_accuracy did not improve from 0.62112
+
+Epoch 00156: val_accuracy did not improve from 0.62112
+
+Epoch 00157: val_accuracy did not improve from 0.62112
+
+Epoch 00158: val_accuracy did not improve from 0.62112
+
+Epoch 00159: val_accuracy did not improve from 0.62112
+
+Epoch 00160: val_accuracy did not improve from 0.62112
+
+Epoch 00161: val_accuracy did not improve from 0.62112
+
+Epoch 00162: val_accuracy did not improve from 0.62112
+
+Epoch 00163: val_accuracy did not improve from 0.62112
+
+Epoch 00164: val_accuracy did not improve from 0.62112
+
+Epoch 00165: val_accuracy did not improve from 0.62112
+
+Epoch 00166: val_accuracy did not improve from 0.62112
+
+Epoch 00167: val_accuracy did not improve from 0.62112
+
+Epoch 00168: val_accuracy did not improve from 0.62112
+
+Epoch 00169: val_accuracy did not improve from 0.62112
+
+Epoch 00170: val_accuracy did not improve from 0.62112
+
+Epoch 00171: val_accuracy did not improve from 0.62112
+
+Epoch 00172: val_accuracy did not improve from 0.62112
+
+Epoch 00173: val_accuracy did not improve from 0.62112
+
+Epoch 00174: val_accuracy did not improve from 0.62112
+
+Epoch 00175: val_accuracy did not improve from 0.62112
+
+Epoch 00176: val_accuracy did not improve from 0.62112
+
+Epoch 00177: val_accuracy did not improve from 0.62112
+
+Epoch 00178: val_accuracy did not improve from 0.62112
+
+Epoch 00179: val_accuracy did not improve from 0.62112
+
+Epoch 00180: val_accuracy did not improve from 0.62112
+
+Epoch 00181: val_accuracy did not improve from 0.62112
+
+Epoch 00182: val_accuracy did not improve from 0.62112
+
+Epoch 00183: val_accuracy did not improve from 0.62112
+
+Epoch 00184: val_accuracy did not improve from 0.62112
+
+Epoch 00185: val_accuracy did not improve from 0.62112
+
+Epoch 00186: val_accuracy did not improve from 0.62112
+
+Epoch 00187: val_accuracy did not improve from 0.62112
+
+Epoch 00188: val_accuracy did not improve from 0.62112
+
+Epoch 00189: val_accuracy did not improve from 0.62112
+
+Epoch 00190: val_accuracy did not improve from 0.62112
+
+Epoch 00191: val_accuracy did not improve from 0.62112
+
+Epoch 00192: val_accuracy did not improve from 0.62112
+
+Epoch 00193: val_accuracy did not improve from 0.62112
+
+Epoch 00194: val_accuracy did not improve from 0.62112
+
+Epoch 00195: val_accuracy did not improve from 0.62112
+
+Epoch 00196: val_accuracy did not improve from 0.62112
+
+Epoch 00197: val_accuracy did not improve from 0.62112
+
+Epoch 00198: val_accuracy did not improve from 0.62112
+
+Epoch 00199: val_accuracy did not improve from 0.62112
+
+Epoch 00200: val_accuracy did not improve from 0.62112
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  535  background 178  signals, validate on  60 background 20 signals
+1605 1605 180 180
+start training on bin  49
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy did not improve from 0.50000
+
+Epoch 00066: val_accuracy did not improve from 0.50000
+
+Epoch 00067: val_accuracy did not improve from 0.50000
+
+Epoch 00068: val_accuracy did not improve from 0.50000
+
+Epoch 00069: val_accuracy did not improve from 0.50000
+
+Epoch 00070: val_accuracy did not improve from 0.50000
+
+Epoch 00071: val_accuracy did not improve from 0.50000
+
+Epoch 00072: val_accuracy did not improve from 0.50000
+
+Epoch 00073: val_accuracy did not improve from 0.50000
+
+Epoch 00074: val_accuracy did not improve from 0.50000
+
+Epoch 00075: val_accuracy did not improve from 0.50000
+
+Epoch 00076: val_accuracy did not improve from 0.50000
+
+Epoch 00077: val_accuracy did not improve from 0.50000
+
+Epoch 00078: val_accuracy did not improve from 0.50000
+
+Epoch 00079: val_accuracy did not improve from 0.50000
+
+Epoch 00080: val_accuracy did not improve from 0.50000
+
+Epoch 00081: val_accuracy did not improve from 0.50000
+
+Epoch 00082: val_accuracy did not improve from 0.50000
+
+Epoch 00083: val_accuracy did not improve from 0.50000
+
+Epoch 00084: val_accuracy did not improve from 0.50000
+
+Epoch 00085: val_accuracy did not improve from 0.50000
+
+Epoch 00086: val_accuracy did not improve from 0.50000
+
+Epoch 00087: val_accuracy did not improve from 0.50000
+
+Epoch 00088: val_accuracy did not improve from 0.50000
+
+Epoch 00089: val_accuracy did not improve from 0.50000
+
+Epoch 00090: val_accuracy did not improve from 0.50000
+
+Epoch 00091: val_accuracy did not improve from 0.50000
+
+Epoch 00092: val_accuracy did not improve from 0.50000
+
+Epoch 00093: val_accuracy did not improve from 0.50000
+
+Epoch 00094: val_accuracy did not improve from 0.50000
+
+Epoch 00095: val_accuracy did not improve from 0.50000
+
+Epoch 00096: val_accuracy did not improve from 0.50000
+
+Epoch 00097: val_accuracy did not improve from 0.50000
+
+Epoch 00098: val_accuracy did not improve from 0.50000
+
+Epoch 00099: val_accuracy did not improve from 0.50000
+
+Epoch 00100: val_accuracy did not improve from 0.50000
+
+Epoch 00101: val_accuracy did not improve from 0.50000
+
+Epoch 00102: val_accuracy did not improve from 0.50000
+
+Epoch 00103: val_accuracy did not improve from 0.50000
+
+Epoch 00104: val_accuracy did not improve from 0.50000
+
+Epoch 00105: val_accuracy did not improve from 0.50000
+
+Epoch 00106: val_accuracy did not improve from 0.50000
+
+Epoch 00107: val_accuracy did not improve from 0.50000
+
+Epoch 00108: val_accuracy did not improve from 0.50000
+
+Epoch 00109: val_accuracy did not improve from 0.50000
+
+Epoch 00110: val_accuracy did not improve from 0.50000
+
+Epoch 00111: val_accuracy did not improve from 0.50000
+
+Epoch 00112: val_accuracy did not improve from 0.50000
+
+Epoch 00113: val_accuracy did not improve from 0.50000
+
+Epoch 00114: val_accuracy did not improve from 0.50000
+
+Epoch 00115: val_accuracy did not improve from 0.50000
+
+Epoch 00116: val_accuracy did not improve from 0.50000
+
+Epoch 00117: val_accuracy did not improve from 0.50000
+
+Epoch 00118: val_accuracy did not improve from 0.50000
+
+Epoch 00119: val_accuracy did not improve from 0.50000
+
+Epoch 00120: val_accuracy did not improve from 0.50000
+
+Epoch 00121: val_accuracy did not improve from 0.50000
+
+Epoch 00122: val_accuracy did not improve from 0.50000
+
+Epoch 00123: val_accuracy did not improve from 0.50000
+
+Epoch 00124: val_accuracy did not improve from 0.50000
+
+Epoch 00125: val_accuracy did not improve from 0.50000
+
+Epoch 00126: val_accuracy did not improve from 0.50000
+
+Epoch 00127: val_accuracy did not improve from 0.50000
+
+Epoch 00128: val_accuracy did not improve from 0.50000
+
+Epoch 00129: val_accuracy did not improve from 0.50000
+
+Epoch 00130: val_accuracy did not improve from 0.50000
+
+Epoch 00131: val_accuracy did not improve from 0.50000
+
+Epoch 00132: val_accuracy did not improve from 0.50000
+
+Epoch 00133: val_accuracy did not improve from 0.50000
+
+Epoch 00134: val_accuracy did not improve from 0.50000
+
+Epoch 00135: val_accuracy did not improve from 0.50000
+
+Epoch 00136: val_accuracy did not improve from 0.50000
+
+Epoch 00137: val_accuracy improved from 0.50000 to 0.50556, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00138: val_accuracy did not improve from 0.50556
+
+Epoch 00139: val_accuracy did not improve from 0.50556
+
+Epoch 00140: val_accuracy did not improve from 0.50556
+
+Epoch 00141: val_accuracy did not improve from 0.50556
+
+Epoch 00142: val_accuracy did not improve from 0.50556
+
+Epoch 00143: val_accuracy improved from 0.50556 to 0.53333, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00144: val_accuracy improved from 0.53333 to 0.61111, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00145: val_accuracy did not improve from 0.61111
+
+Epoch 00146: val_accuracy did not improve from 0.61111
+
+Epoch 00147: val_accuracy did not improve from 0.61111
+
+Epoch 00148: val_accuracy improved from 0.61111 to 0.61389, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00149: val_accuracy improved from 0.61389 to 0.64444, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00150: val_accuracy did not improve from 0.64444
+
+Epoch 00151: val_accuracy did not improve from 0.64444
+
+Epoch 00152: val_accuracy did not improve from 0.64444
+
+Epoch 00153: val_accuracy did not improve from 0.64444
+
+Epoch 00154: val_accuracy improved from 0.64444 to 0.64722, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00155: val_accuracy did not improve from 0.64722
+
+Epoch 00156: val_accuracy did not improve from 0.64722
+
+Epoch 00157: val_accuracy did not improve from 0.64722
+
+Epoch 00158: val_accuracy improved from 0.64722 to 0.68611, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00159: val_accuracy improved from 0.68611 to 0.70833, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00160: val_accuracy improved from 0.70833 to 0.72222, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00161: val_accuracy did not improve from 0.72222
+
+Epoch 00162: val_accuracy did not improve from 0.72222
+
+Epoch 00163: val_accuracy did not improve from 0.72222
+
+Epoch 00164: val_accuracy did not improve from 0.72222
+
+Epoch 00165: val_accuracy did not improve from 0.72222
+
+Epoch 00166: val_accuracy did not improve from 0.72222
+
+Epoch 00167: val_accuracy did not improve from 0.72222
+
+Epoch 00168: val_accuracy improved from 0.72222 to 0.74444, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00169: val_accuracy did not improve from 0.74444
+
+Epoch 00170: val_accuracy improved from 0.74444 to 0.77500, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00171: val_accuracy did not improve from 0.77500
+
+Epoch 00172: val_accuracy did not improve from 0.77500
+
+Epoch 00173: val_accuracy improved from 0.77500 to 0.78056, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00174: val_accuracy did not improve from 0.78056
+
+Epoch 00175: val_accuracy did not improve from 0.78056
+
+Epoch 00176: val_accuracy did not improve from 0.78056
+
+Epoch 00177: val_accuracy did not improve from 0.78056
+
+Epoch 00178: val_accuracy did not improve from 0.78056
+
+Epoch 00179: val_accuracy did not improve from 0.78056
+
+Epoch 00180: val_accuracy did not improve from 0.78056
+
+Epoch 00181: val_accuracy did not improve from 0.78056
+
+Epoch 00182: val_accuracy did not improve from 0.78056
+
+Epoch 00183: val_accuracy did not improve from 0.78056
+
+Epoch 00184: val_accuracy did not improve from 0.78056
+
+Epoch 00185: val_accuracy did not improve from 0.78056
+
+Epoch 00186: val_accuracy improved from 0.78056 to 0.79444, saving model to weights_T2qq_bin_49_s.best.hdf5
+
+Epoch 00187: val_accuracy did not improve from 0.79444
+
+Epoch 00188: val_accuracy did not improve from 0.79444
+
+Epoch 00189: val_accuracy did not improve from 0.79444
+
+Epoch 00190: val_accuracy did not improve from 0.79444
+
+Epoch 00191: val_accuracy did not improve from 0.79444
+
+Epoch 00192: val_accuracy did not improve from 0.79444
+
+Epoch 00193: val_accuracy did not improve from 0.79444
+
+Epoch 00194: val_accuracy did not improve from 0.79444
+
+Epoch 00195: val_accuracy did not improve from 0.79444
+
+Epoch 00196: val_accuracy did not improve from 0.79444
+
+Epoch 00197: val_accuracy did not improve from 0.79444
+
+Epoch 00198: val_accuracy did not improve from 0.79444
+
+Epoch 00199: val_accuracy did not improve from 0.79444
+
+Epoch 00200: val_accuracy did not improve from 0.79444
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  7785  background 1268  signals, validate on  866 background 141 signals
+23355 23355 2598 2598
+start training on bin  45
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy improved from 0.50000 to 0.51232, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00049: val_accuracy improved from 0.51232 to 0.53329, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00050: val_accuracy improved from 0.53329 to 0.55235, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00051: val_accuracy improved from 0.55235 to 0.57679, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00052: val_accuracy improved from 0.57679 to 0.59007, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00053: val_accuracy improved from 0.59007 to 0.60393, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00054: val_accuracy improved from 0.60393 to 0.63222, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00055: val_accuracy improved from 0.63222 to 0.64588, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00056: val_accuracy improved from 0.64588 to 0.65031, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00057: val_accuracy improved from 0.65031 to 0.65704, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00058: val_accuracy improved from 0.65704 to 0.66763, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00059: val_accuracy improved from 0.66763 to 0.67321, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00060: val_accuracy improved from 0.67321 to 0.68168, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00061: val_accuracy improved from 0.68168 to 0.68687, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00062: val_accuracy improved from 0.68687 to 0.68803, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00063: val_accuracy improved from 0.68803 to 0.69823, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00064: val_accuracy improved from 0.69823 to 0.70593, saving model to weights_T2qq_bin_45_s.best.hdf5
+
+Epoch 00065: val_accuracy did not improve from 0.70593
+
+Epoch 00066: val_accuracy did not improve from 0.70593
+
+Epoch 00067: val_accuracy did not improve from 0.70593
+
+Epoch 00068: val_accuracy did not improve from 0.70593
+
+Epoch 00069: val_accuracy did not improve from 0.70593
+
+Epoch 00070: val_accuracy did not improve from 0.70593
+
+Epoch 00071: val_accuracy did not improve from 0.70593
+
+Epoch 00072: val_accuracy did not improve from 0.70593
+
+Epoch 00073: val_accuracy did not improve from 0.70593
+
+Epoch 00074: val_accuracy did not improve from 0.70593
+
+Epoch 00075: val_accuracy did not improve from 0.70593
+
+Epoch 00076: val_accuracy did not improve from 0.70593
+
+Epoch 00077: val_accuracy did not improve from 0.70593
+
+Epoch 00078: val_accuracy did not improve from 0.70593
+
+Epoch 00079: val_accuracy did not improve from 0.70593
+
+Epoch 00080: val_accuracy did not improve from 0.70593
+
+Epoch 00081: val_accuracy did not improve from 0.70593
+
+Epoch 00082: val_accuracy did not improve from 0.70593
+
+Epoch 00083: val_accuracy did not improve from 0.70593
+
+Epoch 00084: val_accuracy did not improve from 0.70593
+
+Epoch 00085: val_accuracy did not improve from 0.70593
+
+Epoch 00086: val_accuracy did not improve from 0.70593
+
+Epoch 00087: val_accuracy did not improve from 0.70593
+
+Epoch 00088: val_accuracy did not improve from 0.70593
+
+Epoch 00089: val_accuracy did not improve from 0.70593
+
+Epoch 00090: val_accuracy did not improve from 0.70593
+
+Epoch 00091: val_accuracy did not improve from 0.70593
+
+Epoch 00092: val_accuracy did not improve from 0.70593
+
+Epoch 00093: val_accuracy did not improve from 0.70593
+
+Epoch 00094: val_accuracy did not improve from 0.70593
+
+Epoch 00095: val_accuracy did not improve from 0.70593
+
+Epoch 00096: val_accuracy did not improve from 0.70593
+
+Epoch 00097: val_accuracy did not improve from 0.70593
+
+Epoch 00098: val_accuracy did not improve from 0.70593
+
+Epoch 00099: val_accuracy did not improve from 0.70593
+
+Epoch 00100: val_accuracy did not improve from 0.70593
+
+Epoch 00101: val_accuracy did not improve from 0.70593
+
+Epoch 00102: val_accuracy did not improve from 0.70593
+
+Epoch 00103: val_accuracy did not improve from 0.70593
+
+Epoch 00104: val_accuracy did not improve from 0.70593
+
+Epoch 00105: val_accuracy did not improve from 0.70593
+
+Epoch 00106: val_accuracy did not improve from 0.70593
+
+Epoch 00107: val_accuracy did not improve from 0.70593
+
+Epoch 00108: val_accuracy did not improve from 0.70593
+
+Epoch 00109: val_accuracy did not improve from 0.70593
+
+Epoch 00110: val_accuracy did not improve from 0.70593
+
+Epoch 00111: val_accuracy did not improve from 0.70593
+
+Epoch 00112: val_accuracy did not improve from 0.70593
+
+Epoch 00113: val_accuracy did not improve from 0.70593
+
+Epoch 00114: val_accuracy did not improve from 0.70593
+
+Epoch 00115: val_accuracy did not improve from 0.70593
+
+Epoch 00116: val_accuracy did not improve from 0.70593
+
+Epoch 00117: val_accuracy did not improve from 0.70593
+
+Epoch 00118: val_accuracy did not improve from 0.70593
+
+Epoch 00119: val_accuracy did not improve from 0.70593
+
+Epoch 00120: val_accuracy did not improve from 0.70593
+
+Epoch 00121: val_accuracy did not improve from 0.70593
+
+Epoch 00122: val_accuracy did not improve from 0.70593
+
+Epoch 00123: val_accuracy did not improve from 0.70593
+
+Epoch 00124: val_accuracy did not improve from 0.70593
+
+Epoch 00125: val_accuracy did not improve from 0.70593
+
+Epoch 00126: val_accuracy did not improve from 0.70593
+
+Epoch 00127: val_accuracy did not improve from 0.70593
+
+Epoch 00128: val_accuracy did not improve from 0.70593
+
+Epoch 00129: val_accuracy did not improve from 0.70593
+
+Epoch 00130: val_accuracy did not improve from 0.70593
+
+Epoch 00131: val_accuracy did not improve from 0.70593
+
+Epoch 00132: val_accuracy did not improve from 0.70593
+
+Epoch 00133: val_accuracy did not improve from 0.70593
+
+Epoch 00134: val_accuracy did not improve from 0.70593
+
+Epoch 00135: val_accuracy did not improve from 0.70593
+
+Epoch 00136: val_accuracy did not improve from 0.70593
+
+Epoch 00137: val_accuracy did not improve from 0.70593
+
+Epoch 00138: val_accuracy did not improve from 0.70593
+
+Epoch 00139: val_accuracy did not improve from 0.70593
+
+Epoch 00140: val_accuracy did not improve from 0.70593
+
+Epoch 00141: val_accuracy did not improve from 0.70593
+
+Epoch 00142: val_accuracy did not improve from 0.70593
+
+Epoch 00143: val_accuracy did not improve from 0.70593
+
+Epoch 00144: val_accuracy did not improve from 0.70593
+
+Epoch 00145: val_accuracy did not improve from 0.70593
+
+Epoch 00146: val_accuracy did not improve from 0.70593
+
+Epoch 00147: val_accuracy did not improve from 0.70593
+
+Epoch 00148: val_accuracy did not improve from 0.70593
+
+Epoch 00149: val_accuracy did not improve from 0.70593
+
+Epoch 00150: val_accuracy did not improve from 0.70593
+
+Epoch 00151: val_accuracy did not improve from 0.70593
+
+Epoch 00152: val_accuracy did not improve from 0.70593
+
+Epoch 00153: val_accuracy did not improve from 0.70593
+
+Epoch 00154: val_accuracy did not improve from 0.70593
+
+Epoch 00155: val_accuracy did not improve from 0.70593
+
+Epoch 00156: val_accuracy did not improve from 0.70593
+
+Epoch 00157: val_accuracy did not improve from 0.70593
+
+Epoch 00158: val_accuracy did not improve from 0.70593
+
+Epoch 00159: val_accuracy did not improve from 0.70593
+
+Epoch 00160: val_accuracy did not improve from 0.70593
+
+Epoch 00161: val_accuracy did not improve from 0.70593
+
+Epoch 00162: val_accuracy did not improve from 0.70593
+
+Epoch 00163: val_accuracy did not improve from 0.70593
+
+Epoch 00164: val_accuracy did not improve from 0.70593
+
+Epoch 00165: val_accuracy did not improve from 0.70593
+
+Epoch 00166: val_accuracy did not improve from 0.70593
+
+Epoch 00167: val_accuracy did not improve from 0.70593
+
+Epoch 00168: val_accuracy did not improve from 0.70593
+
+Epoch 00169: val_accuracy did not improve from 0.70593
+
+Epoch 00170: val_accuracy did not improve from 0.70593
+
+Epoch 00171: val_accuracy did not improve from 0.70593
+
+Epoch 00172: val_accuracy did not improve from 0.70593
+
+Epoch 00173: val_accuracy did not improve from 0.70593
+
+Epoch 00174: val_accuracy did not improve from 0.70593
+
+Epoch 00175: val_accuracy did not improve from 0.70593
+
+Epoch 00176: val_accuracy did not improve from 0.70593
+
+Epoch 00177: val_accuracy did not improve from 0.70593
+
+Epoch 00178: val_accuracy did not improve from 0.70593
+
+Epoch 00179: val_accuracy did not improve from 0.70593
+
+Epoch 00180: val_accuracy did not improve from 0.70593
+
+Epoch 00181: val_accuracy did not improve from 0.70593
+
+Epoch 00182: val_accuracy did not improve from 0.70593
+
+Epoch 00183: val_accuracy did not improve from 0.70593
+
+Epoch 00184: val_accuracy did not improve from 0.70593
+
+Epoch 00185: val_accuracy did not improve from 0.70593
+
+Epoch 00186: val_accuracy did not improve from 0.70593
+
+Epoch 00187: val_accuracy did not improve from 0.70593
+
+Epoch 00188: val_accuracy did not improve from 0.70593
+
+Epoch 00189: val_accuracy did not improve from 0.70593
+
+Epoch 00190: val_accuracy did not improve from 0.70593
+
+Epoch 00191: val_accuracy did not improve from 0.70593
+
+Epoch 00192: val_accuracy did not improve from 0.70593
+
+Epoch 00193: val_accuracy did not improve from 0.70593
+
+Epoch 00194: val_accuracy did not improve from 0.70593
+
+Epoch 00195: val_accuracy did not improve from 0.70593
+
+Epoch 00196: val_accuracy did not improve from 0.70593
+
+Epoch 00197: val_accuracy did not improve from 0.70593
+
+Epoch 00198: val_accuracy did not improve from 0.70593
+
+Epoch 00199: val_accuracy did not improve from 0.70593
+
+Epoch 00200: val_accuracy did not improve from 0.70593
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  8154  background 1342  signals, validate on  907 background 150 signals
+24462 24462 2721 2721
+start training on bin  19
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy improved from 0.50000 to 0.50698, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00052: val_accuracy improved from 0.50698 to 0.51874, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00053: val_accuracy improved from 0.51874 to 0.53565, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00054: val_accuracy improved from 0.53565 to 0.54704, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00055: val_accuracy improved from 0.54704 to 0.57497, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00056: val_accuracy improved from 0.57497 to 0.59169, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00057: val_accuracy did not improve from 0.59169
+
+Epoch 00058: val_accuracy improved from 0.59169 to 0.59519, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00059: val_accuracy improved from 0.59519 to 0.59537, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00060: val_accuracy improved from 0.59537 to 0.62165, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00061: val_accuracy improved from 0.62165 to 0.62220, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00062: val_accuracy improved from 0.62220 to 0.62863, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00063: val_accuracy did not improve from 0.62863
+
+Epoch 00064: val_accuracy improved from 0.62863 to 0.64002, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00065: val_accuracy improved from 0.64002 to 0.64921, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00066: val_accuracy improved from 0.64921 to 0.65215, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00067: val_accuracy improved from 0.65215 to 0.66850, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00068: val_accuracy improved from 0.66850 to 0.66887, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00069: val_accuracy did not improve from 0.66887
+
+Epoch 00070: val_accuracy did not improve from 0.66887
+
+Epoch 00071: val_accuracy did not improve from 0.66887
+
+Epoch 00072: val_accuracy did not improve from 0.66887
+
+Epoch 00073: val_accuracy did not improve from 0.66887
+
+Epoch 00074: val_accuracy did not improve from 0.66887
+
+Epoch 00075: val_accuracy improved from 0.66887 to 0.67181, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00076: val_accuracy improved from 0.67181 to 0.68082, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00077: val_accuracy improved from 0.68082 to 0.68100, saving model to weights_T2qq_bin_19_s.best.hdf5
+
+Epoch 00078: val_accuracy did not improve from 0.68100
+
+Epoch 00079: val_accuracy did not improve from 0.68100
+
+Epoch 00080: val_accuracy did not improve from 0.68100
+
+Epoch 00081: val_accuracy did not improve from 0.68100
+
+Epoch 00082: val_accuracy did not improve from 0.68100
+
+Epoch 00083: val_accuracy did not improve from 0.68100
+
+Epoch 00084: val_accuracy did not improve from 0.68100
+
+Epoch 00085: val_accuracy did not improve from 0.68100
+
+Epoch 00086: val_accuracy did not improve from 0.68100
+
+Epoch 00087: val_accuracy did not improve from 0.68100
+
+Epoch 00088: val_accuracy did not improve from 0.68100
+
+Epoch 00089: val_accuracy did not improve from 0.68100
+
+Epoch 00090: val_accuracy did not improve from 0.68100
+
+Epoch 00091: val_accuracy did not improve from 0.68100
+
+Epoch 00092: val_accuracy did not improve from 0.68100
+
+Epoch 00093: val_accuracy did not improve from 0.68100
+
+Epoch 00094: val_accuracy did not improve from 0.68100
+
+Epoch 00095: val_accuracy did not improve from 0.68100
+
+Epoch 00096: val_accuracy did not improve from 0.68100
+
+Epoch 00097: val_accuracy did not improve from 0.68100
+
+Epoch 00098: val_accuracy did not improve from 0.68100
+
+Epoch 00099: val_accuracy did not improve from 0.68100
+
+Epoch 00100: val_accuracy did not improve from 0.68100
+
+Epoch 00101: val_accuracy did not improve from 0.68100
+
+Epoch 00102: val_accuracy did not improve from 0.68100
+
+Epoch 00103: val_accuracy did not improve from 0.68100
+
+Epoch 00104: val_accuracy did not improve from 0.68100
+
+Epoch 00105: val_accuracy did not improve from 0.68100
+
+Epoch 00106: val_accuracy did not improve from 0.68100
+
+Epoch 00107: val_accuracy did not improve from 0.68100
+
+Epoch 00108: val_accuracy did not improve from 0.68100
+
+Epoch 00109: val_accuracy did not improve from 0.68100
+
+Epoch 00110: val_accuracy did not improve from 0.68100
+
+Epoch 00111: val_accuracy did not improve from 0.68100
+
+Epoch 00112: val_accuracy did not improve from 0.68100
+
+Epoch 00113: val_accuracy did not improve from 0.68100
+
+Epoch 00114: val_accuracy did not improve from 0.68100
+
+Epoch 00115: val_accuracy did not improve from 0.68100
+
+Epoch 00116: val_accuracy did not improve from 0.68100
+
+Epoch 00117: val_accuracy did not improve from 0.68100
+
+Epoch 00118: val_accuracy did not improve from 0.68100
+
+Epoch 00119: val_accuracy did not improve from 0.68100
+
+Epoch 00120: val_accuracy did not improve from 0.68100
+
+Epoch 00121: val_accuracy did not improve from 0.68100
+
+Epoch 00122: val_accuracy did not improve from 0.68100
+
+Epoch 00123: val_accuracy did not improve from 0.68100
+
+Epoch 00124: val_accuracy did not improve from 0.68100
+
+Epoch 00125: val_accuracy did not improve from 0.68100
+
+Epoch 00126: val_accuracy did not improve from 0.68100
+
+Epoch 00127: val_accuracy did not improve from 0.68100
+
+Epoch 00128: val_accuracy did not improve from 0.68100
+
+Epoch 00129: val_accuracy did not improve from 0.68100
+
+Epoch 00130: val_accuracy did not improve from 0.68100
+
+Epoch 00131: val_accuracy did not improve from 0.68100
+
+Epoch 00132: val_accuracy did not improve from 0.68100
+
+Epoch 00133: val_accuracy did not improve from 0.68100
+
+Epoch 00134: val_accuracy did not improve from 0.68100
+
+Epoch 00135: val_accuracy did not improve from 0.68100
+
+Epoch 00136: val_accuracy did not improve from 0.68100
+
+Epoch 00137: val_accuracy did not improve from 0.68100
+
+Epoch 00138: val_accuracy did not improve from 0.68100
+
+Epoch 00139: val_accuracy did not improve from 0.68100
+
+Epoch 00140: val_accuracy did not improve from 0.68100
+
+Epoch 00141: val_accuracy did not improve from 0.68100
+
+Epoch 00142: val_accuracy did not improve from 0.68100
+
+Epoch 00143: val_accuracy did not improve from 0.68100
+
+Epoch 00144: val_accuracy did not improve from 0.68100
+
+Epoch 00145: val_accuracy did not improve from 0.68100
+
+Epoch 00146: val_accuracy did not improve from 0.68100
+
+Epoch 00147: val_accuracy did not improve from 0.68100
+
+Epoch 00148: val_accuracy did not improve from 0.68100
+
+Epoch 00149: val_accuracy did not improve from 0.68100
+
+Epoch 00150: val_accuracy did not improve from 0.68100
+
+Epoch 00151: val_accuracy did not improve from 0.68100
+
+Epoch 00152: val_accuracy did not improve from 0.68100
+
+Epoch 00153: val_accuracy did not improve from 0.68100
+
+Epoch 00154: val_accuracy did not improve from 0.68100
+
+Epoch 00155: val_accuracy did not improve from 0.68100
+
+Epoch 00156: val_accuracy did not improve from 0.68100
+
+Epoch 00157: val_accuracy did not improve from 0.68100
+
+Epoch 00158: val_accuracy did not improve from 0.68100
+
+Epoch 00159: val_accuracy did not improve from 0.68100
+
+Epoch 00160: val_accuracy did not improve from 0.68100
+
+Epoch 00161: val_accuracy did not improve from 0.68100
+
+Epoch 00162: val_accuracy did not improve from 0.68100
+
+Epoch 00163: val_accuracy did not improve from 0.68100
+
+Epoch 00164: val_accuracy did not improve from 0.68100
+
+Epoch 00165: val_accuracy did not improve from 0.68100
+
+Epoch 00166: val_accuracy did not improve from 0.68100
+
+Epoch 00167: val_accuracy did not improve from 0.68100
+
+Epoch 00168: val_accuracy did not improve from 0.68100
+
+Epoch 00169: val_accuracy did not improve from 0.68100
+
+Epoch 00170: val_accuracy did not improve from 0.68100
+
+Epoch 00171: val_accuracy did not improve from 0.68100
+
+Epoch 00172: val_accuracy did not improve from 0.68100
+
+Epoch 00173: val_accuracy did not improve from 0.68100
+
+Epoch 00174: val_accuracy did not improve from 0.68100
+
+Epoch 00175: val_accuracy did not improve from 0.68100
+
+Epoch 00176: val_accuracy did not improve from 0.68100
+
+Epoch 00177: val_accuracy did not improve from 0.68100
+
+Epoch 00178: val_accuracy did not improve from 0.68100
+
+Epoch 00179: val_accuracy did not improve from 0.68100
+
+Epoch 00180: val_accuracy did not improve from 0.68100
+
+Epoch 00181: val_accuracy did not improve from 0.68100
+
+Epoch 00182: val_accuracy did not improve from 0.68100
+
+Epoch 00183: val_accuracy did not improve from 0.68100
+
+Epoch 00184: val_accuracy did not improve from 0.68100
+
+Epoch 00185: val_accuracy did not improve from 0.68100
+
+Epoch 00186: val_accuracy did not improve from 0.68100
+
+Epoch 00187: val_accuracy did not improve from 0.68100
+
+Epoch 00188: val_accuracy did not improve from 0.68100
+
+Epoch 00189: val_accuracy did not improve from 0.68100
+
+Epoch 00190: val_accuracy did not improve from 0.68100
+
+Epoch 00191: val_accuracy did not improve from 0.68100
+
+Epoch 00192: val_accuracy did not improve from 0.68100
+
+Epoch 00193: val_accuracy did not improve from 0.68100
+
+Epoch 00194: val_accuracy did not improve from 0.68100
+
+Epoch 00195: val_accuracy did not improve from 0.68100
+
+Epoch 00196: val_accuracy did not improve from 0.68100
+
+Epoch 00197: val_accuracy did not improve from 0.68100
+
+Epoch 00198: val_accuracy did not improve from 0.68100
+
+Epoch 00199: val_accuracy did not improve from 0.68100
+
+Epoch 00200: val_accuracy did not improve from 0.68100
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  3131  background 224  signals, validate on  348 background 25 signals
+9393 9393 1044 1044
+start training on bin  65
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy did not improve from 0.50000
+
+Epoch 00066: val_accuracy did not improve from 0.50000
+
+Epoch 00067: val_accuracy did not improve from 0.50000
+
+Epoch 00068: val_accuracy did not improve from 0.50000
+
+Epoch 00069: val_accuracy did not improve from 0.50000
+
+Epoch 00070: val_accuracy did not improve from 0.50000
+
+Epoch 00071: val_accuracy did not improve from 0.50000
+
+Epoch 00072: val_accuracy did not improve from 0.50000
+
+Epoch 00073: val_accuracy did not improve from 0.50000
+
+Epoch 00074: val_accuracy did not improve from 0.50000
+
+Epoch 00075: val_accuracy did not improve from 0.50000
+
+Epoch 00076: val_accuracy did not improve from 0.50000
+
+Epoch 00077: val_accuracy did not improve from 0.50000
+
+Epoch 00078: val_accuracy did not improve from 0.50000
+
+Epoch 00079: val_accuracy did not improve from 0.50000
+
+Epoch 00080: val_accuracy did not improve from 0.50000
+
+Epoch 00081: val_accuracy did not improve from 0.50000
+
+Epoch 00082: val_accuracy did not improve from 0.50000
+
+Epoch 00083: val_accuracy did not improve from 0.50000
+
+Epoch 00084: val_accuracy did not improve from 0.50000
+
+Epoch 00085: val_accuracy did not improve from 0.50000
+
+Epoch 00086: val_accuracy did not improve from 0.50000
+
+Epoch 00087: val_accuracy did not improve from 0.50000
+
+Epoch 00088: val_accuracy did not improve from 0.50000
+
+Epoch 00089: val_accuracy did not improve from 0.50000
+
+Epoch 00090: val_accuracy did not improve from 0.50000
+
+Epoch 00091: val_accuracy did not improve from 0.50000
+
+Epoch 00092: val_accuracy did not improve from 0.50000
+
+Epoch 00093: val_accuracy did not improve from 0.50000
+
+Epoch 00094: val_accuracy did not improve from 0.50000
+
+Epoch 00095: val_accuracy did not improve from 0.50000
+
+Epoch 00096: val_accuracy did not improve from 0.50000
+
+Epoch 00097: val_accuracy did not improve from 0.50000
+
+Epoch 00098: val_accuracy did not improve from 0.50000
+
+Epoch 00099: val_accuracy did not improve from 0.50000
+
+Epoch 00100: val_accuracy did not improve from 0.50000
+
+Epoch 00101: val_accuracy did not improve from 0.50000
+
+Epoch 00102: val_accuracy did not improve from 0.50000
+
+Epoch 00103: val_accuracy did not improve from 0.50000
+
+Epoch 00104: val_accuracy did not improve from 0.50000
+
+Epoch 00105: val_accuracy did not improve from 0.50000
+
+Epoch 00106: val_accuracy did not improve from 0.50000
+
+Epoch 00107: val_accuracy did not improve from 0.50000
+
+Epoch 00108: val_accuracy did not improve from 0.50000
+
+Epoch 00109: val_accuracy did not improve from 0.50000
+
+Epoch 00110: val_accuracy did not improve from 0.50000
+
+Epoch 00111: val_accuracy did not improve from 0.50000
+
+Epoch 00112: val_accuracy did not improve from 0.50000
+
+Epoch 00113: val_accuracy did not improve from 0.50000
+
+Epoch 00114: val_accuracy did not improve from 0.50000
+
+Epoch 00115: val_accuracy did not improve from 0.50000
+
+Epoch 00116: val_accuracy did not improve from 0.50000
+
+Epoch 00117: val_accuracy did not improve from 0.50000
+
+Epoch 00118: val_accuracy did not improve from 0.50000
+
+Epoch 00119: val_accuracy did not improve from 0.50000
+
+Epoch 00120: val_accuracy did not improve from 0.50000
+
+Epoch 00121: val_accuracy did not improve from 0.50000
+
+Epoch 00122: val_accuracy did not improve from 0.50000
+
+Epoch 00123: val_accuracy did not improve from 0.50000
+
+Epoch 00124: val_accuracy did not improve from 0.50000
+
+Epoch 00125: val_accuracy did not improve from 0.50000
+
+Epoch 00126: val_accuracy did not improve from 0.50000
+
+Epoch 00127: val_accuracy improved from 0.50000 to 0.51820, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00128: val_accuracy improved from 0.51820 to 0.52921, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00129: val_accuracy improved from 0.52921 to 0.56418, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00130: val_accuracy improved from 0.56418 to 0.58285, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00131: val_accuracy improved from 0.58285 to 0.62117, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00132: val_accuracy improved from 0.62117 to 0.64224, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00133: val_accuracy did not improve from 0.64224
+
+Epoch 00134: val_accuracy improved from 0.64224 to 0.69061, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00135: val_accuracy improved from 0.69061 to 0.73659, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00136: val_accuracy improved from 0.73659 to 0.75479, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00137: val_accuracy did not improve from 0.75479
+
+Epoch 00138: val_accuracy did not improve from 0.75479
+
+Epoch 00139: val_accuracy improved from 0.75479 to 0.77011, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00140: val_accuracy did not improve from 0.77011
+
+Epoch 00141: val_accuracy improved from 0.77011 to 0.79119, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00142: val_accuracy did not improve from 0.79119
+
+Epoch 00143: val_accuracy did not improve from 0.79119
+
+Epoch 00144: val_accuracy did not improve from 0.79119
+
+Epoch 00145: val_accuracy did not improve from 0.79119
+
+Epoch 00146: val_accuracy improved from 0.79119 to 0.79502, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00147: val_accuracy did not improve from 0.79502
+
+Epoch 00148: val_accuracy did not improve from 0.79502
+
+Epoch 00149: val_accuracy did not improve from 0.79502
+
+Epoch 00150: val_accuracy did not improve from 0.79502
+
+Epoch 00151: val_accuracy did not improve from 0.79502
+
+Epoch 00152: val_accuracy did not improve from 0.79502
+
+Epoch 00153: val_accuracy improved from 0.79502 to 0.79598, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00154: val_accuracy did not improve from 0.79598
+
+Epoch 00155: val_accuracy did not improve from 0.79598
+
+Epoch 00156: val_accuracy did not improve from 0.79598
+
+Epoch 00157: val_accuracy did not improve from 0.79598
+
+Epoch 00158: val_accuracy did not improve from 0.79598
+
+Epoch 00159: val_accuracy did not improve from 0.79598
+
+Epoch 00160: val_accuracy did not improve from 0.79598
+
+Epoch 00161: val_accuracy did not improve from 0.79598
+
+Epoch 00162: val_accuracy improved from 0.79598 to 0.81705, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00163: val_accuracy improved from 0.81705 to 0.82998, saving model to weights_T2qq_bin_65_s.best.hdf5
+
+Epoch 00164: val_accuracy did not improve from 0.82998
+
+Epoch 00165: val_accuracy did not improve from 0.82998
+
+Epoch 00166: val_accuracy did not improve from 0.82998
+
+Epoch 00167: val_accuracy did not improve from 0.82998
+
+Epoch 00168: val_accuracy did not improve from 0.82998
+
+Epoch 00169: val_accuracy did not improve from 0.82998
+
+Epoch 00170: val_accuracy did not improve from 0.82998
+
+Epoch 00171: val_accuracy did not improve from 0.82998
+
+Epoch 00172: val_accuracy did not improve from 0.82998
+
+Epoch 00173: val_accuracy did not improve from 0.82998
+
+Epoch 00174: val_accuracy did not improve from 0.82998
+
+Epoch 00175: val_accuracy did not improve from 0.82998
+
+Epoch 00176: val_accuracy did not improve from 0.82998
+
+Epoch 00177: val_accuracy did not improve from 0.82998
+
+Epoch 00178: val_accuracy did not improve from 0.82998
+
+Epoch 00179: val_accuracy did not improve from 0.82998
+
+Epoch 00180: val_accuracy did not improve from 0.82998
+
+Epoch 00181: val_accuracy did not improve from 0.82998
+
+Epoch 00182: val_accuracy did not improve from 0.82998
+
+Epoch 00183: val_accuracy did not improve from 0.82998
+
+Epoch 00184: val_accuracy did not improve from 0.82998
+
+Epoch 00185: val_accuracy did not improve from 0.82998
+
+Epoch 00186: val_accuracy did not improve from 0.82998
+
+Epoch 00187: val_accuracy did not improve from 0.82998
+
+Epoch 00188: val_accuracy did not improve from 0.82998
+
+Epoch 00189: val_accuracy did not improve from 0.82998
+
+Epoch 00190: val_accuracy did not improve from 0.82998
+
+Epoch 00191: val_accuracy did not improve from 0.82998
+
+Epoch 00192: val_accuracy did not improve from 0.82998
+
+Epoch 00193: val_accuracy did not improve from 0.82998
+
+Epoch 00194: val_accuracy did not improve from 0.82998
+
+Epoch 00195: val_accuracy did not improve from 0.82998
+
+Epoch 00196: val_accuracy did not improve from 0.82998
+
+Epoch 00197: val_accuracy did not improve from 0.82998
+
+Epoch 00198: val_accuracy did not improve from 0.82998
+
+Epoch 00199: val_accuracy did not improve from 0.82998
+
+Epoch 00200: val_accuracy did not improve from 0.82998
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  141613  background 18599  signals, validate on  15735 background 2067 signals
+424839 424839 47205 47205
+start training on bin  0
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_0_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy improved from 0.50000 to 0.58525, saving model to weights_T2qq_bin_0_s.best.hdf5
+
+Epoch 00006: val_accuracy did not improve from 0.58525
+
+Epoch 00007: val_accuracy did not improve from 0.58525
+
+Epoch 00008: val_accuracy did not improve from 0.58525
+
+Epoch 00009: val_accuracy did not improve from 0.58525
+
+Epoch 00010: val_accuracy did not improve from 0.58525
+
+Epoch 00011: val_accuracy did not improve from 0.58525
+
+Epoch 00012: val_accuracy did not improve from 0.58525
+
+Epoch 00013: val_accuracy did not improve from 0.58525
+
+Epoch 00014: val_accuracy did not improve from 0.58525
+
+Epoch 00015: val_accuracy did not improve from 0.58525
+
+Epoch 00016: val_accuracy did not improve from 0.58525
+
+Epoch 00017: val_accuracy did not improve from 0.58525
+
+Epoch 00018: val_accuracy did not improve from 0.58525
+
+Epoch 00019: val_accuracy did not improve from 0.58525
+
+Epoch 00020: val_accuracy did not improve from 0.58525
+
+Epoch 00021: val_accuracy did not improve from 0.58525
+
+Epoch 00022: val_accuracy did not improve from 0.58525
+
+Epoch 00023: val_accuracy did not improve from 0.58525
+
+Epoch 00024: val_accuracy did not improve from 0.58525
+
+Epoch 00025: val_accuracy did not improve from 0.58525
+
+Epoch 00026: val_accuracy did not improve from 0.58525
+
+Epoch 00027: val_accuracy did not improve from 0.58525
+
+Epoch 00028: val_accuracy did not improve from 0.58525
+
+Epoch 00029: val_accuracy did not improve from 0.58525
+
+Epoch 00030: val_accuracy did not improve from 0.58525
+
+Epoch 00031: val_accuracy did not improve from 0.58525
+
+Epoch 00032: val_accuracy did not improve from 0.58525
+
+Epoch 00033: val_accuracy did not improve from 0.58525
+
+Epoch 00034: val_accuracy did not improve from 0.58525
+
+Epoch 00035: val_accuracy did not improve from 0.58525
+
+Epoch 00036: val_accuracy did not improve from 0.58525
+
+Epoch 00037: val_accuracy did not improve from 0.58525
+
+Epoch 00038: val_accuracy did not improve from 0.58525
+
+Epoch 00039: val_accuracy did not improve from 0.58525
+
+Epoch 00040: val_accuracy did not improve from 0.58525
+
+Epoch 00041: val_accuracy did not improve from 0.58525
+
+Epoch 00042: val_accuracy did not improve from 0.58525
+
+Epoch 00043: val_accuracy did not improve from 0.58525
+
+Epoch 00044: val_accuracy did not improve from 0.58525
+
+Epoch 00045: val_accuracy did not improve from 0.58525
+
+Epoch 00046: val_accuracy did not improve from 0.58525
+
+Epoch 00047: val_accuracy did not improve from 0.58525
+
+Epoch 00048: val_accuracy did not improve from 0.58525
+
+Epoch 00049: val_accuracy did not improve from 0.58525
+
+Epoch 00050: val_accuracy did not improve from 0.58525
+
+Epoch 00051: val_accuracy did not improve from 0.58525
+
+Epoch 00052: val_accuracy did not improve from 0.58525
+
+Epoch 00053: val_accuracy did not improve from 0.58525
+
+Epoch 00054: val_accuracy did not improve from 0.58525
+
+Epoch 00055: val_accuracy did not improve from 0.58525
+
+Epoch 00056: val_accuracy did not improve from 0.58525
+
+Epoch 00057: val_accuracy did not improve from 0.58525
+
+Epoch 00058: val_accuracy did not improve from 0.58525
+
+Epoch 00059: val_accuracy did not improve from 0.58525
+
+Epoch 00060: val_accuracy did not improve from 0.58525
+
+Epoch 00061: val_accuracy did not improve from 0.58525
+
+Epoch 00062: val_accuracy did not improve from 0.58525
+
+Epoch 00063: val_accuracy did not improve from 0.58525
+
+Epoch 00064: val_accuracy did not improve from 0.58525
+
+Epoch 00065: val_accuracy did not improve from 0.58525
+
+Epoch 00066: val_accuracy did not improve from 0.58525
+
+Epoch 00067: val_accuracy did not improve from 0.58525
+
+Epoch 00068: val_accuracy did not improve from 0.58525
+
+Epoch 00069: val_accuracy did not improve from 0.58525
+
+Epoch 00070: val_accuracy did not improve from 0.58525
+
+Epoch 00071: val_accuracy did not improve from 0.58525
+
+Epoch 00072: val_accuracy did not improve from 0.58525
+
+Epoch 00073: val_accuracy did not improve from 0.58525
+
+Epoch 00074: val_accuracy did not improve from 0.58525
+
+Epoch 00075: val_accuracy did not improve from 0.58525
+
+Epoch 00076: val_accuracy did not improve from 0.58525
+
+Epoch 00077: val_accuracy did not improve from 0.58525
+
+Epoch 00078: val_accuracy did not improve from 0.58525
+
+Epoch 00079: val_accuracy did not improve from 0.58525
+
+Epoch 00080: val_accuracy did not improve from 0.58525
+
+Epoch 00081: val_accuracy did not improve from 0.58525
+
+Epoch 00082: val_accuracy did not improve from 0.58525
+
+Epoch 00083: val_accuracy did not improve from 0.58525
+
+Epoch 00084: val_accuracy did not improve from 0.58525
+
+Epoch 00085: val_accuracy did not improve from 0.58525
+
+Epoch 00086: val_accuracy did not improve from 0.58525
+
+Epoch 00087: val_accuracy did not improve from 0.58525
+
+Epoch 00088: val_accuracy did not improve from 0.58525
+
+Epoch 00089: val_accuracy did not improve from 0.58525
+
+Epoch 00090: val_accuracy did not improve from 0.58525
+
+Epoch 00091: val_accuracy did not improve from 0.58525
+
+Epoch 00092: val_accuracy did not improve from 0.58525
+
+Epoch 00093: val_accuracy did not improve from 0.58525
+
+Epoch 00094: val_accuracy did not improve from 0.58525
+
+Epoch 00095: val_accuracy did not improve from 0.58525
+
+Epoch 00096: val_accuracy did not improve from 0.58525
+
+Epoch 00097: val_accuracy did not improve from 0.58525
+
+Epoch 00098: val_accuracy did not improve from 0.58525
+
+Epoch 00099: val_accuracy did not improve from 0.58525
+
+Epoch 00100: val_accuracy did not improve from 0.58525
+
+Epoch 00101: val_accuracy did not improve from 0.58525
+
+Epoch 00102: val_accuracy did not improve from 0.58525
+
+Epoch 00103: val_accuracy did not improve from 0.58525
+
+Epoch 00104: val_accuracy did not improve from 0.58525
+
+Epoch 00105: val_accuracy did not improve from 0.58525
+
+Epoch 00106: val_accuracy did not improve from 0.58525
+
+Epoch 00107: val_accuracy did not improve from 0.58525
+
+Epoch 00108: val_accuracy did not improve from 0.58525
+
+Epoch 00109: val_accuracy did not improve from 0.58525
+
+Epoch 00110: val_accuracy did not improve from 0.58525
+
+Epoch 00111: val_accuracy did not improve from 0.58525
+
+Epoch 00112: val_accuracy did not improve from 0.58525
+
+Epoch 00113: val_accuracy did not improve from 0.58525
+
+Epoch 00114: val_accuracy did not improve from 0.58525
+
+Epoch 00115: val_accuracy did not improve from 0.58525
+
+Epoch 00116: val_accuracy did not improve from 0.58525
+
+Epoch 00117: val_accuracy did not improve from 0.58525
+
+Epoch 00118: val_accuracy did not improve from 0.58525
+
+Epoch 00119: val_accuracy did not improve from 0.58525
+
+Epoch 00120: val_accuracy did not improve from 0.58525
+
+Epoch 00121: val_accuracy did not improve from 0.58525
+
+Epoch 00122: val_accuracy did not improve from 0.58525
+
+Epoch 00123: val_accuracy did not improve from 0.58525
+
+Epoch 00124: val_accuracy did not improve from 0.58525
+
+Epoch 00125: val_accuracy did not improve from 0.58525
+
+Epoch 00126: val_accuracy did not improve from 0.58525
+
+Epoch 00127: val_accuracy did not improve from 0.58525
+
+Epoch 00128: val_accuracy did not improve from 0.58525
+
+Epoch 00129: val_accuracy did not improve from 0.58525
+
+Epoch 00130: val_accuracy did not improve from 0.58525
+
+Epoch 00131: val_accuracy did not improve from 0.58525
+
+Epoch 00132: val_accuracy did not improve from 0.58525
+
+Epoch 00133: val_accuracy did not improve from 0.58525
+
+Epoch 00134: val_accuracy did not improve from 0.58525
+
+Epoch 00135: val_accuracy did not improve from 0.58525
+
+Epoch 00136: val_accuracy did not improve from 0.58525
+
+Epoch 00137: val_accuracy did not improve from 0.58525
+
+Epoch 00138: val_accuracy did not improve from 0.58525
+
+Epoch 00139: val_accuracy did not improve from 0.58525
+
+Epoch 00140: val_accuracy did not improve from 0.58525
+
+Epoch 00141: val_accuracy did not improve from 0.58525
+
+Epoch 00142: val_accuracy did not improve from 0.58525
+
+Epoch 00143: val_accuracy did not improve from 0.58525
+
+Epoch 00144: val_accuracy did not improve from 0.58525
+
+Epoch 00145: val_accuracy did not improve from 0.58525
+
+Epoch 00146: val_accuracy did not improve from 0.58525
+
+Epoch 00147: val_accuracy did not improve from 0.58525
+
+Epoch 00148: val_accuracy did not improve from 0.58525
+
+Epoch 00149: val_accuracy did not improve from 0.58525
+
+Epoch 00150: val_accuracy did not improve from 0.58525
+
+Epoch 00151: val_accuracy did not improve from 0.58525
+
+Epoch 00152: val_accuracy did not improve from 0.58525
+
+Epoch 00153: val_accuracy did not improve from 0.58525
+
+Epoch 00154: val_accuracy did not improve from 0.58525
+
+Epoch 00155: val_accuracy did not improve from 0.58525
+
+Epoch 00156: val_accuracy did not improve from 0.58525
+
+Epoch 00157: val_accuracy did not improve from 0.58525
+
+Epoch 00158: val_accuracy did not improve from 0.58525
+
+Epoch 00159: val_accuracy did not improve from 0.58525
+
+Epoch 00160: val_accuracy did not improve from 0.58525
+
+Epoch 00161: val_accuracy did not improve from 0.58525
+
+Epoch 00162: val_accuracy did not improve from 0.58525
+
+Epoch 00163: val_accuracy did not improve from 0.58525
+
+Epoch 00164: val_accuracy did not improve from 0.58525
+
+Epoch 00165: val_accuracy did not improve from 0.58525
+
+Epoch 00166: val_accuracy did not improve from 0.58525
+
+Epoch 00167: val_accuracy did not improve from 0.58525
+
+Epoch 00168: val_accuracy did not improve from 0.58525
+
+Epoch 00169: val_accuracy did not improve from 0.58525
+
+Epoch 00170: val_accuracy did not improve from 0.58525
+
+Epoch 00171: val_accuracy did not improve from 0.58525
+
+Epoch 00172: val_accuracy did not improve from 0.58525
+
+Epoch 00173: val_accuracy did not improve from 0.58525
+
+Epoch 00174: val_accuracy did not improve from 0.58525
+
+Epoch 00175: val_accuracy did not improve from 0.58525
+
+Epoch 00176: val_accuracy did not improve from 0.58525
+
+Epoch 00177: val_accuracy did not improve from 0.58525
+
+Epoch 00178: val_accuracy did not improve from 0.58525
+
+Epoch 00179: val_accuracy did not improve from 0.58525
+
+Epoch 00180: val_accuracy did not improve from 0.58525
+
+Epoch 00181: val_accuracy did not improve from 0.58525
+
+Epoch 00182: val_accuracy did not improve from 0.58525
+
+Epoch 00183: val_accuracy did not improve from 0.58525
+
+Epoch 00184: val_accuracy did not improve from 0.58525
+
+Epoch 00185: val_accuracy did not improve from 0.58525
+
+Epoch 00186: val_accuracy did not improve from 0.58525
+
+Epoch 00187: val_accuracy did not improve from 0.58525
+
+Epoch 00188: val_accuracy did not improve from 0.58525
+
+Epoch 00189: val_accuracy did not improve from 0.58525
+
+Epoch 00190: val_accuracy did not improve from 0.58525
+
+Epoch 00191: val_accuracy did not improve from 0.58525
+
+Epoch 00192: val_accuracy did not improve from 0.58525
+
+Epoch 00193: val_accuracy did not improve from 0.58525
+
+Epoch 00194: val_accuracy did not improve from 0.58525
+
+Epoch 00195: val_accuracy did not improve from 0.58525
+
+Epoch 00196: val_accuracy did not improve from 0.58525
+
+Epoch 00197: val_accuracy did not improve from 0.58525
+
+Epoch 00198: val_accuracy did not improve from 0.58525
+
+Epoch 00199: val_accuracy did not improve from 0.58525
+
+Epoch 00200: val_accuracy did not improve from 0.58525
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  3580  background 355  signals, validate on  398 background 40 signals
+10740 10740 1194 1194
+start training on bin  26
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy did not improve from 0.50000
+
+Epoch 00066: val_accuracy did not improve from 0.50000
+
+Epoch 00067: val_accuracy did not improve from 0.50000
+
+Epoch 00068: val_accuracy did not improve from 0.50000
+
+Epoch 00069: val_accuracy did not improve from 0.50000
+
+Epoch 00070: val_accuracy did not improve from 0.50000
+
+Epoch 00071: val_accuracy improved from 0.50000 to 0.50293, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00072: val_accuracy improved from 0.50293 to 0.52303, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00073: val_accuracy improved from 0.52303 to 0.53099, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00074: val_accuracy improved from 0.53099 to 0.53894, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00075: val_accuracy did not improve from 0.53894
+
+Epoch 00076: val_accuracy improved from 0.53894 to 0.54271, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00077: val_accuracy improved from 0.54271 to 0.56491, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00078: val_accuracy improved from 0.56491 to 0.58710, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00079: val_accuracy improved from 0.58710 to 0.62228, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00080: val_accuracy did not improve from 0.62228
+
+Epoch 00081: val_accuracy did not improve from 0.62228
+
+Epoch 00082: val_accuracy improved from 0.62228 to 0.63610, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00083: val_accuracy improved from 0.63610 to 0.64322, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00084: val_accuracy improved from 0.64322 to 0.65997, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00085: val_accuracy improved from 0.65997 to 0.66499, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00086: val_accuracy improved from 0.66499 to 0.67044, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00087: val_accuracy did not improve from 0.67044
+
+Epoch 00088: val_accuracy did not improve from 0.67044
+
+Epoch 00089: val_accuracy did not improve from 0.67044
+
+Epoch 00090: val_accuracy improved from 0.67044 to 0.67839, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00091: val_accuracy improved from 0.67839 to 0.70603, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00092: val_accuracy improved from 0.70603 to 0.71189, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00093: val_accuracy did not improve from 0.71189
+
+Epoch 00094: val_accuracy improved from 0.71189 to 0.73241, saving model to weights_T2qq_bin_26_s.best.hdf5
+
+Epoch 00095: val_accuracy did not improve from 0.73241
+
+Epoch 00096: val_accuracy did not improve from 0.73241
+
+Epoch 00097: val_accuracy did not improve from 0.73241
+
+Epoch 00098: val_accuracy did not improve from 0.73241
+
+Epoch 00099: val_accuracy did not improve from 0.73241
+
+Epoch 00100: val_accuracy did not improve from 0.73241
+
+Epoch 00101: val_accuracy did not improve from 0.73241
+
+Epoch 00102: val_accuracy did not improve from 0.73241
+
+Epoch 00103: val_accuracy did not improve from 0.73241
+
+Epoch 00104: val_accuracy did not improve from 0.73241
+
+Epoch 00105: val_accuracy did not improve from 0.73241
+
+Epoch 00106: val_accuracy did not improve from 0.73241
+
+Epoch 00107: val_accuracy did not improve from 0.73241
+
+Epoch 00108: val_accuracy did not improve from 0.73241
+
+Epoch 00109: val_accuracy did not improve from 0.73241
+
+Epoch 00110: val_accuracy did not improve from 0.73241
+
+Epoch 00111: val_accuracy did not improve from 0.73241
+
+Epoch 00112: val_accuracy did not improve from 0.73241
+
+Epoch 00113: val_accuracy did not improve from 0.73241
+
+Epoch 00114: val_accuracy did not improve from 0.73241
+
+Epoch 00115: val_accuracy did not improve from 0.73241
+
+Epoch 00116: val_accuracy did not improve from 0.73241
+
+Epoch 00117: val_accuracy did not improve from 0.73241
+
+Epoch 00118: val_accuracy did not improve from 0.73241
+
+Epoch 00119: val_accuracy did not improve from 0.73241
+
+Epoch 00120: val_accuracy did not improve from 0.73241
+
+Epoch 00121: val_accuracy did not improve from 0.73241
+
+Epoch 00122: val_accuracy did not improve from 0.73241
+
+Epoch 00123: val_accuracy did not improve from 0.73241
+
+Epoch 00124: val_accuracy did not improve from 0.73241
+
+Epoch 00125: val_accuracy did not improve from 0.73241
+
+Epoch 00126: val_accuracy did not improve from 0.73241
+
+Epoch 00127: val_accuracy did not improve from 0.73241
+
+Epoch 00128: val_accuracy did not improve from 0.73241
+
+Epoch 00129: val_accuracy did not improve from 0.73241
+
+Epoch 00130: val_accuracy did not improve from 0.73241
+
+Epoch 00131: val_accuracy did not improve from 0.73241
+
+Epoch 00132: val_accuracy did not improve from 0.73241
+
+Epoch 00133: val_accuracy did not improve from 0.73241
+
+Epoch 00134: val_accuracy did not improve from 0.73241
+
+Epoch 00135: val_accuracy did not improve from 0.73241
+
+Epoch 00136: val_accuracy did not improve from 0.73241
+
+Epoch 00137: val_accuracy did not improve from 0.73241
+
+Epoch 00138: val_accuracy did not improve from 0.73241
+
+Epoch 00139: val_accuracy did not improve from 0.73241
+
+Epoch 00140: val_accuracy did not improve from 0.73241
+
+Epoch 00141: val_accuracy did not improve from 0.73241
+
+Epoch 00142: val_accuracy did not improve from 0.73241
+
+Epoch 00143: val_accuracy did not improve from 0.73241
+
+Epoch 00144: val_accuracy did not improve from 0.73241
+
+Epoch 00145: val_accuracy did not improve from 0.73241
+
+Epoch 00146: val_accuracy did not improve from 0.73241
+
+Epoch 00147: val_accuracy did not improve from 0.73241
+
+Epoch 00148: val_accuracy did not improve from 0.73241
+
+Epoch 00149: val_accuracy did not improve from 0.73241
+
+Epoch 00150: val_accuracy did not improve from 0.73241
+
+Epoch 00151: val_accuracy did not improve from 0.73241
+
+Epoch 00152: val_accuracy did not improve from 0.73241
+
+Epoch 00153: val_accuracy did not improve from 0.73241
+
+Epoch 00154: val_accuracy did not improve from 0.73241
+
+Epoch 00155: val_accuracy did not improve from 0.73241
+
+Epoch 00156: val_accuracy did not improve from 0.73241
+
+Epoch 00157: val_accuracy did not improve from 0.73241
+
+Epoch 00158: val_accuracy did not improve from 0.73241
+
+Epoch 00159: val_accuracy did not improve from 0.73241
+
+Epoch 00160: val_accuracy did not improve from 0.73241
+
+Epoch 00161: val_accuracy did not improve from 0.73241
+
+Epoch 00162: val_accuracy did not improve from 0.73241
+
+Epoch 00163: val_accuracy did not improve from 0.73241
+
+Epoch 00164: val_accuracy did not improve from 0.73241
+
+Epoch 00165: val_accuracy did not improve from 0.73241
+
+Epoch 00166: val_accuracy did not improve from 0.73241
+
+Epoch 00167: val_accuracy did not improve from 0.73241
+
+Epoch 00168: val_accuracy did not improve from 0.73241
+
+Epoch 00169: val_accuracy did not improve from 0.73241
+
+Epoch 00170: val_accuracy did not improve from 0.73241
+
+Epoch 00171: val_accuracy did not improve from 0.73241
+
+Epoch 00172: val_accuracy did not improve from 0.73241
+
+Epoch 00173: val_accuracy did not improve from 0.73241
+
+Epoch 00174: val_accuracy did not improve from 0.73241
+
+Epoch 00175: val_accuracy did not improve from 0.73241
+
+Epoch 00176: val_accuracy did not improve from 0.73241
+
+Epoch 00177: val_accuracy did not improve from 0.73241
+
+Epoch 00178: val_accuracy did not improve from 0.73241
+
+Epoch 00179: val_accuracy did not improve from 0.73241
+
+Epoch 00180: val_accuracy did not improve from 0.73241
+
+Epoch 00181: val_accuracy did not improve from 0.73241
+
+Epoch 00182: val_accuracy did not improve from 0.73241
+
+Epoch 00183: val_accuracy did not improve from 0.73241
+
+Epoch 00184: val_accuracy did not improve from 0.73241
+
+Epoch 00185: val_accuracy did not improve from 0.73241
+
+Epoch 00186: val_accuracy did not improve from 0.73241
+
+Epoch 00187: val_accuracy did not improve from 0.73241
+
+Epoch 00188: val_accuracy did not improve from 0.73241
+
+Epoch 00189: val_accuracy did not improve from 0.73241
+
+Epoch 00190: val_accuracy did not improve from 0.73241
+
+Epoch 00191: val_accuracy did not improve from 0.73241
+
+Epoch 00192: val_accuracy did not improve from 0.73241
+
+Epoch 00193: val_accuracy did not improve from 0.73241
+
+Epoch 00194: val_accuracy did not improve from 0.73241
+
+Epoch 00195: val_accuracy did not improve from 0.73241
+
+Epoch 00196: val_accuracy did not improve from 0.73241
+
+Epoch 00197: val_accuracy did not improve from 0.73241
+
+Epoch 00198: val_accuracy did not improve from 0.73241
+
+Epoch 00199: val_accuracy did not improve from 0.73241
+
+Epoch 00200: val_accuracy did not improve from 0.73241
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  8520  background 2034  signals, validate on  947 background 226 signals
+25560 25560 2841 2841
+start training on bin  8
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy improved from 0.50000 to 0.50898, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00066: val_accuracy improved from 0.50898 to 0.52112, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00067: val_accuracy improved from 0.52112 to 0.54153, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00068: val_accuracy improved from 0.54153 to 0.55544, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00069: val_accuracy improved from 0.55544 to 0.56617, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00070: val_accuracy improved from 0.56617 to 0.57515, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00071: val_accuracy improved from 0.57515 to 0.59257, saving model to weights_T2qq_bin_8_s.best.hdf5
+
+Epoch 00072: val_accuracy did not improve from 0.59257
+
+Epoch 00073: val_accuracy did not improve from 0.59257
+
+Epoch 00074: val_accuracy did not improve from 0.59257
+
+Epoch 00075: val_accuracy did not improve from 0.59257
+
+Epoch 00076: val_accuracy did not improve from 0.59257
+
+Epoch 00077: val_accuracy did not improve from 0.59257
+
+Epoch 00078: val_accuracy did not improve from 0.59257
+
+Epoch 00079: val_accuracy did not improve from 0.59257
+
+Epoch 00080: val_accuracy did not improve from 0.59257
+
+Epoch 00081: val_accuracy did not improve from 0.59257
+
+Epoch 00082: val_accuracy did not improve from 0.59257
+
+Epoch 00083: val_accuracy did not improve from 0.59257
+
+Epoch 00084: val_accuracy did not improve from 0.59257
+
+Epoch 00085: val_accuracy did not improve from 0.59257
+
+Epoch 00086: val_accuracy did not improve from 0.59257
+
+Epoch 00087: val_accuracy did not improve from 0.59257
+
+Epoch 00088: val_accuracy did not improve from 0.59257
+
+Epoch 00089: val_accuracy did not improve from 0.59257
+
+Epoch 00090: val_accuracy did not improve from 0.59257
+
+Epoch 00091: val_accuracy did not improve from 0.59257
+
+Epoch 00092: val_accuracy did not improve from 0.59257
+
+Epoch 00093: val_accuracy did not improve from 0.59257
+
+Epoch 00094: val_accuracy did not improve from 0.59257
+
+Epoch 00095: val_accuracy did not improve from 0.59257
+
+Epoch 00096: val_accuracy did not improve from 0.59257
+
+Epoch 00097: val_accuracy did not improve from 0.59257
+
+Epoch 00098: val_accuracy did not improve from 0.59257
+
+Epoch 00099: val_accuracy did not improve from 0.59257
+
+Epoch 00100: val_accuracy did not improve from 0.59257
+
+Epoch 00101: val_accuracy did not improve from 0.59257
+
+Epoch 00102: val_accuracy did not improve from 0.59257
+
+Epoch 00103: val_accuracy did not improve from 0.59257
+
+Epoch 00104: val_accuracy did not improve from 0.59257
+
+Epoch 00105: val_accuracy did not improve from 0.59257
+
+Epoch 00106: val_accuracy did not improve from 0.59257
+
+Epoch 00107: val_accuracy did not improve from 0.59257
+
+Epoch 00108: val_accuracy did not improve from 0.59257
+
+Epoch 00109: val_accuracy did not improve from 0.59257
+
+Epoch 00110: val_accuracy did not improve from 0.59257
+
+Epoch 00111: val_accuracy did not improve from 0.59257
+
+Epoch 00112: val_accuracy did not improve from 0.59257
+
+Epoch 00113: val_accuracy did not improve from 0.59257
+
+Epoch 00114: val_accuracy did not improve from 0.59257
+
+Epoch 00115: val_accuracy did not improve from 0.59257
+
+Epoch 00116: val_accuracy did not improve from 0.59257
+
+Epoch 00117: val_accuracy did not improve from 0.59257
+
+Epoch 00118: val_accuracy did not improve from 0.59257
+
+Epoch 00119: val_accuracy did not improve from 0.59257
+
+Epoch 00120: val_accuracy did not improve from 0.59257
+
+Epoch 00121: val_accuracy did not improve from 0.59257
+
+Epoch 00122: val_accuracy did not improve from 0.59257
+
+Epoch 00123: val_accuracy did not improve from 0.59257
+
+Epoch 00124: val_accuracy did not improve from 0.59257
+
+Epoch 00125: val_accuracy did not improve from 0.59257
+
+Epoch 00126: val_accuracy did not improve from 0.59257
+
+Epoch 00127: val_accuracy did not improve from 0.59257
+
+Epoch 00128: val_accuracy did not improve from 0.59257
+
+Epoch 00129: val_accuracy did not improve from 0.59257
+
+Epoch 00130: val_accuracy did not improve from 0.59257
+
+Epoch 00131: val_accuracy did not improve from 0.59257
+
+Epoch 00132: val_accuracy did not improve from 0.59257
+
+Epoch 00133: val_accuracy did not improve from 0.59257
+
+Epoch 00134: val_accuracy did not improve from 0.59257
+
+Epoch 00135: val_accuracy did not improve from 0.59257
+
+Epoch 00136: val_accuracy did not improve from 0.59257
+
+Epoch 00137: val_accuracy did not improve from 0.59257
+
+Epoch 00138: val_accuracy did not improve from 0.59257
+
+Epoch 00139: val_accuracy did not improve from 0.59257
+
+Epoch 00140: val_accuracy did not improve from 0.59257
+
+Epoch 00141: val_accuracy did not improve from 0.59257
+
+Epoch 00142: val_accuracy did not improve from 0.59257
+
+Epoch 00143: val_accuracy did not improve from 0.59257
+
+Epoch 00144: val_accuracy did not improve from 0.59257
+
+Epoch 00145: val_accuracy did not improve from 0.59257
+
+Epoch 00146: val_accuracy did not improve from 0.59257
+
+Epoch 00147: val_accuracy did not improve from 0.59257
+
+Epoch 00148: val_accuracy did not improve from 0.59257
+
+Epoch 00149: val_accuracy did not improve from 0.59257
+
+Epoch 00150: val_accuracy did not improve from 0.59257
+
+Epoch 00151: val_accuracy did not improve from 0.59257
+
+Epoch 00152: val_accuracy did not improve from 0.59257
+
+Epoch 00153: val_accuracy did not improve from 0.59257
+
+Epoch 00154: val_accuracy did not improve from 0.59257
+
+Epoch 00155: val_accuracy did not improve from 0.59257
+
+Epoch 00156: val_accuracy did not improve from 0.59257
+
+Epoch 00157: val_accuracy did not improve from 0.59257
+
+Epoch 00158: val_accuracy did not improve from 0.59257
+
+Epoch 00159: val_accuracy did not improve from 0.59257
+
+Epoch 00160: val_accuracy did not improve from 0.59257
+
+Epoch 00161: val_accuracy did not improve from 0.59257
+
+Epoch 00162: val_accuracy did not improve from 0.59257
+
+Epoch 00163: val_accuracy did not improve from 0.59257
+
+Epoch 00164: val_accuracy did not improve from 0.59257
+
+Epoch 00165: val_accuracy did not improve from 0.59257
+
+Epoch 00166: val_accuracy did not improve from 0.59257
+
+Epoch 00167: val_accuracy did not improve from 0.59257
+
+Epoch 00168: val_accuracy did not improve from 0.59257
+
+Epoch 00169: val_accuracy did not improve from 0.59257
+
+Epoch 00170: val_accuracy did not improve from 0.59257
+
+Epoch 00171: val_accuracy did not improve from 0.59257
+
+Epoch 00172: val_accuracy did not improve from 0.59257
+
+Epoch 00173: val_accuracy did not improve from 0.59257
+
+Epoch 00174: val_accuracy did not improve from 0.59257
+
+Epoch 00175: val_accuracy did not improve from 0.59257
+
+Epoch 00176: val_accuracy did not improve from 0.59257
+
+Epoch 00177: val_accuracy did not improve from 0.59257
+
+Epoch 00178: val_accuracy did not improve from 0.59257
+
+Epoch 00179: val_accuracy did not improve from 0.59257
+
+Epoch 00180: val_accuracy did not improve from 0.59257
+
+Epoch 00181: val_accuracy did not improve from 0.59257
+
+Epoch 00182: val_accuracy did not improve from 0.59257
+
+Epoch 00183: val_accuracy did not improve from 0.59257
+
+Epoch 00184: val_accuracy did not improve from 0.59257
+
+Epoch 00185: val_accuracy did not improve from 0.59257
+
+Epoch 00186: val_accuracy did not improve from 0.59257
+
+Epoch 00187: val_accuracy did not improve from 0.59257
+
+Epoch 00188: val_accuracy did not improve from 0.59257
+
+Epoch 00189: val_accuracy did not improve from 0.59257
+
+Epoch 00190: val_accuracy did not improve from 0.59257
+
+Epoch 00191: val_accuracy did not improve from 0.59257
+
+Epoch 00192: val_accuracy did not improve from 0.59257
+
+Epoch 00193: val_accuracy did not improve from 0.59257
+
+Epoch 00194: val_accuracy did not improve from 0.59257
+
+Epoch 00195: val_accuracy did not improve from 0.59257
+
+Epoch 00196: val_accuracy did not improve from 0.59257
+
+Epoch 00197: val_accuracy did not improve from 0.59257
+
+Epoch 00198: val_accuracy did not improve from 0.59257
+
+Epoch 00199: val_accuracy did not improve from 0.59257
+
+Epoch 00200: val_accuracy did not improve from 0.59257
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
+train on  1967  background 1499  signals, validate on  219 background 167 signals
+5901 5901 657 657
+start training on bin  39
+
+Epoch 00001: val_accuracy improved from -inf to 0.50000, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00002: val_accuracy did not improve from 0.50000
+
+Epoch 00003: val_accuracy did not improve from 0.50000
+
+Epoch 00004: val_accuracy did not improve from 0.50000
+
+Epoch 00005: val_accuracy did not improve from 0.50000
+
+Epoch 00006: val_accuracy did not improve from 0.50000
+
+Epoch 00007: val_accuracy did not improve from 0.50000
+
+Epoch 00008: val_accuracy did not improve from 0.50000
+
+Epoch 00009: val_accuracy did not improve from 0.50000
+
+Epoch 00010: val_accuracy did not improve from 0.50000
+
+Epoch 00011: val_accuracy did not improve from 0.50000
+
+Epoch 00012: val_accuracy did not improve from 0.50000
+
+Epoch 00013: val_accuracy did not improve from 0.50000
+
+Epoch 00014: val_accuracy did not improve from 0.50000
+
+Epoch 00015: val_accuracy did not improve from 0.50000
+
+Epoch 00016: val_accuracy did not improve from 0.50000
+
+Epoch 00017: val_accuracy did not improve from 0.50000
+
+Epoch 00018: val_accuracy did not improve from 0.50000
+
+Epoch 00019: val_accuracy did not improve from 0.50000
+
+Epoch 00020: val_accuracy did not improve from 0.50000
+
+Epoch 00021: val_accuracy did not improve from 0.50000
+
+Epoch 00022: val_accuracy did not improve from 0.50000
+
+Epoch 00023: val_accuracy did not improve from 0.50000
+
+Epoch 00024: val_accuracy did not improve from 0.50000
+
+Epoch 00025: val_accuracy did not improve from 0.50000
+
+Epoch 00026: val_accuracy did not improve from 0.50000
+
+Epoch 00027: val_accuracy did not improve from 0.50000
+
+Epoch 00028: val_accuracy did not improve from 0.50000
+
+Epoch 00029: val_accuracy did not improve from 0.50000
+
+Epoch 00030: val_accuracy did not improve from 0.50000
+
+Epoch 00031: val_accuracy did not improve from 0.50000
+
+Epoch 00032: val_accuracy did not improve from 0.50000
+
+Epoch 00033: val_accuracy did not improve from 0.50000
+
+Epoch 00034: val_accuracy did not improve from 0.50000
+
+Epoch 00035: val_accuracy did not improve from 0.50000
+
+Epoch 00036: val_accuracy did not improve from 0.50000
+
+Epoch 00037: val_accuracy did not improve from 0.50000
+
+Epoch 00038: val_accuracy did not improve from 0.50000
+
+Epoch 00039: val_accuracy did not improve from 0.50000
+
+Epoch 00040: val_accuracy did not improve from 0.50000
+
+Epoch 00041: val_accuracy did not improve from 0.50000
+
+Epoch 00042: val_accuracy did not improve from 0.50000
+
+Epoch 00043: val_accuracy did not improve from 0.50000
+
+Epoch 00044: val_accuracy did not improve from 0.50000
+
+Epoch 00045: val_accuracy did not improve from 0.50000
+
+Epoch 00046: val_accuracy did not improve from 0.50000
+
+Epoch 00047: val_accuracy did not improve from 0.50000
+
+Epoch 00048: val_accuracy did not improve from 0.50000
+
+Epoch 00049: val_accuracy did not improve from 0.50000
+
+Epoch 00050: val_accuracy did not improve from 0.50000
+
+Epoch 00051: val_accuracy did not improve from 0.50000
+
+Epoch 00052: val_accuracy did not improve from 0.50000
+
+Epoch 00053: val_accuracy did not improve from 0.50000
+
+Epoch 00054: val_accuracy did not improve from 0.50000
+
+Epoch 00055: val_accuracy did not improve from 0.50000
+
+Epoch 00056: val_accuracy did not improve from 0.50000
+
+Epoch 00057: val_accuracy did not improve from 0.50000
+
+Epoch 00058: val_accuracy did not improve from 0.50000
+
+Epoch 00059: val_accuracy did not improve from 0.50000
+
+Epoch 00060: val_accuracy did not improve from 0.50000
+
+Epoch 00061: val_accuracy did not improve from 0.50000
+
+Epoch 00062: val_accuracy did not improve from 0.50000
+
+Epoch 00063: val_accuracy did not improve from 0.50000
+
+Epoch 00064: val_accuracy did not improve from 0.50000
+
+Epoch 00065: val_accuracy did not improve from 0.50000
+
+Epoch 00066: val_accuracy did not improve from 0.50000
+
+Epoch 00067: val_accuracy did not improve from 0.50000
+
+Epoch 00068: val_accuracy did not improve from 0.50000
+
+Epoch 00069: val_accuracy did not improve from 0.50000
+
+Epoch 00070: val_accuracy did not improve from 0.50000
+
+Epoch 00071: val_accuracy did not improve from 0.50000
+
+Epoch 00072: val_accuracy did not improve from 0.50000
+
+Epoch 00073: val_accuracy did not improve from 0.50000
+
+Epoch 00074: val_accuracy did not improve from 0.50000
+
+Epoch 00075: val_accuracy did not improve from 0.50000
+
+Epoch 00076: val_accuracy did not improve from 0.50000
+
+Epoch 00077: val_accuracy did not improve from 0.50000
+
+Epoch 00078: val_accuracy did not improve from 0.50000
+
+Epoch 00079: val_accuracy did not improve from 0.50000
+
+Epoch 00080: val_accuracy did not improve from 0.50000
+
+Epoch 00081: val_accuracy did not improve from 0.50000
+
+Epoch 00082: val_accuracy did not improve from 0.50000
+
+Epoch 00083: val_accuracy did not improve from 0.50000
+
+Epoch 00084: val_accuracy did not improve from 0.50000
+
+Epoch 00085: val_accuracy did not improve from 0.50000
+
+Epoch 00086: val_accuracy did not improve from 0.50000
+
+Epoch 00087: val_accuracy did not improve from 0.50000
+
+Epoch 00088: val_accuracy did not improve from 0.50000
+
+Epoch 00089: val_accuracy did not improve from 0.50000
+
+Epoch 00090: val_accuracy did not improve from 0.50000
+
+Epoch 00091: val_accuracy did not improve from 0.50000
+
+Epoch 00092: val_accuracy did not improve from 0.50000
+
+Epoch 00093: val_accuracy did not improve from 0.50000
+
+Epoch 00094: val_accuracy did not improve from 0.50000
+
+Epoch 00095: val_accuracy did not improve from 0.50000
+
+Epoch 00096: val_accuracy did not improve from 0.50000
+
+Epoch 00097: val_accuracy did not improve from 0.50000
+
+Epoch 00098: val_accuracy did not improve from 0.50000
+
+Epoch 00099: val_accuracy did not improve from 0.50000
+
+Epoch 00100: val_accuracy did not improve from 0.50000
+
+Epoch 00101: val_accuracy did not improve from 0.50000
+
+Epoch 00102: val_accuracy did not improve from 0.50000
+
+Epoch 00103: val_accuracy did not improve from 0.50000
+
+Epoch 00104: val_accuracy did not improve from 0.50000
+
+Epoch 00105: val_accuracy did not improve from 0.50000
+
+Epoch 00106: val_accuracy did not improve from 0.50000
+
+Epoch 00107: val_accuracy did not improve from 0.50000
+
+Epoch 00108: val_accuracy did not improve from 0.50000
+
+Epoch 00109: val_accuracy did not improve from 0.50000
+
+Epoch 00110: val_accuracy did not improve from 0.50000
+
+Epoch 00111: val_accuracy did not improve from 0.50000
+
+Epoch 00112: val_accuracy did not improve from 0.50000
+
+Epoch 00113: val_accuracy did not improve from 0.50000
+
+Epoch 00114: val_accuracy did not improve from 0.50000
+
+Epoch 00115: val_accuracy did not improve from 0.50000
+
+Epoch 00116: val_accuracy did not improve from 0.50000
+
+Epoch 00117: val_accuracy did not improve from 0.50000
+
+Epoch 00118: val_accuracy did not improve from 0.50000
+
+Epoch 00119: val_accuracy did not improve from 0.50000
+
+Epoch 00120: val_accuracy did not improve from 0.50000
+
+Epoch 00121: val_accuracy did not improve from 0.50000
+
+Epoch 00122: val_accuracy improved from 0.50000 to 0.50076, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00123: val_accuracy improved from 0.50076 to 0.50533, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00124: val_accuracy improved from 0.50533 to 0.50761, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00125: val_accuracy improved from 0.50761 to 0.51370, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00126: val_accuracy improved from 0.51370 to 0.52207, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00127: val_accuracy did not improve from 0.52207
+
+Epoch 00128: val_accuracy improved from 0.52207 to 0.52816, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00129: val_accuracy improved from 0.52816 to 0.53196, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00130: val_accuracy improved from 0.53196 to 0.53881, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00131: val_accuracy improved from 0.53881 to 0.55632, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00132: val_accuracy improved from 0.55632 to 0.55936, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00133: val_accuracy improved from 0.55936 to 0.56545, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00134: val_accuracy improved from 0.56545 to 0.58676, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00135: val_accuracy improved from 0.58676 to 0.60654, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00136: val_accuracy improved from 0.60654 to 0.62785, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00137: val_accuracy improved from 0.62785 to 0.67352, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00138: val_accuracy improved from 0.67352 to 0.70852, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00139: val_accuracy improved from 0.70852 to 0.72907, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00140: val_accuracy improved from 0.72907 to 0.74505, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00141: val_accuracy improved from 0.74505 to 0.78387, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00142: val_accuracy improved from 0.78387 to 0.80594, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00143: val_accuracy improved from 0.80594 to 0.83486, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00144: val_accuracy improved from 0.83486 to 0.85084, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00145: val_accuracy improved from 0.85084 to 0.86682, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00146: val_accuracy improved from 0.86682 to 0.87443, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00147: val_accuracy improved from 0.87443 to 0.87747, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00148: val_accuracy improved from 0.87747 to 0.88356, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00149: val_accuracy improved from 0.88356 to 0.89041, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00150: val_accuracy did not improve from 0.89041
+
+Epoch 00151: val_accuracy improved from 0.89041 to 0.89269, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00152: val_accuracy improved from 0.89269 to 0.90107, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00153: val_accuracy did not improve from 0.90107
+
+Epoch 00154: val_accuracy improved from 0.90107 to 0.90487, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00155: val_accuracy improved from 0.90487 to 0.90715, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00156: val_accuracy did not improve from 0.90715
+
+Epoch 00157: val_accuracy improved from 0.90715 to 0.90791, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00158: val_accuracy improved from 0.90791 to 0.91096, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00159: val_accuracy improved from 0.91096 to 0.91629, saving model to weights_T2qq_bin_39_s.best.hdf5
+
+Epoch 00160: val_accuracy did not improve from 0.91629
+
+Epoch 00161: val_accuracy did not improve from 0.91629
+
+Epoch 00162: val_accuracy did not improve from 0.91629
+
+Epoch 00163: val_accuracy did not improve from 0.91629
+
+Epoch 00164: val_accuracy did not improve from 0.91629
+
+Epoch 00165: val_accuracy did not improve from 0.91629
+
+Epoch 00166: val_accuracy did not improve from 0.91629
+
+Epoch 00167: val_accuracy did not improve from 0.91629
+
+Epoch 00168: val_accuracy did not improve from 0.91629
+
+Epoch 00169: val_accuracy did not improve from 0.91629
+
+Epoch 00170: val_accuracy did not improve from 0.91629
+
+Epoch 00171: val_accuracy did not improve from 0.91629
+
+Epoch 00172: val_accuracy did not improve from 0.91629
+
+Epoch 00173: val_accuracy did not improve from 0.91629
+
+Epoch 00174: val_accuracy did not improve from 0.91629
+
+Epoch 00175: val_accuracy did not improve from 0.91629
+
+Epoch 00176: val_accuracy did not improve from 0.91629
+
+Epoch 00177: val_accuracy did not improve from 0.91629
+
+Epoch 00178: val_accuracy did not improve from 0.91629
+
+Epoch 00179: val_accuracy did not improve from 0.91629
+
+Epoch 00180: val_accuracy did not improve from 0.91629
+
+Epoch 00181: val_accuracy did not improve from 0.91629
+
+Epoch 00182: val_accuracy did not improve from 0.91629
+
+Epoch 00183: val_accuracy did not improve from 0.91629
+
+Epoch 00184: val_accuracy did not improve from 0.91629
+
+Epoch 00185: val_accuracy did not improve from 0.91629
+
+Epoch 00186: val_accuracy did not improve from 0.91629
+
+Epoch 00187: val_accuracy did not improve from 0.91629
+
+Epoch 00188: val_accuracy did not improve from 0.91629
+
+Epoch 00189: val_accuracy did not improve from 0.91629
+
+Epoch 00190: val_accuracy did not improve from 0.91629
+
+Epoch 00191: val_accuracy did not improve from 0.91629
+
+Epoch 00192: val_accuracy did not improve from 0.91629
+
+Epoch 00193: val_accuracy did not improve from 0.91629
+
+Epoch 00194: val_accuracy did not improve from 0.91629
+
+Epoch 00195: val_accuracy did not improve from 0.91629
+
+Epoch 00196: val_accuracy did not improve from 0.91629
+
+Epoch 00197: val_accuracy did not improve from 0.91629
+
+Epoch 00198: val_accuracy did not improve from 0.91629
+
+Epoch 00199: val_accuracy did not improve from 0.91629
+
+Epoch 00200: val_accuracy did not improve from 0.91629
+plotting history
+plotting score distribution
+plotting significance
+finished plotting
