@@ -29,7 +29,8 @@ int skim_for_MLevaluation_signalregion(const char *inputfile,const char *outputf
     Float_t jet_btagDeepCSV[100];
     Int_t nMuons10; Int_t nElectrons10; Int_t nPFLep5LowMT; Int_t nPFHad10LowMT;
     Int_t MLtag;
-    TFile *sourcefile=new TFile(inputfile,"read");
+//    TFile *sourcefile=new TFile(inputfile,"read");
+    TFile *sourcefile=TFile::Open(inputfile);
     TTree *sourcetree=(TTree *)sourcefile->Get(treename);
     cout<<"loading source file "<<inputfile<<endl;
     TFile *bkg=new TFile(outputfile,"recreate");
@@ -70,7 +71,7 @@ int skim_for_MLevaluation_signalregion(const char *inputfile,const char *outputf
             jet_btagDeepCSV[0]=0;
         }
         sourcetree->GetEntry(entry);
-        if(nJet30>=1&&nJet30FailId==0&&ht>250.&&((nJet30>1&&ht<1200.&&met_pt>250.)||(nJet30>1&&ht>=1200.&&met_pt>30.)||(nJet30==1&&met_pt>250.))&&deltaPhiMin>0.3&&(diffMetMht < 0.5*met_pt)&&nMuons10==0&&nElectrons10==0&&nPFLep5LowMT==0&&nPFHad10LowMT==0){
+        if(mt2>200.&&nJet30>=1&&nJet30FailId==0&&ht>250.&&((nJet30>1&&ht<1200.&&met_pt>250.)||(nJet30>1&&ht>=1200.&&met_pt>30.)||(nJet30==1&&met_pt>250.))&&deltaPhiMin>0.3&&(diffMetMht < 0.5*met_pt)&&nMuons10==0&&nElectrons10==0&&nPFLep5LowMT==0&&nPFHad10LowMT==0){
            if(ML) MLtag=rand->Integer(20);
            tree->Fill();
            skimnum++;

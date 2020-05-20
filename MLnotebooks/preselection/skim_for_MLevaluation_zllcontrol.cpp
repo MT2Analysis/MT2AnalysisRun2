@@ -20,16 +20,17 @@
 using namespace std;
 int skim_for_MLevaluation_zllcontrol(const char *inputfile,const char *outputfile,const char* treename,bool ML){
     TRandom *rand= new TRandom(1234);
-    Float_t zll_deltaPhiMin; Float_t zll_ht; Float_t mt2;
+    Float_t zll_deltaPhiMin; Float_t zll_ht; Float_t zll_mt2;
     Float_t mht_pt; Float_t zll_met_pt;Float_t zll_diffMetMht;
     Int_t nJet30;
     Int_t nJet30FailId;
     Float_t jet_pt[100]; Float_t jet_eta[100]; Float_t jet_phi[100];// Float_t jet_mass[100];
     Float_t jet_btagDeepCSV[100];
-    UInt_t nlep; Float_t lep_pt[10];
+    UInt_t nlep; Float_t lep_pt[10];Int_t lep_pdgId[10];
 //    Int_t nMuons10; Int_t nElectrons10; Int_t nPFLep5LowMT; Int_t nPFHad10LowMT;
     Int_t MLtag;
-    TFile *sourcefile=new TFile(inputfile,"read");
+//    TFile *sourcefile=new TFile(inputfile,"read");
+    TFile *sourcefile=TFile::Open(inputfile);
     TTree *sourcetree=(TTree *)sourcefile->Get(treename);
     cout<<"loading source file "<<inputfile<<endl;
     TFile *bkg=new TFile(outputfile,"recreate");
@@ -42,11 +43,13 @@ int skim_for_MLevaluation_zllcontrol(const char *inputfile,const char *outputfil
         tree->Branch(("jet"+to_string(j+1)+"_phi").c_str(),jet_phi+j,("jet"+to_string(j+1)+"_phi/F").c_str());
 //                tree->Branch(("jet"+to_string(j+1)+"_mass").c_str(),jet_mass+j,("jet"+to_string(j+1)+"_mass/F").c_str());
         tree->Branch(("jet"+to_string(j+1)+"_btagDeepCSV").c_str(),jet_btagDeepCSV+j,("jet"+to_string(j+1)+"_btagDeepCSV/F").c_str());
-    }        
+    }
+    tree->Branch("lep_pdgId0",&lep_pdgId[0],"lep_pdgId0/I");
+    tree->Branch("lep_pdgId1",&lep_pdgId[1],"lep_pdgId1/I");        
     sourcetree->SetBranchAddress("zll_deltaPhiMin",&zll_deltaPhiMin);
     sourcetree->SetBranchAddress("zll_ht",&zll_ht);
     sourcetree->SetBranchAddress("nJet30FailId",&nJet30FailId);
-    sourcetree->SetBranchAddress("mt2",&mt2);
+    sourcetree->SetBranchAddress("zll_mt2",&zll_mt2);
     sourcetree->SetBranchAddress("zll_diffMetMht",&zll_diffMetMht);
     sourcetree->SetBranchAddress("mht_pt",&mht_pt);
     sourcetree->SetBranchAddress("zll_met_pt",&zll_met_pt);
@@ -62,6 +65,7 @@ int skim_for_MLevaluation_zllcontrol(const char *inputfile,const char *outputfil
 //    sourcetree->SetBranchAddress("nPFHad10LowMT",&nPFHad10LowMT);
     sourcetree->SetBranchAddress("nlep",&nlep);
     sourcetree->SetBranchAddress("lep_pt",lep_pt);
+    sourcetree->SetBranchAddress("lep_pdgId",lep_pdgId);
     int skimnum=0;
     for(int entry=0;entry<sourcetree->GetEntries();entry++){
         for(int j=0;j<15;j++){
@@ -72,7 +76,7 @@ int skim_for_MLevaluation_zllcontrol(const char *inputfile,const char *outputfil
             jet_btagDeepCSV[0]=0;
         }
         sourcetree->GetEntry(entry);
-        if(nJet30>=1&&nJet30FailId==0&&zll_ht>250.&&((nJet30>1&&zll_ht<1200.&&zll_met_pt>250.)||(nJet30>1&&zll_ht>=1200.&&zll_met_pt>30.)||(nJet30==1&&zll_met_pt>250.))&&zll_deltaPhiMin>0.3&&zll_diffMetMht<0.5*zll_met_pt&&nlep==2&&lep_pt[0]>=100&&lep_pt[1]>=35){
+        if(zll_mt2>200.&&nJet30>=1&&nJet30FailId==0&&zll_ht>250.&&((nJet30>1&&zll_ht<1200.&&zll_met_pt>250.)||(nJet30>1&&zll_ht>=1200.&&zll_met_pt>30.)||(nJet30==1&&zll_met_pt>250.))&&zll_deltaPhiMin>0.3&&zll_diffMetMht<0.5*zll_met_pt&&nlep==2&&lep_pt[0]>=100&&lep_pt[1]>=35){
            if(ML) MLtag=rand->Integer(20);
            tree->Fill();
            skimnum++;

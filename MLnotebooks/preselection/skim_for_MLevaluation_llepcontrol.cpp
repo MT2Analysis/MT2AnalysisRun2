@@ -27,8 +27,9 @@ int skim_for_MLevaluation_llepcontrol(const char *inputfile,const char *outputfi
     Float_t jet_btagDeepCSV[100];
 //    Int_t nMuons10; Int_t nElectrons10; Int_t nPFLep5LowMT; Int_t nPFHad10LowMT;
     Int_t nLepLowMT; Int_t nLepHighMT;Bool_t is2016=0;
-    Int_t MLtag;
-    TFile *sourcefile=new TFile(inputfile,"read");
+    Int_t MLtag; Int_t lep_pdgId[10];
+//    TFile *sourcefile=new TFile(inputfile,"read");
+    TFile *sourcefile=TFile::Open(inputfile);
     TTree *sourcetree=(TTree *)sourcefile->Get(treename);
     cout<<"loading source file "<<inputfile<<endl;
     TString sourcefilename(inputfile);
@@ -44,6 +45,8 @@ int skim_for_MLevaluation_llepcontrol(const char *inputfile,const char *outputfi
 //                tree->Branch(("jet"+to_string(j+1)+"_mass").c_str(),jet_mass+j,("jet"+to_string(j+1)+"_mass/F").c_str());
         tree->Branch(("jet"+to_string(j+1)+"_btagDeepCSV").c_str(),jet_btagDeepCSV+j,("jet"+to_string(j+1)+"_btagDeepCSV/F").c_str());
     }        
+    tree->Branch("lep_pdgId0",&lep_pdgId[0],"lep_pdgId0/I");
+    tree->Branch("lep_pdgId1",&lep_pdgId[1],"lep_pdgId1/I");
     sourcetree->SetBranchAddress("deltaPhiMin",&deltaPhiMin);
     sourcetree->SetBranchAddress("ht",&ht);
     sourcetree->SetBranchAddress("mt2",&mt2);
@@ -62,6 +65,7 @@ int skim_for_MLevaluation_llepcontrol(const char *inputfile,const char *outputfi
 //    sourcetree->SetBranchAddress("nPFLep5LowMT",&nPFLep5LowMT);
 //    sourcetree->SetBranchAddress("nPFHad10LowMT",&nPFHad10LowMT);
     sourcetree->SetBranchAddress("nLepLowMT",&nLepLowMT);
+    sourcetree->SetBranchAddress("lep_pdgId",lep_pdgId);
     if(!is2016) sourcetree->SetBranchAddress("nLepHighMT",&nLepHighMT);
     int skimnum=0;
     for(int entry=0;entry<sourcetree->GetEntries();entry++){
@@ -72,8 +76,9 @@ int skim_for_MLevaluation_llepcontrol(const char *inputfile,const char *outputfi
  //                       jet_mass[j]=0;
             jet_btagDeepCSV[0]=0;
         }
+        lep_pdgId[0]=0;lep_pdgId[1]=0;
         sourcetree->GetEntry(entry);
-        if(nJet30>=1&&nJet30FailId==0&&ht>250.&&((nJet30>1&&ht<1200.&&met_pt>250.)||(nJet30>1&&ht>=1200.&&met_pt>30.)||(nJet30==1 && met_pt>250.))&&deltaPhiMin>0.3&&(diffMetMht < 0.5*met_pt)&&(nLepLowMT==1&&(is2016||nLepHighMT==0))){
+        if(mt2>200.&&nJet30>=1&&nJet30FailId==0&&ht>250.&&((nJet30>1&&ht<1200.&&met_pt>250.)||(nJet30>1&&ht>=1200.&&met_pt>30.)||(nJet30==1 && met_pt>250.))&&deltaPhiMin>0.3&&(diffMetMht < 0.5*met_pt)&&(nLepLowMT==1&&(is2016||nLepHighMT==0))){
            if(ML) MLtag=rand->Integer(20);
            tree->Fill();
            skimnum++;
