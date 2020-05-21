@@ -317,11 +317,18 @@ int main( int argc, char* argv[] ) {
   //since the shapes were created in the Nb-integrated regions set (moriond2019_forExtrapol), we have to redistribute the yields in all the topological bins
   //e.g HT250to450_j2to3_b0toInf will fill (identically) HT250to450_j2to3_b0, HT250to450_j2to3_b1, HT250to450_j2to3_b2
 
-  extrapolToTopoRegion( zllData_shape_TR, (MT2Analysis<MT2Estimate>*)zllData_shape );
-  extrapolToTopoRegion( zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape, 1 ); //1 means it is mc
-  extrapolToTopoRegion( zinvMC_forShape_TR1, (MT2Analysis<MT2Estimate>*)zinvMC_forShape1, 1 );
-  extrapolToTopoRegion( zinvMC_forShape_TR2, (MT2Analysis<MT2Estimate>*)zinvMC_forShape2, 1 );
-  extrapolToTopoRegion( zinvMC_forShape_TR3, (MT2Analysis<MT2Estimate>*)zinvMC_forShape3, 1 );
+//  extrapolToTopoRegion( zllData_shape_TR, (MT2Analysis<MT2Estimate>*)zllData_shape );
+//  extrapolToTopoRegion( zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape, 1 ); //1 means it is mc
+//  extrapolToTopoRegion( zinvMC_forShape_TR1, (MT2Analysis<MT2Estimate>*)zinvMC_forShape1, 1 );
+//  extrapolToTopoRegion( zinvMC_forShape_TR2, (MT2Analysis<MT2Estimate>*)zinvMC_forShape2, 1 );
+//  extrapolToTopoRegion( zinvMC_forShape_TR3, (MT2Analysis<MT2Estimate>*)zinvMC_forShape3, 1 );
+
+
+  extrapolToTopoRegion( zllData_shape_TR, (MT2Analysis<MT2Estimate>*)zllData_shape,0,0 );
+  extrapolToTopoRegion( zllMC_shape_TR, (MT2Analysis<MT2Estimate>*)zllMC_shape, 0,1 );
+  extrapolToTopoRegion( zinvMC_forShape_TR1, (MT2Analysis<MT2Estimate>*)zinvMC_forShape1, 0,1 );
+  extrapolToTopoRegion( zinvMC_forShape_TR2, (MT2Analysis<MT2Estimate>*)zinvMC_forShape2, 0,1 );
+  extrapolToTopoRegion( zinvMC_forShape_TR3, (MT2Analysis<MT2Estimate>*)zinvMC_forShape3, 0,1 );
  
 
   //we build the hybrid shape with the above-created elements
