@@ -1,10 +1,11 @@
 import os
 
+os.system("mkdir -p logs")
 directory="/work/wjin/featurereduced4/rootfiles/2016/"
 targetdir="/work/wjin/featurereduced4/bkg_score/"
 signaltype=["T1bbbb","T1qqqq","T2bb","T2qq"]
 treename="mt2"
-'''
+
 for filename in os.listdir(directory):
     if filename.endswith(".root"):
         for signal in signaltype:
@@ -31,7 +32,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evall_2016_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evall_2016_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles_zinvcontrol/2016/"
 targetdir="/work/wjin/featurereduced4/zinvcontrol_score/"
 treename="mt2"
@@ -46,7 +47,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evazll_2016_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evazll_2016_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles/2016/signal/"
 targetdir="/work/wjin/featurereduced4/sig_score/"
 treename="mt2"
@@ -92,7 +93,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evadatall_2016_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evadatall_2016_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles_zinvcontrol/2016/data/"
 targetdir="/work/wjin/featurereduced4/zinvcontrol_score/"
 treename="Events"
@@ -108,7 +109,7 @@ for filename in os.listdir(directory):
             print(command)
             os.system(command)
 
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles/2017/"
 targetdir="/work/wjin/featurereduced4/bkg_score/"
 treename="mt2"
@@ -138,7 +139,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evall_2017_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evall_2017_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles_zinvcontrol/2017/"
 targetdir="/work/wjin/featurereduced4/zinvcontrol_score/"
 treename="mt2"
@@ -154,7 +155,6 @@ for filename in os.listdir(directory):
             print(command)
             os.system(command)
 
-'''
 directory="/work/wjin/featurereduced4/rootfiles/2017/signal/"
 targetdir="/work/wjin/featurereduced4/sig_score/"
 treename="mt2"
@@ -199,7 +199,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evadatall_2017_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evadatall_2017_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles_zinvcontrol/2017/data/"
 targetdir="/work/wjin/featurereduced4/zinvcontrol_score/"
 treename="Events"
@@ -214,7 +214,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evadatazll_2017_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evadatazll_2017"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles/2018/"
 targetdir="/work/wjin/featurereduced4/bkg_score/"
 treename="mt2"
@@ -242,7 +242,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu  --time=0-5:00  --account=gpu_gres --gres=gpu:1  -o "+"logs/evall_2018_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evall_2018_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles_zinvcontrol/2018/"
 targetdir="/work/wjin/featurereduced4/zinvcontrol_score/"
 treename="mt2"
@@ -257,7 +257,6 @@ for filename in os.listdir(directory):
             print(command)
             os.system(command)
 
-'''
 
 directory="/work/wjin/featurereduced4/rootfiles/2018/data/"
 targetdir="/work/wjin/featurereduced4/datasigregion_score/"
@@ -288,7 +287,7 @@ for filename in os.listdir(directory):
             command="sbatch  -p gpu --time=0-5:00 --account=gpu_gres --gres=gpu:1  -o "+"logs/evadatall_2018_"+signal+"_"+filename.replace(".root",".txt")+" -e "+"logs/evadatall_2018_"+signal+"_"+filename.replace(".root",".txt")+" --job-name=scoreeval batch_try.sh"+" "+inputfile+" "+outputfile+" "+treename+" "+signal
             print(command)
             os.system(command)
-'''
+
 directory="/work/wjin/featurereduced4/rootfiles_zinvcontrol/2018/data/"
 targetdir="/work/wjin/featurereduced4/zinvcontrol_score/"
 treename="Events"

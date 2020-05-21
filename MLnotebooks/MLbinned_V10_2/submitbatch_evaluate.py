@@ -1,5 +1,6 @@
 import os
 
+os.system("mkdir -p logs")
 directory="/work/wjin/featurereduced4/rootfiles/2016/"
 targetdir="/work/wjin/featurereduced4/bkg_score/"
 signaltype=["T1bbbb","T1qqqq","T2bb","T2qq"]
