@@ -1,0 +1,44 @@
+lumi 59.97 
+year 2018
+regionsSet Moriond2019
+useETHdata 1
+useETHmc 0
+#isMLcut 0
+#MLcut 0.5
+usebinMLcut 1
+binMLcutinf cutinfincluV3_5_T1qqqq
+dozllmergecut 1
+
+gammaTemplateRegions 13TeV_2016_inclusive
+crRegionsSet 13TeV_2016_inclusive
+qcdRegionsSet 13TeV_2016_inclusive
+
+mcSamples 2018MC_MLoptimize
+dataSamples 2018data_MLoptimize
+sigSamples 2017Signals_MLoptimize
+zllmcSamples 2018zllMC_MLoptimize
+llepmcSamples 2018llepMC_MLoptimize
+#zllsigSamples 2017zllSignals_MLoptimize
+#llepsigSamples 2017llepSignals_MLoptimize
+zlldataSamples 2018zlldata_MLoptimize
+llepdataSamples 2018llepdata_MLoptimize
+
+mcMLscore 2018MC_T1qqqq_scoreincluV3
+dataMLscore 2018data_T1qqqq_scoreincluV3
+sigMLscore 2017Signals_T1qqqq_scoreincluV3
+zllmcMLscore 2018zllMC_T1qqqq_scoreincluV3
+llepmcMLscore 2018llepMC_T1qqqq_scoreincluV3
+#zllsigMLscore 2017zllSignals_T1qqqq_scoreincluV3
+#llepsigMLscore 2017llepSignals_T1qqqq_scoreincluV3
+zlldataMLscore 2018zlldata_T1qqqq_scoreincluV3
+llepdataMLscore 2018llepdata_T1qqqq_scoreincluV3
+
+qcdMCSamples Summer16_SnT_06Mar_forQCD
+qcdDataSamples Run2016_35p9ifb_06Mar_forQCD
+
+qcdMonoJetMCSamples 2017MC_201812
+qcdMonoJetDataSamples Run2016_35p9ifb_06Mar_forMonoJet
+
+#additionalStuff noSignals
+#qcdMCSamples Spring16_SnT_Dec02
+#qcdDataSamples Run2016_12p9ifb_qcdSkim

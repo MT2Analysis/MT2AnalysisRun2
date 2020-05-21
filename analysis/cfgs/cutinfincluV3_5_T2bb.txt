@@ -1,0 +1,9 @@
+HT575to1200_j4to6_b2 0.4 0.5 0.5 score_bin19_HT575to1200_j4to6_b2
+HT575to1200_j2to3_b1 0.99 0.5 0.5 score_bin15_HT575to1200_j2to3_b1
+HT450to575_j4to6_b2 0.025 0.5 0.5 score_bin12_HT450to575_j4to6_b2
+HT575to1200_j4to6_b1 0.99 0.5 0.5 score_bin18_HT575to1200_j4to6_b1
+HT250to450_j4to6_b2 0.005 0.5 0.5 score_bin5_HT250to450_j4to6_b2
+HT450to575_j2to3_b1 0.995 0.5 0.5 score_bin8_HT450to575_j2to3_b1
+HT250to450_j2to3_b2 0.99 0.5 0.5 score_bin2_HT250to450_j2to3_b2
+HT575to1200_j7to9_b1 0.21 0.5 0.5 score_bin44_HT575to1200_j7to9_b1
+HT450to575_j4to6_b1 0.97 0.5 0.5 score_bin11_HT450to575_j4to6_b1
