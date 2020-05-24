@@ -29,18 +29,18 @@ doCreationNtuples=true #do you want to create SR and CR ntuples?
 
 doComputationEstimates=true #do you want to compute the Lost Lepton and Z invisible estimates?
 
-doDatacard=false #do you want to create the datacards?
+doDatacard=true #do you want to create the datacards?
 
 doSRplot=true #do you want to produce the SR plots?
 
-doSignal=false
+doSignal=true
 
 Signaltype="T1bbbb"
 
-cfg2016="config_MLoptimize_2016_ForT1bbbb_BDTV3_2_1_plot"
+cfg2016="config_MLoptimize_2016_ForT1bbbb_BDTV3_2_1"
 #cfg2016="config_MLoptimize_2016_ForT1bbbb_btagexclu_noMLcutallevents_o_o"
 #cfg2016="config_MLoptimize_2016_ForT1bbbb_btagexclu_draw"
-cfg2017="config_MLoptimize_2017_ForT1bbbb_BDTV3_2_1_plot"
+cfg2017="config_MLoptimize_2017_ForT1bbbb_BDTV3_2_1"
 #cfg2017="config_MLoptimize_2017_ForT1bbbb_btagexclu_noMLcutallevents_o_o"
 #cfg2017="config_MLoptimize_2017_ForT1bbbb_btagexclu_draw"
 cfg2018="config_MLoptimize_2018_ForT1bbbb_BDTV3_2_1_plot"
