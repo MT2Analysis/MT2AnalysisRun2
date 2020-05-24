@@ -71,9 +71,8 @@ make clean
 and then recompile
 
 ## Run - time !
+### Preselection
 
-
-###Preselection
 Under the cmsenv, you can prepare the files for machine learning. Remember to check the file paths and names of the nominal ntuples, prepare the directory for the output, and change the path of the output files. This step skims the signal, background, and control region data and MC. 
 ```
 cd MLnotebooks/preselection
