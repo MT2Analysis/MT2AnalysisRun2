@@ -247,7 +247,7 @@ Submit a limit (for a single point, as a check)
 combine -M AsymptoticLimits <combined-card> -n --run blind ${MODEL}_${M1}_${M2} >& log_${MODEL}_${M1}_${M2}_combined.txt
 ```
 #### Automatic launch the datacards creation and limit calculation for one point
-First change the file paths in LimitAnalysis.sh, then (<VER> is a customized tag). Some jobs can fail. You may need to run them interactively.
+First change the file paths in LimitAnalysis.sh, then (`<VER>` is a customized tag). Some jobs can fail. You may need to run them interactively.
 ```
 bash LimitAnalysis.sh <16-config> <VER> <SIGNAL> <parent-mass-down> <parent-mass-up> <daugther-mass-down> <daugther-mass-up>
 ```
