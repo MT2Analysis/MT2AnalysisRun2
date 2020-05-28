@@ -1,3 +1,5 @@
+#The information of benchmark points, their corresponding sensitive bins, tags marking ML set - analysis set spliting, the splitting fractions and significance change wrt cut are saved in directories.
+
 models_forbin={'mass':[[1400,1350],[2000,1600],[2400,1400],[2400,200]],
                'binindex':[[33,19,20,26,25,16,27,34,18,65,23,32,66,55,15,45,46,54,84],
                           [20,47,13,46,27,57,34,66],

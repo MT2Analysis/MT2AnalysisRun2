@@ -43,7 +43,12 @@ METRICS = [
       keras.metrics.AUC(name='auc'),
 ]
 
-
+#Some options for the training, 
+#massskim: whether to do the skim on the signal mass spectrum, 
+#usehalfspliting: whether to use half of the samples for machine learning, otherwise the number of samples for ML is based on total sample size, 
+#dozllmerge: whether to merge some high Ht bins for zll and zinv samples
+#usedataexp: whether to use expectations from simulation instead of CR data in background estimation
+#num_fold: number of folds in cross validation
 massskim=True
 usehalfspliting=False
 dozllmerge=True
@@ -55,6 +60,8 @@ if signaltype!="T1bbbb" and signaltype!="T1qqqq" and signaltype!="T2bb" and sign
     print("wrong signal type, please input T1bbbb or T1qqqq or T2bb or T2qq")
     sys.exit(0)
 #features_exclude=[b'nJet30',b'nJet40',b'nBJet20',b'nBJet30',b'nBJet40',b'ht',b'mt2',b'mht_pt',b'met_pt',b'mht_phi',b'met_phi',b'njet']
+
+#import datasets
 
 bkg=loaddata.loadbkg()
 sig=loaddata.loadsig(massskim=massskim,sig=signaltype)
@@ -90,7 +97,10 @@ print("dataset sampled")
 binsused=[]
 #binsused_scalers=[]
 #valindex=[]
+
+#In the following we loop over the four benchmark mass-mass points
 for j in range(len(models_forbin['mass'])):
+#initialize the list of variables to save
     m1=models_forbin['mass'][j][0]
     m2=models_forbin['mass'][j][1]
     print("for mass1= ",m1,", mass2= ",m2)
@@ -106,6 +116,8 @@ for j in range(len(models_forbin['mass'])):
 #    models_forbin['bkg_sig_plots'].append([])
 #    models_forbin['CR_plots'].append([])
 #    models_forbin['significance_plots'].append([])
+
+#For each benchmark point, we loop over its most sensitive Ht, njet, nbjet bins.
     for i in models_forbin['binindex'][j]:
         tf.random.set_seed(2)
         features_train=methods.feature_choice(min(binning.selections[i][1][1],16)-1)
@@ -113,6 +125,7 @@ for j in range(len(models_forbin['mass'])):
 #        scaler = StandardScaler()
         X0=databkg_ML_bin[i][(features_train+[b'evt_scale1fb',b'GenSusyMScan1',b'GenSusyMScan2',b'absweight',b'bkgtype',b'w2'])[:]]
         y0=databkg_ML_bin[i][b'sigtag']
+#For signal T1qqqq and T1bbbb, add 3*weight for the signals in compressed region, so the model can pay more attention to them in training.
         if signaltype=="T1qqqq" and j==0:
             X1=pd.concat([datasig_ML_bin[i][(features_train+[b'evt_scale1fb',b'GenSusyMScan1',b'GenSusyMScan2',b'absweight',b'bkgtype',b'w2'])[:]],
                       datasig_ML_bin[i][datasig_ML_bin[i][b'GenSusyMScan2']>=(datasig_ML_bin[i][b'GenSusyMScan1']-300)][(features_train+[b'evt_scale1fb',b'GenSusyMScan1',b'GenSusyMScan2',b'absweight',b'bkgtype',b'w2'])[:]],
@@ -148,6 +161,7 @@ for j in range(len(models_forbin['mass'])):
             mergebin=methods.zllmergebin(i)
             print("mergebin for bin ",i,": ",mergebin)
         if i not in binsused:
+#Split the ML set into training+validation, and testing set
             X0_train, X0_test, y0_train, y0_test = train_test_split(X0, y0, test_size=0.1, random_state=42)
             X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.1, random_state=90)
 #            scaler.fit(pd.concat([X0[features_train[:]],X1[features_train[:]]],axis=0))
@@ -172,20 +186,7 @@ for j in range(len(models_forbin['mass'])):
             train0=pd.concat([X0_train,y0_train],axis=1)
             train1=pd.concat([X1_train,y1_train],axis=1)
             print("train on ",X0_train.shape[0]," background", X1_train.shape[0]," signals, test on ",X0_test.shape[0],"background",X1_test.shape[0],"signals")
-#            nsample=3*np.max([X0_train.shape[0],X1_train.shape[0]])
-#            ids0=np.arange(X0_train.shape[0])
-#            ids1=np.arange(X1_train.shape[0])
-#            choices0 = np.random.choice(ids0, nsample)
-#            choices1 = np.random.choice(ids1, nsample)
-#            res_X_train=pd.concat([X0_train.iloc[choices0,:],X1_train.iloc[choices1,:]])
-#            res_y_train=pd.concat([y0_train.iloc[choices0],y1_train.iloc[choices1]])
-#            res_X_train=res_X_train.reset_index(drop=True)
-#            res_y_train=res_y_train.reset_index(drop=True)
-#            nsample=3*np.max([X0_test.shape[0],X1_test.shape[0]])
-#            ids0=np.arange(X0_test.shape[0])
-#            ids1=np.arange(X1_test.shape[0])
-#            choices0 = np.random.choice(ids0, nsample)
-#            choices1 = np.random.choice(ids1, nsample)
+#If the numbers of background and signal events are not the same, we oversample the minor one to balance the training.
             if X0_test.shape[0] > X1_test.shape[0]:
                 choices=np.random.choice(np.arange(X1_test.shape[0]),X0_test.shape[0]-X1_test.shape[0])
                 res_X_test=pd.concat([X0_test,X1_test,X1_test.iloc[choices,:]])
@@ -197,17 +198,15 @@ for j in range(len(models_forbin['mass'])):
             else:
                 res_X_test=pd.concat([X0_test,X1_test])
                 res_y_test=pd.concat([y0_test,y1_test])
-#            res_X_test=pd.concat([X0_test.iloc[choices0,:],X1_test.iloc[choices1,:]])
-#            res_y_test=pd.concat([y0_test.iloc[choices0],y1_test.iloc[choices1]])
             res_X_test=res_X_test.reset_index(drop=True)
             res_y_test=res_y_test.reset_index(drop=True)
-#            print (res_y_train[res_y_train==0].shape[0], res_y_train[res_y_train==1].shape[0], res_y_test[res_y_test==0].shape[0], res_y_test[res_y_test==1].shape[0])
-
+#Split the training+validation set into num_fold folds.
             kf = StratifiedKFold(n_splits=num_fold,shuffle=True)
 
             score_va_total=[]
             score_train_total=[]
             score_test_total=[]
+#Do the k-fold training and cross validation.
             for train_index, va_index in kf.split(X_train,y_train):
                 X_train_fold=X_train.iloc[train_index,:]
                 y_train_fold=y_train.iloc[train_index]
@@ -246,6 +245,7 @@ for j in range(len(models_forbin['mass'])):
                 score_va=[]
                 score_train=[]
                 score_test=[]
+#Scan the hyperparameter n_estimators, and evaluate the model performance (model "score") for training, validation and testing set
                 for ii in range(20,180,20):
                     model=GradientBoostingRegressor(n_estimators=ii, learning_rate=0.3, max_features=2, max_depth=3, random_state=0)
                     model.fit(X_train_fold[features_train[:]],y_train_fold);
@@ -255,12 +255,14 @@ for j in range(len(models_forbin['mass'])):
                 score_va_total.append(score_va)
                 score_train_total.append(score_train)
                 score_test_total.append(score_test)
+#Compute the average "score" among the folds, and also the standard deviation.
             score_va_average=[mean([score_va_total[foldindex][ii] for foldindex in range(num_fold)]) for ii in range(8)]
             score_train_average=[mean([score_train_total[foldindex][ii] for foldindex in range(num_fold)]) for ii in range(8)]
             score_test_average=[mean([score_test_total[foldindex][ii] for foldindex in range(num_fold)]) for ii in range(8)]
             score_va_std=[np.std([score_va_total[foldindex][ii] for foldindex in range(num_fold)]) for ii in range(8)]
             score_train_std=[np.std([score_train_total[foldindex][ii] for foldindex in range(num_fold)]) for ii in range(8)]
             score_test_std=[np.std([score_test_total[foldindex][ii] for foldindex in range(num_fold)]) for ii in range(8)]
+#Choose the n_estimator corresponding to the best validation performance.
             n_estimators=20*(score_va_average.index(max(score_va_average))+1)
             fig_nesti=methods.plot_hyperparameter(score_train_total,score_va_total,"n_estimators","parameter tuning of n_estimators--"
                                    +" bin"+str(i)+' ht '+str(binning.selections[i][0][0])
@@ -285,6 +287,7 @@ for j in range(len(models_forbin['mass'])):
             score_va_total=[]
             score_train_total=[]
             score_test_total=[]
+#The same fold division and hyperparameter scan on learning rate.
             for train_index, va_index in kf.split(X_train,y_train):
                 X_train_fold=X_train.iloc[train_index,:]
                 y_train_fold=y_train.iloc[train_index]
@@ -364,6 +367,7 @@ for j in range(len(models_forbin['mass'])):
             score_va_total=[]
             score_train_total=[]
             score_test_total=[]
+#The fold spliting and hyperparamter scan on max_depth
             for train_index, va_index in kf.split(X_train,y_train):
                 X_train_fold=X_train.iloc[train_index,:]
                 y_train_fold=y_train.iloc[train_index]
@@ -440,7 +444,7 @@ for j in range(len(models_forbin['mass'])):
                        +" nbjet "+str(binning.selections[i][2][0])+"-"+str(binning.selections[i][2][1]-1),range(2,10))
             fig_dep_average_plustest.savefig("hyperpara_maxdepth_average_plustest_"+signaltype+"_bin"+str(i)+".png")
             fig_dep_average_plustest.savefig("hyperpara_maxdepth_average_plustest_"+signaltype+"_bin"+str(i)+".pdf")
-
+#Save the models with the best validation performance
             for foldindex in range(num_fold):
                 dump(bestmodels[foldindex],"model_"+signaltype+"_bin"+str(i)+"_"+str(foldindex)+".joblib")
 #            print("plotting history")
@@ -539,6 +543,8 @@ for j in range(len(models_forbin['mass'])):
 #            val[b'MLscore']=model.predict(val[features_train[:]], batch_size=20000)
 
 #        if zlldata[i].shape[0]*zllMC[i].shape[0]:
+
+#Scan the cut position and plot significance wrt cut.
         if dozllmerge:
             midsig=methods.computesignificance(databkg_test_bin[i],datasig_test_bin[i],pd.concat([zllMC[mergebinindex] for mergebinindex in mergebin],axis=0),llepMC[i],
                                            pd.concat([zlldata[mergebinindex] for mergebinindex in mergebin],axis=0),llepdata[i],m1,m2,1-MLuse_bkg[i],1-MLuse_sig[i],0.005,usedataexp)

@@ -1,6 +1,8 @@
 import numpy as np
 from binning import selections
 import sys
+#This file reads the ranking of contributions of the bins to the limit of a benckmark point, in order to choose the most sensitive bins to optimize.
+#USAGE: python readranking.py <filename>
 filename=str(sys.argv[1])
 def binstring(bin_number):
     info=selections[bin_number]

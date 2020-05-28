@@ -1,6 +1,10 @@
 import sys
 import numpy as np
 from binning import selections
+#This file reads the significances from the directories saved from training, choose the best cut position, and writes the configuration file for cutting in the analysis
+#USAGE: python readsign.py <signal type>
+#<signal type>=T1bbbb/T1qqqq/T2bb/T2qq
+
 signaltype=str(sys.argv[1])
 
 def binstring(bin_number):
